@@ -26,6 +26,7 @@ const { addToBurnPool, logTx, withRetry } = require('./src/services/burn');
 const { checkAndUnlockAchievements } = require('./src/services/achievements');
 const { askAI } = require('./src/services/ai');
 const { bestchangeCache, bestchangeFetch, CACHE_TTL_MS } = require('./src/services/bestchange');
+const { getJettonWalletAddress, sendCogniqJetton } = require('./src/services/ton');
 
 const {
   BOT_TOKEN,
