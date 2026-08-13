@@ -1,5 +1,4 @@
 const express = require('express');
-const { Pool } = require('pg');
 const { Telegraf } = require('telegraf');
 const crypto = require('crypto');
 const path = require('path');
@@ -10,65 +9,58 @@ const { TonClient, WalletContractV4, internal, Address } = require('@ton/ton');
 const { mnemonicToPrivateKey } = require('@ton/crypto');
 const { beginCell } = require('@ton/core');
 const { generateStreakWarningCard, generateStreakMilestoneCard, generateQuestionOfDayCard, generateWelcomeCard, generateWeeklyTopCard, generateReferralReferrerCard, generateReferralNewUserCard, generateWeeklyHeroesCard, generateStreakBattleCard, generateFactOfDayCard, generateRankRatingCard, generateAchievementCard, generatePurchaseCard, generateExchangeCard, generateTransferReceivedCard, postBurnCard, postBetaCard } = require('./channel.js');
+
+// ==================== CONFIG + DB ====================
+const config = require('./src/config');
+const pool = require('./src/db/pool');
+
+const {
+  BOT_TOKEN,
+  WEBHOOK_URL,
+  WEBAPP_URL,
+  ADMIN_PASSWORD,
+  PORT,
+  BESTCHANGE_API_KEY,
+  BESTCHANGE_PARTNER_ID,
+  BESTCHANGE_API_HOSTS,
+  QUESTIONS_PER_GAME,
+  MAX_FREE_GAMES_PER_DAY,
+  TOKENS_PER_QUESTION_FREE,
+  TOKENS_SUPER_GAME,
+  REFERRAL_BONUS,
+  REFERRAL_BONUS_NEW_USER,
+  MIN_WITHDRAW,
+  COGNIQ_PACK_PRICE,
+  COGNIQ_PACK_COOLDOWN_DAYS,
+  PACK_GAMES,
+  VIP_PRICE_STARS,
+  PREMIUM_PRICE_STARS,
+  VIP_DURATION_DAYS,
+  PREMIUM_DURATION_DAYS,
+  VIP_PRICE_USDT,
+  PREMIUM_PRICE_USDT,
+  CHANNEL_BONUS,
+} = config;
+
 const app = express();
 app.use(express.json());
 app.use(express.static(__dirname));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.set('trust proxy', 1);
 
-// ==================== КОНФИГУРАЦИЯ ====================
-const BOT_TOKEN = process.env.BOT_TOKEN;
-const WEBHOOK_URL = process.env.WEBHOOK_URL;
-const WEBAPP_URL = process.env.WEBAPP_URL;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-const PORT = process.env.PORT || 3000;
-// ==================== BESTCHANGE CONFIG ====================
-const BESTCHANGE_API_KEY = process.env.BESTCHANGE_API_KEY;
-const BESTCHANGE_PARTNER_ID = process.env.BESTCHANGE_PARTNER_ID || '1344120';
-const BESTCHANGE_API_HOSTS = [
-  'bestchange.app',
-  'mirror1.bestchange.app',
-  'mirror2.bestchange.app',
-  'mirror3.bestchange.app',
-  'mirror4.bestchange.app'
-];
-
 if (!BESTCHANGE_API_KEY) {
   console.warn('⚠️ BESTCHANGE_API_KEY не задан в .env — BestChange API работать не будет');
 }
 
 if (!BOT_TOKEN) { console.error('BOT_TOKEN is not set'); process.exit(1); }
-if (!process.env.DATABASE_URL) { console.error('DATABASE_URL is not set'); process.exit(1); }
+if (!config.DATABASE_URL) { console.error('DATABASE_URL is not set'); process.exit(1); }
 if (!ADMIN_PASSWORD) { console.error('ADMIN_PASSWORD is not set'); process.exit(1); }
-
-// ==================== БАЗА ДАННЫХ ====================
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
-});
 
 // ==================== TELEGRAM BOT ====================
 const bot = new Telegraf(BOT_TOKEN);
 let botUsername = '';
 
-// ==================== КОНСТАНТЫ ИГРЫ ====================
-const QUESTIONS_PER_GAME = 10;
-const MAX_FREE_GAMES_PER_DAY = 10;
-const TOKENS_PER_QUESTION_FREE = 2;
-const TOKENS_SUPER_GAME = 15;
-const REFERRAL_BONUS = 50;
-const REFERRAL_BONUS_NEW_USER = 10;
-const MIN_WITHDRAW = 1000;
-const COGNIQ_PACK_PRICE = 150;
-const COGNIQ_PACK_COOLDOWN_DAYS = 3;
-const PACK_GAMES = 10;
-const VIP_PRICE_STARS = 300;
-const PREMIUM_PRICE_STARS = 800;
-const VIP_DURATION_DAYS = 7;
-const PREMIUM_DURATION_DAYS = 30;
-const VIP_PRICE_USDT = 3;
-const PREMIUM_PRICE_USDT = 8;
-const CHANNEL_BONUS = 50;
+// ==================== КОНСТАНТЫ ИГРЫ (из config) ====================
 function calcGamesLeft(user) {
   const base = MAX_FREE_GAMES_PER_DAY;
   const bonus = user.subscription_type === 'premium' ? 10 : user.subscription_type === 'vip' ? 10 : 0;
