@@ -21,6 +21,7 @@ const { ALLOWED_USER_FIELDS } = require('./src/constants/allowedUserFields');
 const { publicRateLimit, authRateLimit, heavyRateLimit, casinoRateLimit, adminRateLimit, questionsAdminRateLimit } = require('./src/middleware/rateLimit');
 const { requireInitData, requireInitDataStrict, requireAdmin } = require('./src/middleware/auth');
 const { getOrCreateUser, saveUser, calcGamesLeft, checkAndResetDailyLimit, todayStr, normalizeDateStr } = require('./src/services/users');
+const { loadQuestionsFromDB, pickGameQuestions, translateQuestion, yandexTranslate, questionsCache } = require('./src/services/questions');
 
 const {
   BOT_TOKEN,
