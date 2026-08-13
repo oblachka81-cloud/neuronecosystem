@@ -466,7 +466,7 @@ app.get('/tonconnect-manifest.json', (req, res) => {
   });
 });
 
-app.get('/api/user', requireInitData, rateLimit(30, 60000), async (req, res) => {
+app.get('/api/user', requireInitData, publicRateLimit, async (req, res) => {
   try {
     const user = await getOrCreateUser(req.tgUser);
 
