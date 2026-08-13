@@ -445,6 +445,15 @@ async function initDB() {
     status VARCHAR(20) DEFAULT 'active',
     created_at TIMESTAMP DEFAULT NOW()
   )`,
+    `CREATE TABLE IF NOT EXISTS crash_bets (
+    telegram_id BIGINT PRIMARY KEY,
+    bet_amount INT NOT NULL,
+    round_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    crash_point NUMERIC(10,2),
+    server_seed TEXT,
+    status VARCHAR(20) DEFAULT 'active',
+    expires_at TIMESTAMP
+  )`,
   ];
   for (const m of migrations) await pool.query(m);
 
@@ -599,17 +608,6 @@ await pool.query(`
     result_number INTEGER NOT NULL,
     win_amount INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
-  )
-`);
-  await pool.query(`
-  CREATE TABLE IF NOT EXISTS crash_bets (
-    telegram_id BIGINT PRIMARY KEY,
-    bet_amount INT NOT NULL,
-    round_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    crash_point NUMERIC(10,2),
-    server_seed TEXT,
-    status VARCHAR(20) DEFAULT 'active',
-    expires_at TIMESTAMP
   )
 `);
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS balance_purchased INTEGER DEFAULT 0`);
