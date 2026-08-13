@@ -14,6 +14,7 @@ const { generateStreakWarningCard, generateStreakMilestoneCard, generateQuestion
 const config = require('./src/config');
 const pool = require('./src/db/pool');
 const initDB = require('./src/db/init');
+const { RANKS, getUserRank } = require('./src/constants/ranks');
 
 const {
   BOT_TOKEN,
@@ -87,21 +88,6 @@ const STREAK_TRANSLATIONS = {
 };
 
 // ==================== РАНГИ ====================
-const RANKS = [
-  { min: 200000, emoji: '👑', ru: 'Легенда', en: 'Legend', fr: 'Légende', es: 'Leyenda' },
-  { min: 50000,  emoji: '🎓', ru: 'Мастер',  en: 'Master', fr: 'Maître',  es: 'Maestro' },
-  { min: 10000,  emoji: '🔬', ru: 'Эксперт', en: 'Expert', fr: 'Expert',  es: 'Experto' },
-  { min: 1000,   emoji: '📚', ru: 'Знаток',  en: 'Scholar',fr: 'Érudit',  es: 'Erudito' },
-  { min: 0,      emoji: '🧠', ru: 'Новичок', en: 'Novice', fr: 'Novice',  es: 'Novato' },
-];
-
-function getUserRank(balance, lang = 'en') {
-  const rank = RANKS.find(r => balance >= r.min);
-  return {
-    emoji: rank.emoji,
-    title: rank[lang] || rank['en'],
-  };
-}
 function isValidTonAddress(address) {
   return /^[EUk][Qq0-9A-Za-z_-]{47}$/.test(address);
 }
