@@ -22,6 +22,7 @@ const { publicRateLimit, authRateLimit, heavyRateLimit, casinoRateLimit, adminRa
 const { requireInitData, requireInitDataStrict, requireAdmin } = require('./src/middleware/auth');
 const { getOrCreateUser, saveUser, calcGamesLeft, checkAndResetDailyLimit, todayStr, normalizeDateStr } = require('./src/services/users');
 const { loadQuestionsFromDB, pickGameQuestions, translateQuestion, yandexTranslate, questionsCache } = require('./src/services/questions');
+const { addToBurnPool, logTx, withRetry } = require('./src/services/burn');
 
 const {
   BOT_TOKEN,
