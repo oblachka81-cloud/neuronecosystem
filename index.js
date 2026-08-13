@@ -776,7 +776,6 @@ await pool.query(`CREATE INDEX IF NOT EXISTS idx_users_balance ON users (balance
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS simple_game_pending BOOLEAN DEFAULT false`);
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_simple_game_date DATE`);
 
-await loadQuestionsFromDB();
 
   await loadQuestionsFromDB();
   console.log('БД инициализирована');
