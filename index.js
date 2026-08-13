@@ -5521,7 +5521,7 @@ async function askAI(question, mode) {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-          'HTTP-Referer': 'https://neuron1.bothost.tech',
+          'HTTP-Referer': WEBAPP_URL || 'https://neuron.bothost.tech',
           'X-Title': 'NEURON Support'
         },
         body: JSON.stringify({
