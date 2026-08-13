@@ -1852,7 +1852,7 @@ app.get('/api/referral-stats', requireInitData, publicRateLimit, async (req, res
   try {
     const userId = req.tgUser.id;
     const user = await getOrCreateUser(req.tgUser);
-    const referralLink = `https://t.me/NeuronGame_bot?start=ref_${userId}`;
+    const referralLink = `https://t.me/${botUsername || 'NeuronEcosystemBot'}?start=ref_${userId}`;
     res.json({
       referralCount: user.referred_count || 0,
       referralLink,
