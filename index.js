@@ -361,6 +361,7 @@ async function translateQuestion(q, lang) {
 
 // ==================== ИНИЦИАЛИЗАЦИЯ БД ====================
 async function initDB() {
+  // 1. Сначала users
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       telegram_id BIGINT PRIMARY KEY,
@@ -385,6 +386,42 @@ async function initDB() {
     )
   `);
 
+  // 2. Таблицы, на которые раньше был ALTER ДО их создания (фикс для новой БД)
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS questions (
+      id SERIAL PRIMARY KEY,
+      lang VARCHAR(5) DEFAULT 'ru',
+      text TEXT NOT NULL,
+      options JSONB NOT NULL,
+      correct TEXT NOT NULL,
+      translations JSONB DEFAULT '{}'
+    )
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS withdrawals (
+      id SERIAL PRIMARY KEY,
+      telegram_id BIGINT REFERENCES users(telegram_id) ON DELETE CASCADE,
+      amount INTEGER NOT NULL,
+      wallet TEXT NOT NULL,
+      status TEXT DEFAULT 'pending',
+      created_at TIMESTAMP DEFAULT NOW(),
+      processed_at TIMESTAMP,
+      tx_hash VARCHAR(200)
+    )
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS processed_ton_payments (
+      id SERIAL PRIMARY KEY,
+      tx_hash TEXT UNIQUE NOT NULL,
+      user_id TEXT,
+      amount bigint DEFAULT 0,
+      processed_at TIMESTAMP DEFAULT NOW()
+    )
+  `);
+
+  // 3. Миграции (только users + CREATE для casino-таблиц)
   const migrations = [
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS super_game_pending BOOLEAN DEFAULT false`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS current_game_index INTEGER DEFAULT 0`,
@@ -403,7 +440,7 @@ async function initDB() {
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS daily_question_answered BOOLEAN DEFAULT false`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS last_streak_bonus_level INTEGER DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS streak_eternal_weeks INTEGER DEFAULT 0`,
-    `ALTER TABLE users ADD COLUMN IF NOT EXISTS recent_questions JSONB DEFAULT '[]'`,                                                                                                                      
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS recent_questions JSONB DEFAULT '[]'`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS channel_bonus_claimed BOOLEAN DEFAULT false`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS nickname VARCHAR(32)`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_emoji VARCHAR(8) DEFAULT '🧠'`,
@@ -419,41 +456,40 @@ async function initDB() {
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS extra_games INTEGER DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS stars_spent INTEGER DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS daily_deeplink_used BOOLEAN DEFAULT false`,
-    `ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_frame VARCHAR(50) DEFAULT NULL`,   
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_frame VARCHAR(50) DEFAULT NULL`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS balance_purchased INTEGER DEFAULT 0`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_beta_tester BOOLEAN DEFAULT FALSE`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS beta_registered_at TIMESTAMP`,
     `ALTER TABLE withdrawals ADD COLUMN IF NOT EXISTS tx_hash VARCHAR(200)`,
-  
-  
-  `CREATE TABLE IF NOT EXISTS blackjack_sessions (
-    telegram_id BIGINT PRIMARY KEY,
-    deck JSONB NOT NULL,
-    player_hands JSONB NOT NULL,
-    dealer_hand JSONB NOT NULL,
-    bets JSONB NOT NULL,
-    insurance_bet INTEGER DEFAULT 0,
-    status VARCHAR(20) DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT NOW()
-  )`,
+
+    `CREATE TABLE IF NOT EXISTS blackjack_sessions (
+      telegram_id BIGINT PRIMARY KEY,
+      deck JSONB NOT NULL,
+      player_hands JSONB NOT NULL,
+      dealer_hand JSONB NOT NULL,
+      bets JSONB NOT NULL,
+      insurance_bet INTEGER DEFAULT 0,
+      status VARCHAR(20) DEFAULT 'active',
+      created_at TIMESTAMP DEFAULT NOW()
+    )`,
     `CREATE TABLE IF NOT EXISTS mines_sessions (
-    telegram_id BIGINT PRIMARY KEY,
-    grid JSONB NOT NULL,
-    mines_count INTEGER NOT NULL,
-    opened JSONB NOT NULL DEFAULT '[]',
-    bet INTEGER NOT NULL,
-    status VARCHAR(20) DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT NOW()
-  )`,
+      telegram_id BIGINT PRIMARY KEY,
+      grid JSONB NOT NULL,
+      mines_count INTEGER NOT NULL,
+      opened JSONB NOT NULL DEFAULT '[]',
+      bet INTEGER NOT NULL,
+      status VARCHAR(20) DEFAULT 'active',
+      created_at TIMESTAMP DEFAULT NOW()
+    )`,
     `CREATE TABLE IF NOT EXISTS crash_bets (
-    telegram_id BIGINT PRIMARY KEY,
-    bet_amount INT NOT NULL,
-    round_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    crash_point NUMERIC(10,2),
-    server_seed TEXT,
-    status VARCHAR(20) DEFAULT 'active',
-    expires_at TIMESTAMP
-  )`,
+      telegram_id BIGINT PRIMARY KEY,
+      bet_amount INT NOT NULL,
+      round_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      crash_point NUMERIC(10,2),
+      server_seed TEXT,
+      status VARCHAR(20) DEFAULT 'active',
+      expires_at TIMESTAMP
+    )`,
   ];
   for (const m of migrations) await pool.query(m);
 
