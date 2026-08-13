@@ -295,7 +295,7 @@ const LANG = {
   }
 };
 
-const BASE_URL = 'https://neuron1.bothost.tech';
+const BASE_URL = 'https://neuron.bothost.tech';
 const urlParams = new URLSearchParams(window.location.search);
 const currentLang = urlParams.get('lang') || 'ru';
 const t = LANG[currentLang] || LANG['ru'];
@@ -331,7 +331,7 @@ async function initTonConnect() {
   }
   if (window.TON_CONNECT_UI) {
     tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://neuron1.bothost.tech/tonconnect-manifest.json'
+      manifestUrl: 'https://neuron.bothost.tech/tonconnect-manifest.json'
     });
     window.tonConnectUI = tonConnectUI;
   }
