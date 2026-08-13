@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEURON Admin</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0b1120; font-family: -apple-system, sans-serif; color: #ddeeff; min-height: 100vh; padding: 20px; }
+    h1 { font-size: 1.6rem; color: #00ffff; margin-bottom: 20px; }
+    h2 { font-size: 1.1rem; color: #88aacc; margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .login-box { max-width: 360px; margin: 80px auto; background: rgba(18,28,40,0.8); border: 1px solid rgba(0,255,255,0.2); border-radius: 24px; padding: 32px; text-align: center; }
+    input { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,255,255,0.3); border-radius: 40px; color: #fff; font-size: 1rem; margin-bottom: 12px; }
+    button { background: linear-gradient(90deg, #00ccff, #7a2eff); border: none; border-radius: 40px; padding: 12px 24px; color: white; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
+    button.danger { background: rgba(255,60,60,0.2); border: 1px solid rgba(255,60,60,0.5); color: #ff8888; }
+    button.success { background: rgba(0,255,150,0.15); border: 1px solid rgba(0,255,150,0.4); color: #00ffaa; }
+    button.small { padding: 6px 14px; font-size: 0.8rem; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .card { background: rgba(18,28,40,0.8); border: 1px solid rgba(0,255,255,0.15); border-radius: 20px; padding: 20px; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th { text-align: left; color: #5599bb; padding: 8px 10px; border-bottom: 1px solid rgba(0,255,255,0.1); }
+    td { padding: 8px 10px; border-bottom: 1px solid rgba(0,255,255,0.06); vertical-align: middle; }
+    .q-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,255,255,0.08); }
+    .q-text { flex: 1; font-size: 0.9rem; }
+    .q-correct { color: #00ffaa; font-size: 0.8rem; }
+    .add-form input { margin-bottom: 8px; }
+    .add-form .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    #msg { color: #00ffaa; font-size: 0.85rem; margin-top: 8px; min-height: 20px; }
+    .btn-group { display: flex; gap: 6px; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; }
+    .badge-pending { background: rgba(255,200,0,0.15); color: #ffcc00; border: 1px solid rgba(255,200,0,0.3); }
+    .badge-approved { background: rgba(0,255,150,0.15); color: #00ffaa; border: 1px solid rgba(0,255,150,0.3); }
+    .badge-rejected { background: rgba(255,60,60,0.15); color: #ff8888; border: 1px solid rgba(255,60,60,0.3); }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 8px; }
+    .stat-box { background: rgba(0,0,0,0.3); border: 1px solid rgba(0,255,255,0.1); border-radius: 14px; padding: 14px 16px; }
+    .stat-label { font-size: 0.75rem; color: #5599bb; margin-bottom: 4px; }
+    .stat-value { font-size: 1.4rem; font-weight: 700; color: #00ffff; }
+    .stat-sub { font-size: 0.72rem; color: #5599bb; margin-top: 2px; }
+    .wallet-addr { font-size: 0.75rem; color: #88aacc; font-family: monospace; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tab-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab { padding: 8px 20px; border-radius: 40px; border: 1px solid rgba(0,255,255,0.2); background: transparent; color: #88aacc; cursor: pointer; font-size: 0.9rem; }
+    .tab.active { background: linear-gradient(90deg, #00ccff22, #7a2eff22); border-color: #00ccff; color: #00ffff; font-weight: 700; }
+    .section-title { font-size: 0.8rem; color: #5599bb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 4px; }
+    .divider { border: none; border-top: 1px solid rgba(0,255,255,0.08); margin: 20px 0; }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+    .modal-overlay.open { display:flex; }
+    .modal-box { background:#0d1a2a; border:1px solid rgba(0,255,255,0.25); border-radius:20px; padding:28px; width:100%; max-width:480px; }
+    .modal-box h2 { margin-bottom:16px; }
+    #translateAllBtn { margin-bottom: 16px; }
+    #translateMsg { font-size:0.85rem; margin-top:8px; min-height:20px; color:#00ffaa; }
+
+    /* Поиск */
+    .search-row { display: flex; gap: 8px; margin-bottom: 14px; align-items: center; }
+    .search-row input { margin-bottom: 0; flex: 1; }
+    .search-row button { flex-shrink: 0; }
+
+    /* Пагинация */
+    .pagination { display: flex; align-items: center; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+    .pagination button { padding: 6px 14px; font-size: 0.8rem; }
+    .pagination .page-info { font-size: 0.82rem; color: #5599bb; margin: 0 4px; }
+
+    /* Лоадер строки */
+    .table-loading { text-align: center; padding: 24px; color: #5599bb; font-size: 0.9rem; }
+    .music-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 999;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00ffff;
+  padding: 0;
+}
+  </style>
+</head>
+<body>
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+<audio id="bgMusic" preload="auto"></audio>
+<div id="loginView" class="login-box">
+  <h1>🔐 Admin</h1>
+  <input type="password" id="pwdInput" placeholder="Пароль" />
+  <button onclick="login()">Войти</button>
+  <div id="loginErr" style="color:#ff8888; margin-top:10px; font-size:0.85rem;"></div>
+</div>
+
+<div id="adminView" style="display:none; max-width:960px; margin:0 auto;">
+  <h1>🛠️ NEURON Admin</h1>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="showTab('stats')">📊 Статистика</button>
+    <button class="tab" onclick="showTab('players')">👥 Игроки</button>
+    <button class="tab" onclick="showTab('withdrawals')">💸 Выводы</button>
+    <button class="tab" onclick="showTab('questions')">❓ Вопросы</button>
+    <button class="tab" onclick="showTab('shop')">🛒 Магазин</button>
+    <button class="tab" onclick="showTab('exchange')">💱 Обмены</button>
+    <button class="tab" id="tabTransfers" onclick="showTab('transfers')">🔁 Переводы</button>
+    <button class="tab" onclick="showTab('burn')">🔥 Сжигание</button>
+  </div>
+
+  <!-- СТАТИСТИКА -->
+  <div id="tab-stats">
+    <div class="card">
+      <div class="section-title">Общее</div>
+      <div class="stats-grid" id="statsGeneral"></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Монетизация</div>
+      <div class="stats-grid" id="statsMonetization"></div>
+    </div>
+    <div class="card">
+      <div class="section-title">Выводы</div>
+      <div class="stats-grid" id="statsWithdrawals"></div>
+    </div>
+    <div class="card">
+  <div class="section-title">Обменник</div>
+  <div class="stats-grid" id="statsExchange"></div>
+</div>
+  </div>
+
+  <!-- ИГРОКИ -->
+  <div id="tab-players" style="display:none;">
+    <div class="card">
+      <h2>Игроки <span id="playersTotalLabel" style="font-size:0.85rem; color:#5599bb; font-weight:400; text-transform:none;"></span></h2>
+      <div class="search-row">
+        <input id="playersSearch" placeholder="Поиск по имени, username или ID" />
+        <button class="small success" onclick="playersPage=1; loadPlayers()">Найти</button>
+        <button class="small" onclick="document.getElementById('playersSearch').value=''; playersPage=1; loadPlayers()">Сбросить</button>
+      </div>
+      <table id="playersTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Имя</th>
+            <th>Баланс</th>
+            <th>Супер-игр</th>
+            <th>Тикеты вывода</th>
+            <th>Игр сегодня</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="playersTbody"></tbody>
+      </table>
+      <div class="pagination" id="playersPagination"></div>
+    </div>
+  </div>
+    <!-- ВЫВОДЫ -->
+  <div id="tab-withdrawals" style="display:none;">
+    <div class="card">
+      <div class="stats-grid" id="withdrawStats"></div>
+    </div>
+    <div class="card">
+      <h2>Заявки на вывод</h2>
+      <select id="withdrawalFilter" onchange="loadWithdrawals(1)" style="padding:6px 12px;border-radius:8px;border:1px solid #334;background:#1a1a2e;color:#fff;margin-bottom:10px;">
+        <option value="all">Все</option>
+        <option value="pending">Ожидают</option>
+        <option value="approved">Одобрены</option>
+        <option value="rejected">Отклонены</option>
+      </select>
+      <table id="withdrawalsTable">
+        <thead>
+  <tr>
+    <th>#</th>
+    <th>Игрок</th>
+    <th>Сумма</th>
+    <th>Кошелёк</th>
+    <th>Статус</th>
+    <th>Дата</th>
+    <th>Действия</th>
+  </tr>
+</thead>
+        <tbody></tbody>
+      </table>
+      <div id="withdrawalsPagination" class="pagination"></div>
+    </div>
+  </div>
+
+  <!-- ВОПРОСЫ -->
+  <div id="tab-questions" style="display:none;">
+    <div class="card">
+      <h2>Вопросы <span id="qTotalLabel" style="font-size:0.85rem; color:#5599bb; font-weight:400; text-transform:none;"></span></h2>
+      <div class="search-row">
+        <input id="questionsSearch" placeholder="Поиск по тексту или ответу" />
+        <button class="small success" onclick="questionsPage=1; loadQuestions()">Найти</button>
+        <button class="small" onclick="document.getElementById('questionsSearch').value=''; questionsPage=1; loadQuestions()">Сбросить</button>
+      </div>
+      <button id="translateAllBtn" class="success" onclick="translateAll()">🌐 Перевести все вопросы</button>
+      <div id="translateMsg"></div>
+      <div id="questionsList"></div>
+      <div class="pagination" id="questionsPagination"></div>
+
+      <h2 style="margin-top:28px;">Добавить вопрос</h2>
+      <div class="add-form">
+        <input id="qText" placeholder="Текст вопроса" />
+        <div class="options">
+          <input id="opt0" placeholder="Вариант 1" />
+          <input id="opt1" placeholder="Вариант 2" />
+          <input id="opt2" placeholder="Вариант 3" />
+          <input id="opt3" placeholder="Вариант 4" />
+        </div>
+        <input id="qCorrect" placeholder="Правильный ответ (точно как в вариантах)" />
+        <button onclick="addQuestion()">Добавить</button>
+        <div id="msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- МАГАЗИН -->
+  <div id="tab-shop" style="display:none;">
+    <div class="card">
+      <h3>🛒 Статистика магазина</h3>
+      <div id="shopStatsContent" style="color:#aaa;">Загрузка...</div>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <h3>🎫 Активные подписчики</h3>
+      <div id="subscribersContent" style="color:#aaa;">Загрузка...</div>
+      <div id="subsPagination" class="pagination"></div>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <h3>📋 История покупок (последние 100)</h3>
+      <div id="shopHistoryContent" style="color:#aaa;">Загрузка...</div>
+      <div id="histPagination" class="pagination"></div>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <h3>⚙️ Управление игроком</h3>
+      <div style="margin-bottom:12px;">
+        <input id="adminTgId" type="text" placeholder="Telegram ID игрока" style="padding:8px 12px;border-radius:8px;border:1px solid #334;background:#1a1a2e;color:#fff;width:220px;">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="adminResetCooldown()" style="padding:9px 18px;background:#00ccff;border:none;border-radius:8px;color:#000;font-weight:700;cursor:pointer;">🔄 Сбросить кулдаун</button>
+        <button onclick="adminSetSub('vip', 7)" style="padding:9px 18px;background:#ffcc44;border:none;border-radius:8px;color:#000;font-weight:700;cursor:pointer;">👑 Выдать VIP (7д)</button>
+        <button onclick="adminSetSub('premium', 30)" style="padding:9px 18px;background:#aa66ff;border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;">💎 Выдать PREMIUM (30д)</button>
+        <button onclick="adminSetSub(null, 0)" style="padding:9px 18px;background:#cc3333;border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;">❌ Отозвать подписку</button>
+      </div>
+      <div id="adminActionResult" style="margin-top:10px;color:#00ffcc;font-size:0.9rem;"></div>
+    </div>
+  </div>
+  <div id="tab-transfers" style="display:none;">
+<div class="card">
+<h2>Переводы между игроками</h2>
+<div class="stats-grid" id="statsTransfers"></div>
+<table id="transfersTable">
+<thead><tr><th>#</th><th>От</th><th>Кому</th><th>Сумма</th><th>Комиссия</th><th>Дата</th></tr></thead>
+<tbody></tbody>
+</table>
+<div class="pagination" id="transfersPagination"></div>
+</div>
+</div>
+  <!-- СЖИГАНИЕ -->
+<div id="tab-burn" style="display:none;">
+<div class="card">
+<div class="section-title">Burn Pool — накоплено к сжиганию</div>
+<div class="stats-grid" id="burnStats"></div>
+<hr class="divider">
+<div class="section-title">Разбивка по источникам (за всё время)</div>
+<div id="burnSources" style="margin-bottom:20px;"></div>
+<hr class="divider">
+<div class="section-title">🔥 Выполнить сжигание</div>
+<div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:8px;">
+<div style="flex:1; min-width:200px;">
+<div style="font-size:0.75rem; color:#5599bb; margin-bottom:6px;">TX Hash (из TON Explorer)</div>
+<input id="burnTxHash" placeholder="напр. abc123def456..." style="margin-bottom:0;" />
+</div>
+<button class="danger" onclick="executeBurn()" id="burnBtn" style="flex-shrink:0;">🔥 Сжечь и опубликовать в канал</button>
+</div>
+<div id="burnMsg" style="font-size:0.85rem; min-height:20px; margin-top:4px;"></div>
+<hr class="divider">
+<div class="section-title">История сжиганий</div>
+<div id="burnHistory"></div>
+</div>
+</div>
+  <!-- ОБМЕНЫ -->
+<div id="tab-exchange" style="display:none;">
+  <div class="card">
+    <h2>Обмены</h2>
+    <table id="exchangeTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Игрок</th>
+          <th>USDT</th>
+          <th>COGNIQ</th>
+          <th>Дата</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="pagination" id="exchangePagination"></div>
+  </div>
+</div>
+
+<!-- МОДАЛКА РЕДАКТИРОВАНИЯ -->
+
+<!-- МОДАЛКА РЕДАКТИРОВАНИЯ -->
+<div id="editModal" class="modal-overlay">
+  <div class="modal-box">
+    <h2>✏️ Редактировать вопрос</h2>
+    <input id="editText" placeholder="Текст вопроса" />
+    <div class="add-form">
+      <div class="options">
+        <input id="editOpt0" placeholder="Вариант 1" />
+        <input id="editOpt1" placeholder="Вариант 2" />
+        <input id="editOpt2" placeholder="Вариант 3" />
+        <input id="editOpt3" placeholder="Вариант 4" />
+      </div>
+    </div>
+    <input id="editCorrect" placeholder="Правильный ответ (точно как в вариантах)" />
+    <div style="display:flex; gap:10px; margin-top:12px;">
+      <button onclick="saveEdit()">💾 Сохранить</button>
+      <button class="danger" onclick="closeEdit()">Отмена</button>
+    </div>
+    <div id="editMsg" style="font-size:0.85rem; margin-top:8px; min-height:20px;"></div>
+  </div>
+</div>
+
+<script>
+  let pwd = '';
+  let cachedStats = null;
+
+  // Состояние пагинации игроков
+  let playersPage = 1;
+  const playersLimit = 20;
+
+  // Состояние пагинации вопросов
+  let questionsPage = 1;
+  const questionsLimit = 20;
+  let cachedQuestionsTotal = 0; // для openEdit по глобальному индексу
+
+  // Хранилище текущей страницы вопросов для редактирования
+  let currentPageQuestions = [];
+
+  const TABS = ['stats', 'players', 'withdrawals', 'questions', 'shop', 'exchange', 'transfers', 'burn'];
+
+  function showTab(name) {
+    TABS.forEach(t => {
+      document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+    });
+    document.querySelectorAll('.tab').forEach((btn, i) => {
+      btn.classList.toggle('active', TABS[i] === name);
+    });
+    if (name === 'players') loadPlayers();
+    if (name === 'withdrawals') loadWithdrawals();
+    if (name === 'questions') loadQuestions();
+    if (name === 'stats') loadStats();
+    if (name === 'shop') loadShopStats();
+    if (name === 'exchange') loadExchangeOrders();
+    if (name === 'transfers') loadTransfers();
+    if (name === 'burn') loadBurn();
+  }
+
+  function login() {
+    pwd = document.getElementById('pwdInput').value;
+    loadAll();
+  }
+  document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+
+  // Enter в поиске игроков
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (document.activeElement.id === 'playersSearch') { playersPage = 1; loadPlayers(); }
+      if (document.activeElement.id === 'questionsSearch') { questionsPage = 1; loadQuestions(); }
+    }
+  });
+
+  function api(url, opts = {}) {
+    return fetch(url, {
+      ...opts,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-admin-password': pwd,
+        ...(opts.headers || {})
+      }
+    }).then(r => r.json());
+  }
+
+  function loadAll() {
+  api('/api/admin/stats').then(stats => {
+    if (stats.error) {
+      document.getElementById('loginErr').innerText = stats.error;
+      return;
+    }
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('adminView').style.display = 'block';
+    cachedStats = stats;
+    renderStats(stats);
+  }).catch(() => {
+    document.getElementById('loginErr').innerText = 'Ошибка подключения';
+  });
+}
+  function loadStats() {
+  api('/api/admin/stats').then(stats => {
+    if (stats.error) return;
+    cachedStats = stats;
+    renderStats(stats);
+  }).catch(() => {
+    console.error('loadStats error');
+  });
+}
+
+  function renderStats(s) {
+    document.getElementById('statsGeneral').innerHTML = `
+      <div class="stat-box">
+        <div class="stat-label">Игроков</div>
+        <div class="stat-value">${(s.totalPlayers || 0).toLocaleString()}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Игр сыграно сегодня</div>
+        <div class="stat-value">${(s.gamesToday || 0).toLocaleString()}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">КОГНИК в обороте</div>
+        <div class="stat-value">${(s.cogniqInCirculation || 0).toLocaleString()}</div>
+        <div class="stat-sub">суммарный баланс</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Вопросов в базе</div>
+        <div class="stat-value">${(s.totalQuestions || 0).toLocaleString()}</div>
+      </div>
+    `;
+    document.getElementById('statsMonetization').innerHTML = `
+      <div class="stat-box">
+        <div class="stat-label">Супер-игр сыграно</div>
+        <div class="stat-value" style="color:#ff9900">${(s.superGamesTotal || 0).toLocaleString()}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Stars собрано</div>
+        <div class="stat-value" style="color:#ffcc00">⭐ ${(s.starsCollected || 0).toLocaleString()}</div>
+        <div class="stat-sub">по 100 Stars за игру</div>
+      </div>
+      <div class="stat-box">
+  <div class="stat-label">USDT оборот</div>
+  <div class="stat-value" style="color:#26a17b">$${parseFloat(s.usdtTotal || 0).toFixed(2)}</div>
+  <div class="stat-sub">TON платежи</div>
+</div>
+    `;
+    const ws = s.withdrawStats || {};
+    document.getElementById('statsWithdrawals').innerHTML = `
+      <div class="stat-box">
+        <div class="stat-label">Ожидают</div>
+        <div class="stat-value" style="color:#ffcc00">${ws.pending || 0}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Одобрено</div>
+        <div class="stat-value" style="color:#00ffaa">${ws.approved || 0}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Отклонено</div>
+        <div class="stat-value" style="color:#ff8888">${ws.rejected || 0}</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Выведено КОГНИК</div>
+        <div class="stat-value">${(ws.totalApproved || 0).toLocaleString()}</div>
+      </div>
+    `;
+    document.getElementById('statsExchange').innerHTML = `
+  <div class="stat-box">
+    <div class="stat-label">Куплено COGNIQ</div>
+    <div class="stat-value">${(s.totalPurchasedCogniq || 0).toLocaleString()}</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-label">Получено USDT</div>
+    <div class="stat-value" style="color:#26a17b">$${parseFloat(s.totalUsdtReceived || 0).toFixed(2)}</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-label">Обменов</div>
+    <div class="stat-value">${(s.exchangeCount || 0).toLocaleString()}</div>
+  </div>
+`;
+  }
+
+  // ==================== ИГРОКИ ====================
+  function loadPlayers() {
+    const search = document.getElementById('playersSearch')?.value.trim() || '';
+    const tbody = document.getElementById('playersTbody');
+    tbody.innerHTML = '<tr><td colspan="7" class="table-loading">⏳ Загрузка...</td></tr>';
+    document.getElementById('playersPagination').innerHTML = '';
+
+    const url = `/api/admin/players?page=${playersPage}&limit=${playersLimit}${search ? '&search=' + encodeURIComponent(search) : ''}`;
+    api(url).then(data => {
+      if (data.error) { tbody.innerHTML = `<tr><td colspan="7" class="table-loading" style="color:#ff8888">${esc(data.error)}</td></tr>`; return; }
+      renderPlayersTable(data.players || [], data.total || 0, data.pages || 1);
+    }).catch(() => {
+      tbody.innerHTML = '<tr><td colspan="7" class="table-loading" style="color:#ff8888">Ошибка загрузки</td></tr>';
+    });
+  }
+
+  function renderPlayersTable(players, total, pages) {
+    const tbody = document.getElementById('playersTbody');
+    const label = document.getElementById('playersTotalLabel');
+    label.textContent = `(${total.toLocaleString()})`;
+
+    if (!players.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="table-loading">Нет игроков</td></tr>';
+      document.getElementById('playersPagination').innerHTML = '';
+      return;
+    }
+
+    const offset = (playersPage - 1) * playersLimit;
+    tbody.innerHTML = players.map((p, i) => `
+      <tr>
+        <td>${offset + i + 1}</td>
+        <td>${esc(p.name)}${p.username ? `<br><span style="color:#5599bb;font-size:0.75rem">@${esc(p.username)}</span>` : ''}</td>
+        <td>${(p.total_score || 0).toLocaleString()} 🪙</td>
+        <td>${p.super_games_total || 0}</td>
+        <td>${p.withdraw_tickets || 0}</td>
+        <td>${p.games_played || 0}</td>
+        <td>
+  <div class="btn-group">
+    <button class="small" onclick="resetPlayer('${esc(String(p.id))}')">Сброс</button>
+    <button class="small danger" onclick="deletePlayer('${esc(String(p.id))}')">Удалить</button>
+  </div>
+</td>
+      </tr>
+    `).join('');
+
+    renderPagination('playersPagination', playersPage, pages, (p) => { playersPage = p; loadPlayers(); });
+  }
+
+  // ==================== ВОПРОСЫ ====================
+  function loadQuestions() {
+    const search = document.getElementById('questionsSearch')?.value.trim() || '';
+    const listEl = document.getElementById('questionsList');
+    listEl.innerHTML = '<div class="table-loading">⏳ Загрузка...</div>';
+    document.getElementById('questionsPagination').innerHTML = '';
+
+    const url = `/api/admin/questions?page=${questionsPage}&limit=${questionsLimit}${search ? '&search=' + encodeURIComponent(search) : ''}`;
+    api(url).then(data => {
+      if (data.error) { listEl.innerHTML = `<div class="table-loading" style="color:#ff8888">${esc(data.error)}</div>`; return; }
+      currentPageQuestions = data.questions || [];
+      cachedQuestionsTotal = data.total || 0;
+      renderQuestionsPage(data.questions || [], data.total || 0, data.pages || 1);
+    }).catch(() => {
+      listEl.innerHTML = '<div class="table-loading" style="color:#ff8888">Ошибка загрузки</div>';
+    });
+  }
+
+  function renderQuestionsPage(questions, total, pages) {
+    const label = document.getElementById('qTotalLabel');
+    label.textContent = `(${total.toLocaleString()})`;
+
+    const offset = (questionsPage - 1) * questionsLimit;
+    const listEl = document.getElementById('questionsList');
+
+    if (!questions.length) {
+      listEl.innerHTML = '<div style="color:#5599bb; padding: 12px 0;">Нет вопросов</div>';
+      document.getElementById('questionsPagination').innerHTML = '';
+      return;
+    }
+
+    listEl.innerHTML = questions.map((q, i) => `
+      <div class="q-row">
+        <div style="color:#5599bb; min-width:28px;">${offset + i + 1}</div>
+        <div class="q-text">
+          ${esc(q.text)}
+          <div class="q-correct">✅ ${esc(q.correct)}</div>
+          <div style="color:#5599bb; font-size:0.78rem;">${(q.options || []).map(o => esc(o)).join(' / ')}</div>
+        </div>
+        <div class="btn-group">
+          <button class="small success" onclick="openEdit(${i})">✏️</button>
+          <button class="small danger" onclick="deleteQuestion(${i})">Удалить</button>
+        </div>
+      </div>
+    `).join('');
+
+    renderPagination('questionsPagination', questionsPage, pages, (p) => { questionsPage = p; loadQuestions(); });
+  }
+
+  // ==================== УНИВЕРСАЛЬНАЯ ПАГИНАЦИЯ ====================
+  function renderPagination(containerId, current, total, onPage) {
+  const el = document.getElementById(containerId);
+  if (!el || total <= 1) { if (el) el.innerHTML = ''; return; }
+  el._onPage = onPage;
+  let html = '';
+  if (current > 1) html += `<button class="small" data-page="${current - 1}">◀</button>`;
+  let lastPrinted = 0;
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || Math.abs(i - current) <= 2) {
+      if (i - lastPrinted > 1) html += `<span class="page-info">...</span>`;
+      if (i === current) {
+        html += `<button class="small" style="background:rgba(0,200,255,0.3);border-color:#00ccff;font-weight:700;" disabled>${i}</button>`;
+      } else {
+        html += `<button class="small" data-page="${i}">${i}</button>`;
+      }
+      lastPrinted = i;
+    }
+  }
+  if (current < total) html += `<button class="small" data-page="${current + 1}">▶</button>`;
+  el.innerHTML = html;
+  el.querySelectorAll('button[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => el._onPage(parseInt(btn.dataset.page)));
+  });
+}
+// ==================== ВЫВОДЫ ====================
+
+async function loadWithdrawals(page = 1) {
+  const status = document.getElementById('withdrawalFilter')?.value || 'all';
+  try {
+    const res = await fetch(`/api/admin/withdrawals?page=${page}&limit=25&status=${status}`, {
+      headers: { 'x-admin-password': pwd }
+    });
+    if (!res.ok) throw new Error('fetch failed');
+    const data = await res.json();
+    document.getElementById('withdrawStats').innerHTML = `
+      <div class="stat-box"><div class="stat-label">Ожидают</div><div class="stat-value" style="color:#ffcc00">${data.stats?.pending ?? 0}</div></div>
+      <div class="stat-box"><div class="stat-label">Одобрено</div><div class="stat-value" style="color:#00ffaa">${data.stats?.approved ?? 0}</div></div>
+      <div class="stat-box"><div class="stat-label">Отклонено</div><div class="stat-value" style="color:#ff8888">${data.stats?.rejected ?? 0}</div></div>
+      <div class="stat-box"><div class="stat-label">Выведено КОГНИК</div><div class="stat-value">${(data.stats?.totalApproved ?? 0).toLocaleString()}</div></div>
+    `;
+    const tbody = document.querySelector('#withdrawalsTable tbody');
+    tbody.innerHTML = (data.withdrawals || []).map(w => `
+      <tr>
+        <td>${w.id}</td>
+        <td>${w.first_name || w.telegram_id}</td>
+        <td>${w.amount} COGNIQ</td>
+        <td>${w.wallet}</td>
+        <td><span class="badge-${w.status}">${w.status}</span></td>
+        <td>${new Date(w.created_at).toLocaleDateString()}</td>
+        <td>
+  ${w.status === 'pending' ? `
+    <div class="btn-group">
+      <button class="small success" onclick="approveWithdrawal(${w.id})">✅</button>
+      <button class="small danger" onclick="rejectWithdrawal(${w.id})">❌</button>
+    </div>
+  ` : '—'}
+</td>
+      </tr>
+    `).join('');
+    renderPagination('withdrawalsPagination', data.page, data.pages, (p) => loadWithdrawals(p));
+  } catch(e) {
+    console.error('loadWithdrawals error:', e);
+    document.querySelector('#withdrawalsTable tbody').innerHTML = '<tr><td colspan="7" style="color:#ff8888;text-align:center;">Ошибка загрузки</td></tr>';
+  }
+}
+  // ==================== РЕДАКТИРОВАНИЕ ВОПРОСА ====================
+  let editIndex = -1;
+  let editQuestionId = null;
+
+  function openEdit(localIndex) {
+  const q = currentPageQuestions[localIndex];
+  if (!q) return;
+  editIndex = localIndex;
+  editQuestionId = q.id;
+  document.getElementById('editText').value = q.text;
+  document.getElementById('editCorrect').value = q.correct;
+  [0,1,2,3].forEach(n => {
+    document.getElementById('editOpt' + n).value = (q.options && q.options[n]) || '';
+  });
+  document.getElementById('editMsg').innerText = '';
+  document.getElementById('editModal').classList.add('open');
+}
+
+  function closeEdit() {
+    document.getElementById('editModal').classList.remove('open');
+  }
+
+  function saveEdit() {
+  const text = document.getElementById('editText').value.trim();
+  const options = [0,1,2,3].map(n => document.getElementById('editOpt' + n).value.trim()).filter(Boolean);
+  const correct = document.getElementById('editCorrect').value.trim();
+  const msgEl = document.getElementById('editMsg');
+  if (!text || options.length < 2 || !correct) {
+    msgEl.style.color = '#ff8888'; msgEl.innerText = 'Заполни все поля'; return;
+  }
+  if (!options.includes(correct)) {
+    msgEl.style.color = '#ff8888'; msgEl.innerText = 'Правильный ответ должен совпадать с одним из вариантов'; return;
+  }
+  api('/api/admin/questions/edit', {
+    method: 'POST',
+    body: JSON.stringify({ id: editQuestionId, text, options, correct })
+  }).then(res => {
+    if (res.error) { msgEl.style.color = '#ff8888'; msgEl.innerText = res.error; return; }
+    closeEdit();
+    loadQuestions();
+  });
+}
+  async function approveWithdrawal(id) {
+  if (!confirm('Подтвердить вывод #' + id + '?')) return;
+  try {
+    const res = await fetch('/api/admin/withdrawals/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': pwd },
+      body: JSON.stringify({ id, status: 'approved' })
+    });
+    const data = await res.json();
+    if (data.ok) { loadWithdrawals(); loadStats(); }
+    else alert('Ошибка: ' + (data.error || 'неизвестно'));
+  } catch(e) {
+    alert('Ошибка подключения');
+  }
+}
+
+async function rejectWithdrawal(id) {
+  if (!confirm('Отклонить вывод #' + id + '?')) return;
+  try {
+    const res = await fetch('/api/admin/withdrawals/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': pwd },
+      body: JSON.stringify({ id, status: 'rejected' })
+    });
+    const data = await res.json();
+    if (data.ok) { loadWithdrawals(); loadStats(); }
+    else alert('Ошибка: ' + (data.error || 'неизвестно'));
+  } catch(e) {
+    alert('Ошибка подключения');
+  }
+}
+
+  // ==================== ПЕРЕВОД ====================
+  function translateAll() {
+    const btn = document.getElementById('translateAllBtn');
+    const msgEl = document.getElementById('translateMsg');
+    if (!confirm('Перевести все вопросы? Это может занять несколько минут.')) return;
+    btn.disabled = true;
+    btn.innerText = '⏳ Переводим...';
+    msgEl.style.color = '#00ffaa';
+    msgEl.innerText = 'Запрос отправлен, ждём...';
+    api('/api/admin/questions/translate-all', { method: 'POST' }).then(res => {
+      btn.disabled = false;
+      btn.innerText = '🌐 Перевести все вопросы';
+      if (res.error) { msgEl.style.color = '#ff8888'; msgEl.innerText = res.error; return; }
+      msgEl.innerText = `✅ Переведено: ${res.translated}, пропущено: ${res.skipped}`;
+      loadQuestions();
+    }).catch(() => {
+      btn.disabled = false;
+      btn.innerText = '🌐 Перевести все вопросы';
+      msgEl.style.color = '#ff8888';
+      msgEl.innerText = 'Ошибка подключения';
+    });
+  }
+
+  // ==================== ИГРОКИ — ДЕЙСТВИЯ ====================
+  function resetPlayer(userId) {
+    if (!confirm('Сбросить прогресс игрока?')) return;
+    api('/api/admin/reset-player', { method: 'POST', body: JSON.stringify({ userId }) })
+      .then(() => loadPlayers());
+  }
+
+  function deletePlayer(userId) {
+    if (!confirm('Полностью удалить игрока? Это нельзя отменить.')) return;
+    api('/api/admin/delete-player', { method: 'POST', body: JSON.stringify({ userId }) })
+      .then(() => loadPlayers());
+  }
+
+  // ==================== ВОПРОСЫ — ДЕЙСТВИЯ ====================
+  function deleteQuestion(localIndex) {
+  const q = currentPageQuestions[localIndex];
+  if (!q || !confirm('Удалить вопрос?')) return;
+  api('/api/admin/questions/delete', {
+    method: 'POST',
+    body: JSON.stringify({ id: q.id })
+  }).then(() => loadQuestions());
+}
+
+  function addQuestion() {
+    const text = document.getElementById('qText').value.trim();
+    const options = [0,1,2,3].map(i => document.getElementById('opt' + i).value.trim()).filter(Boolean);
+    const correct = document.getElementById('qCorrect').value.trim();
+    const msg = document.getElementById('msg');
+    if (!text || options.length < 2 || !correct) {
+      msg.style.color = '#ff8888'; msg.innerText = 'Заполни все поля'; return;
+    }
+    if (!options.includes(correct)) {
+      msg.style.color = '#ff8888'; msg.innerText = 'Правильный ответ должен совпадать с одним из вариантов'; return;
+    }
+    api('/api/admin/questions/add', {
+      method: 'POST',
+      body: JSON.stringify({ text, options, correct })
+    }).then(() => {
+      msg.style.color = '#00ffaa'; msg.innerText = 'Вопрос добавлен!';
+      ['qText','opt0','opt1','opt2','opt3','qCorrect'].forEach(id => document.getElementById(id).value = '');
+      loadQuestions();
+    });
+  }
+
+
+  function esc(s) { return String(s || '').replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+  // ==================== МУЗЫКА ====================
+const playlist = [
+  '/track1.mp3',
+  '/track2.mp3',
+  '/track3.mp3',
+  '/track4.mp3',
+  '/track5.mp3',
+  '/track6.mp3',
+  '/track7.mp3',
+  '/track8.mp3',
+  '/track9.mp3',
+  '/track10.mp3',
+];
+
+let currentTrack = 0;
+let musicStarted = false;
+let musicPlaying = false;
+
+function playTrack(index) {
+  const bgMusic = document.getElementById('bgMusic');
+  bgMusic.src = playlist[index];
+  const playPromise = bgMusic.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      musicPlaying = true;
+      document.getElementById('musicBtn').innerText = '🔊';
+    }).catch(() => {
+      musicPlaying = false;
+      document.getElementById('musicBtn').innerText = '🔇';
+    });
+  }
+}
+
+document.getElementById('bgMusic').addEventListener('ended', () => {
+  currentTrack = (currentTrack + 1) % playlist.length;
+  playTrack(currentTrack);
+});
+
+function toggleMusic() {
+  const bgMusic = document.getElementById('bgMusic');
+  if (!musicStarted) {
+    musicStarted = true;
+    playTrack(currentTrack);
+    localStorage.setItem('adminMusic', '1');
+    return;
+  }
+  if (musicPlaying) {
+    bgMusic.pause();
+    musicPlaying = false;
+    document.getElementById('musicBtn').innerText = '🎵';
+    localStorage.setItem('adminMusic', '0');
+  } else {
+    playTrack(currentTrack);
+    localStorage.setItem('adminMusic', '1');
+  }
+}
+
+document.addEventListener('pointerdown', function() {
+  if (localStorage.getItem('adminMusic') !== '0' && !musicStarted) {
+    musicStarted = true;
+    playTrack(currentTrack);
+  }
+}, { once: true });
+  async function loadShopStats(subsPage = 1, histPage = 1) {
+  const statsRes = await fetch('/api/admin/shop-stats', { headers: { 'x-admin-password': pwd } });
+  const stats = await statsRes.json();
+
+  const packMap = {};
+  (stats.packRows || []).forEach(r => packMap[r.price_currency] = { cnt: r.cnt, total: r.total });
+  const subMap = {};
+  (stats.subRows || []).forEach(r => subMap[r.subscription_type] = r.cnt);
+
+  document.getElementById('shopStatsContent').innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+      <tr style="color:#5599bb;"><th style="text-align:left;padding:6px 0;">Пакет</th><th>Кол-во</th><th>Сумма</th></tr>
+      <tr><td>Базовый за COGNIQ</td><td style="text-align:center;">${packMap['cogniq']?.cnt || 0}</td><td style="text-align:center;">${packMap['cogniq']?.total || 0} 🪙</td></tr>
+      <tr><td>Базовый за USDT</td><td style="text-align:center;">${packMap['usdt']?.cnt || 0}</td><td style="text-align:center;">$${packMap['usdt']?.total || 0}</td></tr>
+      <tr><td>Базовый за Stars</td><td style="text-align:center;">${packMap['stars']?.cnt || 0}</td><td style="text-align:center;">${packMap['stars']?.total || 0} ⭐</td></tr>
+      <tr style="border-top:1px solid #334;"><td>👑 VIP активных</td><td style="text-align:center;" colspan="2">${subMap['vip'] || 0}</td></tr>
+      <tr><td>💎 PREMIUM активных</td><td style="text-align:center;" colspan="2">${subMap['premium'] || 0}</td></tr>
+    </table>`;
+
+  const subsRes = await fetch(`/api/admin/subscribers?page=${subsPage}&limit=20`, { headers: { 'x-admin-password': pwd } });
+  const subsData = await subsRes.json();
+  document.getElementById('subscribersContent').innerHTML = subsData.subscribers.length
+    ? `<table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+        <tr style="color:#5599bb;"><th style="text-align:left;padding:6px 0;">ID</th><th style="text-align:left;">Имя</th><th>Тип</th><th>До</th></tr>
+        ${subsData.subscribers.map(s => `
+          <tr style="border-top:1px solid #223;">
+            <td style="padding:5px 0;color:#667799;">${s.telegram_id}</td>
+            <td>${s.first_name || '—'}</td>
+            <td style="text-align:center;">${s.subscription_type === 'premium' ? '💎 PREMIUM' : '👑 VIP'}</td>
+            <td style="text-align:center;font-size:0.8rem;color:#5599bb;">${new Date(s.subscription_expires_at).toLocaleDateString()}</td>
+          </tr>`).join('')}
+      </table>`
+    : '<span style="color:#5599bb;">Нет активных подписчиков</span>';
+  renderPagination('subsPagination', subsData.page, subsData.pages, (p) => loadShopStats(p, histPage));
+
+  const histRes = await fetch(`/api/admin/shop-history?page=${histPage}&limit=20`, { headers: { 'x-admin-password': pwd } });
+  const histData = await histRes.json();
+  document.getElementById('shopHistoryContent').innerHTML = histData.purchases.length
+    ? `<table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+        <tr style="color:#5599bb;"><th style="text-align:left;padding:6px 0;">ID</th><th style="text-align:left;">Имя</th><th>Товар</th><th>Сумма</th><th>Дата</th></tr>
+        ${histData.purchases.map(p => `
+          <tr style="border-top:1px solid #223;">
+            <td style="padding:5px 0;color:#667799;">${p.user_id}</td>
+            <td>${p.first_name || '—'}</td>
+            <td>${p.item_key}</td>
+            <td style="text-align:center;">${p.price_amount} ${p.price_currency}</td>
+            <td style="text-align:center;color:#5599bb;">${new Date(p.created_at).toLocaleDateString()}</td>
+          </tr>`).join('')}
+      </table>`
+    : '<span style="color:#5599bb;">Нет покупок</span>';
+  renderPagination('histPagination', histData.page, histData.pages, (p) => loadShopStats(subsPage, p));
+}
+  async function loadExchangeOrders(page = 1) {
+  try {
+    const res = await fetch(`/api/admin/exchange-orders?page=${page}&limit=25`, {
+      headers: { 'x-admin-password': pwd }
+    });
+    const data = await res.json();
+    const tbody = document.querySelector('#exchangeTable tbody');
+    tbody.innerHTML = (data.orders || []).map(o => `
+      <tr>
+        <td>${o.id}</td>
+        <td>${o.first_name || o.telegram_id}</td>
+        <td>$${parseFloat(o.amount_usdt).toFixed(2)}</td>
+        <td>${o.amount_cogniq.toLocaleString()} COGNIQ</td>
+        <td>${new Date(o.created_at).toLocaleDateString()}</td>
+      </tr>
+    `).join('');
+    renderPagination('exchangePagination', data.page, data.pages, (p) => loadExchangeOrders(p));
+  } catch(e) {
+    document.querySelector('#exchangeTable tbody').innerHTML = '<tr><td colspan="5" style="color:#ff8888;text-align:center;">Ошибка загрузки</td></tr>';
+  }
+}
+  function loadTransfers(page = 1) {
+  fetch(`/api/admin/transfers/list?page=${page}`, { headers: { 'x-admin-password': pwd } })
+    .then(r => r.json()).then(data => {
+      const tbody = document.querySelector('#transfersTable tbody');
+      tbody.innerHTML = (data.transfers || []).map(t => `
+        <tr>
+          <td>${t.id}</td>
+          <td>${t.from_nick || t.from_name || t.from_user}</td>
+          <td>${t.to_nick || t.to_name || t.to_user}</td>
+          <td>${t.amount.toLocaleString()} COGNIQ</td>
+          <td>${t.commission.toLocaleString()} COGNIQ</td>
+          <td>${new Date(t.created_at).toLocaleDateString()}</td>
+        </tr>
+      `).join('');
+      renderPagination('transfersPagination', data.page, data.pages, (p) => loadTransfers(p));
+    });
+  fetch(`/api/admin/transfers/stats`, { headers: { 'x-admin-password': pwd } })
+    .then(r => r.json()).then(data => {
+      document.getElementById('statsTransfers').innerHTML = `
+        <div class="stat-box"><div class="stat-label">Всего переводов</div><div class="stat-value">${data.total_count || 0}</div></div>
+        <div class="stat-box"><div class="stat-label">Объём COGNIQ</div><div class="stat-value">${(data.total_volume || 0).toLocaleString()}</div></div>
+        <div class="stat-box"><div class="stat-label">Комиссия собрана</div><div class="stat-value">${(data.total_commission || 0).toLocaleString()}</div></div>
+      `;
+    });
+}
+
+async function adminResetCooldown() {
+  const id = document.getElementById('adminTgId').value.trim();
+  if (!id) { document.getElementById('adminActionResult').textContent = '⚠️ Введи Telegram ID'; return; }
+  const r = await fetch('/api/admin/reset-cooldown', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-admin-password': pwd }, body: JSON.stringify({ telegram_id: id }) });
+  const data = await r.json();
+  document.getElementById('adminActionResult').textContent = data.ok ? '✅ Кулдаун сброшен' : '❌ Ошибка: ' + (data.error || '');
+}
+
+async function adminSetSub(type, days) {
+  const id = document.getElementById('adminTgId').value.trim();
+  if (!id) { document.getElementById('adminActionResult').textContent = '⚠️ Введи Telegram ID'; return; }
+  const r = await fetch('/api/admin/set-subscription', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-admin-password': pwd }, body: JSON.stringify({ telegram_id: id, subscription_type: type, days }) });
+  const data = await r.json();
+  document.getElementById('adminActionResult').textContent = data.ok ? (type ? `✅ Подписка ${type} выдана на ${days} дней` : '✅ Подписка отозвана') : '❌ Ошибка: ' + (data.error || '');
+}
+  // ==================== BURN ====================
+async function loadBurn() {
+  try {
+    const data = await api('/api/admin/burn/stats');
+    if (data.error) return;
+    document.getElementById('burnStats').innerHTML = `
+      <div class="stat-box"><div class="stat-label">Накоплено в пуле</div><div class="stat-value" style="color:#ff6644;">${(data.total || 0).toLocaleString()}</div><div class="stat-sub">COGNIQ к сжиганию</div></div>
+      <div class="stat-box"><div class="stat-label">Сожжено всего</div><div class="stat-value" style="color:#ff4422;">${(data.totalBurned || 0).toLocaleString()}</div><div class="stat-sub">за всё время</div></div>
+      <div class="stat-box"><div class="stat-label">Последнее сжигание</div><div class="stat-value" style="font-size:0.95rem;">${data.lastBurnedAt ? new Date(data.lastBurnedAt).toLocaleDateString() : '—'}</div></div>
+    `;
+    const sources = data.sources || [];
+    const sourceLabels = { hint: '💡 Подсказки', super_retry: '🔁 Повтор супер-игры', impulse_crash: '✈️ Crash', impulse_roulette: '🎰 Рулетка', impulse_slot: '🎲 Слоты', impulse_blackjack: '🃏 Блэкджек' };
+    document.getElementById('burnSources').innerHTML = sources.length ? `<table style="width:100%;border-collapse:collapse;font-size:0.88rem;"><thead><tr><th>Источник</th><th style="text-align:right;">Событий</th><th style="text-align:right;">COGNIQ</th></tr></thead><tbody>${sources.map(s => `<tr><td style="padding:7px 10px;">${sourceLabels[s.source] || s.source}</td><td style="text-align:right;padding:7px 10px;color:#5599bb;">${s.count}</td><td style="text-align:right;padding:7px 10px;color:#ff8866;">${parseInt(s.total).toLocaleString()}</td></tr>`).join('')}</tbody></table>` : '<div style="color:#5599bb;padding:8px 0;">Событий пока нет</div>';
+    const history = data.history || [];
+    document.getElementById('burnHistory').innerHTML = history.length ? `<table style="width:100%;border-collapse:collapse;font-size:0.85rem;"><thead><tr><th>Дата</th><th style="text-align:right;">Сумма</th><th>TX Hash</th></tr></thead><tbody>${history.map(h => `<tr><td style="padding:7px 10px;">${new Date(h.burned_at).toLocaleDateString()}</td><td style="text-align:right;padding:7px 10px;color:#ff6644;">${parseInt(h.amount).toLocaleString()} COGNIQ</td><td style="padding:7px 10px;">${h.tx_hash ? `<a href="https://tonviewer.com/transaction/${h.tx_hash}" target="_blank" style="color:#00ccff;font-size:0.78rem;font-family:monospace;">${h.tx_hash.slice(0,16)}...</a>` : '—'}</td></tr>`).join('')}</tbody></table>` : '<div style="color:#5599bb;padding:8px 0;">Сжиганий ещё не было</div>';
+  } catch(e) { console.error('loadBurn error:', e); }
+}
+
+async function executeBurn() {
+  const txHash = document.getElementById('burnTxHash').value.trim();
+  const msgEl = document.getElementById('burnMsg');
+  if (!txHash) { msgEl.style.color = '#ff8888'; msgEl.innerText = '⚠️ Введи TX Hash'; return; }
+  if (!confirm('Выполнить сжигание и опубликовать в канал?')) return;
+  const btn = document.getElementById('burnBtn');
+  btn.disabled = true;
+  msgEl.style.color = '#00ffaa'; msgEl.innerText = '⏳ Выполняем...';
+  try {
+    const data = await api('/api/admin/burn/execute', { method: 'POST', body: JSON.stringify({ txHash }) });
+    if (data.error) { msgEl.style.color = '#ff8888'; msgEl.innerText = '❌ ' + data.error; }
+    else { msgEl.style.color = '#00ffaa'; msgEl.innerText = `✅ Сожжено ${data.burned.toLocaleString()} COGNIQ. Опубликовано в канал.`; document.getElementById('burnTxHash').value = ''; loadBurn(); }
+  } catch(e) { msgEl.style.color = '#ff8888'; msgEl.innerText = '❌ Ошибка подключения'; }
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>
