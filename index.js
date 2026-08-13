@@ -352,10 +352,6 @@ async function translateQuestion(q, lang) {
   }
 }
 
-// ==================== ИНИЦИАЛИЗАЦИЯ БД ====================
-  await loadQuestionsFromDB();
-  console.log('БД инициализирована');
-}
 // BURN — добавить в пул
 async function addToBurnPool(source, amount, telegramId) {
   if (!amount || amount <= 0) return;
