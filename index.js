@@ -3443,15 +3443,6 @@ app.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (req,
   }
 });
 // ==================== CRASH: ГЕНЕРАТОР ТОЧКИ КРАША ====================
-function generateCrashPoint() {
-  // Провабли-фэйр: house edge 5%, минимум x1.00
-  const r = Math.random();
-  // Отсекаем топ 5% → краш на x1.00
-  if (r < 0.05) return 1.00;
-  // Для остальных 95%: равномерное распределение от 1.00 до ~20x
-  const crash = Math.floor(100 / (1 - r)) / 100;
-  return Math.min(crash, 100.00); // кап 100x
-}
 // ===== CRASH (серверная логика) =====
 app.post('/api/casino/crash/start', requireInitDataStrict, casinoRateLimit, async (req, res) => {
   try {
@@ -3635,41 +3626,6 @@ app.post('/api/casino/crash/lose', requireInitDataStrict, casinoRateLimit, async
   }
 });
 // ==================== BLACKJACK: СЕРВЕРНАЯ ЛОГИКА ====================
-function bjBuildDeck() {
-  const SUITS = ['♠','♥','♦','♣']; const VALUES = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-  let deck = [];
-  for (let d = 0; d < 6; d++) for (const s of SUITS) for (const v of VALUES) deck.push({ v, s });
-  for (let i = deck.length - 1; i > 0; i--) {
-    const buf = crypto.randomBytes(4); const j = buf.readUInt32BE(0) % (i + 1);
-    [deck[i], deck[j]] = [deck[j], deck[i]];
-  }
-  return deck;
-}
-function minesMultiplier(total, mines, opened) {
-  if (opened === 0) return 1.00;
-  let mult = 1.0;
-  for (let i = 0; i < opened; i++) {
-    const safe = total - mines - i;
-    const remaining = total - i;
-    mult *= remaining / safe;
-  }
-  return Math.floor(mult * 0.95 * 100) / 100;
-}
-
-
-function bjCardValue(card) {
-  if (['J','Q','K'].includes(card.v)) return 10;
-  if (card.v === 'A') return 11;
-  return parseInt(card.v);
-}
-
-function bjHandScore(hand) {
-  let score = 0, aces = 0;
-  for (const c of hand) { score += bjCardValue(c); if (c.v === 'A') aces++; }
-  while (score > 21 && aces > 0) { score -= 10; aces--; }
-  return score;
-}
-
 // РАЗДАЧА
 app.post('/api/casino/blackjack/deal', requireInitDataStrict, casinoRateLimit, async (req, res) => {
   const client = await pool.connect();
