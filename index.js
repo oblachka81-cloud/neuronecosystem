@@ -4082,33 +4082,6 @@ app.get('/fiat.html', (req, res) => {
 
 // ─── MINES END ────────────────────────────────────────────
 // ==================== BESTCHANGE API ====================
-const bestchangeCache = {
-  currencies: {},      // { ru: { data, timestamp }, en: { data, timestamp } }
-  rates: {},           // { "112-132": { data, timestamp } }
-  changers: {}         // { ru: { data, timestamp }, en: { data, timestamp } }
-};
-
-const CACHE_TTL_MS = 60000; // 60 секунд, как в доке BestChange
-
-async function bestchangeFetch(path) {
-  let lastError;
-  for (const host of BESTCHANGE_API_HOSTS) {
-    try {
-      const url = `https://${host}/v2/${BESTCHANGE_API_KEY}${path}`;
-      const resp = await fetch(url, {
-        headers: { 'Accept-Encoding': 'gzip', 'Accept': 'application/json' },
-        signal: AbortSignal.timeout(8000)
-      });
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      return await resp.json();
-    } catch (e) {
-      lastError = e;
-      console.warn(`[BestChange] ${host} failed: ${e.message}, trying next mirror...`);
-    }
-  }
-  throw lastError || new Error('All BestChange mirrors failed');
-}
-
 // GET /api/bestchange/currencies/:lang
 app.get('/api/bestchange/currencies/:lang', publicRateLimit, async (req, res) => {
   if (!BESTCHANGE_API_KEY) return res.status(503).json({ success: false, error: 'API key not configured' });
