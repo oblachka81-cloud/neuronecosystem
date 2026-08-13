@@ -4847,7 +4847,7 @@ await pool.query('UPDATE users SET balance = balance - $1 WHERE telegram_id = $2
   }
 });
 // ==================== ОБМЕННИК ====================
-app.get('/api/exchange/rate', requireInitData, rateLimit(20, 60000), async (req, res) => {
+app.get('/api/exchange/rate', requireInitData, authRateLimit, async (req, res) => {
   const wallet = process.env.TON_OPERATION_WALLET;
   res.json({ rate: 200, address: wallet || 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv', min_usdt: 1, max_usdt: 100 });
 });
