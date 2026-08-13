@@ -28,6 +28,7 @@ const { askAI } = require('./src/services/ai');
 const { bestchangeCache, bestchangeFetch, CACHE_TTL_MS } = require('./src/services/bestchange');
 const { getJettonWalletAddress, sendCogniqJetton } = require('./src/services/ton');
 const { bjBuildDeck, bjCardValue, bjHandScore, minesMultiplier, generateCrashPoint } = require('./src/services/casino');
+const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuote, toUnitsForSwap, toAssetId, safePayload, requestQuoteWithFee } = require('./src/services/exchange');
 
 const {
   BOT_TOKEN,
