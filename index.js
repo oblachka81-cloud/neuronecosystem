@@ -449,22 +449,30 @@ async function initDB() {
   for (const m of migrations) await pool.query(m);
 
 // Клинап зависших crash ставок при старте сервера
-await pool.query(`
-  UPDATE crash_bets SET status = 'crashed'
-  WHERE status = 'active' AND round_start < NOW() - INTERVAL '10 minutes'
-`);
+try {
   await pool.query(`
-  UPDATE crash_bets SET status = 'crashed'
-  WHERE status = 'waiting' AND round_start < NOW() - INTERVAL '1 hour'
-`);
-console.log('[CRASH] Stale bets cleaned up on startup');
+    UPDATE crash_bets SET status = 'crashed'
+    WHERE status = 'active' AND round_start < NOW() - INTERVAL '10 minutes'
+  `);
+  await pool.query(`
+    UPDATE crash_bets SET status = 'crashed'
+    WHERE status = 'waiting' AND round_start < NOW() - INTERVAL '1 hour'
+  `);
+  console.log('[CRASH] Stale bets cleaned up on startup');
+} catch (e) {
+  console.log('[CRASH] Cleanup skipped (table not yet created)');
+}
 
 // Клинап зависших BJ сессий при старте сервера
-await pool.query(`
-  DELETE FROM blackjack_sessions
-  WHERE created_at < NOW() - INTERVAL '30 minutes'
-`);
-console.log('[BJ] Stale sessions cleaned up on startup');
+try {
+  await pool.query(`
+    DELETE FROM blackjack_sessions
+    WHERE created_at < NOW() - INTERVAL '30 minutes'
+  `);
+  console.log('[BJ] Stale sessions cleaned up on startup');
+} catch (e) {
+  console.log('[BJ] Cleanup skipped (table not yet created)');
+}
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS questions (
