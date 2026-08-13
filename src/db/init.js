@@ -1,5 +1,6 @@
 // src/db/init.js
 module.exports = async function initDB(pool, loadQuestionsFromDB) {
+    await pool.query(`
   CREATE TABLE IF NOT EXISTS users (
       telegram_id BIGINT PRIMARY KEY,
       username TEXT,
