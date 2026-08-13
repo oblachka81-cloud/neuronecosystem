@@ -24,6 +24,7 @@ const { getOrCreateUser, saveUser, calcGamesLeft, checkAndResetDailyLimit, today
 const { loadQuestionsFromDB, pickGameQuestions, translateQuestion, yandexTranslate, questionsCache } = require('./src/services/questions');
 const { addToBurnPool, logTx, withRetry } = require('./src/services/burn');
 const { checkAndUnlockAchievements } = require('./src/services/achievements');
+const { askAI } = require('./src/services/ai');
 
 const {
   BOT_TOKEN,
