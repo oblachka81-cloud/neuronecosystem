@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta property="og:title" content="NEURON BETA — Стань тестером"/>
+  <meta property="og:description" content="Первые 100 тестеров получают все наигранные COGNIQ + бонус до 10 000"/>
+  <meta property="og:url" content="https://neuron1.bothost.tech/beta.html"/>
+  <title>NEURON BETA TESTER</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: #0a0a0f;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== PARTICLES ===== */
+    #particles {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: float linear infinite;
+      opacity: 0.15;
+    }
+    @keyframes float {
+      0%   { transform: translateY(100vh) scale(0); opacity:0; }
+      10%  { opacity: 0.15; }
+      90%  { opacity: 0.1; }
+      100% { transform: translateY(-100px) scale(1); opacity:0; }
+    }
+
+    /* ===== WRAPPER ===== */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    /* ===== LANG SWITCHER ===== */
+    .lang-bar {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-bottom: 32px;
+    }
+    .lang-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.5);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+    }
+    .lang-btn.active {
+      background: rgba(168,85,247,0.25);
+      border-color: rgba(168,85,247,0.6);
+      color: #c084fc;
+    }
+    .lang-btn:hover { border-color: rgba(168,85,247,0.4); color:#c084fc; }
+
+    /* ===== HEADER ===== */
+    .logo-block {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .logo-icon {
+      font-size: 52px;
+      line-height: 1;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 20px rgba(168,85,247,0.8));
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { filter: drop-shadow(0 0 20px rgba(168,85,247,0.8)); }
+      50%      { filter: drop-shadow(0 0 40px rgba(168,85,247,1)); }
+    }
+    .logo-title {
+      font-size: 13px;
+      letter-spacing: 6px;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .main-title {
+      font-size: clamp(28px,6vw,42px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .sub-title {
+      font-size: 15px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ===== COUNTER ===== */
+    .counter-block {
+      background: rgba(168,85,247,0.08);
+      border: 1px solid rgba(168,85,247,0.25);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .counter-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+    }
+    .counter-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .counter-num {
+      font-size: 48px;
+      font-weight: 900;
+      color: #c084fc;
+      line-height: 1;
+      text-shadow: 0 0 30px rgba(168,85,247,0.6);
+    }
+    .counter-slash {
+      font-size: 28px;
+      color: rgba(255,255,255,0.2);
+    }
+    .counter-total {
+      font-size: 28px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.35);
+    }
+    .counter-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+    .counter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      border-radius: 3px;
+      transition: width 1s ease;
+      box-shadow: 0 0 10px rgba(168,85,247,0.5);
+    }
+
+    /* ===== CARDS ===== */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 18px 16px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .card:hover {
+      border-color: rgba(168,85,247,0.35);
+      transform: translateY(-2px);
+    }
+    .card-icon { font-size: 26px; margin-bottom: 10px; }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .card-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.5;
+    }
+
+    /* ===== REWARD ===== */
+    .reward-block {
+      background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(236,72,153,0.08));
+      border: 1px solid rgba(168,85,247,0.3);
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin-bottom: 28px;
+    }
+    .reward-title {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 14px;
+    }
+    .reward-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .reward-row:last-child { margin-bottom: 0; }
+    .reward-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,#a855f7,#ec4899);
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(168,85,247,0.6);
+    }
+    .reward-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.4;
+    }
+    .reward-text strong { color:#e879f9; }
+
+    /* ===== CTA ===== */
+    .cta-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      box-shadow: 0 8px 30px rgba(168,85,247,0.4);
+      margin-bottom: 14px;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(168,85,247,0.6);
+    }
+    .cta-btn:active { transform: translateY(0); }
+    .cta-btn.disabled {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.3);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .cta-note {
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 1px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.15);
+      letter-spacing: 2px;
+    }
+
+    /* ===== CLOSED OVERLAY ===== */
+    .closed-badge {
+      display: none;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 10px;
+      padding: 12px 18px;
+      text-align: center;
+      font-size: 13px;
+      color: #f87171;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    @media(max-width:400px){
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="wrap">
+
+  <!-- LANG -->
+  <div class="lang-bar" style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:32px;">
+  <button onclick="setLang('ru')" style="background:none;border:none;padding:0;cursor:pointer;filter:brightness(1.4)drop-shadow(0 0 6px #f472b6);">
+    <img src="/public/images/cogniq/beta_lang_ru.png" style="height:36px;width:auto;display:block;">
+  </button>
+  <button onclick="setLang('en')" style="background:none;border:none;padding:0;cursor:pointer;">
+    <img src="/public/images/cogniq/beta_lang_en.png" style="height:36px;width:auto;display:block;">
+  </button>
+  <button onclick="setLang('fr')" style="background:none;border:none;padding:0;cursor:pointer;">
+    <img src="/public/images/cogniq/beta_lang_fr.png" style="height:36px;width:auto;display:block;">
+  </button>
+  <button onclick="setLang('es')" style="background:none;border:none;padding:0;cursor:pointer;">
+    <img src="/public/images/cogniq/beta_lang_es.png" style="height:36px;width:auto;display:block;">
+  </button>
+</div>
+
+  <!-- HEADER -->
+  <div class="logo-block" style="text-align:center;margin-bottom:36px;">
+  <img src="/public/images/cogniq/beta_logo.png" alt="BETA TESTER" style="height:250px;width:auto;display:block;margin:0 auto;">
+</div>
+
+  <!-- COUNTER -->
+  <div style="position:relative;margin-bottom:28px;">
+  <img src="/public/images/cogniq/beta_counter_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+  <div style="position:relative;z-index:1;padding:20px;text-align:center;">
+    <div class="counter-label" data-i18n="spotsLabel">Занято мест</div>
+    <div class="counter-row">
+      <div class="counter-num" id="counterNum">—</div>
+      <div class="counter-slash">/</div>
+      <div class="counter-total">100</div>
+    </div>
+    <div class="counter-bar">
+      <div class="counter-fill" id="counterFill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+
+  <!-- CARDS -->
+  <div class="cards">
+  <div style="position:relative;">
+    <img src="/public/images/cogniq/beta_card_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+    <div style="position:relative;z-index:1;padding:18px 16px;">
+      <div class="card-icon">🎮</div>
+      <div class="card-title" data-i18n="card1Title">Играй</div>
+      <div class="card-text" data-i18n="card1Text">Все игры IMPULSE открыты. Тестируй, исследуй, побеждай.</div>
+    </div>
+  </div>
+  <div style="position:relative;">
+    <img src="/public/images/cogniq/beta_card_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+    <div style="position:relative;z-index:1;padding:18px 16px;">
+      <div class="card-icon">🐛</div>
+      <div class="card-title" data-i18n="card2Title">Находи баги</div>
+      <div class="card-text" data-i18n="card2Text">Заметил ошибку — сообщи. Каждый репорт ценится.</div>
+    </div>
+  </div>
+  <div style="position:relative;">
+    <img src="/public/images/cogniq/beta_card_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+    <div style="position:relative;z-index:1;padding:18px 16px;">
+      <div class="card-icon">💎</div>
+      <div class="card-title" data-i18n="card3Title">Зарабатывай</div>
+      <div class="card-text" data-i18n="card3Text">Все наигранные COGNIQ остаются у тебя-Честный айрдроп.</div>
+    </div>
+  </div>
+  <div style="position:relative;">
+    <img src="/public/images/cogniq/beta_card_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+    <div style="position:relative;z-index:1;padding:18px 16px;">
+      <div class="card-icon">🏆</div>
+      <div class="card-title" data-i18n="card4Title">Получи бонус</div>
+      <div class="card-text" data-i18n="card4Text">От 1 000 до 10 000 COGNIQ по итогам активности.</div>
+    </div>
+  </div>
+</div>
+
+  <!-- REWARD -->
+  <div style="position:relative; margin-bottom:28px;">
+  <img src="/public/images/cogniq/beta_reward_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+  <div style="position:relative;z-index:1;padding:22px 20px;">
+    <div class="reward-title" data-i18n="rewardTitle">Что ты получишь</div>
+    <div class="reward-row">
+      <div class="reward-dot"></div>
+      <div class="reward-text" data-i18n="reward1">Все <strong>наигранные COGNIQ</strong> остаются на балансе</div>
+    </div>
+    <div class="reward-row">
+      <div class="reward-dot"></div>
+      <div class="reward-text" data-i18n="reward2">Бонус <strong>1 000 — 10 000 COGNIQ</strong> по активности</div>
+    </div>
+    <div class="reward-row">
+      <div class="reward-dot"></div>
+      <div class="reward-text" data-i18n="reward3">Статус <strong>первого тестера</strong> в истории платформы</div>
+    </div>
+    <div class="reward-row">
+      <div class="reward-dot"></div>
+      <div class="reward-text" data-i18n="reward4">Прямое влияние на <strong>развитие игр</strong></div>
+    </div>
+  </div>
+</div>
+
+  <!-- CTA -->
+  <div class="closed-badge" id="closedBadge" data-i18n="closedText">Набор завершён. 100 тестеров уже в игре!</div>
+  <a id="ctaBtn" href="https://t.me/NeuronGame_bot?start=beta" target="_blank" style="display:block;width:100%;text-align:center;margin-bottom:14px;">
+  <img id="ctaBtnImg" src="/public/images/cogniq/beta_cta_btn_ru.png" style="width:100%;max-width:480px;height:auto;display:block;margin:0 auto;">
+</a>
+  <div class="cta-note" data-i18n="ctaNote">Только первые 100 ·Бесплатно· Telegram</div>
+
+  <div class="footer">NEURON PLATFORM © 2026</div>
+</div>
+
+<script>
+// ===== I18N =====
+const i18n = {
+  ru: {
+    mainTitle: "BETA TESTER<br>PROGRAM",
+    subTitle: "Первые 100 участников",
+    spotsLabel: "Занято мест",
+    card1Title: "Играй",
+    card1Text: "Все игры IMPULSE открыты. Тестируй, исследуй, побеждай.",
+    card2Title: "Находи баги",
+    card2Text: "Заметил ошибку — сообщи. Каждый репорт ценится.",
+    card3Title: "Зарабатывай",
+    card3Text: "Все наигранные COGNIQ остаются у тебя-Честный айрдроп.",
+    card4Title: "Получи бонус",
+    card4Text: "От 1 000 до 10 000 COGNIQ по итогам активности.",
+    rewardTitle: "Что ты получишь",
+    reward1: "Все <strong>наигранные COGNIQ</strong> остаются на балансе",
+    reward2: "Бонус <strong>1 000 — 10 000 COGNIQ</strong> по активности",
+    reward3: "Статус <strong>первого тестера</strong> в истории платформы",
+    reward4: "Прямое влияние на <strong>развитие игр</strong>",
+    closedText: "Набор завершён. 100 тестеров уже в игре!",
+    ctaBtn: "⚡ Стать тестером",
+    ctaNote: "Только первые 100 · Бесплатно · Telegram"
+  },
+  en: {
+    mainTitle: "BETA TESTER<br>PROGRAM",
+    subTitle: "First 100 participants",
+    spotsLabel: "Spots taken",
+    card1Title: "Play",
+    card1Text: "All IMPULSE games are open. Test, explore, win.",
+    card2Title: "Find bugs",
+    card2Text: "Spotted an issue — report it. Every report counts.",
+    card3Title: "Earn",
+    card3Text: "All COGNIQ you win stays in your balance-Fair Airdrop.",
+    card4Title: "Get bonus",
+    card4Text: "From 1,000 to 10,000 COGNIQ based on your activity.",
+    rewardTitle: "What you get",
+    reward1: "All <strong>earned COGNIQ</strong> stays in your balance",
+    reward2: "Bonus <strong>1,000 — 10,000 COGNIQ</strong> by activity",
+    reward3: "Status of <strong>first tester</strong> in platform history",
+    reward4: "Direct influence on <strong>game development</strong>",
+    closedText: "Enrollment closed. 100 testers are already in!",
+    ctaBtn: "⚡ Become a Tester",
+    ctaNote: "First 100 only · Free · Telegram"
+  },
+  fr: {
+    mainTitle: "PROGRAMME<br>BÊTA TESTEUR",
+    subTitle: "Les 100 premiers participants",
+    spotsLabel: "Places prises",
+    card1Title: "Joue",
+    card1Text: "Tous les jeux IMPULSE sont ouverts. Teste, explore, gagne.",
+    card2Title: "Trouve les bugs",
+    card2Text: "Tu vois un problème — signale-le. Chaque rapport compte.",
+    card3Title: "Gagne",
+    card3Text: "Tous tes COGNIQ gagnés restent sur ton solde pour-Airdrop Équitable.",
+    card4Title: "Reçois un bonus",
+    card4Text: "De 1 000 à 10 000 COGNIQ selon ton activité.",
+    rewardTitle: "Ce que tu reçois",
+    reward1: "Tous les <strong>COGNIQ gagnés</strong> restent sur ton solde",
+    reward2: "Bonus <strong>1 000 — 10 000 COGNIQ</strong> selon l'activité",
+    reward3: "Statut de <strong>premier testeur</strong> dans l'histoire de la plateforme",
+    reward4: "Influence directe sur le <strong>développement des jeux</strong>",
+    closedText: "Inscription terminée. 100 testeurs sont déjà dans le jeu !",
+    ctaBtn: "⚡ Devenir Testeur",
+    ctaNote: "100 premiers seulement · Gratuit · Telegram"
+  },
+  es: {
+    mainTitle: "PROGRAMA<br>BETA TESTER",
+    subTitle: "Los primeros 100 participantes",
+    spotsLabel: "Lugares ocupados",
+    card1Title: "Juega",
+    card1Text: "Todos los juegos IMPULSE están abiertos. Prueba, explora, gana.",
+    card2Title: "Encuentra bugs",
+    card2Text: "¿Ves un error? — repórtalo. Cada reporte cuenta.",
+    card3Title: "Gana",
+    card3Text: "Todos los COGNIQ que ganes se quedan en tu saldo para-Airdrop Justo.",
+    card4Title: "Recibe bonus",
+    card4Text: "De 1.000 a 10.000 COGNIQ según tu actividad.",
+    rewardTitle: "Lo que recibes",
+    reward1: "Todos los <strong>COGNIQ ganados</strong> se quedan en tu saldo",
+    reward2: "Bonus <strong>1.000 — 10.000 COGNIQ</strong> por actividad",
+    reward3: "Estatus de <strong>primer tester</strong> en la historia de la plataforma",
+    reward4: "Influencia directa en el <strong>desarrollo de juegos</strong>",
+    closedText: "Inscripción cerrada. ¡100 testers ya están en el juego!",
+    ctaBtn: "⚡ Ser Tester",
+    ctaNote: "Solo los primeros 100 · Gratis · Telegram"
+  }
+};
+
+let currentLang = 'ru';
+
+function setLang(lang) {
+  currentLang = lang;
+  
+  // Подсветка активной кнопки
+  document.querySelectorAll('.lang-bar button').forEach((btn, i) => {
+    const langs = ['ru','en','fr','es'];
+    const isActive = langs[i] === lang;
+    btn.style.filter = isActive ? 'brightness(1.4) drop-shadow(0 0 6px #f472b6)' : 'none';
+  });
+  
+  // Обновление текстов
+  const t = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  
+  // Обновление кнопки CTA
+  const ctaImg = document.getElementById('ctaBtnImg');
+  if (ctaImg) ctaImg.src = '/public/images/cogniq/beta_cta_btn_' + lang + '.png';
+}
+
+// ===== COUNTER =====
+async function loadCounter() {
+  try {
+    const r = await fetch('/api/beta/count');
+    const d = await r.json();
+    const taken = d.taken || 0;
+    const pct = Math.min((taken / 100) * 100, 100);
+    document.getElementById('counterNum').textContent = taken;
+    document.getElementById('counterFill').style.width = pct + '%';
+    if (taken >= 100) {
+      document.getElementById('closedBadge').style.display = 'block';
+      const btn = document.getElementById('ctaBtn');
+      btn.classList.add('disabled');
+      btn.removeAttribute('href');
+      btn.style.pointerEvents = 'none';
+    }
+  } catch(e) {
+    document.getElementById('counterNum').textContent = '?';
+  }
+}
+
+loadCounter();
+setInterval(loadCounter, 15000);
+
+// ===== PARTICLES =====
+(function(){
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const colors = ['168,85,247','236,72,153','249,115,22','99,102,241'];
+
+  for(let i=0;i<55;i++){
+    particles.push({
+      x: Math.random()*window.innerWidth,
+      y: Math.random()*window.innerHeight,
+      r: Math.random()*2.5+0.5,
+      speed: Math.random()*0.4+0.15,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      opacity: Math.random()*0.12+0.04
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(${p.color},${p.opacity})`;
+      ctx.fill();
+      p.y -= p.speed;
+      if(p.y < -10){ p.y = H+10; p.x = Math.random()*W; }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
