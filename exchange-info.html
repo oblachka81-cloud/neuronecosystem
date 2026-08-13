@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEURON EXCHANGE — Информация</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--amber:#f59e0b;--amber-light:#fbbf24;--amber-dark:#d97706;--dark:#0a0a0f;--card:rgba(18,18,42,0.55);--border:#2a2a4a;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:#e0e0f0;font-family:'Inter',sans-serif;line-height:1.7;overflow-x:hidden;}
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
+.particle{position:absolute;border-radius:50%;animation:float linear infinite;opacity:0;}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-10vh) scale(1);opacity:0;}}
+
+.nav-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10, 10, 15, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.15);
+    padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fbbf24;
+    padding: 8px 16px; border-radius: 12px;
+    text-decoration: none; font-size: 0.9em; font-weight: 700;
+    transition: all 0.2s; cursor: pointer;
+}
+.back-btn:hover {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: #fbbf24;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
+header {
+    position: relative; text-align: center; padding: 40px 20px 30px;
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, transparent 100%);
+}
+.header-glow {
+    position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+.logo {
+    font-size: 2em; font-weight: 900;
+    background: linear-gradient(135deg, #fcd34d, #f59e0b, #d97706);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: 3px;
+    filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.4));
+}
+.subtitle {
+    color: #8899aa; margin-top: 8px; font-size: 0.9em;
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+}
+main { max-width: 800px; margin: 0 auto; padding: 20px 20px 60px; position: relative; z-index: 1; }
+section { margin-bottom: 48px; }
+section h2 {
+    font-size: 1.3em; font-weight: 800;
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+}
+section h2::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; width: 50px; height: 2px;
+    background: linear-gradient(90deg, #f59e0b, transparent); border-radius: 2px;
+}
+section p { color: #c0c8d8; margin-bottom: 12px; font-size: 0.95em; line-height: 1.6; }
+
+.highlight {
+    background: rgba(245, 158, 11, 0.04);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    border-top: 2px solid #f59e0b;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin: 16px 0;
+    transition: all 0.3s;
+}
+.highlight:hover {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+    box-shadow: 0 8px 32px rgba(245, 158, 11, 0.05);
+}
+.highlight p { margin: 0; font-size: 0.95em; color: #e0e8f0; font-weight: 500; }
+
+.step-list, .info-list { list-style: none; margin: 16px 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.step-list li, .info-list li {
+    background: rgba(20, 20, 40, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex; align-items: flex-start; gap: 14px;
+    transition: all 0.2s;
+}
+.step-list li:hover, .info-list li:hover {
+    border-color: rgba(245, 158, 11, 0.3);
+    background: rgba(20, 20, 40, 0.8);
+}
+.step-num {
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    color: #0a0a0f;
+    font-weight: 900; font-size: 0.85em;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+.step-text, .info-text { color: #c0c8d8; font-size: 0.95em; line-height: 1.5; padding-top: 3px; }
+
+.disclaimer {
+    background: rgba(10, 10, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    font-size: 0.85em;
+    color: #667788;
+    line-height: 1.6;
+}
+footer {
+    text-align: center; padding: 32px 20px;
+    color: #445566; font-size: 0.8em;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    background: rgba(0,0,0,0.2);
+}
+.lang-switch { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+.lang-switch button {
+    background: transparent; border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fbbf24; padding: 6px 16px; border-radius: 20px;
+    cursor: pointer; font-size: 0.8em; font-weight: 700;
+    transition: all 0.2s;
+}
+.lang-switch button.active {
+    background: #f59e0b; color: #0a0a0f;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); border-color: #f59e0b;
+}
+.lang-switch button:hover:not(.active) { background: rgba(245, 158, 11, 0.1); }
+
+[data-en],[data-fr],[data-es]{display:none;}
+body.en [data-ru]{display:none;} body.en [data-en]{display:block;}
+body.fr [data-ru]{display:none;} body.fr [data-fr]{display:block;}
+body.es [data-ru]{display:none;} body.es [data-es]{display:block;}
+
+@media(max-width:480px){
+    .logo{font-size:1.5em;}
+    .nav-bar{padding: 12px 16px;}
+}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+
+<nav class="nav-bar">
+    <a class="back-btn" href="#" onclick="goBackToExchange(); return false;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span data-ru>На биржу</span><span data-en>Back</span><span data-fr>Retour</span><span data-es>Volver</span>
+    </a>
+</nav>
+
+<header>
+    <div class="header-glow"></div>
+    <div class="logo">💛 NEURON EXCHANGE</div>
+    <p class="subtitle">
+        <span data-ru>Информация о торговых парах</span>
+        <span data-en>Trading Pairs Information</span>
+        <span data-fr>Information sur les paires</span>
+        <span data-es>Información de pares</span>
+    </p>
+    <div class="lang-switch">
+        <button id="btn-ru" onclick="setLang('ru')">RU</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+        <button id="btn-fr" onclick="setLang('fr')">FR</button>
+        <button id="btn-es" onclick="setLang('es')">ES</button>
+    </div>
+</header>
+
+<main>
+    <section>
+        <h2><span data-ru>1. NEURON EXCHANGE — часть экосистемы</span><span data-en>1. NEURON EXCHANGE — Part of the Ecosystem</span><span data-fr>1. NEURON EXCHANGE — Partie de l'écosystème</span><span data-es>1. NEURON EXCHANGE — Parte del ecosistema</span></h2>
+        <p data-ru>NEURON Exchange — неотъемлемая часть блокчейн-экосистемы NEURON. Платформа в реальном времени мониторит ведущие децентрализованные биржи экосистемы TON и автоматически выбирает для Вас наилучший курс в момент совершения свопа.</p>
+        <p data-en>NEURON Exchange is an integral part of the NEURON blockchain ecosystem. The platform monitors leading decentralized exchanges in the TON ecosystem in real time and automatically selects the best rate for your swap.</p>
+        <p data-fr>NEURON Exchange fait partie intégrante de l'écosystème blockchain NEURON. La plateforme surveille les principales bourses décentralisées de l'écosystème TON en temps réel et sélectionne automatiquement le meilleur taux pour votre échange.</p>
+        <p data-es>NEURON Exchange es parte integral del ecosistema blockchain NEURON. La plataforma monitorea los principales exchanges descentralizados del ecosistema TON en tiempo real y selecciona automáticamente la mejor tasa para tu intercambio.</p>
+        <div class="highlight">
+            <p style="text-align:center; letter-spacing:1px; font-weight:700; color:#fbbf24;">STON.fi &nbsp;·&nbsp; DeDust &nbsp;·&nbsp; Megaton Finance</p>
+        </div>
+    </section>
+
+    <section>
+        <h2><span data-ru>2. Безопасность и конфиденциальность</span><span data-en>2. Security & Privacy</span><span data-fr>2. Sécurité et confidentialité</span><span data-es>2. Seguridad y Privacidad</span></h2>
+        <p data-ru>✅ NEURON Exchange <strong>не хранит Ваши активы</strong>. Все средства находятся на Вашем TON-кошельке.</p>
+        <p data-en>✅ NEURON Exchange <strong>does not store your assets</strong>. All funds remain on your TON wallet.</p>
+        <p data-fr>✅ NEURON Exchange <strong>ne stocke pas vos actifs</strong>. Tous les fonds restent sur votre portefeuille TON.</p>
+        <p data-es>✅ NEURON Exchange <strong>no almacena sus activos</strong>. Todos los fondos permanecen en su billetera TON.</p>
+        <p data-ru>🔒 Мы не передаём данные третьим лицам и не собираем личную информацию.</p>
+        <p data-en>🔒 We do not share data with third parties and do not collect personal information.</p>
+        <p data-fr>🔒 Nous ne partageons pas les données avec des tiers et ne collectons pas d'informations personnelles.</p>
+        <p data-es>🔒 No compartimos datos con terceros y no recopilamos información personal.</p>
+        <div class="highlight">
+            <p data-ru>💛 <strong>Без торговой комиссии.</strong> Только газ платформы (5 COGNIQ) + газ сети TON.</p>
+            <p data-en>💛 <strong>No trading fees.</strong> Only platform gas (5 COGNIQ) + TON network gas.</p>
+            <p data-fr>💛 <strong>Sans frais de trading.</strong> Uniquement le gaz de la plateforme (5 COGNIQ) + gaz du réseau TON.</p>
+            <p data-es>💛 <strong>Sin comisiones de trading.</strong> Solo gas de plataforma (5 COGNIQ) + gas de red TON.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2><span data-ru>3. xStocks — токенизированные акции</span><span data-en>3. xStocks — Tokenized Stocks</span><span data-fr>3. xStocks — Actions tokenisées</span><span data-es>3. xStocks — Acciones Tokenizadas</span></h2>
+        <p data-ru>xStocks — токенизированные акции мировых компаний на блокчейне TON. Каждый токен обеспечен реальной акцией 1:1.</p>
+        <p data-en>xStocks are tokenized shares of global companies on the TON blockchain. Each token is backed 1:1 by a real share.</p>
+        <p data-fr>Les xStocks sont des actions tokenisées de grandes entreprises mondiales sur la blockchain TON. Chaque token est adossé 1:1 à une action réelle.</p>
+        <p data-es>xStocks son acciones tokenizadas de empresas globales en la blockchain TON. Cada token está respaldado 1:1 por una acción real.</p>
+        <p data-ru><strong>Доступные активы:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+        <p data-en><strong>Available assets:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+        <p data-fr><strong>Actifs disponibles :</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+        <p data-es><strong>Activos disponibles:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+
+        <p data-ru><strong>Как работает обеспечение:</strong></p>
+        <ul class="info-list" data-ru>
+            <li><span class="step-text">🏦 <strong>Обеспечение 1:1.</strong> На каждый токен приобретается реальная акция на NYSE/NASDAQ.</span></li>
+            <li><span class="step-text">🏛️ <strong>Кастодиальное хранение.</strong> Ценные бумаги хранятся в регулируемых швейцарских и европейских банках-кастодианах.</span></li>
+            <li><span class="step-text">🛡️ <strong>Защита от банкротства (SPV).</strong> Акции изолированы от финансовых рисков эмитента.</span></li>
+            <li><span class="step-text">🔍 <strong>Публичный аудит.</strong> Proof-of-Reserves доступен публично. Каждому продукту присвоен ISIN.</span></li>
+        </ul>
+
+        <p data-en><strong>How backing works:</strong></p>
+        <ul class="info-list" data-en>
+            <li><span class="step-text">🏦 <strong>1:1 Backing.</strong> For every token, a real share is purchased on NYSE/NASDAQ.</span></li>
+            <li><span class="step-text">🏛️ <strong>Custodial Storage.</strong> Securities are held in regulated Swiss and European custodian banks.</span></li>
+            <li><span class="step-text">🛡️ <strong>Bankruptcy Protection (SPV).</strong> Shares are isolated from issuer's financial risks.</span></li>
+            <li><span class="step-text">🔍 <strong>Public Audit.</strong> Proof-of-Reserves is publicly available. Each product has an ISIN.</span></li>
+        </ul>
+
+        <p data-ru>Выпуск токенов осуществляется швейцарской регулируемой компанией <strong>Backed Finance</strong> (Backed Assets Limited).</p>
+        <p data-en>Token issuance is handled by the Swiss regulated company <strong>Backed Finance</strong> (Backed Assets Limited).</p>
+        <p data-fr>L'émission de tokens est gérée par la société suisse réglementée <strong>Backed Finance</strong> (Backed Assets Limited).</p>
+        <p data-es>La emisión de tokens está a cargo de la empresa regulada suiza <strong>Backed Finance</strong> (Backed Assets Limited).</p>
+
+        <div class="highlight">
+            <p data-ru>💡 При выплате дивидендов или сплитах акций баланс токенов автоматически корректируется через ончейн-ребейзинг.</p>
+            <p data-en>💡 When dividends are paid or stock splits occur, token balances are automatically adjusted via on-chain rebasing.</p>
+            <p data-fr>💡 Lors du versement de dividendes ou de fractionnements d'actions, les soldes de tokens sont automatiquement ajustés via le rebasing on-chain.</p>
+            <p data-es>💡 Cuando se pagan dividendos o se producen divisiones de acciones, los saldos de tokens se ajustan automáticamente mediante rebasing en cadena.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2><span data-ru>4. Как начать торговать</span><span data-en>4. How to Start Trading</span><span data-fr>4. Comment commencer à trader</span><span data-es>4. Cómo empezar a operar</span></h2>
+        <ul class="step-list">
+            <li>
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <span data-ru>Подключите TON-кошелёк (Tonkeeper, Tonhub, MyTonWallet)</span>
+                    <span data-en>Connect your TON wallet (Tonkeeper, Tonhub, MyTonWallet)</span>
+                    <span data-fr>Connectez votre portefeuille TON (Tonkeeper, Tonhub, MyTonWallet)</span>
+                    <span data-es>Conecte su billetera TON (Tonkeeper, Tonhub, MyTonWallet)</span>
+                </div>
+            </li>
+            <li>
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <span data-ru>Выберите торговую пару в разделе «Crypto» или «xStocks»</span>
+                    <span data-en>Choose a trading pair in the "Crypto" or "xStocks" section</span>
+                    <span data-fr>Choisissez une paire de trading dans la section «Crypto» ou «xStocks»</span>
+                    <span data-es>Elija un par de trading en la sección "Crypto" o "xStocks"</span>
+                </div>
+            </li>
+            <li>
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <span data-ru>Введите сумму и нажмите «Exchange»</span>
+                    <span data-en>Enter the amount and press "Exchange"</span>
+                    <span data-fr>Entrez le montant et appuyez sur «Exchange»</span>
+                    <span data-es>Ingrese el monto y presione "Exchange"</span>
+                </div>
+            </li>
+            <li>
+                <div class="step-num">4</div>
+                <div class="step-text">
+                    <span data-ru>Подтвердите транзакцию в кошельке</span>
+                    <span data-en>Confirm the transaction in your wallet</span>
+                    <span data-fr>Confirmez la transaction dans votre portefeuille</span>
+                    <span data-es>Confirme la transacción en su billetera</span>
+                </div>
+            </li>
+            <li>
+                <div class="step-num">5</div>
+                <div class="step-text">
+                    <span data-ru>Актив автоматически зачисляется на Ваш TON-кошелёк</span>
+                    <span data-en>The asset is automatically credited to your TON wallet</span>
+                    <span data-fr>L'actif est automatiquement crédité sur votre portefeuille TON</span>
+                    <span data-es>El activo se acredita automáticamente en su billetera TON</span>
+                </div>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>
+            <span data-ru>5. NEURON FIAT — Прямой доступ к ликвидности</span>
+            <span data-en>5. NEURON FIAT — Direct Access to Global Liquidity</span>
+            <span data-fr>5. NEURON FIAT — Accès direct à la liquidité mondiale</span>
+            <span data-es>5. NEURON FIAT — Acceso directo a la liquidez global</span>
+        </h2>
+        <p data-ru>NEURON Exchange интегрирован с ведущими агрегаторами рынка: <strong>BestChange, Exchanger и MonitorEC</strong>. Это обеспечивает мгновенный доступ к пулу из <strong>500+ проверенных обменников</strong> и <strong>43 000+ торговых пар</strong> в реальном времени.</p>
+        <p data-en>NEURON Exchange is integrated with leading market aggregators: <strong>BestChange, Exchanger, and MonitorEC</strong>. This provides instant access to a pool of <strong> for 500+ verified exchangers</strong> and <strong>43,000+ trading pairs</strong> in real time.</p>
+        <p data-fr>NEURON Exchange est intégré aux principaux agrégateurs du marché : <strong>BestChange, Exchanger et MonitorEC</strong>. Cela offre un accès instantané à un pool de <strong>plus de 500 échangeurs vérifiés</strong> et <strong>plus de 43 000 paires de trading</strong> en temps réel.</p>
+        <p data-es>NEURON Exchange está integrado con los principales agregadores del mercado: <strong>BestChange, Exchanger y MonitorEC</strong>. Esto proporciona acceso instantáneo a un pool de <strong>más de 500 cambiadores verificados</strong> y <strong>más de 43 000 pares de trading</strong> en tiempo real.</p>
+        
+        <ul class="info-list">
+            <li>
+                <span class="step-text">
+                    <span data-ru><strong>Верифицированные резервы.</strong> Строгий скоринг партнеров. Мошенники и ненадежные сервисы исключаются из выдачи автоматически.</span>
+                    <span data-en><strong>Verified reserves.</strong> Strict partner scoring. Scammers and unreliable services are automatically excluded from the feed.</span>
+                    <span data-fr><strong>Réserves vérifiées.</strong> Évaluation stricte des partenaires. Les escrocs et les services peu fiables sont automatiquement exclus.</span>
+                <span data-es><strong>Reservas verificadas.</strong> Evaluación estricta de socios. Estafadores y servicios poco fiables se excluyen automáticamente.</span>
+                </span>
+            </li>
+            <li>
+                <span class="step-text">
+                    <span data-ru><strong>Умный маршрутизатор.</strong> Алгоритм сравнивает курсы с учетом скрытых комиссий платежных систем и строит транзитные пути, если прямой пары нет.</span>
+                    <span data-en><strong>Smart routing.</strong> The algorithm compares rates accounting for hidden payment fees and builds transit routes if no direct pair exists.</span>
+                    <span data-fr><strong>Routage intelligent.</strong> L'algorithme compare les taux en tenant compte des frais cachés et crée des itinéraires de transit si nécessaire.</span>
+                    <span data-es><strong>Enrutamiento inteligente.</strong> El algoritmo compara tasas considerando comisiones ocultas y construye rutas de tránsito si es necesario.</span>
+                </span>
+            </li>
+            <li>
+                <span class="step-text">
+                    <span data-ru><strong>Глобальный охват.</strong> Поддержка фиата десятков стран (USD, EUR, AED и др.) и любых платежных методов: от банковских карт до PayPal, Wise и наличных.</span>
+                    <span data-en><strong>Global coverage.</strong> Support for fiat from dozens of countries (USD, EUR, AED, etc.) and any payment methods: from bank cards to PayPal, Wise, and cash.</span>
+                    <span data-fr><strong>Couverture mondiale.</strong> Prise en charge des devises de dizaines de pays (USD, EUR, AED, etc.) et de tout moyen de paiement : cartes, PayPal, Wise, espèces.</span>
+                    <span data-es><strong>Cobertura global.</strong> Soporte para fiat de decenas de países (USD, EUR, AED, etc.) y cualquier método de pago: tarjetas, PayPal, Wise, efectivo.</span>
+                </span>
+            </li>
+            <li>
+                <span class="step-text">
+                    <span data-ru><strong>Колоссальные объемы.</strong> Суммарные резервы партнеров превышают $80 млрд. Ваша сделка исполнится мгновенно при любом объеме.</span>
+                    <span data-en><strong>Massive volumes.</strong> Total partner reserves exceed $80 billion. Your trade will execute instantly at any volume.</span>
+                    <span data-fr><strong>Volumes massifs.</strong> Les réserves totales des partenaires dépassent 80 milliards de dollars. Votre transaction s'exécutera instantanément.</span>
+                    <span data-es><strong>Volúmenes masivos.</strong> Las reservas totales de los socios superan los $80 mil millones. Su transacción se ejecutará al instante.</span>
+                </span>
+            </li>
+        </ul>
+
+        <div class="highlight">
+            <p data-ru><strong>0% скрытых комиссий NEURON.</strong> Вы видите точную сумму к получению до подтверждения сделки.</p>
+            <p data-en><strong>0% hidden NEURON fees.</strong> You see the exact amount to receive before confirming the transaction.</p>
+            <p data-fr><strong>0% de frais cachés NEURON.</strong> Vous voyez le montant exact à recevoir avant de confirmer la transaction.</p>
+            <p data-es><strong>0% de comisiones ocultas de NEURON.</strong> Ves el monto exacto a recibir antes de confirmar la transacción.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2><span data-ru>6. Дисклеймер</span><span data-en>5. Disclaimer</span><span data-fr>5. Avertissement</span><span data-es>5. Aviso Legal</span></h2>
+        <div class="disclaimer">
+            <p data-ru>Торговля токенизированными акциями (xStocks) может быть ограничена или запрещена в некоторых юрисдикциях. Перед использованием убедитесь что это разрешено законодательством Вашей страны. NEURON Exchange предоставляет доступ к децентрализованным протоколам и не несёт ответственности за соблюдение Вами местных законов.</p>
+            <p data-en>Trading tokenized stocks (xStocks) may be restricted or prohibited in certain jurisdictions. Before using, ensure it is permitted by your local laws. NEURON Exchange provides access to decentralized protocols and is not responsible for your compliance with local regulations.</p>
+            <p data-fr>Le trading d'actions tokenisées (xStocks) peut être restreint ou interdit dans certaines juridictions. Avant utilisation, assurez-vous que cela est autorisé par votre législation locale. NEURON Exchange fournit l'accès aux protocoles décentralisés et n'est pas responsable de votre conformité aux réglementations locales.</p>
+            <p data-es>El trading de acciones tokenizadas (xStocks) puede estar restringido o prohibido en ciertas jurisdicciones. Antes de usarlo, asegúrese de que esté permitido por las leyes locales. NEURON Exchange proporciona acceso a protocolos descentralizados y no es responsable del cumplimiento de las regulaciones locales.</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    2026 © NEURON Exchange — <span data-ru>Все права защищены</span><span data-en>All rights reserved</span><span data-fr>Tous droits réservés</span><span data-es>Todos los derechos reservados</span>
+</footer>
+
+<script>
+// === PARTICLES ===
+(function(){
+    const container = document.getElementById('particles');
+    const colors = ['#f59e0b', '#fbbf24', '#00ffff', '#a855f7'];
+    for(let i = 0; i < 30; i++){
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 4 + 2;
+        p.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random() * colors.length)]};left:${Math.random() * 100}%;animation-duration:${Math.random() * 15 + 10}s;animation-delay:${Math.random() * 10}s;`;
+        container.appendChild(p);
+    }
+})();
+
+// === LANGUAGE SWITCHER ===
+function setLang(lang){
+    document.body.className = lang;
+    document.documentElement.lang = lang;
+    ['ru','en','fr','es'].forEach(l => {
+        document.getElementById('btn-' + l).classList.toggle('active', l === lang);
+    });
+    localStorage.setItem('neuron_ex_info_lang', lang);
+}
+
+// === ROBUST BACK BUTTON ===
+function goBackToExchange() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get('lang') || localStorage.getItem('neuron_ex_info_lang') || 'ru';
+    window.location.href = '/exchange.html?lang=' + lang;
+}
+
+// Init
+const savedLang = localStorage.getItem('neuron_ex_info_lang') || 'ru';
+setLang(savedLang);
+</script>
+</body>
+</html>
