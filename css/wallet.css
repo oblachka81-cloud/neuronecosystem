@@ -1,0 +1,75 @@
+.wallet-panel { padding: 22px 18px 30px; animation: fadeInUp 0.4s ease forwards; }
+.wallet-section-title { font-size: 0.72rem; font-weight: 700; color: #334466; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; margin-top: 18px; }
+.wallet-section-title:first-child { margin-top: 0; }
+.wallet-balance-card { background: linear-gradient(135deg, rgba(0,200,255,0.1), rgba(122,46,255,0.1)); border: 1px solid rgba(0,255,255,0.25); border-radius: 24px; padding: 24px 20px; text-align: center; margin-bottom: 8px; box-shadow: 0 0 40px rgba(0,200,255,0.07); position: relative; overflow: hidden; }
+.wallet-balance-card::after { content: ''; position: absolute; bottom: 0; left: 20%; right: 20%; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,255,255,0.3), transparent); }
+.wallet-balance-amount { font-size: 2.6rem; font-weight: 900; background: linear-gradient(135deg, #00ffff, #aa66ff); -webkit-background-clip: text; background-clip: text; color: transparent; line-height: 1.1; text-shadow: none; }
+.wallet-balance-label { font-size: 0.82rem; color: #334466; margin-top: 4px; letter-spacing: 1px; }
+.wallet-status-pill { display: inline-block; background: rgba(255,170,0,0.12); border: 1px solid rgba(255,180,0,0.3); border-radius: 40px; padding: 5px 14px; font-size: 0.78rem; font-weight: 700; color: #ffcc44; margin-top: 10px; }
+.wallet-connect-card { background: rgba(10,18,38,0.7); border: 1px solid rgba(0,255,255,0.15); border-radius: 20px; padding: 14px 18px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wallet-connect-info { font-size: 0.8rem; color: #446688; }
+.wallet-connect-addr { font-size: 0.88rem; font-weight: 700; color: #00ffff; margin-top: 2px; word-break: break-all; }
+.wallet-btn-big { border: none; border-radius: 60px; padding: 13px 22px; font-size: 0.97rem; font-weight: 800; color: white; cursor: pointer; width: 100%; margin-bottom: 8px; transition: all 0.2s; letter-spacing: 0.3px; }
+.wallet-btn-big:hover { transform: translateY(-1px); }
+.wallet-btn-connect { background: linear-gradient(135deg, #0099dd, #0055bb); box-shadow: 0 4px 14px rgba(0,130,220,0.3); }
+.wallet-btn-disconnect { background: rgba(200,40,40,0.15); border: 1px solid rgba(255,80,80,0.35) !important; color: #ff8888 !important; }
+.wallet-btn-withdraw { background: linear-gradient(135deg, #00bb55, #008833); box-shadow: 0 4px 14px rgba(0,160,80,0.3); }
+.wallet-btn-withdraw-disabled { background: rgba(255,255,255,0.05); color: #445566 !important; cursor: not-allowed !important; box-shadow: none !important; }
+.wallet-btn-withdraw-disabled:hover { transform: none !important; }
+.wallet-info-card { background: rgba(10,18,38,0.7); border: 1px solid rgba(0,255,255,0.1); border-radius: 20px; padding: 6px 16px; margin-bottom: 8px; }
+.wallet-info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,255,255,0.06); font-size: 0.88rem; }
+.wallet-info-row:last-child { border-bottom: none; }
+.wallet-info-label { color: #334466; }
+.wallet-info-value { color: #8899bb; font-weight: 600; }
+.wallet-info-value.green { color: #00ffaa; text-shadow: 0 0 8px rgba(0,255,170,0.3); }
+.wallet-withdraw-hint { background: rgba(255,150,0,0.07); border: 1px solid rgba(255,150,0,0.2); border-radius: 14px; padding: 9px 14px; font-size: 0.8rem; color: #ffaa44; margin-bottom: 8px; text-align: center; }
+.profile-panel { padding: 22px 18px 30px; animation: fadeInUp 0.4s ease forwards; }
+.profile-avatar-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 22px; }
+.profile-avatar-img { width: 120px; height: 120px; border-radius: 50%; border: 2px solid rgba(0,255,255,0.35); object-fit: cover; box-shadow: 0 0 24px rgba(0,200,255,0.2); }
+.profile-avatar-emoji { width: 120px; height: 120px; border-radius: 50%; background: rgba(0,200,255,0.08); border: 2px solid rgba(0,255,255,0.35); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+.profile-avatar-fallback { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, rgba(0,200,255,0.15), rgba(122,46,255,0.15)); border: 2px solid rgba(0,255,255,0.35); display: flex; align-items: center; justify-content: center; font-size: 2.8rem; font-weight: 900; color: #00ffff; box-shadow: 0 0 24px rgba(0,200,255,0.2); }
+.profile-section-title { font-size: 0.72rem; font-weight: 700; color: #334466; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; margin-top: 18px; }
+.profile-section-title:first-of-type { margin-top: 0; }
+.profile-field-card { background: rgba(10,18,38,0.7); border: 1px solid rgba(0,255,255,0.12); border-radius: 20px; padding: 13px 16px; margin-bottom: 6px; }
+.profile-nickname-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.profile-nickname-val { font-size: 0.97rem; font-weight: 700; color: #e0f0ff; }
+.profile-edit-btn { background: rgba(0,200,255,0.08); border: 1px solid rgba(0,255,255,0.25); border-radius: 28px; padding: 6px 13px; font-size: 0.78rem; font-weight: 700; color: #00ffff; cursor: pointer; transition: all 0.2s; }
+.profile-edit-btn:hover { background: rgba(0,200,255,0.18); }
+.profile-input { width: 100%; background: rgba(0,0,0,0.35); border: 1px solid rgba(0,255,255,0.25); border-radius: 14px; padding: 10px 14px; font-size: 0.93rem; color: #e0f0ff; margin-top: 10px; outline: none; transition: border-color 0.2s; }
+.profile-input:focus { border-color: rgba(0,255,255,0.5); }
+.profile-input-btns { display: flex; gap: 8px; margin-top: 8px; }
+.profile-input-save { flex: 2; background: linear-gradient(135deg, #00ccff, #7a2eff); border: none; border-radius: 28px; padding: 10px; font-size: 0.83rem; font-weight: 800; color: white; cursor: pointer; }
+.profile-input-cancel { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 28px; padding: 10px; font-size: 0.83rem; color: #5577aa; cursor: pointer; }
+.profile-toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.profile-toggle-label { font-size: 0.88rem; color: #8899bb; }
+.profile-toggle { position: relative; width: 46px; height: 24px; flex-shrink: 0; }
+.profile-toggle input { opacity: 0; width: 0; height: 0; }
+.profile-toggle-slider { position: absolute; inset: 0; background: rgba(255,255,255,0.08); border-radius: 24px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(0,255,255,0.15); }
+.profile-toggle input:checked + .profile-toggle-slider { background: linear-gradient(135deg, #00ccff, #7a2eff); border-color: #00ccff; }
+.profile-toggle-slider:before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+.profile-toggle input:checked + .profile-toggle-slider:before { transform: translateX(22px); }
+.emoji-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.achievement-item { display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; font-size: 28px; border-radius: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,255,0.12); cursor: pointer; flex-shrink: 0; transition: all 0.15s; }
+.achievement-item:hover { background: rgba(0,200,255,0.12); border-color: rgba(0,255,255,0.35); transform: scale(1.08); }
+.achievement-item.locked { opacity: 0.3; filter: grayscale(1); }
+.profile-save-btn { background: linear-gradient(135deg, #00ccff, #7a2eff); border: none; border-radius: 60px; padding: 14px 24px; font-size: 0.97rem; font-weight: 800; color: white; cursor: pointer; width: 100%; margin-top: 18px; box-shadow: 0 4px 18px rgba(0,200,255,0.3); transition: all 0.2s; letter-spacing: 0.3px; }
+.profile-save-btn:hover { box-shadow: 0 4px 26px rgba(0,200,255,0.45); }
+.frame-card { background: rgba(12,20,40,0.8); border: 1px solid rgba(0,255,255,0.13); border-radius: 20px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; transition: border-color 0.2s; }
+.frame-card:hover { border-color: rgba(0,255,255,0.28); }
+.frame-preview { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, rgba(0,200,255,0.15), rgba(122,46,255,0.15)); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; flex-shrink: 0; }
+.frame-info { flex: 1; }
+.frame-name { font-size: 0.93rem; font-weight: 700; color: #ddeeff; margin-bottom: 4px; }
+.frame-price { font-size: 0.78rem; color: #334466; margin-bottom: 9px; }
+.frame-btns { display: flex; gap: 7px; flex-wrap: wrap; }
+.frame-btn { padding: 7px 13px; border: none; border-radius: 28px; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.frame-btn:hover { opacity: 0.85; transform: scale(1.03); }
+.frame-btn-cogniq { background: linear-gradient(135deg, #00ccff, #7a2eff); color: white; }
+.frame-btn-usdt { background: linear-gradient(135deg, #00aa88, #00ddaa); color: white; }
+.frame-btn-equip { background: linear-gradient(135deg, #ffaa00, #ff6600); color: white; }
+.frame-btn-active { background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.35); color: #00ffaa; cursor: default; }
+.frame-badge-active { display: inline-block; background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.3); border-radius: 20px; padding: 2px 9px; font-size: 0.7rem; color: #00ffaa; margin-left: 6px; }
+@keyframes neonPulse { 0%,100% { box-shadow: 0 0 0 3px #aa66ff, 0 0 16px rgba(170,102,255,0.6); } 50% { box-shadow: 0 0 0 3px #cc88ff, 0 0 32px rgba(170,102,255,1); } }
+@keyframes goldPulse { 0%,100% { box-shadow: 0 0 0 3px #ffd700, 0 0 16px rgba(255,215,0,0.6); } 50% { box-shadow: 0 0 0 3px #ffe44d, 0 0 32px rgba(255,215,0,1); } }
+.avatar-frame-neon-basic { border: 3px solid #00ffff !important; box-shadow: 0 0 0 2px #00ccff, 0 0 16px rgba(0,255,255,0.5) !important; }
+.avatar-frame-neon-pulse { border: 3px solid #aa66ff !important; animation: neonPulse 1.8s ease-in-out infinite !important; }
+.avatar-frame-neon-gold { border: 3px solid #ffd700 !important; animation: goldPulse 1.8s ease-in-out infinite !important; }
