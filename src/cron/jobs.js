@@ -4,7 +4,7 @@ const { postDailyQuestion, postWeeklyTop, sendStreakWarnings, postWeeklyAchievem
 
 // TON платежи — каждые 30 секунд
 // (checkTonUsdtPayments пока в index.js, потом вынесем)
-
+function setupCron(bot, botUsername) {
 // Авто-клейм стейков — каждый день в полночь
 cron.schedule('0 0 * * *', async () => {
   try {
