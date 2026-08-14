@@ -30,6 +30,7 @@ const { getJettonWalletAddress, sendCogniqJetton } = require('./src/services/ton
 const { bjBuildDeck, bjCardValue, bjHandScore, minesMultiplier, generateCrashPoint } = require('./src/services/casino');
 const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuote, toUnitsForSwap, toAssetId, safePayload, requestQuoteWithFee } = require('./src/services/exchange');
 const { postDailyQuestion, postWeeklyTop, sendStreakWarnings, postWeeklyAchievements, postStreakBattle, postDailyFact, postRankLeaderboard, postDailyPoll } = require('./src/services/channel');
+const { setupCron } = require('./src/cron/jobs');
 
 const {
   BOT_TOKEN,
@@ -1751,23 +1752,6 @@ try {
   }
 }
 
-// Каждые 30 секунд
-cron.schedule('*/30 * * * * *', checkTonUsdtPayments, { scheduled: true });
-cron.schedule('0 0 * * *', async () => {
-  try {
-    const { rows } = await pool.query(
-      "SELECT * FROM stakes WHERE claimed = false AND end_date <= CURRENT_DATE"
-    );
-    for (const s of rows) {
-      const total = s.amount + Math.floor(s.amount * s.percent / 100);
-      await pool.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [total, s.user_id]);
-      await pool.query('UPDATE stakes SET claimed = true WHERE id = $1', [s.id]);
-    }
-    if (rows.length) console.log(`[CRON] Auto-claimed ${rows.length} stakes`);
-  } catch (e) {
-    console.error('[CRON] stake claim error:', e.message);
-  }
-});
 app.get('/api/ton-balance', async (req, res) => {
   try {
     const { address } = req.query;
@@ -2742,36 +2726,7 @@ bot.on('successful_payment', async (ctx) => {
   try { await bot.telegram.sendMessage(userId, msgs['ru']); } catch (e2) {}
 }
   });
-// ==================== ВОПРОС ДНЯ ====================
-// Каждый день в 10:00 МСК (07:00 UTC)
-cron.schedule('0 7 * * *', postDailyQuestion);
-// ==================== ТОП НЕДЕЛИ ====================
 
-// Каждое воскресенье в 18:00 UTC (21:00 МСК)
-cron.schedule('0 18 * * 0', postWeeklyTop);
-// ==================== STREAK WARNINGS ====================
-// Каждый день в 11:00 UTC (14:00 МСК)
-cron.schedule('0 11 * * *', sendStreakWarnings);
-
-// ==================== CHANNEL CONTENT AUTOMATION ====================
-
-// Пятница 16:00 UTC (19:00 МСК)
-cron.schedule('0 16 * * 5', postWeeklyAchievements);
-cron.schedule('0 0 * * *', async () => {
-  await pool.query(`UPDATE users SET daily_deeplink_used = false`);
-  console.log('[CRON] daily_deeplink_used reset');
-});
-
-// Среда 15:00 UTC (18:00 МСК)
-cron.schedule('0 15 * * 3', postStreakBattle);
-
-// Каждый день 12:00 UTC (15:00 МСК)
-cron.schedule('0 12 * * *', postDailyFact);
-
-// Вторник 15:00 UTC (18:00 МСК)
-cron.schedule('0 15 * * 2', postRankLeaderboard);
-
-cron.schedule('0 15 * * 4', postDailyPoll);
 // ==================== IMPULSE ====================
 app.get('/api/impulse/balance', requireInitData, async (req, res) => {
   try {
@@ -4265,6 +4220,9 @@ async function start() {
       const botInfo = await bot.telegram.getMe();
       botUsername = botInfo.username;
       console.log(`Бот: @${botUsername}`);
+
+      setupCron(bot, botUsername);
+      
     } catch (e) {
       console.error('Не удалось получить username бота:', e.message);
     }
