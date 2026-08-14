@@ -1,0 +1,57 @@
+.leaderboard-panel { padding: 20px 18px 28px; width: 100%; }
+.my-card-wrap { position: relative; margin-bottom: 18px; }
+.my-card-wrap > img { width: 100%; display: block; }
+.my-card-inner { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 12px; padding-top: 14px; }
+.my-card-name { color: #ffd700; font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; text-align: center; }
+.my-card-row { display: flex; width: 100%; }
+.my-card-avatar-wrap { flex: 1; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+.my-card-avatar { position: relative; width: 48px; height: 48px; }
+.my-card-avatar img:first-child { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+.my-card-avatar img:last-child { position: absolute; top: -6px; left: -6px; width: 60px; height: 60px; pointer-events: none; }
+.my-card-stats { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.my-card-stats span { font-size: 0.75rem; }
+.leaderboard-title { font-size: 0.78rem; font-weight: 700; color: #3355aa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+.lb-row-wrap { position: relative; margin-bottom: 6px; }
+.lb-row-wrap > img { width: 100%; display: block; }
+.lb-row-inner { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; }
+.lb-avatar { position: relative; flex-shrink: 0; }
+.lb-avatar img:first-child { border-radius: 50%; object-fit: cover; }
+.lb-avatar img:last-child { position: absolute; pointer-events: none; }
+.lb-name { flex: 1; min-width: 0; font-weight: 600; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-score { font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+.ref-wrap { position: relative; margin-top: 14px; }
+.ref-wrap > img { width: 100%; display: block; }
+.ref-inner { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 12px; gap: 6px; }
+.referral-card { background: linear-gradient(135deg, rgba(0,200,255,0.05), rgba(122,46,255,0.05)); border: 1px solid rgba(0,255,255,0.18); border-radius: 24px; padding: 18px; margin-top: 18px; }
+.referral-card-title { font-size: 0.97rem; font-weight: 800; color: #00ffff; margin-bottom: 4px; }
+.referral-card-desc { font-size: 0.8rem; color: #446688; margin-bottom: 12px; }
+.referral-card-stat { font-size: 0.82rem; color: #8899bb; margin-bottom: 12px; background: rgba(0,0,0,0.25); border-radius: 20px; padding: 7px 14px; text-align: center; }
+.referral-btns { display: flex; gap: 10px; }
+.referral-copy-btn { flex: 1; border: none; border-radius: 40px; padding: 11px 10px; font-size: 0.83rem; font-weight: 700; color: white; cursor: pointer; background: linear-gradient(135deg, #00ccff, #0077aa); transition: opacity 0.2s; box-shadow: 0 3px 12px rgba(0,180,255,0.25); }
+.referral-copy-btn:hover { opacity: 0.85; }
+.referral-share-btn { flex: 1; border: none; border-radius: 40px; padding: 11px 10px; font-size: 0.83rem; font-weight: 700; color: white; cursor: pointer; background: linear-gradient(135deg, #7a2eff, #4400cc); transition: opacity 0.2s; box-shadow: 0 3px 12px rgba(100,0,255,0.25); }
+.referral-share-btn:hover { opacity: 0.85; }
+
+/* Телефон (до 480px) */
+@media (max-width: 480px) {
+  .lb-row-inner { padding: 0 50px 0 65px; }
+  .lb-avatar { width: 34px; height: 34px; margin-right: 8px; }
+  .lb-avatar img:first-child { width: 34px; height: 34px; }
+  .lb-avatar img:last-child { top: -4px; left: -4px; width: 42px; height: 42px; }
+}
+
+/* Планшет (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .lb-row-inner { padding: 0 80px 0 100px; }
+  .lb-avatar { width: 40px; height: 40px; margin-right: 12px; }
+  .lb-avatar img:first-child { width: 40px; height: 40px; }
+  .lb-avatar img:last-child { top: -5px; left: -5px; width: 50px; height: 50px; }
+}
+
+/* Большой планшет (769px+) */
+@media (min-width: 769px) {
+  .lb-row-inner { padding: 0 100px 0 120px; }
+  .lb-avatar { width: 44px; height: 44px; margin-right: 16px; }
+  .lb-avatar img:first-child { width: 44px; height: 44px; }
+  .lb-avatar img:last-child { top: -6px; left: -6px; width: 56px; height: 56px; }
+}
