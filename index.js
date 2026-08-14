@@ -31,6 +31,7 @@ const { bjBuildDeck, bjCardValue, bjHandScore, minesMultiplier, generateCrashPoi
 const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuote, toUnitsForSwap, toAssetId, safePayload, requestQuoteWithFee } = require('./src/services/exchange');
 const { postDailyQuestion, postWeeklyTop, sendStreakWarnings, postWeeklyAchievements, postStreakBattle, postDailyFact, postRankLeaderboard, postDailyPoll } = require('./src/services/channel');
 const { setupCron } = require('./src/cron/jobs');
+const quizRoutes = require('./src/routes/quiz');
 
 const {
   BOT_TOKEN,
@@ -65,6 +66,7 @@ app.use(express.json());
 app.use(express.static(__dirname));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.set('trust proxy', 1);
+app.use(quizRoutes);
 
 if (!BESTCHANGE_API_KEY) {
   console.warn('⚠️ BESTCHANGE_API_KEY не задан в .env — BestChange API работать не будет');
