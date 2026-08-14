@@ -5757,83 +5757,104 @@ document.getElementById('bankTermBtns').addEventListener('click', e => {
   });
 
   // === 3. CRASH ===
-  let cState = 'waiting', cMult = 1.0, cPoint = 1.0, cBet = 0, cHasBet = false, cCashedOut = false;
+    // === 3. CRASH (честный: точка только на сервере) ===
+  let cState = 'waiting', cMult = 1.0, cPoint = 100, cBet = 0, cHasBet = false, cCashedOut = false;
   let cTimer = null, cGraphTimer = null, cStartTime = 0, cPoints = [];
   const cCanvas = document.getElementById('casinoCrashCanvas');
   const cCtx = cCanvas.getContext('2d');
 
-  window.casinoResizeCrash = () => { 
-    if(cCanvas && cCanvas.parentElement) {
-      cCanvas.width = cCanvas.parentElement.offsetWidth; 
-      cCanvas.height = 220; 
+  /** Та же формула, что на бэке (src/services/casino.js → crashMultiplierAt) */
+  function crashMultiplierAt(elapsedMs) {
+    const t = Math.max(0, elapsedMs) / 1000;
+    return Math.min(Math.floor(Math.pow(1.06, t * 8) * 100) / 100, 100);
+  }
+
+  window.casinoResizeCrash = () => {
+    if (cCanvas && cCanvas.parentElement) {
+      cCanvas.width = cCanvas.parentElement.offsetWidth;
+      cCanvas.height = 220;
     }
   };
   window.addEventListener('resize', window.casinoResizeCrash);
   setTimeout(window.casinoResizeCrash, 100);
 
   function drawCrashGraph() {
-    if(!cCanvas) return;
-    const w = cCanvas.width, h = 220; cCtx.clearRect(0,0,w,h);
-    if(cPoints.length < 2) return;
+    if (!cCanvas) return;
+    const w = cCanvas.width, h = 220;
+    cCtx.clearRect(0, 0, w, h);
+    if (cPoints.length < 2) return;
     const maxY = Math.max(cMult * 1.2, 2);
     const toX = i => (i / Math.max(cPoints.length, 30)) * w * 0.95 + w * 0.02;
     const toY = v => h - (v / maxY) * h * 0.88 - h * 0.06;
     const color = cState === 'crashed' ? '#ef4444' : '#10b981';
-    const grad = cCtx.createLinearGradient(0,0,0,h);
-    grad.addColorStop(0, cState==='crashed' ? 'rgba(239,68,68,0.35)' : 'rgba(16,185,129,0.3)');
+    const grad = cCtx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, cState === 'crashed' ? 'rgba(239,68,68,0.35)' : 'rgba(16,185,129,0.3)');
     grad.addColorStop(1, 'rgba(0,0,0,0)');
-    
-    cCtx.beginPath(); cCtx.moveTo(toX(0), toY(1.0));
-    cPoints.forEach((v,i) => cCtx.lineTo(toX(i), toY(v)));
-    cCtx.lineTo(toX(cPoints.length-1), h); cCtx.lineTo(toX(0), h); cCtx.closePath();
-    cCtx.fillStyle = grad; cCtx.fill();
-    
-    cCtx.beginPath(); cCtx.strokeStyle = color; cCtx.lineWidth = 4; cCtx.shadowBlur = 12; cCtx.shadowColor = color; cCtx.lineJoin = 'round';
-    cPoints.forEach((v,i) => i===0 ? cCtx.moveTo(toX(0), toY(1.0)) : cCtx.lineTo(toX(i), toY(v)));
-    cCtx.stroke(); cCtx.shadowBlur = 0;
+
+    cCtx.beginPath();
+    cCtx.moveTo(toX(0), toY(1.0));
+    cPoints.forEach((v, i) => cCtx.lineTo(toX(i), toY(v)));
+    cCtx.lineTo(toX(cPoints.length - 1), h);
+    cCtx.lineTo(toX(0), h);
+    cCtx.closePath();
+    cCtx.fillStyle = grad;
+    cCtx.fill();
+
+    cCtx.beginPath();
+    cCtx.strokeStyle = color;
+    cCtx.lineWidth = 4;
+    cCtx.shadowBlur = 12;
+    cCtx.shadowColor = color;
+    cCtx.lineJoin = 'round';
+    cPoints.forEach((v, i) => (i === 0 ? cCtx.moveTo(toX(0), toY(1.0)) : cCtx.lineTo(toX(i), toY(v))));
+    cCtx.stroke();
+    cCtx.shadowBlur = 0;
   }
 
   function cStartWaiting() {
-    if(cTimer) clearInterval(cTimer); if(cGraphTimer) clearInterval(cGraphTimer);
-    cState = 'waiting'; cMult = 1.0; cPoints = []; cHasBet = false; cCashedOut = false; cBet = 0;
+    if (cTimer) clearInterval(cTimer);
+    if (cGraphTimer) clearInterval(cGraphTimer);
+    cState = 'waiting';
+    cMult = 1.0;
+    cPoint = 100;
+    cPoints = [];
+    cHasBet = false;
+    cCashedOut = false;
+    cBet = 0;
+
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     document.getElementById('casinoCrashMult').textContent = '---';
     document.getElementById('casinoCrashMult').className = '';
     document.getElementById('casinoCrashMult').style.color = '#334455';
     document.getElementById('casinoCrashLabel').textContent = 'ОЖИДАНИЕ';
-    document.getElementById('casinoCrashStatus').textContent = 'Принимаются ставки...';
+    document.getElementById('casinoCrashStatus').textContent = 'Сделайте ставку';
     document.getElementById('casinoCrashDot').style.background = '#334';
     document.getElementById('casinoCrashDot').style.boxShadow = 'none';
+    document.getElementById('casinoCrashTimer').textContent = '';
     document.getElementById('casinoCrashMainBtnImg').src = `/public/images/cogniq/krash_btn_main_bet_${currentLang}.png`;
     document.getElementById('casinoCrashMainBtn').disabled = false;
     document.getElementById('casinoCrashMyBet').style.display = 'none';
     drawCrashGraph();
-    
-    let count = 5;
-    document.getElementById('casinoCrashTimer').textContent = `Старт через ${count}с`;
-    cTimer = setInterval(() => {
-      count--;
-      if(count <= 0) { clearInterval(cTimer); document.getElementById('casinoCrashTimer').textContent = ''; cStartRound(); }
-      else { document.getElementById('casinoCrashTimer').textContent = `Старт через ${count}с`; }
-    }, 1000);
   }
 
-  async function cStartRound() {
-    let serverPoint = null;
-    try {
-      const r = await authFetch(`${BASE_URL}/api/casino/crash/start`, { method: 'POST', headers: {'Content-Type':'application/json'} });
-      const data = await r.json();
-      if(data.success) serverPoint = data.crash_point;
-    } catch(e) {}
+  function cStartRound() {
+    if (cGraphTimer) clearInterval(cGraphTimer);
+    cState = 'running';
+    cPoint = 100;
+    cMult = 1.0;
+    cPoints = [1.0];
+    cStartTime = Date.now();
+    cCashedOut = false;
 
-    cState = 'running'; cPoint = serverPoint || 1.50; cMult = 1.0; cPoints = [1.0]; cStartTime = Date.now(); cCashedOut = false;
+    document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     document.getElementById('casinoCrashStatus').textContent = 'Раунд идёт!';
     document.getElementById('casinoCrashDot').style.background = '#10b981';
     document.getElementById('casinoCrashDot').style.boxShadow = '0 0 12px #10b981';
     document.getElementById('casinoCrashMult').style.color = '#10b981';
     document.getElementById('casinoCrashLabel').textContent = 'ЛЕТИМ';
+    document.getElementById('casinoCrashTimer').textContent = '';
 
-    if(cHasBet) {
+    if (cHasBet) {
       document.getElementById('casinoCrashMainBtnImg').src = `/public/images/cogniq/krash_btn_main_cashout_${currentLang}.png`;
       document.getElementById('casinoCrashMainBtn').disabled = false;
     } else {
@@ -5842,107 +5863,196 @@ document.getElementById('bankTermBtns').addEventListener('click', e => {
     }
 
     cGraphTimer = setInterval(() => {
-      const elapsed = (Date.now() - cStartTime) / 1000;
-      cMult = Math.round(Math.pow(1.06, elapsed * 8) * 100) / 100;
-      if(cMult >= cPoint) {
-        cMult = cPoint; cPoints.push(cMult); clearInterval(cGraphTimer); cTriggerCrash(); return;
+      const elapsedMs = Date.now() - cStartTime;
+      cMult = crashMultiplierAt(elapsedMs);
+
+      // Потолок 100x — закрываем через /lose (точки краша на клиенте нет)
+      if (cMult >= 100) {
+        cMult = 100;
+        cPoints.push(cMult);
+        clearInterval(cGraphTimer);
+        cTriggerCrash(100, false);
+        return;
       }
+
       cPoints.push(cMult);
       document.getElementById('casinoCrashMult').textContent = cMult.toFixed(2) + 'x';
-      if(cHasBet && !cCashedOut) {
-        document.getElementById('casinoCrashPotential').textContent = Math.floor(cBet * cMult) + ' IMPULSE';
+      if (cHasBet && !cCashedOut) {
+        document.getElementById('casinoCrashPotential').textContent =
+          Math.floor(cBet * cMult) + ' IMPULSE';
       }
       drawCrashGraph();
     }, 100);
   }
 
-  function cTriggerCrash() {
-  document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_crashed.png';
-  cState = 'crashed';
-  document.getElementById('casinoCrashMult').textContent = cPoint.toFixed(2) + 'x';
-  document.getElementById('casinoCrashMult').style.color = '#ef4444';
-  document.getElementById('casinoCrashLabel').textContent = 'КРАШ!';
-  document.getElementById('casinoCrashStatus').textContent = `Краш на x${cPoint.toFixed(2)}`;
-  document.getElementById('casinoCrashDot').style.background = '#ef4444';
-  document.getElementById('casinoCrashDot').style.boxShadow = '0 0 12px #ef4444';
-  document.getElementById('casinoCrashMainBtnImg').src = `/public/images/cogniq/krash_btn_main_disabled_${currentLang}.png`;
-  document.getElementById('casinoCrashMainBtn').disabled = true;
+  function cTriggerCrash(point, alreadySettled) {
+    if (cGraphTimer) clearInterval(cGraphTimer);
+    cPoint = typeof point === 'number' && point > 0 ? point : cMult;
+    cState = 'crashed';
 
-  // === ИСПРАВЛЕНО: Не списываем ставку если пользователь уже забрал выигрыш ===
-  if(cHasBet && !cCashedOut) {
-    authFetch(`${BASE_URL}/api/casino/crash/lose`, {
-      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({bet_amount: cBet})
-    }).then(r => r.json()).then(data => {
+    document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_crashed.png';
+    document.getElementById('casinoCrashMult').textContent = cPoint.toFixed(2) + 'x';
+    document.getElementById('casinoCrashMult').style.color = '#ef4444';
+    document.getElementById('casinoCrashLabel').textContent = 'КРАШ!';
+    document.getElementById('casinoCrashStatus').textContent = `Краш на x${cPoint.toFixed(2)}`;
+    document.getElementById('casinoCrashDot').style.background = '#ef4444';
+    document.getElementById('casinoCrashDot').style.boxShadow = '0 0 12px #ef4444';
+    document.getElementById('casinoCrashMainBtnImg').src = `/public/images/cogniq/krash_btn_main_disabled_${currentLang}.png`;
+    document.getElementById('casinoCrashMainBtn').disabled = true;
+
+    // Не дергаем /lose, если сервер уже закрыл ставку (cashout → crashed)
+    if (cHasBet && !cCashedOut && !alreadySettled) {
+      cCashedOut = true;
+      authFetch(`${BASE_URL}/api/casino/crash/lose`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      })
+        .then(r => r.json())
+        .then(data => {
+          const balEl = document.getElementById('casinoBalanceAmount');
+          if (balEl && data.new_balance !== undefined) {
+            balance = data.new_balance;
+            balEl.textContent = balance.toLocaleString();
+          }
+          if (data.crash_point) {
+            cPoint = parseFloat(data.crash_point);
+            document.getElementById('casinoCrashMult').textContent = cPoint.toFixed(2) + 'x';
+            document.getElementById('casinoCrashStatus').textContent = `Краш на x${cPoint.toFixed(2)}`;
+          }
+          casinoShowToast(`-${cBet} IMPULSE`, 3000);
+        })
+        .catch(() => {});
+    }
+
+    const row = document.getElementById('casinoCrashHistory');
+    let clsColor = 'rgba(239,68,68,0.15)';
+    let border = 'rgba(239,68,68,0.35)';
+    let color = '#ef4444';
+    if (cPoint >= 10) {
+      clsColor = 'rgba(168,85,247,0.2)';
+      border = 'rgba(168,85,247,0.5)';
+      color = '#c084fc';
+    } else if (cPoint >= 3) {
+      clsColor = 'rgba(16,185,129,0.15)';
+      border = 'rgba(16,185,129,0.35)';
+      color = '#10b981';
+    } else if (cPoint >= 1.5) {
+      clsColor = 'rgba(255,170,0,0.15)';
+      border = 'rgba(255,170,0,0.35)';
+      color = '#ffaa00';
+    }
+    row.insertAdjacentHTML(
+      'afterbegin',
+      `<span style="border-radius:20px;padding:5px 13px;font-size:0.76em;font-weight:800;border:1px solid ${border};background:${clsColor};color:${color};">x${cPoint.toFixed(2)}</span>`
+    );
+    if (row.children.length > 15) row.removeChild(row.lastChild);
+
+    drawCrashGraph();
+    setTimeout(cStartWaiting, 3000);
+  }
+
+  async function cPlaceBet() {
+    if (cState !== 'waiting' || cHasBet) return;
+    const amount = parseInt(document.getElementById('casinoCrashBetInput').value, 10) || 0;
+    if (amount < 10 || amount > 100) {
+      casinoShowToast('Ставка: 10-100 IMPULSE');
+      return;
+    }
+
+    document.getElementById('casinoCrashMainBtn').disabled = true;
+
+    try {
+      const r = await authFetch(`${BASE_URL}/api/casino/crash/bet`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bet_amount: amount }),
+      });
+      const data = await r.json();
+      if (!data.success) {
+        casinoShowToast(data.error || 'Ошибка');
+        document.getElementById('casinoCrashMainBtn').disabled = false;
+        return;
+      }
+
+      cBet = amount;
+      cHasBet = true;
       const balEl = document.getElementById('casinoBalanceAmount');
-      if(balEl && data.new_balance !== undefined) {
+      if (balEl && data.new_balance !== undefined) {
         balance = data.new_balance;
         balEl.textContent = balance.toLocaleString();
       }
-      casinoShowToast(`-${cBet} IMPULSE`, 3000);
-    }).catch(() => {});
-  }
-  // === КОНЕЦ ИСПРАВЛЕНИЯ ===
 
-  const row = document.getElementById('casinoCrashHistory');
-  let cls = 'low'; if(cPoint >= 10) cls = 'mega'; else if(cPoint >= 3) cls = 'high'; else if(cPoint >= 1.5) cls = 'mid';
-  row.insertAdjacentHTML('afterbegin', `<span style="border-radius:20px;padding:5px 13px;font-size:0.76em;font-weight:800;border:1px solid transparent;background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.35);color:#ef4444;">x${cPoint.toFixed(2)}</span>`);
-  if(row.children.length > 15) row.removeChild(row.lastChild);
-
-  drawCrashGraph();
-  setTimeout(cStartWaiting, 3000);
-}
-
-  async function cPlaceBet() {
-    if(cState !== 'waiting') return;
-    const amount = parseInt(document.getElementById('casinoCrashBetInput').value) || 0;
-    if(amount < 10 || amount > 100) { casinoShowToast('Ставка: 10-100 IMPULSE'); return; }
-    
-    try {
-      const r = await authFetch(`${BASE_URL}/api/casino/crash/bet`, {
-        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({bet_amount: amount})
-      });
-      const data = await r.json();
-      if(!data.success) { casinoShowToast(data.error || 'Ошибка'); return; }
-      
-      cBet = amount; cHasBet = true;
-      const balEl = document.getElementById('casinoBalanceAmount');
-      if(balEl && data.new_balance !== undefined) balEl.textContent = data.new_balance.toLocaleString();
-      
       document.getElementById('casinoCrashMyBet').style.display = 'flex';
       document.getElementById('casinoCrashBetAmount').textContent = amount + ' IMPULSE';
-      document.getElementById('casinoCrashPotential').textContent = Math.floor(amount * cMult) + ' IMPULSE';
-      document.getElementById('casinoCrashMainBtnImg').src = `/public/images/cogniq/krash_btn_main_disabled_${currentLang}.png`;
-      document.getElementById('casinoCrashMainBtn').disabled = true;
-    } catch(e) { casinoShowToast('Ошибка соединения'); }
+      document.getElementById('casinoCrashPotential').textContent = amount + ' IMPULSE';
+
+      // Полёт сразу после ставки (точку краша не знаем)
+      cStartRound();
+    } catch (e) {
+      casinoShowToast('Ошибка соединения');
+      document.getElementById('casinoCrashMainBtn').disabled = false;
+    }
   }
 
   async function cDoCashout() {
-  if(!cHasBet || cCashedOut) return;
-  cCashedOut = true; // === ВАЖНО: Сначала ставим флаг ===
-  try {
-    const r = await authFetch(`${BASE_URL}/api/casino/crash/cashout`, {
-      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({multiplier: cMult})
-    });
-    const data = await r.json();
-    const balEl = document.getElementById('casinoBalanceAmount');
-    if(balEl && data.new_balance !== undefined) {
-      balance = data.new_balance; // === ДОБАВЛЕНО: сохраняем в переменную ===
-      balEl.textContent = balance.toLocaleString();
-    }
-
-    const won = data.won_amount || Math.floor(cBet * cMult);
-    casinoShowToast(`+${won} IMPULSE — x${cMult.toFixed(2)}!`, 4000);
-    document.getElementById('casinoCrashMyBet').style.display = 'none';
-    document.getElementById('casinoCrashMainBtnImg').src = `/public/images/cogniq/krash_btn_main_disabled_${currentLang}.png`;
+    if (!cHasBet || cCashedOut || cState !== 'running') return;
+    cCashedOut = true;
     document.getElementById('casinoCrashMainBtn').disabled = true;
-  } catch(e) { casinoShowToast('Ошибка соединения'); }
-}
+
+    try {
+      const r = await authFetch(`${BASE_URL}/api/casino/crash/cashout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+      const data = await r.json();
+
+      const balEl = document.getElementById('casinoBalanceAmount');
+      if (balEl && data.new_balance !== undefined) {
+        balance = data.new_balance;
+        balEl.textContent = balance.toLocaleString();
+      }
+
+      // Сервер сказал: уже краш
+      if (data.crashed || data.success === false) {
+        const cp = parseFloat(data.crash_point) || cMult;
+        cTriggerCrash(cp, true);
+        casinoShowToast('Краш! Не успели', 3000);
+        return;
+      }
+
+      // Успешный cashout
+      if (cGraphTimer) clearInterval(cGraphTimer);
+      const won = data.won_amount || 0;
+      const mult = data.actual_multiplier || cMult;
+      casinoShowToast(`+${won} IMPULSE — x${Number(mult).toFixed(2)}!`, 4000);
+      document.getElementById('casinoCrashMyBet').style.display = 'none';
+      document.getElementById('casinoCrashMainBtnImg').src = `/public/images/cogniq/krash_btn_main_disabled_${currentLang}.png`;
+      document.getElementById('casinoCrashStatus').textContent = `Забрано на x${Number(mult).toFixed(2)}`;
+      document.getElementById('casinoCrashLabel').textContent = 'ЗАБРАЛИ';
+
+      // История
+      const row = document.getElementById('casinoCrashHistory');
+      row.insertAdjacentHTML(
+        'afterbegin',
+        `<span style="border-radius:20px;padding:5px 13px;font-size:0.76em;font-weight:800;border:1px solid rgba(16,185,129,0.35);background:rgba(16,185,129,0.15);color:#10b981;">x${Number(mult).toFixed(2)}</span>`
+      );
+      if (row.children.length > 15) row.removeChild(row.lastChild);
+
+      setTimeout(cStartWaiting, 2500);
+    } catch (e) {
+      cCashedOut = false;
+      document.getElementById('casinoCrashMainBtn').disabled = false;
+      casinoShowToast('Ошибка соединения');
+    }
+  }
 
   document.getElementById('casinoCrashMainBtn').addEventListener('click', () => {
-    if(cState === 'waiting') cPlaceBet();
-    else if(cState === 'running' && cHasBet && !cCashedOut) cDoCashout();
+    if (cState === 'waiting') cPlaceBet();
+    else if (cState === 'running' && cHasBet && !cCashedOut) cDoCashout();
   });
-  
+
   cStartWaiting();
   // === 4. BLACKJACK (ОРИГИНАЛЬНАЯ ЛОГИКА) ===
   const SUITS = ['♠','♥','♦','♣']; 
