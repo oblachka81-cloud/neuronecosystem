@@ -37,6 +37,7 @@ const shopRoutes = require('./src/routes/shop');
 const withdrawRoutes = require('./src/routes/withdraw');
 const bankRoutes = require('./src/routes/bank');
 const casinoRoutes = require('./src/routes/casino');
+const exchangeRoutes = require('./src/routes/exchange');
 
 const {
   BOT_TOKEN,
@@ -77,6 +78,7 @@ app.use(shopRoutes);
 app.use(withdrawRoutes);
 app.use(bankRoutes);
 app.use(casinoRoutes);
+app.use(exchangeRoutes);
 
 if (!BESTCHANGE_API_KEY) {
   console.warn('⚠️ BESTCHANGE_API_KEY не задан в .env — BestChange API работать не будет');
