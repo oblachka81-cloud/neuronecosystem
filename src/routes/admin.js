@@ -253,4 +253,369 @@ router.post('/api/admin/delete-player', adminRateLimit, requireAdmin, async (req
   }
 });
 
+// ==================== ВОПРОСЫ ====================
+router.get('/api/admin/questions', questionsAdminRateLimit, requireAdmin, async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 20));
+    const search = (req.query.search || '').trim();
+    const offset = (page - 1) * limit;
+
+    let filtered = questionsCache;
+    if (search) {
+      const s = search.toLowerCase();
+      filtered = questionsCache.filter(q =>
+        q.text.toLowerCase().includes(s) ||
+        q.correct.toLowerCase().includes(s)
+      );
+    }
+
+    const total = filtered.length;
+    const paginated = filtered.slice(offset, offset + limit);
+
+    res.json({
+      questions: paginated,
+      total,
+      page,
+      limit,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (e) {
+    console.error('[ADMIN] /api/admin/questions error:', e.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.post('/api/admin/questions/add', questionsAdminRateLimit, requireAdmin, async (req, res) => {
+  try {
+    const { text, options, correct, lang } = req.body;
+    if (!text || !options || correct === undefined) {
+      return res.status(400).json({ error: 'Неверные данные' });
+    }
+
+    const translations = {};
+    const targetLangs = ['en', 'fr', 'es'];
+    if (process.env.YANDEX_TRANSLATE_API_KEY) {
+      for (const tLang of targetLangs) {
+        try {
+          const [translatedText, ...translatedOptions] = await Promise.all([
+            yandexTranslate(text, tLang),
+            ...options.map(opt => yandexTranslate(opt, tLang))
+          ]);
+          translations[tLang] = {
+            text: translatedText,
+            options: translatedOptions,
+          };
+        } catch (e) {
+          console.error(`[TRANSLATE] Failed for ${tLang}:`, e.message);
+        }
+      }
+    }
+
+    const result = await pool.query(
+      'INSERT INTO questions (lang, text, options, correct, translations) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+      [lang || 'ru', text, JSON.stringify(options), correct, JSON.stringify(translations)]
+    );
+    await loadQuestionsFromDB();
+    res.json({ ok: true, total: questionsCache.length, id: result.rows[0].id });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.post('/api/admin/questions/delete', questionsAdminRateLimit, requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: 'ID не указан' });
+    await pool.query('DELETE FROM questions WHERE id = $1', [id]);
+    await loadQuestionsFromDB();
+    res.json({ ok: true, total: questionsCache.length });
+  } catch (e) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.post('/api/admin/questions/edit', questionsAdminRateLimit, requireAdmin, async (req, res) => {
+  const { id, text, options, correct } = req.body;
+  if (!id || !text || !options || !correct) {
+    return res.status(400).json({ error: 'Неверные данные' });
+  }
+
+  try {
+    let translations = {};
+    if (process.env.YANDEX_TRANSLATE_API_KEY) {
+      try {
+        const langs = ['en', 'fr', 'es'];
+        for (const lang of langs) {
+          const translated = await yandexTranslate(text, lang);
+          const translatedOptions = await Promise.all(options.map(o => yandexTranslate(o, lang)));
+          translations[lang] = {
+            text: translated,
+            options: translatedOptions,
+          };
+        }
+      } catch (e) {
+        console.error('[TRANSLATE] Edit question translation failed:', e.message);
+        translations = {};
+      }
+    }
+
+    const { rowCount } = await pool.query(
+      'UPDATE questions SET text=$1, options=$2, correct=$3, translations=$4 WHERE id=$5',
+      [text, JSON.stringify(options), correct, JSON.stringify(translations), id]
+    );
+    if (rowCount === 0) return res.status(404).json({ error: 'Вопрос не найден' });
+
+    await loadQuestionsFromDB();
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('[ADMIN] Edit question error:', e.message);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+router.post('/api/admin/questions/translate-all', questionsAdminRateLimit, requireAdmin, async (req, res) => {
+  if (!process.env.YANDEX_TRANSLATE_API_KEY) {
+    return res.json({ error: 'YANDEX_TRANSLATE_API_KEY не задан' });
+  }
+
+  try {
+    const result = await pool.query(
+      "SELECT id, text, options FROM questions WHERE translations = '{}' OR translations IS NULL"
+    );
+
+    let translated = 0;
+    let skipped = 0;
+
+    for (const row of result.rows) {
+      try {
+        const langs = ['en', 'fr', 'es'];
+        const translations = {};
+
+        for (const lang of langs) {
+          const options = typeof row.options === 'string'
+            ? JSON.parse(row.options)
+            : row.options;
+
+          const tText = await yandexTranslate(row.text, lang);
+          const tOptions = await Promise.all(options.map(o => yandexTranslate(o, lang)));
+
+          translations[lang] = {
+            text: tText,
+            options: tOptions,
+          };
+        }
+
+        await pool.query(
+          'UPDATE questions SET translations=$1 WHERE id=$2',
+          [JSON.stringify(translations), row.id]
+        );
+        translated++;
+      } catch (e) {
+        console.error(`[TRANSLATE-ALL] Failed for question id=${row.id}:`, e.message);
+        skipped++;
+      }
+    }
+
+    await loadQuestionsFromDB();
+    res.json({ ok: true, translated, skipped });
+  } catch (e) {
+    console.error('[ADMIN] Translate all error:', e.message);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+// ==================== ВЫВОДЫ ====================
+router.get('/api/admin/withdrawals', adminRateLimit, requireAdmin, async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 25));
+    const status = req.query.status || 'all';
+    const offset = (page - 1) * limit;
+    const whereClause = status !== 'all' ? `WHERE w.status = $1` : '';
+    const params = status !== 'all' ? [status] : [];
+    const countRes = await pool.query(`SELECT COUNT(*) FROM withdrawals w ${whereClause}`, params);
+    const total = parseInt(countRes.rows[0].count);
+
+    const { rows: statsRows } = await pool.query(`SELECT status, COUNT(*) AS cnt, COALESCE(SUM(amount), 0) AS total FROM withdrawals GROUP BY status`);
+    const stats = { pending: 0, approved: 0, rejected: 0, totalApproved: 0 };
+    for (const r of statsRows) {
+      if (r.status === 'pending') stats.pending = parseInt(r.cnt);
+      if (r.status === 'approved') { stats.approved = parseInt(r.cnt); stats.totalApproved = parseInt(r.total); }
+      if (r.status === 'rejected') stats.rejected = parseInt(r.cnt);
+    }
+
+    const dataParams = [...params, limit, offset];
+    const limitIdx = params.length + 1;
+    const offsetIdx = params.length + 2;
+    const { rows } = await pool.query(`SELECT w.id, w.telegram_id, w.amount, w.wallet, w.status, w.created_at, w.processed_at, u.first_name FROM withdrawals w LEFT JOIN users u ON u.telegram_id = w.telegram_id ${whereClause} ORDER BY w.created_at DESC LIMIT $${limitIdx} OFFSET $${offsetIdx}`, dataParams);
+
+    res.json({ withdrawals: rows, stats, total, page, limit, pages: Math.ceil(total / limit) });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.get('/api/admin/exchange-orders', adminRateLimit, requireAdmin, async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 25));
+    const offset = (page - 1) * limit;
+    const countRes = await pool.query('SELECT COUNT(*) FROM exchange_orders');
+    const total = parseInt(countRes.rows[0].count);
+    const { rows } = await pool.query(
+      `SELECT e.*, u.first_name FROM exchange_orders e LEFT JOIN users u ON u.telegram_id = e.telegram_id ORDER BY e.created_at DESC LIMIT $1 OFFSET $2`,
+      [limit, offset]
+    );
+    res.json({ orders: rows, total, page, limit, pages: Math.ceil(total / limit) });
+  } catch (e) {
+    console.error('[ADMIN] exchange-orders error:', e);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.post('/api/admin/withdrawals/update', adminRateLimit, requireAdmin, async (req, res) => {
+  try {
+    const { id, status } = req.body;
+    if (!['approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ error: 'Неверный статус' });
+    }
+    
+    if (status === 'approved') {
+      const withdrawal = await pool.query(
+        'SELECT * FROM withdrawals WHERE id = $1 AND status = $2',
+        [id, 'pending']
+      );
+      
+      if (!withdrawal.rows.length) {
+        return res.status(404).json({ error: 'Заявка не найдена или уже обработана' });
+      }
+      
+      const w = withdrawal.rows[0];
+      
+      const privateKey = process.env.TON_OPERATION_WALLET_PRIVATE_KEY;
+      if (!privateKey) {
+        return res.status(500).json({ 
+          error: 'Приватный ключ операционного кошелька не настроен. Добавь TON_OPERATION_WALLET_PRIVATE_KEY в переменные окружения.' 
+        });
+      }
+      
+      try {
+        const txHash = await sendCogniqJetton(
+          w.wallet,
+          w.amount,
+          privateKey
+        );
+        
+        await pool.query(
+          `UPDATE withdrawals 
+           SET status = 'completed', 
+               processed_at = NOW(),
+               tx_hash = $1 
+           WHERE id = $2`,
+          [txHash, id]
+        );
+        
+        const bot = req.app.get('bot');
+        try {
+          await bot.telegram.sendMessage(
+            w.telegram_id,
+            `✅ Вывод ${w.amount.toLocaleString()} COGNIQ выполнен!\n\n🔗 TX: https://tonviewer.com/transaction/${txHash}`
+          );
+        } catch(e) {
+          console.error('[WITHDRAW] Notification error:', e.message);
+        }
+        
+        console.log(`[WITHDRAW] Completed id=${id}, TX: ${txHash}`);
+        return res.json({ ok: true, txHash });
+        
+      } catch(e) {
+        console.error('[WITHDRAW] On-chain error:', e.message);
+        await pool.query(
+          'UPDATE users SET balance = balance + $1 WHERE telegram_id = $2',
+          [w.amount, w.telegram_id]
+        );
+        await pool.query(
+          "UPDATE withdrawals SET status = 'failed' WHERE id = $1",
+          [id]
+        );
+        return res.status(500).json({ error: 'Ошибка ончейн-вывода: ' + e.message });
+      }
+    }
+    
+    const { rowCount } = await pool.query(
+      `UPDATE withdrawals SET status = $1, processed_at = NOW() WHERE id = $2`,
+      [status, id]
+    );
+    
+    if (rowCount === 0) return res.status(404).json({ error: 'Заявка не найдена' });
+    
+    if (status === 'rejected') {
+      const w = await pool.query('SELECT * FROM withdrawals WHERE id = $1', [id]);
+      if (w.rows.length) {
+        await pool.query(
+          'UPDATE users SET balance = balance + $1 WHERE telegram_id = $2',
+          [w.rows[0].amount, w.rows[0].telegram_id]
+        );
+      }
+    }
+    
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ==================== ТРАНСФЕРЫ ====================
+router.get('/api/admin/transfers/stats', requireAdmin, async (req, res) => {
+  try {
+    const { rows } = await pool.query(`SELECT COUNT(*) as total_count, COALESCE(SUM(amount), 0) as total_volume, COALESCE(SUM(commission), 0) as total_commission FROM transfers`);
+    res.json(rows[0]);
+  } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+router.get('/api/admin/transfers/list', requireAdmin, async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = 20;
+    const offset = (page - 1) * limit;
+    const countRes = await pool.query('SELECT COUNT(*) FROM transfers');
+    const total = parseInt(countRes.rows[0].count);
+    const { rows } = await pool.query(`SELECT t.*, uf.nickname as from_nick, uf.first_name as from_name, ut.nickname as to_nick, ut.first_name as to_name FROM transfers t LEFT JOIN users uf ON uf.telegram_id = t.from_user LEFT JOIN users ut ON ut.telegram_id = t.to_user ORDER BY t.created_at DESC LIMIT $1 OFFSET $2`, [limit, offset]);
+    res.json({ transfers: rows, total, page, pages: Math.ceil(total / limit) });
+  } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ==================== BURN ====================
+router.get('/api/admin/burn/stats', requireAdmin, async (req, res) => {
+  try {
+    const { rows: poolRows } = await pool.query('SELECT COALESCE(SUM(amount), 0) AS total FROM burn_pool');
+    const { rows: histRows } = await pool.query('SELECT COALESCE(SUM(amount), 0) AS total_burned, MAX(burned_at) AS last_burned_at FROM burn_history');
+    const { rows: sources } = await pool.query('SELECT source, COUNT(*) AS count, SUM(amount) AS total FROM burn_pool GROUP BY source ORDER BY total DESC');
+    const { rows: history } = await pool.query('SELECT id, amount, tx_hash, burned_at FROM burn_history ORDER BY burned_at DESC LIMIT 20');
+    res.json({ total: parseInt(poolRows[0].total), totalBurned: parseInt(histRows[0].total_burned), lastBurnedAt: histRows[0].last_burned_at, sources, history });
+  } catch(e) { console.error('[BURN] stats error:', e); res.status(500).json({ error: 'Server error' }); }
+});
+
+router.post('/api/admin/burn/execute', requireAdmin, async (req, res) => {
+  const { txHash } = req.body;
+  if (!txHash) return res.status(400).json({ error: 'txHash обязателен' });
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query('SELECT COALESCE(SUM(amount), 0) AS total FROM burn_pool');
+    const total = parseInt(rows[0].total);
+    if (total <= 0) { await client.query('ROLLBACK'); return res.status(400).json({ error: 'Пул пуст, нечего сжигать' }); }
+    await client.query('INSERT INTO burn_history (amount, tx_hash) VALUES ($1, $2)', [total, txHash]);
+    await client.query('DELETE FROM burn_pool');
+    await client.query('COMMIT');
+    const bot = req.app.get('bot');
+    try { await postBurnCard(bot, total, txHash); } catch(e) { console.error('[BURN] card error:', e.message); }
+    res.json({ ok: true, burned: total });
+  } catch(e) { await client.query('ROLLBACK'); console.error('[BURN] execute error:', e); res.status(500).json({ error: 'Server error' }); } finally { client.release(); }
+});
+
 module.exports = router;
