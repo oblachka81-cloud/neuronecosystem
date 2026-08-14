@@ -39,6 +39,7 @@ const bankRoutes = require('./src/routes/bank');
 const casinoRoutes = require('./src/routes/casino');
 const exchangeRoutes = require('./src/routes/exchange');
 const adminRoutes = require('./src/routes/admin');
+const miscRoutes = require('./src/routes/misc');
 
 const {
   BOT_TOKEN,
@@ -81,6 +82,7 @@ app.use(bankRoutes);
 app.use(casinoRoutes);
 app.use(exchangeRoutes);
 app.use(adminRoutes);
+app.use(miscRoutes);
 
 if (!BESTCHANGE_API_KEY) {
   console.warn('⚠️ BESTCHANGE_API_KEY не задан в .env — BestChange API работать не будет');
@@ -930,6 +932,7 @@ async function start() {
       console.log(`Бот: @${botUsername}`);
 
       setupCron(bot, botUsername);
+      app.set('botUsername', botUsername);
       
     } catch (e) {
       console.error('Не удалось получить username бота:', e.message);
