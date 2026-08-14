@@ -50,10 +50,18 @@ function minesMultiplier(total, mines, opened) {
 }
 
 function generateCrashPoint() {
-  const r = Math.random();
+  // crypto вместо Math.random; ~5% мгновенный краш на 1.00
+  const r = crypto.randomBytes(4).readUInt32BE(0) / 0x100000000; // [0, 1)
   if (r < 0.05) return 1.00;
-  const crash = Math.floor(100 / (1 - r)) / 100;
-  return Math.min(crash, 100.00);
+  const crash = Math.floor((100 / (1 - r)) * 100) / 100;
+  return Math.min(Math.max(crash, 1.01), 100.00);
+}
+
+/** Множитель только на сервере. Та же формула должна быть на фронте для анимации. */
+function crashMultiplierAt(elapsedMs) {
+  const t = Math.max(0, elapsedMs) / 1000;
+  const mult = Math.pow(1.06, t * 8);
+  return Math.min(Math.floor(mult * 100) / 100, 100);
 }
 
 module.exports = {
@@ -62,4 +70,5 @@ module.exports = {
   bjHandScore,
   minesMultiplier,
   generateCrashPoint,
+  crashMultiplierAt,
 };
