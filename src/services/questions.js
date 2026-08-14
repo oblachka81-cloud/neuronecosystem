@@ -1,6 +1,8 @@
 const pool = require('../db/pool');
 
-let questionsCache = [];
+const state = {
+  questionsCache: [],
+};
 
 function shuffleArray(arr) {
   const a = [...arr];
@@ -12,7 +14,7 @@ function shuffleArray(arr) {
 }
 
 async function pickGameQuestions(recentQuestions = []) {
-  if (!questionsCache || questionsCache.length === 0) {
+  if (!state.questionsCache || state.questionsCache.length === 0) {
     console.warn('[pickGameQuestions] questionsCache пустой — загружаю из БД');
     try {
       await loadQuestionsFromDB();
@@ -20,7 +22,7 @@ async function pickGameQuestions(recentQuestions = []) {
       console.error('[pickGameQuestions] Ошибка загрузки из БД:', err);
       return [];
     }
-    if (!questionsCache || questionsCache.length === 0) {
+    if (!state.questionsCache || state.questionsCache.length === 0) {
       console.error('[pickGameQuestions] В БД нет вопросов');
       return [];
     }
@@ -28,7 +30,7 @@ async function pickGameQuestions(recentQuestions = []) {
 
   const recentSet = new Set(recentQuestions || []);
   const available = [];
-  for (let i = 0; i < questionsCache.length; i++) {
+  for (let i = 0; i < state.questionsCache.length; i++) {
     if (!recentSet.has(i)) available.push(i);
   }
   if (available.length < 10) {
@@ -41,7 +43,7 @@ async function pickGameQuestions(recentQuestions = []) {
 
 async function loadQuestionsFromDB() {
   const { rows } = await pool.query('SELECT * FROM questions ORDER BY id');
-  questionsCache = rows.map(r => ({
+  state.questionsCache = rows.map(r => ({
     id: r.id,
     text: r.text,
     options: typeof r.options === 'string' ? JSON.parse(r.options) : r.options,
@@ -49,7 +51,7 @@ async function loadQuestionsFromDB() {
     lang: r.lang || 'ru',
     translations: r.translations || {}
   }));
-  console.log(`Загружено ${questionsCache.length} вопросов из БД`);
+  console.log(`Загружено ${state.questionsCache.length} вопросов из БД`);
 }
 
 async function yandexTranslate(text, targetLang) {
@@ -110,5 +112,8 @@ module.exports = {
   pickGameQuestions,
   translateQuestion,
   yandexTranslate,
-  questionsCache,
+  shuffleArray,
+  get questionsCache() {
+    return state.questionsCache;
+  },
 };
