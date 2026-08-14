@@ -529,6 +529,64 @@ router.post('/api/use-hint', requireInitDataStrict, authRateLimit, async (req, r
   }
 });
 
+router.post('/api/replay-super', requireInitData, heavyRateLimit, async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    const userId = req.tgUser.id;
+
+    const userRes = await client.query(
+      'SELECT * FROM users WHERE telegram_id = $1 FOR UPDATE',
+      [userId]
+    );
+    const user = userRes.rows[0];
+
+    if (!user) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (user.super_replay_used) {
+      await client.query('ROLLBACK');
+      return res.status(403).json({ error: 'replayAlreadyUsed' });
+    }
+
+    if (user.balance < 50) {
+      await client.query('ROLLBACK');
+      return res.status(403).json({ error: 'notEnoughTokens' });
+    }
+
+    const newBalance = user.balance - 50;
+    const newOrder = await pickGameQuestions();
+
+    await client.query(
+      `UPDATE users SET
+        balance = $1,
+        current_game_index = 0,
+        current_game_score = 0,
+        current_question_order = $2,
+        current_hints_used = $3,
+        current_is_super = true,
+        question_start_time = 0,
+        super_replay_used = true,
+        total_burned = total_burned + 50
+      WHERE telegram_id = $4`,
+      [newBalance, JSON.stringify(newOrder), JSON.stringify([]), userId]
+    );
+    await addToBurnPool('super_retry', 50, userId);
+
+    await client.query('COMMIT');
+    res.json({ ok: true, newBalance });
+  } catch (e) {
+    await client.query('ROLLBACK');
+    console.error('/api/replay-super error:', e);
+    res.status(500).json({ error: 'Server error' });
+  } finally {
+    client.release();
+  }
+});
+
 // Здесь будут /api/answer, /api/use-hint, /api/replay-super
 // Пока вырежи их из index.js и вставь сюда
 
