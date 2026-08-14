@@ -1737,11 +1737,6 @@ const usdtTxs = (usdtRes.jetton_transfers || []).map(tx => ({
   }
 }
 
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
-}
-
 async function loadProfilePanel() {
   root.innerHTML = `<div class="loader">${t.loading}</div>`;
   try {
