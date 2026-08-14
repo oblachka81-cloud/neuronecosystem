@@ -40,6 +40,7 @@ const casinoRoutes = require('./src/routes/casino');
 const exchangeRoutes = require('./src/routes/exchange');
 const adminRoutes = require('./src/routes/admin');
 const miscRoutes = require('./src/routes/misc');
+const { setupBotHandlers } = require('./src/bot/handlers');
 
 const {
   BOT_TOKEN,
@@ -96,6 +97,7 @@ if (!ADMIN_PASSWORD) { console.error('ADMIN_PASSWORD is not set'); process.exit(
 const bot = new Telegraf(BOT_TOKEN);
 let botUsername = '';
 app.set('bot', bot);
+setupBotHandlers(bot);
 
 // ==================== КОНСТАНТЫ ИГРЫ (из config) ====================
 // ==================== РАНГИ ====================
