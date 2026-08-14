@@ -202,7 +202,7 @@ router.post('/api/casino/crash/bet', requireInitDataStrict, casinoRateLimit, asy
       return res.status(403).json({ error: 'Not enough balance' });
     }
     
-    const existing = await client.query("SELECT id FROM crash_bets WHERE telegram_id = $1 AND status = 'active'", [userId]);
+    const existing = await client.query("SELECT telegram_id FROM crash_bets WHERE telegram_id = $1 AND status = 'active'", [userId]);
     if (existing.rows.length > 0) {
       await client.query('ROLLBACK');
       return res.status(400).json({ error: 'Already have active bet' });
