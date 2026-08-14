@@ -1,8 +1,10 @@
 const cron = require('node-cron');
 const pool = require('../db/pool');
 const { postDailyQuestion, postWeeklyTop, sendStreakWarnings, postWeeklyAchievements, postStreakBattle, postDailyFact, postRankLeaderboard, postDailyPoll } = require('../services/channel');
+const { checkTonUsdtPayments } = require('../services/tonPayments');
 
 function setupCron(bot, botUsername) {
+cron.schedule('*/30 * * * * *', () => checkTonUsdtPayments(bot));
   cron.schedule('0 0 * * *', async () => {
     try {
       const { rows } = await pool.query(
@@ -34,5 +36,6 @@ function setupCron(bot, botUsername) {
   cron.schedule('0 15 * * 2', () => postRankLeaderboard(bot, botUsername));
   cron.schedule('0 15 * * 4', () => postDailyPoll(bot));
 }
+
 
 module.exports = { setupCron };
