@@ -420,6 +420,115 @@ router.post('/api/answer', requireInitDataStrict, authRateLimit, async (req, res
   }
 });
 
+router.post('/api/use-hint', requireInitDataStrict, authRateLimit, async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    const userId = req.tgUser.id;
+    const { hint, lang } = req.body;
+
+    const userRes = await client.query('SELECT * FROM users WHERE telegram_id = $1 FOR UPDATE', [userId]);
+    const user = userRes.rows[0];
+    if (!user) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'User not found' });
+    }
+    await checkAndResetDailyLimit(client, user);
+
+    const currentIndex = user.current_game_index || 0;
+    const questionOrder = Array.isArray(user.current_question_order) ? user.current_question_order : JSON.parse(user.current_question_order || '[]');
+    const hintsUsed = Array.isArray(user.current_hints_used) ? user.current_hints_used : JSON.parse(user.current_hints_used || '[]');
+
+    if (questionOrder.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Нет активной игры' });
+    }
+    if (currentIndex >= QUESTIONS_PER_GAME) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Викторина завершена' });
+    }
+    if (hintsUsed.includes(hint)) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Подсказка уже использована' });
+    }
+
+    const cost = hint === '5050' ? 1 : hint === 'replace' ? 1 : null;
+    if (cost === null) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Неизвестная подсказка' });
+    }
+
+    const now = new Date();
+    const subActive = user.subscription_type && user.subscription_expires_at && new Date(user.subscription_expires_at) > now;
+    const dailyHintsFree = subActive && user.subscription_type === 'premium' ? 2 : subActive && user.subscription_type === 'vip' ? 1 : 0;
+    const hintsUsedToday = user.daily_hints_used || 0;
+    const hasFreeHint = hintsUsedToday < dailyHintsFree;
+
+    if (!hasFreeHint && user.balance < cost) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: `Недостаточно COGNIQ. Нужно ${cost}` });
+    }
+
+    const newBalance = hasFreeHint ? user.balance : user.balance - cost;
+    const newHintsUsed = [...hintsUsed, hint];
+
+    if (hint === '5050') {
+      const q = questionsCache[questionOrder[currentIndex]];
+      if (!q) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: 'Вопрос не найден в кэше' });
+      }
+      const wrongIndices = [0, 1, 2, 3].filter(i => q.options[i] !== q.correct);
+      const removedIndices = shuffleArray(wrongIndices).slice(0, 2);
+      await client.query(
+        `UPDATE users SET balance = $1, current_hints_used = $2, daily_hints_used = CASE WHEN $4 THEN daily_hints_used + 1 ELSE daily_hints_used END WHERE telegram_id = $3`,
+        [newBalance, JSON.stringify(newHintsUsed), userId, hasFreeHint]
+      );
+      if (!hasFreeHint) {
+        await client.query('UPDATE users SET total_burned = total_burned + $1 WHERE telegram_id = $2', [cost, userId]);
+        await addToBurnPool('hint', cost, userId);
+      }
+      await client.query('COMMIT');
+      return res.json({ removedIndices, newScore: newBalance });
+    } else {
+      const available = [];
+      for (let i = currentIndex + 1; i < questionOrder.length; i++) available.push(i);
+      if (available.length === 0) {
+        await client.query('ROLLBACK');
+        return res.status(400).json({ error: 'Нет вопросов для замены' });
+      }
+      const swapIdx = available[Math.floor(Math.random() * available.length)];
+      const newOrder = [...questionOrder];
+      [newOrder[currentIndex], newOrder[swapIdx]] = [newOrder[swapIdx], newOrder[currentIndex]];
+      const newQ = questionsCache[newOrder[currentIndex]];
+
+      const userLang = lang || 'ru';
+      const translatedQ = await translateQuestion(newQ, userLang);
+
+      await client.query(
+        `UPDATE users SET balance = $1, current_question_order = $2, current_hints_used = $3, daily_hints_used = CASE WHEN $5 THEN daily_hints_used + 1 ELSE daily_hints_used END WHERE telegram_id = $4`,
+        [newBalance, JSON.stringify(newOrder), JSON.stringify(newHintsUsed), userId, hasFreeHint]
+      );
+      if (!hasFreeHint) {
+        await client.query('UPDATE users SET total_burned = total_burned + $1 WHERE telegram_id = $2', [cost, userId]);
+        await addToBurnPool('hint', cost, userId);
+      }
+      await client.query('COMMIT');
+      return res.json({
+        newQuestion: { text: translatedQ.text, options: translatedQ.options },
+        newScore: newBalance,
+      });
+    }
+  } catch (e) {
+    await client.query('ROLLBACK');
+    console.error('/api/use-hint error:', e);
+    res.status(500).json({ error: 'Server error' });
+  } finally {
+    client.release();
+  }
+});
+
 // Здесь будут /api/answer, /api/use-hint, /api/replay-super
 // Пока вырежи их из index.js и вставь сюда
 
