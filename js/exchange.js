@@ -6,6 +6,97 @@ const LISTING_TEXTS = {
   es: 'El listing de COGNIQ está previsto para Q3-Q4 2026. La fecha exacta será anunciada. Sigue nuestro canal de Telegram.'
 };
 
+const EXCHANGE_INFO_TEXTS = {
+  ru: `
+    <p><strong>1. NEURON EXCHANGE — часть экосистемы</strong></p>
+    <p>NEURON Exchange — неотъемлемая часть блокчейн-экосистемы NEURON. Платформа мониторит ведущие DEX экосистемы TON и выбирает лучший курс.</p>
+    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>2. Безопасность</strong></p>
+    <p>✅ NEURON Exchange не хранит Ваши активы.<br>🔒 Мы не передаём данные третьим лицам.</p>
+    <p style="color:#fbbf24;">💛 Без торговой комиссии. Только газ платформы (5 COGNIQ) + газ сети TON.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>3. xStocks — токенизированные акции</strong></p>
+    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p>Обеспечение 1:1 реальными акциями. Кастодиальное хранение в швейцарских банках. Выпуск — Backed Finance.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>4. Как торговать</strong></p>
+    <p>1. Подключите TON-кошелёк<br>2. Выберите пару<br>3. Введите сумму<br>4. Подтвердите транзакцию</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>5. NEURON FIAT</strong></p>
+    <p>Интеграция с BestChange — 500+ обменников, 43,000+ пар. 0% скрытых комиссий.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>6. Дисклеймер</strong></p>
+    <p style="color:#667788;font-size:0.85rem;">Торговля xStocks может быть ограничена в некоторых юрисдикциях. Убедитесь, что это разрешено законами Вашей страны.</p>
+  `,
+  en: `
+    <p><strong>1. NEURON EXCHANGE — Part of the Ecosystem</strong></p>
+    <p>NEURON Exchange monitors leading DEXes of the TON ecosystem and selects the best rate.</p>
+    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>2. Security</strong></p>
+    <p>✅ NEURON Exchange does not store your assets.<br>🔒 We do not share data with third parties.</p>
+    <p style="color:#fbbf24;">💛 No trading fees. Only platform gas (5 COGNIQ) + TON network gas.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>3. xStocks — Tokenized Stocks</strong></p>
+    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p>1:1 backed by real shares. Custodial storage in Swiss banks. Issued by Backed Finance.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>4. How to Trade</strong></p>
+    <p>1. Connect TON wallet<br>2. Choose pair<br>3. Enter amount<br>4. Confirm transaction</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>5. NEURON FIAT</strong></p>
+    <p>BestChange integration — 500+ exchangers, 43,000+ pairs. 0% hidden fees.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>6. Disclaimer</strong></p>
+    <p style="color:#667788;font-size:0.85rem;">Trading xStocks may be restricted in some jurisdictions. Ensure it is permitted by your local laws.</p>
+  `,
+  fr: `
+    <p><strong>1. NEURON EXCHANGE — Partie de l'écosystème</strong></p>
+    <p>NEURON Exchange surveille les principales DEX de l'écosystème TON et sélectionne le meilleur taux.</p>
+    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>2. Sécurité</strong></p>
+    <p>✅ NEURON Exchange ne stocke pas vos actifs.<br>🔒 Nous ne partageons pas les données.</p>
+    <p style="color:#fbbf24;">💛 Sans frais de trading. Uniquement gaz (5 COGNIQ) + gaz TON.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>3. xStocks — Actions tokenisées</strong></p>
+    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p>Adossé 1:1 à des actions réelles. Stockage en banques suisses. Émis par Backed Finance.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>4. Comment trader</strong></p>
+    <p>1. Connectez le portefeuille TON<br>2. Choisissez la paire<br>3. Entrez le montant<br>4. Confirmez</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>5. NEURON FIAT</strong></p>
+    <p>Intégration BestChange — 500+ échangeurs, 43 000+ paires. 0% frais cachés.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>6. Avertissement</strong></p>
+    <p style="color:#667788;font-size:0.85rem;">Le trading xStocks peut être restreint. Vérifiez les lois locales.</p>
+  `,
+  es: `
+    <p><strong>1. NEURON EXCHANGE — Parte del ecosistema</strong></p>
+    <p>NEURON Exchange monitorea los principales DEX del ecosistema TON y selecciona la mejor tasa.</p>
+    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>2. Seguridad</strong></p>
+    <p>✅ NEURON Exchange no almacena sus activos.<br>🔒 No compartimos datos.</p>
+    <p style="color:#fbbf24;">💛 Sin comisiones. Solo gas (5 COGNIQ) + gas TON.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>3. xStocks — Acciones Tokenizadas</strong></p>
+    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p>Respaldado 1:1 por acciones reales. Custodia en bancos suizos. Emitido por Backed Finance.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>4. Cómo operar</strong></p>
+    <p>1. Conecte la billetera TON<br>2. Elija el par<br>3. Ingrese el monto<br>4. Confirme</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>5. NEURON FIAT</strong></p>
+    <p>Integración BestChange — 500+ cambiadores, 43 000+ pares. 0% comisiones ocultas.</p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
+    <p><strong>6. Aviso Legal</strong></p>
+    <p style="color:#667788;font-size:0.85rem;">El trading de xStocks puede estar restringido. Verifique las leyes locales.</p>
+  `
+};
+
 const EXCHANGE_LANG = {
   ru: {
     walletLabel: 'Подключённый кошелёк',
@@ -480,7 +571,35 @@ function loadExchangePanel() {
     document.getElementById('swapBtn').disabled = false;
   }
 
-  exchangeLoadRates();
+    exchangeLoadRates();
   exchangeLoadHistory();
   setInterval(exchangeLoadRates, 60000);
+
+  // Модалка информации
+  const infoModal = document.createElement('div');
+  infoModal.id = 'exchangeInfoModal';
+  infoModal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;overflow-y:auto;';
+  infoModal.innerHTML = `
+    <div style="background:rgba(10,10,20,0.98);border:1px solid rgba(245,158,11,0.3);border-radius:16px;padding:20px;max-width:500px;width:92%;margin:40px auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span style="font-size:1.1rem;font-weight:800;color:#fbbf24;">💛 EXCHANGE INFO</span>
+        <button onclick="closeExchangeInfoModal()" style="background:none;border:none;color:#8899aa;font-size:1.5rem;cursor:pointer;">✕</button>
+      </div>
+      <div id="exchangeInfoContent" style="color:#c0c8d8;font-size:0.9rem;line-height:1.7;"></div>
+    </div>
+  `;
+  document.body.appendChild(infoModal);
+}
+
+function openExchangeInfoModal() {
+  const modal = document.getElementById('exchangeInfoModal');
+  const content = document.getElementById('exchangeInfoContent');
+  const info = EXCHANGE_INFO_TEXTS[currentLang] || EXCHANGE_INFO_TEXTS['ru'];
+  content.innerHTML = info;
+  modal.style.display = 'block';
+}
+
+function closeExchangeInfoModal() {
+  document.getElementById('exchangeInfoModal').style.display = 'none';
+}
 }
