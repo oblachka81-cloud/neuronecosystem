@@ -1138,7 +1138,7 @@ if (miniRefBtn) miniRefBtn.addEventListener('click', () => {
           currentState.totalScore = data.newBalance;
           updateScoresUI(data.newBalance);
         }
-        clearInterval(counter);
+    
         loadFirstQuestion();
       } catch(e) {
         showToast(t.errConnBtn, 3000);
@@ -1223,7 +1223,7 @@ if (channelBtn) {
   const startBtn = document.getElementById('startNewBtn');
   if (startBtn && !startBtn.disabled) {
     startBtn.addEventListener('click', () => {
-      clearInterval(counter);
+  
       const wasSuper = currentState.superGamePending;
       if (!wasSuper) {
         currentState.lastGameWasSuper = false;
