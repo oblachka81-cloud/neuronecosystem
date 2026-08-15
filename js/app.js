@@ -103,10 +103,6 @@ function switchTab(tab) {
   else loadWelcome();
 }
 
-function loadExchangePanel() {
-  window.location.href = '/exchange.html?lang=' + currentLang;
-}
-
 function parseTgUser() {
   const u = tg.initDataUnsafe?.user;
   if (u?.id) return u;
