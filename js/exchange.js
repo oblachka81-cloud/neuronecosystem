@@ -8,92 +8,178 @@ const LISTING_TEXTS = {
 
 const EXCHANGE_INFO_TEXTS = {
   ru: `
-    <p><strong>1. NEURON EXCHANGE — часть экосистемы</strong></p>
-    <p>NEURON Exchange — неотъемлемая часть блокчейн-экосистемы NEURON. Платформа мониторит ведущие DEX экосистемы TON и выбирает лучший курс.</p>
-    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — часть экосистемы</p>
+    <p style="margin-bottom:12px;">NEURON Exchange — неотъемлемая часть блокчейн-экосистемы NEURON. Платформа в реальном времени мониторит ведущие децентрализованные биржи экосистемы TON и автоматически выбирает для Вас наилучший курс в момент совершения свопа.</p>
+    <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>2. Безопасность</strong></p>
-    <p>✅ NEURON Exchange не хранит Ваши активы.<br>🔒 Мы не передаём данные третьим лицам.</p>
-    <p style="color:#fbbf24;">💛 Без торговой комиссии. Только газ платформы (5 COGNIQ) + газ сети TON.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">2. Безопасность и конфиденциальность</p>
+    <p style="margin-bottom:8px;">✅ NEURON Exchange <strong>не хранит Ваши активы</strong>. Все средства находятся на Вашем TON-кошельке.</p>
+    <p style="margin-bottom:8px;">🔒 Мы не передаём данные третьим лицам и не собираем личную информацию.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💛 <strong>Без торговой комиссии.</strong> Только газ платформы (5 COGNIQ) + газ сети TON.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>3. xStocks — токенизированные акции</strong></p>
-    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
-    <p>Обеспечение 1:1 реальными акциями. Кастодиальное хранение в швейцарских банках. Выпуск — Backed Finance.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">3. xStocks — токенизированные акции</p>
+    <p style="margin-bottom:8px;">xStocks — токенизированные акции мировых компаний на блокчейне TON. Каждый токен обеспечен реальной акцией 1:1.</p>
+    <p style="margin-bottom:8px;"><strong>Доступные активы:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p style="margin-bottom:8px;"><strong>Как работает обеспечение:</strong></p>
+    <p style="margin-bottom:4px;">🏦 <strong>Обеспечение 1:1.</strong> На каждый токен приобретается реальная акция на NYSE/NASDAQ.</p>
+    <p style="margin-bottom:4px;">🏛️ <strong>Кастодиальное хранение.</strong> Ценные бумаги хранятся в регулируемых швейцарских и европейских банках-кастодианах.</p>
+    <p style="margin-bottom:4px;">🛡️ <strong>Защита от банкротства (SPV).</strong> Акции изолированы от финансовых рисков эмитента.</p>
+    <p style="margin-bottom:8px;">🔍 <strong>Публичный аудит.</strong> Proof-of-Reserves доступен публично. Каждому продукту присвоен ISIN.</p>
+    <p style="margin-bottom:8px;">Выпуск токенов осуществляется швейцарской регулируемой компанией <strong>Backed Finance</strong> (Backed Assets Limited).</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💡 При выплате дивидендов или сплитах акций баланс токенов автоматически корректируется через ончейн-ребейзинг.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>4. Как торговать</strong></p>
-    <p>1. Подключите TON-кошелёк<br>2. Выберите пару<br>3. Введите сумму<br>4. Подтвердите транзакцию</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">4. Как начать торговать</p>
+    <p style="margin-bottom:4px;">1. Подключите TON-кошелёк (Tonkeeper, Tonhub, MyTonWallet)</p>
+    <p style="margin-bottom:4px;">2. Выберите торговую пару в разделе «Crypto» или «xStocks»</p>
+    <p style="margin-bottom:4px;">3. Введите сумму и нажмите «Exchange»</p>
+    <p style="margin-bottom:4px;">4. Подтвердите транзакцию в кошельке</p>
+    <p style="margin-bottom:16px;">5. Актив автоматически зачисляется на Ваш TON-кошелёк</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>5. NEURON FIAT</strong></p>
-    <p>Интеграция с BestChange — 500+ обменников, 43,000+ пар. 0% скрытых комиссий.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">5. NEURON FIAT — Прямой доступ к ликвидности</p>
+    <p style="margin-bottom:8px;">NEURON Exchange интегрирован с ведущими агрегаторами рынка: <strong>BestChange, Exchanger и MonitorEC</strong>. Это обеспечивает мгновенный доступ к пулу из <strong>500+ проверенных обменников</strong> и <strong>43 000+ торговых пар</strong> в реальном времени.</p>
+    <p style="margin-bottom:4px;"><strong>Верифицированные резервы.</strong> Строгий скоринг партнеров. Мошенники исключаются автоматически.</p>
+    <p style="margin-bottom:4px;"><strong>Умный маршрутизатор.</strong> Алгоритм сравнивает курсы с учетом скрытых комиссий.</p>
+    <p style="margin-bottom:4px;"><strong>Глобальный охват.</strong> Поддержка фиата десятков стран (USD, EUR, AED и др.).</p>
+    <p style="margin-bottom:8px;"><strong>Колоссальные объемы.</strong> Суммарные резервы партнеров превышают $80 млрд.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;"><strong>0% скрытых комиссий NEURON.</strong> Вы видите точную сумму к получению до подтверждения сделки.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>6. Дисклеймер</strong></p>
-    <p style="color:#667788;font-size:0.85rem;">Торговля xStocks может быть ограничена в некоторых юрисдикциях. Убедитесь, что это разрешено законами Вашей страны.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">6. Дисклеймер</p>
+    <p style="color:#667788;font-size:0.85rem;">Торговля токенизированными акциями (xStocks) может быть ограничена или запрещена в некоторых юрисдикциях. Перед использованием убедитесь что это разрешено законодательством Вашей страны. NEURON Exchange предоставляет доступ к децентрализованным протоколам и не несёт ответственности за соблюдение Вами местных законов.</p>
   `,
   en: `
-    <p><strong>1. NEURON EXCHANGE — Part of the Ecosystem</strong></p>
-    <p>NEURON Exchange monitors leading DEXes of the TON ecosystem and selects the best rate.</p>
-    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — Part of the Ecosystem</p>
+    <p style="margin-bottom:12px;">NEURON Exchange is an integral part of the NEURON blockchain ecosystem. The platform monitors leading decentralized exchanges in the TON ecosystem in real time and automatically selects the best rate for your swap.</p>
+    <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>2. Security</strong></p>
-    <p>✅ NEURON Exchange does not store your assets.<br>🔒 We do not share data with third parties.</p>
-    <p style="color:#fbbf24;">💛 No trading fees. Only platform gas (5 COGNIQ) + TON network gas.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">2. Security & Privacy</p>
+    <p style="margin-bottom:8px;">✅ NEURON Exchange <strong>does not store your assets</strong>. All funds remain on your TON wallet.</p>
+    <p style="margin-bottom:8px;">🔒 We do not share data with third parties and do not collect personal information.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💛 <strong>No trading fees.</strong> Only platform gas (5 COGNIQ) + TON network gas.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>3. xStocks — Tokenized Stocks</strong></p>
-    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
-    <p>1:1 backed by real shares. Custodial storage in Swiss banks. Issued by Backed Finance.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">3. xStocks — Tokenized Stocks</p>
+    <p style="margin-bottom:8px;">xStocks are tokenized shares of global companies on the TON blockchain. Each token is backed 1:1 by a real share.</p>
+    <p style="margin-bottom:8px;"><strong>Available assets:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p style="margin-bottom:8px;"><strong>How backing works:</strong></p>
+    <p style="margin-bottom:4px;">🏦 <strong>1:1 Backing.</strong> For every token, a real share is purchased on NYSE/NASDAQ.</p>
+    <p style="margin-bottom:4px;">🏛️ <strong>Custodial Storage.</strong> Securities are held in regulated Swiss and European custodian banks.</p>
+    <p style="margin-bottom:4px;">🛡️ <strong>Bankruptcy Protection (SPV).</strong> Shares are isolated from issuer's financial risks.</p>
+    <p style="margin-bottom:8px;">🔍 <strong>Public Audit.</strong> Proof-of-Reserves is publicly available. Each product has an ISIN.</p>
+    <p style="margin-bottom:8px;">Token issuance is handled by the Swiss regulated company <strong>Backed Finance</strong> (Backed Assets Limited).</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💡 When dividends are paid or stock splits occur, token balances are automatically adjusted via on-chain rebasing.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>4. How to Trade</strong></p>
-    <p>1. Connect TON wallet<br>2. Choose pair<br>3. Enter amount<br>4. Confirm transaction</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">4. How to Start Trading</p>
+    <p style="margin-bottom:4px;">1. Connect your TON wallet (Tonkeeper, Tonhub, MyTonWallet)</p>
+    <p style="margin-bottom:4px;">2. Choose a trading pair in the "Crypto" or "xStocks" section</p>
+    <p style="margin-bottom:4px;">3. Enter the amount and press "Exchange"</p>
+    <p style="margin-bottom:4px;">4. Confirm the transaction in your wallet</p>
+    <p style="margin-bottom:16px;">5. The asset is automatically credited to your TON wallet</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>5. NEURON FIAT</strong></p>
-    <p>BestChange integration — 500+ exchangers, 43,000+ pairs. 0% hidden fees.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">5. NEURON FIAT — Direct Access to Global Liquidity</p>
+    <p style="margin-bottom:8px;">NEURON Exchange is integrated with leading market aggregators: <strong>BestChange, Exchanger, and MonitorEC</strong>. This provides instant access to a pool of <strong>500+ verified exchangers</strong> and <strong>43,000+ trading pairs</strong> in real time.</p>
+    <p style="margin-bottom:4px;"><strong>Verified reserves.</strong> Strict partner scoring. Scammers are automatically excluded.</p>
+    <p style="margin-bottom:4px;"><strong>Smart routing.</strong> The algorithm compares rates accounting for hidden payment fees.</p>
+    <p style="margin-bottom:4px;"><strong>Global coverage.</strong> Support for fiat from dozens of countries (USD, EUR, AED, etc.).</p>
+    <p style="margin-bottom:8px;"><strong>Massive volumes.</strong> Total partner reserves exceed $80 billion.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;"><strong>0% hidden NEURON fees.</strong> You see the exact amount to receive before confirming.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>6. Disclaimer</strong></p>
-    <p style="color:#667788;font-size:0.85rem;">Trading xStocks may be restricted in some jurisdictions. Ensure it is permitted by your local laws.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">6. Disclaimer</p>
+    <p style="color:#667788;font-size:0.85rem;">Trading tokenized stocks (xStocks) may be restricted or prohibited in certain jurisdictions. Before using, ensure it is permitted by your local laws. NEURON Exchange provides access to decentralized protocols and is not responsible for your compliance with local regulations.</p>
   `,
   fr: `
-    <p><strong>1. NEURON EXCHANGE — Partie de l'écosystème</strong></p>
-    <p>NEURON Exchange surveille les principales DEX de l'écosystème TON et sélectionne le meilleur taux.</p>
-    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — Partie de l'écosystème</p>
+    <p style="margin-bottom:12px;">NEURON Exchange fait partie intégrante de l'écosystème blockchain NEURON. La plateforme surveille les principales bourses décentralisées de l'écosystème TON en temps réel et sélectionne automatiquement le meilleur taux pour votre échange.</p>
+    <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>2. Sécurité</strong></p>
-    <p>✅ NEURON Exchange ne stocke pas vos actifs.<br>🔒 Nous ne partageons pas les données.</p>
-    <p style="color:#fbbf24;">💛 Sans frais de trading. Uniquement gaz (5 COGNIQ) + gaz TON.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">2. Sécurité et confidentialité</p>
+    <p style="margin-bottom:8px;">✅ NEURON Exchange <strong>ne stocke pas vos actifs</strong>. Tous les fonds restent sur votre portefeuille TON.</p>
+    <p style="margin-bottom:8px;">🔒 Nous ne partageons pas les données avec des tiers et ne collectons pas d'informations personnelles.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💛 <strong>Sans frais de trading.</strong> Uniquement le gaz de la plateforme (5 COGNIQ) + gaz du réseau TON.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>3. xStocks — Actions tokenisées</strong></p>
-    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
-    <p>Adossé 1:1 à des actions réelles. Stockage en banques suisses. Émis par Backed Finance.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">3. xStocks — Actions tokenisées</p>
+    <p style="margin-bottom:8px;">Les xStocks sont des actions tokenisées de grandes entreprises mondiales sur la blockchain TON. Chaque token est adossé 1:1 à une action réelle.</p>
+    <p style="margin-bottom:8px;"><strong>Actifs disponibles :</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p style="margin-bottom:4px;">🏦 <strong>Adossement 1:1.</strong> Pour chaque token, une action réelle est achetée sur NYSE/NASDAQ.</p>
+    <p style="margin-bottom:4px;">🏛️ <strong>Stockage custodial.</strong> Les titres sont conservés dans des banques dépositaires réglementées suisses et européennes.</p>
+    <p style="margin-bottom:4px;">🛡️ <strong>Protection contre la faillite (SPV).</strong> Les actions sont isolées des risques financiers de l'émetteur.</p>
+    <p style="margin-bottom:8px;">🔍 <strong>Audit public.</strong> La preuve de réserves est disponible publiquement. Chaque produit a un ISIN.</p>
+    <p style="margin-bottom:8px;">L'émission de tokens est gérée par la société suisse réglementée <strong>Backed Finance</strong> (Backed Assets Limited).</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💡 Lors du versement de dividendes ou de fractionnements d'actions, les soldes de tokens sont automatiquement ajustés.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>4. Comment trader</strong></p>
-    <p>1. Connectez le portefeuille TON<br>2. Choisissez la paire<br>3. Entrez le montant<br>4. Confirmez</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">4. Comment commencer à trader</p>
+    <p style="margin-bottom:4px;">1. Connectez votre portefeuille TON (Tonkeeper, Tonhub, MyTonWallet)</p>
+    <p style="margin-bottom:4px;">2. Choisissez une paire de trading dans la section «Crypto» ou «xStocks»</p>
+    <p style="margin-bottom:4px;">3. Entrez le montant et appuyez sur «Exchange»</p>
+    <p style="margin-bottom:4px;">4. Confirmez la transaction dans votre portefeuille</p>
+    <p style="margin-bottom:16px;">5. L'actif est automatiquement crédité sur votre portefeuille TON</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>5. NEURON FIAT</strong></p>
-    <p>Intégration BestChange — 500+ échangeurs, 43 000+ paires. 0% frais cachés.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">5. NEURON FIAT — Accès direct à la liquidité mondiale</p>
+    <p style="margin-bottom:8px;">NEURON Exchange est intégré aux principaux agrégateurs du marché : <strong>BestChange, Exchanger et MonitorEC</strong>. Cela offre un accès instantané à un pool de <strong>plus de 500 échangeurs vérifiés</strong> et <strong>plus de 43 000 paires</strong>.</p>
+    <p style="margin-bottom:4px;"><strong>Réserves vérifiées.</strong> Évaluation stricte des partenaires.</p>
+    <p style="margin-bottom:4px;"><strong>Routage intelligent.</strong> L'algorithme compare les taux en tenant compte des frais cachés.</p>
+    <p style="margin-bottom:4px;"><strong>Couverture mondiale.</strong> Prise en charge des devises de dizaines de pays.</p>
+    <p style="margin-bottom:8px;"><strong>Volumes massifs.</strong> Les réserves totales dépassent 80 milliards de dollars.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;"><strong>0% de frais cachés NEURON.</strong> Vous voyez le montant exact à recevoir avant de confirmer.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>6. Avertissement</strong></p>
-    <p style="color:#667788;font-size:0.85rem;">Le trading xStocks peut être restreint. Vérifiez les lois locales.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">6. Avertissement</p>
+    <p style="color:#667788;font-size:0.85rem;">Le trading d'actions tokenisées (xStocks) peut être restreint ou interdit dans certaines juridictions. Avant utilisation, assurez-vous que cela est autorisé par votre législation locale.</p>
   `,
   es: `
-    <p><strong>1. NEURON EXCHANGE — Parte del ecosistema</strong></p>
-    <p>NEURON Exchange monitorea los principales DEX del ecosistema TON y selecciona la mejor tasa.</p>
-    <p style="color:#fbbf24;text-align:center;">STON.fi · DeDust · Megaton Finance</p>
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — Parte del ecosistema</p>
+    <p style="margin-bottom:12px;">NEURON Exchange es parte integral del ecosistema blockchain NEURON. La plataforma monitorea los principales exchanges descentralizados del ecosistema TON en tiempo real y selecciona automáticamente la mejor tasa.</p>
+    <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>2. Seguridad</strong></p>
-    <p>✅ NEURON Exchange no almacena sus activos.<br>🔒 No compartimos datos.</p>
-    <p style="color:#fbbf24;">💛 Sin comisiones. Solo gas (5 COGNIQ) + gas TON.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">2. Seguridad y Privacidad</p>
+    <p style="margin-bottom:8px;">✅ NEURON Exchange <strong>no almacena sus activos</strong>. Todos los fondos permanecen en su billetera TON.</p>
+    <p style="margin-bottom:8px;">🔒 No compartimos datos con terceros y no recopilamos información personal.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💛 <strong>Sin comisiones de trading.</strong> Solo gas de plataforma (5 COGNIQ) + gas de red TON.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>3. xStocks — Acciones Tokenizadas</strong></p>
-    <p>AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
-    <p>Respaldado 1:1 por acciones reales. Custodia en bancos suizos. Emitido por Backed Finance.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">3. xStocks — Acciones Tokenizadas</p>
+    <p style="margin-bottom:8px;">xStocks son acciones tokenizadas de empresas globales en la blockchain TON. Cada token está respaldado 1:1 por una acción real.</p>
+    <p style="margin-bottom:8px;"><strong>Activos disponibles:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p style="margin-bottom:4px;">🏦 <strong>Respaldo 1:1.</strong> Por cada token, se compra una acción real en NYSE/NASDAQ.</p>
+    <p style="margin-bottom:4px;">🏛️ <strong>Custodia.</strong> Los valores se guardan en bancos custodios regulados suizos y europeos.</p>
+    <p style="margin-bottom:4px;">🛡️ <strong>Protección de quiebra (SPV).</strong> Las acciones están aisladas de los riesgos financieros del emisor.</p>
+    <p style="margin-bottom:8px;">🔍 <strong>Auditoría pública.</strong> Proof-of-Reserves disponible públicamente. Cada producto tiene ISIN.</p>
+    <p style="margin-bottom:8px;">La emisión de tokens está a cargo de la empresa regulada suiza <strong>Backed Finance</strong>.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;">💡 Cuando se pagan dividendos o se producen divisiones de acciones, los saldos se ajustan automáticamente.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>4. Cómo operar</strong></p>
-    <p>1. Conecte la billetera TON<br>2. Elija el par<br>3. Ingrese el monto<br>4. Confirme</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">4. Cómo empezar a operar</p>
+    <p style="margin-bottom:4px;">1. Conecte su billetera TON (Tonkeeper, Tonhub, MyTonWallet)</p>
+    <p style="margin-bottom:4px;">2. Elija un par en la sección "Crypto" o "xStocks"</p>
+    <p style="margin-bottom:4px;">3. Ingrese el monto y presione "Exchange"</p>
+    <p style="margin-bottom:4px;">4. Confirme la transacción en su billetera</p>
+    <p style="margin-bottom:16px;">5. El activo se acredita automáticamente en su billetera TON</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>5. NEURON FIAT</strong></p>
-    <p>Integración BestChange — 500+ cambiadores, 43 000+ pares. 0% comisiones ocultas.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">5. NEURON FIAT — Acceso directo a la liquidez global</p>
+    <p style="margin-bottom:8px;">NEURON Exchange está integrado con los principales agregadores: <strong>BestChange, Exchanger y MonitorEC</strong>. Acceso a <strong>500+ cambiadores verificados</strong> y <strong>43,000+ pares</strong>.</p>
+    <p style="margin-bottom:4px;"><strong>Reservas verificadas.</strong> Evaluación estricta de socios.</p>
+    <p style="margin-bottom:4px;"><strong>Enrutamiento inteligente.</strong> El algoritmo compara tasas considerando comisiones ocultas.</p>
+    <p style="margin-bottom:4px;"><strong>Cobertura global.</strong> Soporte para fiat de decenas de países.</p>
+    <p style="margin-bottom:8px;"><strong>Volúmenes masivos.</strong> Las reservas totales superan los $80 mil millones.</p>
+    <p style="color:#fbbf24;margin-bottom:16px;"><strong>0% de comisiones ocultas de NEURON.</strong> Ves el monto exacto antes de confirmar.</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
-    <p><strong>6. Aviso Legal</strong></p>
-    <p style="color:#667788;font-size:0.85rem;">El trading de xStocks puede estar restringido. Verifique las leyes locales.</p>
+    
+    <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">6. Aviso Legal</p>
+    <p style="color:#667788;font-size:0.85rem;">El trading de acciones tokenizadas (xStocks) puede estar restringido en ciertas jurisdicciones. Verifique las leyes locales antes de usar.</p>
   `
 };
 
