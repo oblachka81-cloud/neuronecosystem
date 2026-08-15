@@ -69,7 +69,7 @@ function switchTab(tab) {
 else if (tab === 'exchange') {
   if (header) header.style.display = '';
   if (footer) footer.style.display = '';
-  if (logoImg) logoImg.src = 'main/exchange_logo.webp';
+  if (logoImg) logoImg.src = '/public/images/cogniq/exchange_logo.png';
 }
   else if (tab === 'bank') {
     if (header) header.style.display = '';
