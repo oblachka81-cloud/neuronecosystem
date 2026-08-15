@@ -602,4 +602,4 @@ function openExchangeInfoModal() {
 function closeExchangeInfoModal() {
   document.getElementById('exchangeInfoModal').style.display = 'none';
 }
-}
+
