@@ -437,9 +437,9 @@ function loadExchangePanel() {
       </div>
 
       <div style="margin-bottom:16px;">
-        <a href="/exchange-info.html" style="display:block;margin-bottom:10px;text-decoration:none;">
-          <img id="exchangeInfoImg" src="/public/images/cogniq/exchange_info_${currentLang}.png" style="width:100%;height:auto;display:block;">
-        </a>
+        <button onclick="openExchangeInfoModal()" style="background:none;border:none;padding:0;cursor:pointer;display:block;margin-bottom:10px;width:100%;">
+         <img id="exchangeInfoImg" src="/public/images/cogniq/exchange_info_${currentLang}.png" style="width:100%;height:auto;display:block;">
+        </button>
         <div style="display:flex;gap:6px;margin-bottom:10px;">
           <button id="tabCrypto" onclick="exchangeSwitchPairTab('crypto')" style="background:none;border:none;padding:0;cursor:pointer;flex:1;">
             <img src="/public/images/cogniq/exchange_tab_crypto.png" style="width:100%;height:auto;display:block;">
