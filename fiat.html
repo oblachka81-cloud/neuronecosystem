@@ -251,7 +251,7 @@ document.getElementById('modalCloseBtn').textContent = t.close;
 document.getElementById('modalSearch').placeholder = t.search;
 document.getElementById('backBtnImg').src = '/public/images/cogniq/exchange_back_' + currentLang + '.png';
 document.getElementById('backBtn').onclick = function() {
-  window.location.href = '/exchange?lang=' + currentLang;
+window.location.href = '/?lang=' + currentLang + '&tab=exchange';
 };
 
 // ===== TELEGRAM WEBAPP =====
