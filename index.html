@@ -965,67 +965,8 @@ function renderLeaderboard(data) {
   
   loadReferralStats();
 }
-    function formatTxDate(iso) {
-  if (!iso) return '';
-  try {
-    return new Date(iso).toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'short' });
-  } catch(e) { return ''; }
-}
-    function getTxLabel(tx) {
-  const labels = {
-    deposit:           { ru:'Пополнение', en:'Deposit', fr:'Dépôt', es:'Depósito' },
-    transfer_sent:     { ru:'Перевод отправлен', en:'Transfer sent', fr:'Transfert envoyé', es:'Transferencia enviada' },
-    transfer_received: { ru:'Перевод получен', en:'Transfer received', fr:'Transfert reçu', es:'Transferencia recibida' },
-    withdraw:          { ru:'Вывод COGNIQ', en:'COGNIQ withdrawal', fr:'Retrait COGNIQ', es:'Retiro COGNIQ' },
-  };
-  const entry = labels[tx.type];
-  if (entry) return entry[currentLang] || entry.en;
-  return tx.type || (currentLang === 'ru' ? 'Операция' : currentLang === 'fr' ? 'Opération' : currentLang === 'es' ? 'Operación' : 'Transaction');
-}
-    async function loadOnchainHistory(walletAddress) {
-  const container = document.getElementById('onchain-history');
-  if (!walletAddress) {
-    container.innerHTML = `<p class="wallet-empty">${t.walletConnectFirst || 'Подключи TON кошелёк'}</p>`;
-    return;
-  }
-  try {
-    const [tonRes, usdtRes] = await Promise.all([
-      fetch(`https://toncenter.com/api/v3/transactions?account=${walletAddress}&limit=10`).then(r => r.json()),
-      fetch(`https://toncenter.com/api/v3/jetton/transfers?owner_address=${walletAddress}&jetton_address=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs&limit=10`).then(r => r.json())
-    ]);
-
-    const tonTxs = (tonRes.transactions || []).map(tx => ({
-  date: new Date(tx.utime * 1000).toLocaleDateString(currentLang),
-  type: 'TON',
-  amount: (parseInt(String(tx.in_msg?.value || '0'), 10) / 1e9).toFixed(2),
-  dir: tx.in_msg?.source ? 'in' : 'out'
-}));
-
-const usdtTxs = (usdtRes.jetton_transfers || []).map(tx => ({
-  date: new Date(tx.utime * 1000).toLocaleDateString(currentLang),
-  type: 'USDT',
-  amount: (parseInt(String(tx.amount || '0'), 10) / 1e6).toFixed(2),
-  dir: tx.direction
-}));
-
-    const all = [...tonTxs, ...usdtTxs].slice(0, 10);
-
-    if (!all.length) {
-      container.innerHTML = `<p class="wallet-empty">${t.noOnchainTx || 'Транзакций пока нет'}</p>`;
-      return;
-    }
-
-    container.innerHTML = all.map(tx => `
-      <div class="tx-item">
-        <span class="tx-type">${tx.type}</span>
-        <span class="tx-dir ${tx.dir === 'in' ? 'tx-in' : 'tx-out'}">${tx.dir === 'in' ? '↓' : '↑'} ${tx.amount}</span>
-        <span class="tx-date">${tx.date}</span>
-      </div>
-    `).join('');
-  } catch(e) {
-    container.innerHTML = `<p class="wallet-empty">${t.loadError || 'Ошибка загрузки'}</p>`;
-  }
-}
+    
+  
 
 function escapeHtml(str) {
   if (!str) return '';
