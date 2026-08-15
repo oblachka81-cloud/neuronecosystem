@@ -323,6 +323,9 @@ window._hideSplash = hideSplash;
 try{tg.expand();}catch(e){}
 try{tg.MainButton.hide();}catch(e){}
 
+    initTonConnect();
+window.addEventListener('load', () => { initTonConnect(); });
+
 let userId, userName;
   let tonPaymentContext = 'super_game';
 
