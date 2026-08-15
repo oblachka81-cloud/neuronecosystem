@@ -62,10 +62,15 @@ function switchTab(tab) {
   const footer = document.querySelector('footer');
   const logoImg = document.querySelector('.logo-wrap img');
   
-  if (tab === 'casino' || tab === 'exchange') {
-    if (header) header.style.display = 'none';
-    if (footer) footer.style.display = 'none';
-  } 
+  if (tab === 'casino') {
+  if (header) header.style.display = 'none';
+  if (footer) footer.style.display = 'none';
+}
+else if (tab === 'exchange') {
+  if (header) header.style.display = '';
+  if (footer) footer.style.display = '';
+  if (logoImg) logoImg.src = 'main/exchange_logo.webp';
+}
   else if (tab === 'bank') {
     if (header) header.style.display = '';
     if (footer) footer.style.display = '';
