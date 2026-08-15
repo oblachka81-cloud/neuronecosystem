@@ -24,7 +24,236 @@ function loadCasinoPanel() {
   const casinoContainer = document.createElement('div');
   casinoContainer.id = 'casinoContainer';
   casinoContainer.className = 'casino-wrapper';
-  casinoContainer.innerHTML = `...`; // ← ВЕСЬ HTML КАЗИНО
+  casinoContainer.innerHTML = `
+    <div class="casino-card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+    <button id="casinoBackBtn" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+      <img id="casinoBackBtnImg" src="/public/images/cogniq/back_btn_${currentLang}.png" style="height:44px;width:auto;display:block;">
+    </button>
+    <button id="casinoDailyImpulseBtn" onclick="window.casinoClaimDailyImpulse()" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+      <img id="casinoDailyImpulseBtnImg" src="/public/images/cogniq/btn_daily_impulse.png" style="height:44px;width:auto;display:block;">
+    </button>
+  </div>
+  <div class="neuron-logo">
+    <img src="/public/images/cogniq/neuron_logo.png" alt="NEURON" style="height:128px;width:auto;display:block;">
+  </div>
+  <div class="casino-tabs" style="display:flex;gap:4px;background:transparent;border:none;padding:0;">
+    <button class="casino-tab active" data-tab="roulette" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+      <img src="/public/images/cogniq/tab_btn_fortuna.png" style="width:100%;height:auto;display:block;">
+    </button>
+    <button class="casino-tab" data-tab="slots" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+      <img src="/public/images/cogniq/tab_btn_spark.png" style="width:100%;height:auto;display:block;">
+    </button>
+    <button class="casino-tab" data-tab="crash" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+      <img src="/public/images/cogniq/tab_btn_crash.png" style="width:100%;height:auto;display:block;">
+    </button>
+    <button class="casino-tab" data-tab="blackjack" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+      <img src="/public/images/cogniq/tab_btn_xxi.png" style="width:100%;height:auto;display:block;">
+    </button>
+    <button class="casino-tab" data-tab="mines" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+      <img src="/public/images/cogniq/tab_btn_mines.png" style="width:100%;height:auto;display:block;">
+    </button>
+  </div>
+  <div class="balance-row" style="margin-bottom:2px;">
+    <div class="balance-label" id="casinoBalanceLabel">Available IMPULSE</div>
+    <div class="balance-amount" id="casinoBalanceAmount">—</div>
+  </div>
+
+       <!-- ROULETTE -->
+      <div id="casinoSectionRoulette" class="casino-game-section">
+        <div class="wheel-panel" style="padding:80px 20px 14px;margin-bottom:2px;">
+          <div class="wheel-wrap" style="position:relative;width:min(330px,65vw,50vh);height:min(330px,65vw,50vh);margin:0 auto 16px;filter:drop-shadow(0 0 24px rgba(255,140,0,0.5));">
+            <div class="wheel-pointer" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:1.4rem;color:#ffd700;filter:drop-shadow(0 0 10px #ffaa00);z-index:2;">▼</div>
+            <canvas id="casinoWheelCanvas" class="wheel-svg" width="220" height="220" style="width:100%;height:100%;border-radius:50%;box-shadow:0 0 50px rgba(255,170,0,0.4),0 0 100px rgba(255,80,0,0.2);"></canvas>
+            <div class="wheel-center" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;background:radial-gradient(circle,#1e2e48,#07111f);border:3px solid #ffaa00;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 24px rgba(255,170,0,0.7),inset 0 0 16px rgba(0,0,0,0.5);">
+              <span class="wheel-center-num" id="casinoWheelResult" style="font-size:1.4rem;font-weight:900;color:#ffaa00;">?</span>
+            </div>
+          </div>
+        </div>
+        <button id="casinoSpinBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;margin-bottom:14px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
+          <img id="casinoSpinBtnImg" src="/public/images/cogniq/fortuna_btn_spin_${currentLang}.png" style="width:100%;height:auto;display:block;">
+        </button>
+        <div class="result-color" id="casinoRouletteResultColor" style="font-size:1rem;font-weight:700;margin-top:6px;text-align:center;min-height:24px;margin-bottom:4px;"></div>
+        <div class="result-message" id="casinoRouletteResultMsg" style="font-size:0.88rem;margin-top:4px;color:#aabbcc;text-align:center;min-height:20px;margin-bottom:12px;"></div>
+        <div style="position:relative;margin-bottom:14px;">
+          <img src="/public/images/cogniq/fortuna_bets_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+          <div class="bet-form" style="position:relative;z-index:1;background:none;border:none;padding:24px 18px 18px 18px;">
+            <div class="input-row" style="display:flex;gap:10px;margin-bottom:12px;"><input type="number" id="casinoRouletteBet" placeholder="Amount (10-100 IMPULSE)" min="10" max="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;"></div>
+            <div class="bet-types" id="casinoRouletteBetTypes" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+              <button class="wheel-bet-btn" data-type="red" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_red.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="black" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_black.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="even" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_even.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="odd" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_odd.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="low" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_low.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="high" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_high.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="dozen1" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_dozen1.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="dozen2" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_dozen2.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="dozen3" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_dozen3.png" style="width:100%;height:auto;display:block;"></button>
+            </div>
+          </div>
+        </div>
+        <div class="section-title" id="casinoRouletteHistoryTitle" style="font-size:0.72rem;font-weight:700;color:#445577;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">${ct.history}</div>
+        <div id="casinoRouletteHistory"></div>
+      </div>
+
+      <!-- SLOTS -->
+      <div id="casinoSectionSlots" class="casino-game-section" style="display:none;">
+        <div class="slot-machine" style="position:relative;margin-bottom:20px;padding:28px 32px 22px;">
+          <img src="/public/images/cogniq/spark_machine_bg.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <div style="position:relative;z-index:2;">
+            <div id="casinoSlotReels" style="display:flex;gap:3px;justify-content:center;margin-bottom:20px;padding-top:40px;"></div>
+            <div style="text-align:center;min-height:54px;margin-bottom:6px;">
+              <div id="casinoSlotResultCombo" style="font-size:1.6rem;font-weight:900;letter-spacing:8px;min-height:32px;"></div>
+              <div id="casinoSlotResultMsg" style="font-size:0.9rem;margin-top:6px;font-weight:700;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="position:relative;margin-bottom:14px;">
+          <img src="/public/images/cogniq/spark_bets_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <div style="position:relative;z-index:1;padding:18px;">
+            <input type="number" id="casinoSlotBet" placeholder="${ct.bet} (10-100)" min="10" max="100" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
+            <div style="display:flex;gap:6px;margin-bottom:14px;">
+              <button onclick="window.casinoSetSlotBet(10)" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/btn_bet_10.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetSlotBet(25)" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/btn_bet_25.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetSlotBet(50)" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/btn_bet_50.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetSlotBet(100)" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/btn_bet_100.png" style="width:100%;height:auto;display:block;"></button>
+            </div>
+            <button id="casinoSlotSpinBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;"><img src="/public/images/cogniq/btn_spin.png" style="width:100%;height:auto;display:block;"></button>
+          </div>
+        </div>
+        <div class="section-title" style="font-size:0.72rem;font-weight:700;color:#445577;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">${ct.history}</div>
+        <div id="casinoSlotHistory"></div>
+      </div>
+
+      <!-- CRASH -->
+      <div id="casinoSectionCrash" class="casino-game-section" style="display:none;">
+        <div style="position:relative;margin-bottom:14px;border-radius:18px;overflow:hidden;">
+          <img src="/public/images/cogniq/crash_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <div style="position:relative;z-index:1;padding:8px;">
+            <div style="position:relative;margin-bottom:12px;">
+              <img id="casinoCrashBg" src="/public/images/cogniq/krash_display_bg_active.png" style="width:100%;height:auto;display:block;">
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+                <div style="text-align:center;pointer-events:none;">
+                  <div id="casinoCrashMult" style="font-size:3.2em;font-weight:900;color:#10b981;text-shadow:0 0 30px currentColor;">---</div>
+                  <div id="casinoCrashLabel" style="font-size:0.72em;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-top:4px;color:#556677;">ОЖИДАНИЕ</div>
+                </div>
+              </div>
+              <canvas id="casinoCrashCanvas" style="position:absolute;bottom:0;left:0;width:100%;height:220px;z-index:2;"></canvas>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;background:rgba(5,5,20,0.9);border:1px solid rgba(255,170,0,0.15);border-radius:12px;padding:10px 16px;font-size:0.83em;">
+              <div style="display:flex;align-items:center;gap:8px;"><div id="casinoCrashDot" style="width:10px;height:10px;border-radius:50%;background:#334;"></div><span id="casinoCrashStatus" style="color:#aaa;">${ct.bet}...</span></div>
+              <div id="casinoCrashTimer" style="color:#556;"></div>
+            </div>
+            <div id="casinoCrashMyBet" style="display:none;justify-content:space-between;align-items:center;margin-bottom:12px;background:linear-gradient(135deg, rgba(168,85,247,0.12), rgba(59,130,246,0.06));border:1px solid rgba(168,85,247,0.3);border-radius:12px;padding:10px 16px;">
+              <div><div style="font-size:0.78em;color:#556;">${ct.bet}</div><div id="casinoCrashBetAmount" style="font-weight:800;color:#a855f7;">0</div></div>
+              <div style="text-align:right;"><div style="font-size:0.78em;color:#556;">${ct.cashout}</div><div id="casinoCrashPotential" style="font-weight:700;color:#10b981;">0</div></div>
+            </div>
+          </div>
+        </div>
+        <div style="position:relative;margin-bottom:14px;">
+          <img src="/public/images/cogniq/crash_bet_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <div style="position:relative;z-index:1;padding:18px;">
+            <input type="number" id="casinoCrashBetInput" value="50" min="10" max="100" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
+              <button onclick="window.casinoSetCrashBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/krash_btn_10.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetCrashBet(25)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/krash_btn_25.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetCrashBet(50)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/krash_btn_50.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetCrashBet(100)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/krash_btn_100.png" style="width:100%;height:auto;display:block;"></button>
+            </div>
+            <button id="casinoCrashMainBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;"><img id="casinoCrashMainBtnImg" src="/public/images/cogniq/krash_btn_main_bet_${currentLang}.png" style="width:100%;height:auto;display:block;"></button>
+          </div>
+        </div>
+        <div class="section-title" style="font-size:0.72rem;font-weight:700;color:#445577;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">${ct.history}</div>
+        <div id="casinoCrashHistory" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+      </div>
+
+      <!-- BLACKJACK -->
+      <div id="casinoSectionBlackjack" class="casino-game-section" style="display:none;">
+        <div style="position:relative;min-height:300px;margin-bottom:14px;">
+          <img src="/public/images/cogniq/xxi_table.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;border-radius:24px;opacity:0.8;" alt="">
+          <div style="position:relative;z-index:1;border-radius:24px;min-height:300px;display:flex;flex-direction:column;justify-content:space-between;padding:12px 16px;">
+            <div style="flex:1;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;">
+              <div id="casinoBjDealerCards" style="display:flex;flex-wrap:wrap;gap:10px;min-height:88px;align-items:center;justify-content:center;"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:4px;">
+              <div id="casinoBjPlayerCards" style="display:flex;flex-wrap:wrap;gap:10px;min-height:88px;align-items:center;justify-content:center;"></div>
+              <div id="casinoBjResultBanner" style="text-align:center;font-size:1.2em;font-weight:900;padding:12px;border-radius:14px;margin:8px 0;display:none;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div id="casinoBjInsuranceBar" style="display:none;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.35);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:0.83em;color:#c084fc;text-align:center;cursor:pointer;"></div>
+        
+        <div style="position:relative;margin-bottom:14px;">
+          <img src="/public/images/cogniq/xxi_bet_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <div style="position:relative;z-index:1;padding:18px;">
+            <input type="number" id="casinoBjBet" value="50" min="10" max="500" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;">
+              <button onclick="window.casinoSetBjBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/xxi_btn_10.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetBjBet(25)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/xxi_btn_25.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetBjBet(50)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/xxi_btn_50.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetBjBet(100)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/xxi_btn_100.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetBjBet(250)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/xxi_btn_250.png" style="width:100%;height:auto;display:block;"></button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <button id="casinoBjDealBtn" style="grid-column:span 2;background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/bj_deal_${currentLang}.png" style="width:100%;height:auto;display:block;"></button>
+              <button id="casinoBjHitBtn" disabled style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/bj_hit_${currentLang}.png" style="width:100%;height:auto;display:block;"></button>
+              <button id="casinoBjStandBtn" disabled style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/bj_stand_${currentLang}.png" style="width:100%;height:auto;display:block;"></button>
+              <button id="casinoBjDoubleBtn" disabled style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/bj_double_${currentLang}.png" style="width:100%;height:auto;display:block;"></button>
+              <button id="casinoBjSplitBtn" disabled style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/bj_split_${currentLang}.png" style="width:100%;height:auto;display:block;"></button>
+            </div>
+          </div>
+        </div>
+        <div class="section-title" style="font-size:0.72rem;font-weight:700;color:#445577;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">${ct.history}</div>
+        <div id="casinoBjHistory"></div>
+      </div>
+
+      <!-- MINES -->
+      <div id="casinoSectionMines" class="casino-game-section" style="display:none;">
+        <div style="position:relative;margin-bottom:16px;border-radius:0;">
+          <img src="/public/images/cogniq/mines_field_bg.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <div style="position:relative;z-index:1;padding:22px 23px 10px 8px;text-align:center;">
+            <div style="font-size:0.85rem;color:#ffaa00;margin-bottom:8px;">💣 MINES</div>
+            <div id="casinoMinesMult" style="font-size:1.8rem;font-weight:900;color:#ffaa00;text-shadow:0 0 20px rgba(255,170,0,0.7);margin-bottom:8px;min-height:44px;">x1.00</div>
+            <div id="casinoMinesField" style="display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:16px;"></div>
+          </div>
+        </div>
+        <div style="position:relative;margin-bottom:14px;">
+          <img src="/public/images/cogniq/mines_bets_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <div style="position:relative;z-index:1;padding:18px;">
+            <input type="number" id="casinoMinesBet" value="50" min="10" max="100" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
+              <button onclick="window.casinoSetMinesBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_10.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetMinesBet(25)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_25.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetMinesBet(50)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_50.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetMinesBet(100)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_100.png" style="width:100%;height:auto;display:block;"></button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <label style="font-size:0.8rem;color:#5577aa;white-space:nowrap;">💣 Мин:</label>
+              <input type="number" id="casinoMinesCount" min="1" max="24" value="3" style="width:60px;padding:8px 10px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:10px;color:#fff;font-size:0.95rem;outline:none;text-align:center;">
+              <input type="range" id="casinoMinesRange" min="1" max="24" value="3" style="flex:1;accent-color:#ffaa00;">
+            </div>
+            <div style="display:flex;gap:12px;">
+              <button id="casinoMinesCashoutBtn" style="flex:1;background:none;border:none;padding:0;cursor:pointer;display:none;"><img src="/public/images/cogniq/mines_btn_cashout.png" style="width:100%;height:auto;display:block;"></button>
+              <button id="casinoMinesStartBtn" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_start.png" style="width:100%;height:auto;display:block;"></button>
+            </div>
+          </div>
+        </div>
+        <div class="section-title" style="font-size:0.72rem;font-weight:700;color:#445577;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">${ct.history}</div>
+        <div id="casinoMinesHistory"></div>
+      </div>
+
+    </div>
+    
+    <!-- Jackpot Overlay -->
+    <div id="casinoJackpotOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:1000;align-items:center;justify-content:center;flex-direction:column;gap:14px;">
+      <div style="font-size:5rem;animation:brainPop 0.5s cubic-bezier(0.36,0.07,0.19,0.97) both;filter:drop-shadow(0 0 30px #ff00ff);">🧠</div>
+      <div style="font-size:3rem;font-weight:900;background:linear-gradient(90deg, #ff00ff, #ffaa00, #00ffff, #ff00ff);background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gradientShift 1.5s linear infinite;">JACKPOT!</div>
+      <div id="casinoJackpotAmount" style="font-size:2rem;font-weight:900;color:#ffaa00;text-shadow:0 0 30px rgba(255,170,0,0.8);"></div>
+      <button onclick="window.casinoCloseJackpot()" style="padding:14px 44px;background:linear-gradient(90deg, #ff00ff, #9900ff);border:none;border-radius:14px;color:#fff;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 0 30px rgba(255,0,255,0.5);">COLLECT 🎉</button>
+    </div>
+  `;
+
   document.body.appendChild(casinoContainer);
 
 // 4. Частицы
