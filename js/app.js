@@ -138,12 +138,6 @@ function startApp(attempt) {
     localStorage.setItem('neuron_uid', userId);
     localStorage.setItem('neuron_uname', userName);
   }
-    // Если пришли с фиата — открываем биржу
-  const tabParam = new URLSearchParams(window.location.search).get('tab');
-  if (tabParam === 'exchange') {
-    loadWelcome().then(() => switchTab('exchange'));
-    return;
-  }
   loadWelcome();
 }
 
