@@ -646,24 +646,34 @@ function cStartRound() {
   }
 
   cGraphTimer = setInterval(() => {
-    const elapsedMs = Date.now() - cStartTime;
-    cMult = crashMultiplierAt(elapsedMs);
+  const elapsedMs = Date.now() - cStartTime;
+  cMult = crashMultiplierAt(elapsedMs);
 
-    if (cMult >= 100) {
-      cMult = 100;
-      cPoints.push(cMult);
-      clearInterval(cGraphTimer);
-      cTriggerCrash(100, false);
-      return;
-    }
-
+  // Проверяем достижение точки краша
+  if (cMult >= cPoint) {
+    cMult = cPoint;
     cPoints.push(cMult);
-    document.getElementById('casinoCrashMult').textContent = cMult.toFixed(2) + 'x';
-    if (cHasBet && !cCashedOut) {
-      document.getElementById('casinoCrashPotential').textContent = Math.floor(cBet * cMult) + ' IMPULSE';
-    }
-    drawCrashGraph();
-  }, 100);
+    clearInterval(cGraphTimer);
+    cTriggerCrash(cPoint, false);
+    return;
+  }
+
+  // Потолок 100x
+  if (cMult >= 100) {
+    cMult = 100;
+    cPoints.push(cMult);
+    clearInterval(cGraphTimer);
+    cTriggerCrash(100, false);
+    return;
+  }
+
+  cPoints.push(cMult);
+  document.getElementById('casinoCrashMult').textContent = cMult.toFixed(2) + 'x';
+  if (cHasBet && !cCashedOut) {
+    document.getElementById('casinoCrashPotential').textContent = Math.floor(cBet * cMult) + ' IMPULSE';
+  }
+  drawCrashGraph();
+}, 100);
 }
 
 function cTriggerCrash(point, alreadySettled) {
