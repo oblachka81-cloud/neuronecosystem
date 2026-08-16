@@ -175,56 +175,91 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
 });
 
 // ==================== CRASH ====================
+// ==================== CRASH (MULTIPLAYER) ====================
+const { startNewRound, getState, getCurrentRoundId, isPhase, getPhase } = require('../services/crashMaster');
 
-// СТАВКА + ГЕНЕРАЦИЯ ТОЧКИ КРАША (один запрос вместо двух)
+router.get('/api/casino/crash/round', requireInitDataStrict, async (req, res) => {
+  try {
+    const userId = req.tgUser.id;
+    const state = getState();
+    
+    if (state.round_id) {
+      const bet = await pool.query(
+        `SELECT bet_amount, cashed_out_at, win_amount, status 
+         FROM crash_bets_multi WHERE round_id = $1 AND telegram_id = $2`,
+        [state.round_id, userId]
+      );
+      
+      if (bet.rows[0]) {
+        state.my_bet = {
+          amount: bet.rows[0].bet_amount,
+          cashed_out_at: bet.rows[0].cashed_out_at ? parseFloat(bet.rows[0].cashed_out_at) : null,
+          win_amount: bet.rows[0].win_amount,
+          status: bet.rows[0].status,
+        };
+      }
+    }
+    
+    res.json(state);
+  } catch (e) {
+    console.error('[CRASH] round error:', e);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.post('/api/casino/crash/bet', requireInitDataStrict, casinoRateLimit, async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const userId = req.tgUser.id;
     const bet_amount = parseInt(req.body.bet_amount);
+    
     if (!bet_amount || bet_amount < 10 || bet_amount > 100) {
       await client.query('ROLLBACK');
       return res.status(400).json({ error: 'Ставка: 10-100 IMPULSE' });
     }
-
-    const user = await client.query('SELECT balance FROM impulse_balance WHERE user_id = $1 FOR UPDATE', [userId]);
+    
+    if (!isPhase('betting')) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Ставки закрыты! Ждите следующий раунд' });
+    }
+    
+    const roundId = getCurrentRoundId();
+    
+    const existing = await client.query(
+      `SELECT id FROM crash_bets_multi WHERE round_id = $1 AND telegram_id = $2`,
+      [roundId, userId]
+    );
+    if (existing.rows.length > 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Вы уже сделали ставку в этом раунде' });
+    }
+    
+    const user = await client.query(
+      'SELECT balance FROM impulse_balance WHERE user_id = $1 FOR UPDATE',
+      [userId]
+    );
     if (!user.rows[0] || user.rows[0].balance < bet_amount) {
       await client.query('ROLLBACK');
       return res.status(403).json({ error: 'Недостаточно IMPULSE' });
     }
-
-    const existing = await client.query(
-      "SELECT telegram_id FROM crash_bets WHERE telegram_id = $1 AND status = 'active'", [userId]
-    );
-    if (existing.rows.length > 0) {
-      await client.query('ROLLBACK');
-      return res.status(400).json({ error: 'Уже есть активная ставка' });
-    }
-
+    
     const newBalance = user.rows[0].balance - bet_amount;
-    const crashPoint = generateCrashPoint();
-    const serverSeed = crypto.randomBytes(16).toString('hex');
-    const hash = crypto.createHash('sha256').update(serverSeed + crashPoint.toString()).digest('hex');
-
     await client.query('UPDATE impulse_balance SET balance = $1 WHERE user_id = $2', [newBalance, userId]);
+    
     await client.query(
-      `INSERT INTO crash_bets (telegram_id, bet_amount, round_start, crash_point, server_seed, status)
-       VALUES ($1, $2, NOW(), $3, $4, 'active')
-       ON CONFLICT (telegram_id) DO UPDATE
-       SET bet_amount = $2, round_start = NOW(), crash_point = $3, server_seed = $4, status = 'active'`,
-      [userId, bet_amount, crashPoint, serverSeed]
+      `INSERT INTO crash_bets_multi (round_id, telegram_id, bet_amount, status)
+       VALUES ($1, $2, $3, 'active')`,
+      [roundId, userId, bet_amount]
     );
+    
     await client.query('COMMIT');
-
-    await logTx(userId, 'impulse_bet', bet_amount, 'out', { game: 'KRASH' });
-
-    // Отдаём crash_point клиенту для анимации + hash для честности
+    
     res.json({
       success: true,
       new_balance: newBalance,
-      crash_point: crashPoint,
-      hash
+      bet_amount,
+      round_id: roundId,
     });
   } catch (e) {
     await client.query('ROLLBACK');
@@ -235,66 +270,72 @@ router.post('/api/casino/crash/bet', requireInitDataStrict, casinoRateLimit, asy
   }
 });
 
-// КЭШАУТ — только если множитель МЕНЬШЕ точки краша
 router.post('/api/casino/crash/cashout', requireInitDataStrict, casinoRateLimit, async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
     const userId = req.tgUser.id;
-
+    
+    if (!isPhase('flying')) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Cashout недоступен' });
+    }
+    
+    const roundId = getCurrentRoundId();
+    const state = getState();
+    
     const betRow = await client.query(
-      "SELECT bet_amount, crash_point, server_seed, round_start FROM crash_bets WHERE telegram_id = $1 AND status = 'active' FOR UPDATE",
-      [userId]
+      `SELECT id, bet_amount, status FROM crash_bets_multi 
+       WHERE round_id = $1 AND telegram_id = $2 FOR UPDATE`,
+      [roundId, userId]
     );
+    
     if (!betRow.rows[0]) {
       await client.query('ROLLBACK');
       return res.status(400).json({ error: 'Нет активной ставки' });
     }
-
-    const { bet_amount, crash_point, server_seed, round_start } = betRow.rows[0];
-    const crashPointFloat = parseFloat(crash_point);
-    const elapsedMs = Date.now() - new Date(round_start).getTime();
-    const serverMult = crashMultiplierAt(elapsedMs);
-
-    // Если серверный множитель уже достиг точки краша — проигрыш
-    if (serverMult >= crashPointFloat) {
-      await client.query("UPDATE crash_bets SET status = 'crashed' WHERE telegram_id = $1", [userId]);
-      await client.query('COMMIT');
-      const userBal = await pool.query('SELECT balance FROM impulse_balance WHERE user_id = $1', [userId]);
-      await addToBurnPool('impulse_crash', Math.max(1, Math.floor(bet_amount * 0.05)), userId);
-      return res.json({
-        success: false,
-        crashed: true,
-        crash_point: crashPointFloat,
-        new_balance: userBal.rows[0]?.balance || 0,
-        server_seed: server_seed
-      });
+    
+    if (betRow.rows[0].status !== 'active') {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Ставка уже обработана' });
     }
-
-    // Иначе — выигрыш по серверному множителю
-    const actualMultiplier = Math.min(serverMult, crashPointFloat);
-    const wonAmount = Math.floor(bet_amount * actualMultiplier);
-
-    const user = await client.query('SELECT balance FROM impulse_balance WHERE user_id = $1 FOR UPDATE', [userId]);
-    const newBalance = user.rows[0].balance + wonAmount;
-
-    await client.query('UPDATE impulse_balance SET balance = $1 WHERE user_id = $2', [newBalance, userId]);
-    await client.query("UPDATE crash_bets SET status = 'cashed_out' WHERE telegram_id = $1", [userId]);
-    await client.query(
-      'INSERT INTO casino_spins (telegram_id, bet_amount, bet_type, result_number, win_amount) VALUES ($1, $2, $3, $4, $5)',
-      [userId, bet_amount, 'crash', Math.floor(actualMultiplier * 100), wonAmount]
+    
+    const bet_amount = betRow.rows[0].bet_amount;
+    const cashoutMult = state.multiplier;
+    const wonAmount = Math.floor(bet_amount * cashoutMult);
+    
+    const user = await client.query(
+      'SELECT balance FROM impulse_balance WHERE user_id = $1 FOR UPDATE',
+      [userId]
     );
+    const newBalance = user.rows[0].balance + wonAmount;
+    
+    await client.query('UPDATE impulse_balance SET balance = $1 WHERE user_id = $2', [newBalance, userId]);
+    
+    await client.query(
+      `UPDATE crash_bets_multi SET status = 'cashed_out', cashed_out_at = $1, win_amount = $2 WHERE id = $3`,
+      [cashoutMult, wonAmount, betRow.rows[0].id]
+    );
+    
+    await client.query(
+      `INSERT INTO casino_spins (telegram_id, bet_amount, bet_type, result_number, win_amount)
+       VALUES ($1, $2, 'crash', $3, $4)`,
+      [userId, bet_amount, Math.floor(cashoutMult * 100), wonAmount]
+    );
+    
+    await client.query(
+      `INSERT INTO transactions (user_id, type, amount, direction, description)
+       VALUES ($1, 'impulse_win', $2, 'in', $3)`,
+      [userId, wonAmount, JSON.stringify({ game: 'KRASH', mult: cashoutMult })]
+    );
+    
     await client.query('COMMIT');
-
-    await logTx(userId, 'impulse_win', wonAmount, 'in', { game: 'KRASH' });
-
+    
     res.json({
       success: true,
       new_balance: newBalance,
-      actual_multiplier: actualMultiplier,
+      multiplier: cashoutMult,
       won_amount: wonAmount,
-      crash_point: crashPointFloat,
-      server_seed: server_seed
     });
   } catch (e) {
     await client.query('ROLLBACK');
@@ -305,49 +346,16 @@ router.post('/api/casino/crash/cashout', requireInitDataStrict, casinoRateLimit,
   }
 });
 
-// ПРОИГРЫШ (клиент увидел краш до кэшаута)
-router.post('/api/casino/crash/lose', requireInitDataStrict, casinoRateLimit, async (req, res) => {
-  const client = await pool.connect();
+router.get('/api/casino/crash/history', requireInitDataStrict, async (req, res) => {
   try {
-    await client.query('BEGIN');
-    const userId = req.tgUser.id;
-
-    const betRow = await client.query(
-      "SELECT bet_amount, crash_point, server_seed FROM crash_bets WHERE telegram_id = $1 AND status = 'active' FOR UPDATE",
-      [userId]
+    const result = await pool.query(
+      `SELECT crash_point, crashed_at FROM crash_rounds 
+       WHERE phase = 'crashed' 
+       ORDER BY crashed_at DESC LIMIT 20`
     );
-
-    if (!betRow.rows[0]) {
-      await client.query('ROLLBACK');
-      const user = await pool.query('SELECT balance FROM impulse_balance WHERE user_id = $1', [userId]);
-      return res.json({ success: true, new_balance: user.rows[0]?.balance || 0 });
-    }
-
-    const { bet_amount, crash_point, server_seed } = betRow.rows[0];
-
-    await client.query("UPDATE crash_bets SET status = 'crashed' WHERE telegram_id = $1", [userId]);
-    if (bet_amount > 0) {
-      await client.query(
-        'INSERT INTO casino_spins (telegram_id, bet_amount, bet_type, result_number, win_amount) VALUES ($1, $2, $3, $4, $5)',
-        [userId, bet_amount, 'crash', 0, 0]
-      );
-      await addToBurnPool('impulse_crash', Math.max(1, Math.floor(bet_amount * 0.05)), userId);
-    }
-    await client.query('COMMIT');
-
-    const user = await pool.query('SELECT balance FROM impulse_balance WHERE user_id = $1', [userId]);
-    res.json({
-      success: true,
-      new_balance: user.rows[0]?.balance || 0,
-      crash_point: parseFloat(crash_point) || null,
-      server_seed: server_seed || null
-    });
+    res.json({ rounds: result.rows });
   } catch (e) {
-    await client.query('ROLLBACK');
-    console.error('[CRASH] lose error:', e);
     res.status(500).json({ error: 'Server error' });
-  } finally {
-    client.release();
   }
 });
 // ==================== BLACKJACK ====================
