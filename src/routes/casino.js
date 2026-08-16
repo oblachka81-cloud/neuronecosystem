@@ -241,12 +241,6 @@ router.post('/api/casino/crash/cashout', requireInitDataStrict, casinoRateLimit,
   try {
     await client.query('BEGIN');
     const userId = req.tgUser.id;
-    const { multiplier } = req.body;
-
-    if (!multiplier || multiplier < 1.0 || multiplier > 100) {
-      await client.query('ROLLBACK');
-      return res.status(400).json({ error: 'Неверный множитель' });
-    }
 
     const betRow = await client.query(
       "SELECT bet_amount, crash_point, server_seed, round_start FROM crash_bets WHERE telegram_id = $1 AND status = 'active' FOR UPDATE",
@@ -259,12 +253,12 @@ router.post('/api/casino/crash/cashout', requireInitDataStrict, casinoRateLimit,
 
     const { bet_amount, crash_point, server_seed, round_start } = betRow.rows[0];
     const crashPointFloat = parseFloat(crash_point);
+    const elapsedMs = Date.now() - new Date(round_start).getTime();
+    const serverMult = crashMultiplierAt(elapsedMs);
 
-    // ГЛАВНАЯ ПРОВЕРКА: множитель >= точки краша = ПРОИГРЫШ
-    if (multiplier >= crashPointFloat) {
-      await client.query(
-        "UPDATE crash_bets SET status = 'crashed' WHERE telegram_id = $1", [userId]
-      );
+    // Если серверный множитель уже достиг точки краша — проигрыш
+    if (serverMult >= crashPointFloat) {
+      await client.query("UPDATE crash_bets SET status = 'crashed' WHERE telegram_id = $1", [userId]);
       await client.query('COMMIT');
       const userBal = await pool.query('SELECT balance FROM impulse_balance WHERE user_id = $1', [userId]);
       await addToBurnPool('impulse_crash', Math.max(1, Math.floor(bet_amount * 0.05)), userId);
@@ -277,11 +271,8 @@ router.post('/api/casino/crash/cashout', requireInitDataStrict, casinoRateLimit,
       });
     }
 
-    // Анти-чит: множитель физически возможен по времени
-    const elapsedMs = Date.now() - new Date(round_start).getTime();
-    const maxPossible = crashMultiplierAt(elapsedMs) * 1.15;
-    const clampedMultiplier = Math.min(multiplier, maxPossible);
-    const actualMultiplier = Math.min(clampedMultiplier, crashPointFloat);
+    // Иначе — выигрыш по серверному множителю
+    const actualMultiplier = Math.min(serverMult, crashPointFloat);
     const wonAmount = Math.floor(bet_amount * actualMultiplier);
 
     const user = await client.query('SELECT balance FROM impulse_balance WHERE user_id = $1 FOR UPDATE', [userId]);
