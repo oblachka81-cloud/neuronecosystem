@@ -686,7 +686,7 @@ function handlePhaseChange(state) {
     drawCrashGraph(true);
   }
 }
-  
+
 function updateCrashUI() {
   const phase = crashState.phase;
   
