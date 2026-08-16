@@ -631,19 +631,21 @@ function handlePhaseChange(state) {
   const phase = state.phase;
   
   if (phase === 'waiting') {
-    crashGraphPoints = [];
-    document.getElementById('casinoCrashMult').textContent = '---';
-    document.getElementById('casinoCrashMult').style.color = '#334455';
-    document.getElementById('casinoCrashLabel').textContent = 'СЛЕДУЮЩИЙ РАУНД';
+  crashGraphPoints = [];
+  document.getElementById('casinoCrashMult').textContent = '---';
+  document.getElementById('casinoCrashMult').style.color = '#334455';
+  document.getElementById('casinoCrashLabel').textContent = '⏳ СЛЕДУЮЩИЙ РАУНД...';
+  document.getElementById('casinoCrashStatus').textContent = 'Подождите, раунд скоро начнётся';
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     updateCrashMainButton('disabled');
   }
   
   if (phase === 'betting') {
-    crashGraphPoints = [1.0];
-    document.getElementById('casinoCrashMult').textContent = '1.00x';
-    document.getElementById('casinoCrashMult').style.color = '#ffaa00';
-    document.getElementById('casinoCrashLabel').textContent = 'СТАВКИ ОТКРЫТЫ';
+  crashGraphPoints = [1.0];
+  document.getElementById('casinoCrashMult').textContent = '1.00x';
+  document.getElementById('casinoCrashMult').style.color = '#ffaa00';
+  document.getElementById('casinoCrashLabel').textContent = '🔥 ДЕЛАЙ СТАВКУ!';
+  document.getElementById('casinoCrashStatus').textContent = 'Успей поставить за 3 секунды!';
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     
     if (!state.my_bet) {
@@ -654,8 +656,9 @@ function handlePhaseChange(state) {
   }
   
   if (phase === 'flying') {
-    crashLastMult = state.multiplier || 1.0;
-    document.getElementById('casinoCrashLabel').textContent = 'ЛЕТИМ!';
+  crashLastMult = state.multiplier || 1.0;
+  document.getElementById('casinoCrashLabel').textContent = '🚀 ЛЕТИМ! ЖМИ ЗАБРАТЬ!';
+  document.getElementById('casinoCrashStatus').textContent = 'Забирай до краша!';
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     
     if (state.my_bet && state.my_bet.status === 'active') {
@@ -666,9 +669,10 @@ function handlePhaseChange(state) {
   }
   
   if (phase === 'crashed') {
-    document.getElementById('casinoCrashMult').textContent = state.crash_point.toFixed(2) + 'x';
-    document.getElementById('casinoCrashMult').style.color = '#ef4444';
-    document.getElementById('casinoCrashLabel').textContent = 'КРАШ!';
+  document.getElementById('casinoCrashMult').textContent = state.crash_point.toFixed(2) + 'x';
+  document.getElementById('casinoCrashMult').style.color = '#ef4444';
+  document.getElementById('casinoCrashLabel').textContent = '💥 КРАШ!';
+  document.getElementById('casinoCrashStatus').textContent = `Краш на x${state.crash_point.toFixed(2)}`;
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_crashed.png';
     
     if (state.my_bet) {
@@ -691,9 +695,9 @@ function updateCrashUI() {
   const phase = crashState.phase;
   
   if (phase === 'waiting') {
-    document.getElementById('casinoCrashTimer').textContent = `Старт через ${crashState.next_round_in || 0}с`;
-  } else if (phase === 'betting') {
-    document.getElementById('casinoCrashTimer').textContent = `Ставки: ${crashState.betting_ends_in || 0}с`;
+  document.getElementById('casinoCrashTimer').textContent = `⏳ ${crashState.next_round_in || 0}с`;
+} else if (phase === 'betting') {
+  document.getElementById('casinoCrashTimer').textContent = `🔥 ${crashState.betting_ends_in || 0}с`;
   } else {
     document.getElementById('casinoCrashTimer').textContent = '';
   }
