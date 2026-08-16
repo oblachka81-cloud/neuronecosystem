@@ -624,7 +624,6 @@ function cStartWaiting() {
 function cStartRound() {
   if (cGraphTimer) clearInterval(cGraphTimer);
   cState = 'running';
-  cPoint = 100;
   cMult = 1.0;
   cPoints = [1.0];
   cStartTime = Date.now();
