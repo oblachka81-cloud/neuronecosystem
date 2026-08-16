@@ -31,6 +31,7 @@ const { bjBuildDeck, bjCardValue, bjHandScore, minesMultiplier, generateCrashPoi
 const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuote, toUnitsForSwap, toAssetId, safePayload, requestQuoteWithFee } = require('./src/services/exchange');
 const { postDailyQuestion, postWeeklyTop, sendStreakWarnings, postWeeklyAchievements, postStreakBattle, postDailyFact, postRankLeaderboard, postDailyPoll } = require('./src/services/channel');
 const { setupCron } = require('./src/cron/jobs');
+const { startNewRound } = require('./src/services/crashMaster');
 const quizRoutes = require('./src/routes/quiz');
 const userRoutes = require('./src/routes/user');
 const shopRoutes = require('./src/routes/shop');
@@ -205,6 +206,13 @@ async function start() {
 
   app.listen(PORT, '0.0.0.0', async () => {
     console.log(`Сервер запущен на порту ${PORT}`);
+    
+    // Запуск Crash Master Loop
+    setTimeout(() => {
+    console.log('[CRASH] Starting master loop...');
+    startNewRound();
+  }, 2000);
+    
     try {
       const botInfo = await bot.telegram.getMe();
       botUsername = botInfo.username;
