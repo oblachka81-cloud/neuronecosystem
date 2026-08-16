@@ -195,7 +195,7 @@ router.post('/api/casino/crash/bet', requireInitDataStrict, casinoRateLimit, asy
     }
 
     const existing = await client.query(
-      "SELECT id FROM crash_bets WHERE telegram_id = $1 AND status = 'active'", [userId]
+      "SELECT telegram_id FROM crash_bets WHERE telegram_id = $1 AND status = 'active'", [userId]
     );
     if (existing.rows.length > 0) {
       await client.query('ROLLBACK');
