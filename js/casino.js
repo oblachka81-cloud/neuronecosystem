@@ -758,6 +758,7 @@ async function cPlaceBet() {
 
     cBet = amount;
     cHasBet = true;
+    cPoint = data.crash_point || 100;
     const balEl = document.getElementById('casinoBalanceAmount');
     if (balEl && data.new_balance !== undefined) {
       balance = data.new_balance;
