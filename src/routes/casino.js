@@ -5,7 +5,7 @@ const pool = require('../db/pool');
 const { requireInitDataStrict } = require('../middleware/auth');
 const { casinoRateLimit } = require('../middleware/rateLimit');
 const { addToBurnPool, logTx } = require('../services/burn');
-const { bjBuildDeck, bjCardValue, bjHandScore, minesMultiplier, generateCrashPoint } = require('../services/casino');
+const { bjBuildDeck, bjCardValue, bjHandScore, minesMultiplier, generateCrashPoint, crashMultiplierAt } = require('../services/casino');
 
 // ==================== РУЛЕТКА ====================
 router.post('/api/casino/spin', requireInitDataStrict, casinoRateLimit, async (req, res) => {
