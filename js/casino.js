@@ -613,7 +613,15 @@ async function pollCrashState() {
       handlePhaseChange(data);
     }
     
-    updateCrashUI();
+    // Добавляем точку на график при полёте
+if (data.phase === 'flying') {
+  crashGraphPoints.push(data.multiplier);
+  if (crashGraphPoints.length > 300) crashGraphPoints.shift();
+  document.getElementById('casinoCrashMult').textContent = data.multiplier.toFixed(2) + 'x';
+  drawCrashGraph(false);
+}
+
+updateCrashUI();
   } catch (e) {
     console.error('[CRASH] poll error:', e);
   }
@@ -674,9 +682,11 @@ function handlePhaseChange(state) {
     addCrashHistoryItem(state.crash_point);
     updateCrashMainButton('disabled');
     loadCasinoBalance();
+    crashGraphPoints.push(state.crash_point);
+    drawCrashGraph(true);
   }
 }
-
+  
 function updateCrashUI() {
   const phase = crashState.phase;
   
