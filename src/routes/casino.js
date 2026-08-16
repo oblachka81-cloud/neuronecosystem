@@ -593,8 +593,14 @@ router.post('/api/casino/mines/start', requireInitDataStrict, casinoRateLimit, a
     }
 
     const positions = Array(25).fill(false);
-    const shuffled = [...Array(25).keys()].sort(() => Math.random() - 0.5);
-    for (let i = 0; i < minesCount; i++) positions[shuffled[i]] = true;
+    let minesPlaced = 0;
+    while (minesPlaced < minesCount) {
+    const pos = crypto.randomBytes(1)[0] % 25;
+    if (!positions[pos]) {
+    positions[pos] = true;
+    minesPlaced++;
+  }
+}
 
     const newBalance = user.rows[0].balance - bet;
     await client.query('UPDATE impulse_balance SET balance = $1 WHERE user_id = $2', [newBalance, userId]);
