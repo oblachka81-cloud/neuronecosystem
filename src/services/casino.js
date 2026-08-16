@@ -50,11 +50,11 @@ function minesMultiplier(total, mines, opened) {
 }
 
 function generateCrashPoint() {
-  // crypto вместо Math.random; ~5% мгновенный краш на 1.00
-  const r = crypto.randomBytes(4).readUInt32BE(0) / 0x100000000; // [0, 1)
+  const r = crypto.randomBytes(4).readUInt32BE(0) / 0x100000000;
   if (r < 0.05) return 1.00;
-  const crash = Math.floor((100 / (1 - r)) * 100) / 100;
-  return Math.min(Math.max(crash, 1.01), 100.00);
+  // Экспоненциальное: чаще 1-3x, редко 10x, очень редко 100x
+  const crash = Math.floor((1 / (1 - r)) * 100) / 100;
+  return Math.min(crash, 100.00);
 }
 
 /** Множитель только на сервере. Та же формула должна быть на фронте для анимации. */
