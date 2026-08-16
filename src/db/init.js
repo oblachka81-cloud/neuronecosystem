@@ -413,6 +413,38 @@ await pool.query(`CREATE INDEX IF NOT EXISTS idx_users_balance ON users (balance
 `);
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS simple_game_pending BOOLEAN DEFAULT false`);
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_simple_game_date DATE`);
+    // Новая таблица раундов
+await pool.query(`
+  CREATE TABLE IF NOT EXISTS crash_rounds (
+    id SERIAL PRIMARY KEY,
+    crash_point NUMERIC(5,2) NOT NULL,
+    server_seed VARCHAR(64) NOT NULL,
+    seed_hash VARCHAR(128) NOT NULL,
+    phase VARCHAR(20) NOT NULL DEFAULT 'waiting',
+    started_at TIMESTAMPTZ,
+    crashed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+  )
+`);
+
+// Новая таблица ставок (мультиплеер)
+await pool.query(`
+  CREATE TABLE IF NOT EXISTS crash_bets_multi (
+    id SERIAL PRIMARY KEY,
+    round_id INTEGER REFERENCES crash_rounds(id),
+    telegram_id BIGINT NOT NULL,
+    bet_amount INTEGER NOT NULL,
+    cashed_out_at NUMERIC(5,2),
+    win_amount INTEGER DEFAULT 0,
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(round_id, telegram_id)
+  )
+`);
+
+await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_bets_multi_round ON crash_bets_multi(round_id)`);
+await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_bets_multi_user ON crash_bets_multi(telegram_id)`);
+await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_rounds_phase ON crash_rounds(phase)`);
 
   await loadQuestionsFromDB();
   console.log('БД инициализирована');
