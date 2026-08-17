@@ -3,7 +3,7 @@
 /* Телефон */
 @media (max-width: 480px) {
   .exchange-card select {
-    max-width: 100px;
+    max-width: 70px;
     padding: 8px !important;
     font-size: 0.82rem !important;
   }
