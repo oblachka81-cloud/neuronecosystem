@@ -71,7 +71,6 @@ async function startNewRound() {
       bettingEndsAt: Date.now() + PHASES.WAITING_DURATION + PHASES.BETTING_DURATION,
     };
     
-    console.log(`[CRASH] Round ${currentRound.id} started, crash at ${crashPoint}x`);
     
     schedulePhases();
     
@@ -92,14 +91,12 @@ function schedulePhases() {
   setTimeout(() => {
     if (currentRound.phase !== 'waiting') return;
     currentRound.phase = 'betting';
-    console.log(`[CRASH] Round ${currentRound.id} → betting`);
   }, PHASES.WAITING_DURATION);
   
   setTimeout(() => {
     if (currentRound.phase !== 'betting') return;
     currentRound.phase = 'flying';
     currentRound.startedAt = Date.now();
-    console.log(`[CRASH] Round ${currentRound.id} → flying`);
     runFlying();
   }, PHASES.WAITING_DURATION + PHASES.BETTING_DURATION);
 }
@@ -144,7 +141,7 @@ async function triggerCrash(crashPoint) {
     await client.query('COMMIT');
     
     currentRound.phase = 'crashed';
-    console.log(`[CRASH] Round ${currentRound.id} → crashed at ${crashPoint}x`);
+    
     
     // Логируем проигрыши + burn 5%
     const losers = await pool.query(
