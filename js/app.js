@@ -17,8 +17,8 @@ let currentState = {
 };
 
 window.root = document.getElementById('dynamicContent');
-const totalScoreSpan = document.getElementById('totalScoreBadge');
-const gamesLeftSpan = document.getElementById('gamesLeftBadge');
+window.totalScoreSpan = document.getElementById('totalScoreBadge');
+window.gamesLeftSpan = document.getElementById('gamesLeftBadge');
 
 function updateScoresUI(totalScore) { 
   const badge = document.getElementById('totalScoreBadge');
