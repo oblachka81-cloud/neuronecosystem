@@ -397,7 +397,7 @@ await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_simple_game_da
 await pool.query(`
   CREATE TABLE IF NOT EXISTS crash_bets_multi (
     id SERIAL PRIMARY KEY,
-    round_id INTEGER REFERENCES crash_rounds(id),
+    round_id BIGINT,
     telegram_id BIGINT NOT NULL,
     bet_amount INTEGER NOT NULL,
     cashed_out_at NUMERIC(5,2),
