@@ -81,6 +81,11 @@ else if (tab === 'exchange') {
     if (footer) footer.style.display = '';
     if (logoImg) logoImg.src = 'shop/shop_logo.webp';
   }
+    else if (tab === 'support') {
+  if (header) header.style.display = '';
+  if (footer) footer.style.display = '';
+  if (logoImg) logoImg.src = '/public/images/cogniq/support_avatar.png';
+}
   else {
     if (header) header.style.display = '';
     if (footer) footer.style.display = '';
@@ -105,6 +110,7 @@ else if (tab === 'exchange') {
   else if (tab === 'bank') loadBankPanel();
   else if (tab === 'casino') loadCasinoPanel();
   else if (tab === 'exchange') loadExchangePanel();
+  else if (tab === 'support') loadSupportPanel();
   else loadWelcome();
 }
 
