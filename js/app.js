@@ -62,7 +62,7 @@ function switchTab(tab) {
   const footer = document.querySelector('footer');
   const logoImg = document.querySelector('.logo-wrap img');
   
-  if (tab === 'casino') {
+  if (tab === 'casino' || tab === 'fiat') {
     if (header) header.style.display = 'none';
     if (footer) footer.style.display = 'none';
   }
