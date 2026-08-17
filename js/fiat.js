@@ -127,6 +127,7 @@ function loadFiatPanel() {
       <div id="fiatExchangersList">
         <div style="text-align:center;padding:20px;color:#5577aa;font-size:0.85rem;">${ft.loading}</div>
       </div>
+      <button id="fiatLoadMoreBtn" onclick="fiatLoadMoreExchangers()" style="display:none;width:100%;padding:14px;margin-top:10px;background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.3);border-radius:14px;color:#ffaa00;font-size:0.9rem;font-weight:700;cursor:pointer;"></button>
 
       <button id="fiatFindMoreBtn" onclick="fiatOpenBestChange()" style="width:100%;padding:14px;margin-top:16px;background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.3);border-radius:14px;color:#ffaa00;font-size:0.9rem;font-weight:700;cursor:pointer;">
         🔍 ${ft.findMore}
