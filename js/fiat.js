@@ -186,17 +186,38 @@ async function fiatLoadCurrencies() {
       const fiat = fiatAllCurrencies.filter(isLikelyFiat);
       const crypto = fiatAllCurrencies.filter(c => !isLikelyFiat(c));
       
-      const defaultFromFiat = fiat.find(c => 
-        (c.viewname || '').toLowerCase().includes('т-банк') || 
-        (c.viewname || '').toLowerCase().includes('t-bank') ||
-        (c.viewname || '').toLowerCase().includes('тинькофф') ||
-        (c.viewname || '').toLowerCase().includes('tinkoff')
-      ) || fiat.find(c => (c.viewname || '').includes('RUB')) || fiat[0];
-      
-      const defaultToCrypto = crypto.find(c => 
-        (c.viewname || '').toLowerCase().includes('usdt') || 
-        (c.viewname || '').toLowerCase().includes('tether')
-      ) || crypto[0];
+      // Приоритет: Т-Банк (Тинькофф) RUB
+const defaultFromFiat = fiat.find(c => 
+  (c.viewname || '').toLowerCase().includes('т-банк') || 
+  (c.viewname || '').toLowerCase().includes('t-bank') ||
+  (c.viewname || '').toLowerCase().includes('тинькофф') ||
+  (c.viewname || '').toLowerCase().includes('tinkoff')
+) || fiat.find(c => 
+  (c.viewname || '').toLowerCase().includes('сбер') || 
+  (c.viewname || '').toLowerCase().includes('sber')
+) || fiat.find(c => (c.viewname || '').includes('RUB')) || fiat[0];
+
+// Приоритет: USDT BEP-20 → TRC-20 → ERC-20 → TON → Tether
+const defaultToCrypto = crypto.find(c => 
+  (c.viewname || '').toLowerCase().includes('usdt') && 
+  (c.viewname || '').toLowerCase().includes('bep')
+) || crypto.find(c => 
+  (c.viewname || '').toLowerCase().includes('tether') && 
+  (c.viewname || '').toLowerCase().includes('bep')
+) || crypto.find(c => 
+  (c.viewname || '').toLowerCase().includes('usdt') && 
+  (c.viewname || '').toLowerCase().includes('trc')
+) || crypto.find(c => 
+  (c.viewname || '').toLowerCase().includes('usdt') && 
+  (c.viewname || '').toLowerCase().includes('erc')
+) || crypto.find(c => 
+  (c.viewname || '').toLowerCase().includes('usdt') && 
+  (c.viewname || '').toLowerCase().includes('ton')
+) || crypto.find(c => 
+  (c.viewname || '').toLowerCase().includes('tether')
+) || crypto.find(c => 
+  (c.viewname || '').toLowerCase().includes('usdt')
+) || crypto[0];
       
       if (fiatMode === 'buy') {
         fiatFrom = defaultFromFiat;
@@ -319,6 +340,7 @@ function fiatRenderExchangers() {
   }
   
   countEl.textContent = `(${fiatCurrentRates.length})`;
+  const fromIsFiat = isLikelyFiat(fiatFrom);
   
   list.innerHTML = fiatCurrentRates.map((r, idx) => {
     const changer = fiatChangersMap[r.changer] || { name: `Exchange #${r.changer}`, rating: 0, reviews: {} };
@@ -326,6 +348,28 @@ function fiatRenderExchangers() {
     const totalReviews = (reviews.positive || 0) + (reviews.neutral || 0) + (reviews.closed || 0);
     const rate = parseFloat(r.rate) || 0;
     const reserve = parseFloat(r.reserve);
+    const inmin = parseFloat(r.inmin || 0);
+    const inmax = parseFloat(r.inmax || 0);
+    
+    // Считаем отображаемый курс
+    let displayRate, rateText;
+    if (fromIsFiat) {
+      if (rate < 1) {
+        displayRate = rate;
+        rateText = `1 ${fiatFrom?.viewname || ''} = ${formatFiatNumber(displayRate)} ${fiatTo?.viewname || ''}`;
+      } else {
+        displayRate = 1 / rate;
+        rateText = `1 ${fiatTo?.viewname || ''} = ${formatFiatNumber(1/displayRate)} ${fiatFrom?.viewname || ''}`;
+      }
+    } else {
+      if (rate < 1) {
+        displayRate = 1 / rate;
+        rateText = `1 ${fiatFrom?.viewname || ''} = ${formatFiatNumber(displayRate)} ${fiatTo?.viewname || ''}`;
+      } else {
+        displayRate = rate;
+        rateText = `1 ${fiatFrom?.viewname || ''} = ${formatFiatNumber(displayRate)} ${fiatTo?.viewname || ''}`;
+      }
+    }
     
     return `
       <div style="background:rgba(10,20,38,0.8);border:1px solid ${idx === 0 ? 'rgba(0,255,170,0.4)' : 'rgba(255,170,0,0.15)'};border-radius:14px;padding:14px;margin-bottom:10px;">
@@ -333,9 +377,10 @@ function fiatRenderExchangers() {
           <div style="font-size:0.95rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${idx === 0 ? '🥇 ' : ''}${changer.name}</div>
           <div style="display:flex;align-items:center;gap:4px;font-size:0.8rem;color:#ffcc44;flex-shrink:0;">⭐ ${(changer.rating || 0).toFixed(1)} (${totalReviews})</div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:0.78rem;">
-          <div style="color:#aabbcc;">💰 <strong style="color:#fff;">${rate.toFixed(4)}</strong></div>
-          <div style="color:#aabbcc;">📦 ${ft.reserve}: <strong style="color:#fff;">${reserve.toLocaleString()}</strong></div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:0.78rem;">
+          <div style="color:#ffaa00;">💰 <strong>${rateText}</strong></div>
+          <div style="color:#aabbcc;">📦 ${ft.reserve}: <strong style="color:#fff;">${reserve.toLocaleString()} ${fiatTo?.viewname || ''}</strong></div>
+          <div style="color:#aabbcc;">💵 ${ft.minMax}: <strong style="color:#fff;">${formatFiatNumber(inmin)} — ${formatFiatNumber(inmax)} ${fiatFrom?.viewname || ''}</strong></div>
         </div>
         <button onclick="fiatGoToExchanger(${r.changer})" style="width:100%;padding:10px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.3);border-radius:10px;color:#00ffaa;font-size:0.85rem;font-weight:700;cursor:pointer;">🔗 ${ft.goTo}</button>
       </div>
