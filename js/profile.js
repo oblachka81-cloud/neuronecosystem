@@ -39,7 +39,7 @@ function renderProfilePanel(data) {
   const subBorder = data.subscriptionType === 'premium' ? 'border:2.5px solid #aa66ff;box-shadow:0 0 14px rgba(170,102,255,0.6);' : data.subscriptionType === 'vip' ? 'border:2.5px solid #ffcc44;box-shadow:0 0 14px rgba(255,204,68,0.6);' : '';
   const avatarBorder = frameClass ? '' : subBorder;
   let avatarHtml;
-  const frameUrl = '/public/images/cogniq/profile_avatar_frame.png';
+  const frameUrl = '/profile/profile_avatar_frame.webp';
 
   if (data.photo_url) {
     const fullPhotoUrl = BASE_URL + data.photo_url;
@@ -63,7 +63,7 @@ function renderProfilePanel(data) {
     <div class="profile-panel">
 
 <div style="position:relative; margin-bottom:6px;">
-  <img src="/public/images/cogniq/profile_nickname_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
+  <img src="/profile/profile_nickname_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
   <div style="position:relative;z-index:1;background:none;border:none;padding:14px 18px;">
     <div class="profile-nickname-row" id="nicknameDisplay">
       <span class="profile-nickname-val" id="nicknameVal" style="${data.subscriptionType === 'premium' ? 'color:#aa66ff;' : data.subscriptionType === 'vip' ? 'color:#ffcc44;' : ''}">${data.subscriptionType === 'premium' ? '💎 ' : data.subscriptionType === 'vip' ? '👑 ' : ''}${escapeHtml(data.nickname || userName || 'Игрок')}</span>
@@ -80,7 +80,7 @@ function renderProfilePanel(data) {
 </div>
 
 <div style="position:relative; margin-bottom:6px;">
-  <img src="/public/images/cogniq/profile_achievements_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
+  <img src="/profile/profile_achievements_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
   <div style="position:relative;z-index:1;background:none;border:none;padding:16px 18px;">
     <div class="emoji-grid" id="achievementsGrid" style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;padding:8px 0;">
       <div style="color:#5599bb;font-size:0.85rem;width:100%;text-align:center;padding:12px 0;">⏳ ${t.loading || 'Загрузка...'}</div>
@@ -89,7 +89,7 @@ function renderProfilePanel(data) {
 </div>
 
 <div style="position:relative; margin-bottom:6px;">
-  <img src="/public/images/cogniq/profile_privacy_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
+  <img src="/profile/profile_privacy_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
   <div style="position:relative;z-index:1;background:none;border:none;padding:10px 18px;">
     <div class="profile-toggle-row">
       <span class="profile-toggle-label" id="anonLabel">${isAnon ? t.profileAnonHide : t.profileAnonNick}</span>
@@ -102,7 +102,7 @@ function renderProfilePanel(data) {
 </div>
 
 <div style="position:relative; margin-bottom:6px;">
-  <img src="/public/images/cogniq/profile_stats_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
+  <img src="/profile/profile_stats_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
   <div style="position:relative;z-index:1;background:none;border:none;padding:14px 18px;">
     <div class="wallet-info-row">
       <span class="wallet-info-label">${t.tokensLabel}</span>
@@ -144,7 +144,7 @@ function renderProfilePanel(data) {
   </div>
 </div>
       <button id="profileSaveBtn" style="position:relative;background:none;border:none;padding:0;cursor:pointer;width:100%;margin-top:18px;">
-  <img id="profileSaveBtnImg" src="/public/images/cogniq/profile_save_btn_${currentLang}.png" style="width:100%;height:auto;display:block;opacity:0.65;">
+  <img id="profileSaveBtnImg" src="/profile/profile_save_btn_${currentLang}.webp" style="width:100%;height:auto;display:block;opacity:0.65;">
 </button>
     </div>`;
 
