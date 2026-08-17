@@ -48,10 +48,7 @@ function loadSupportPanel() {
   
   root.innerHTML = `
     <div class="support-card" style="max-width:480px;width:100%;margin:0 auto;padding:16px;display:flex;flex-direction:column;height:calc(100vh - 140px);min-height:400px;">
-      <div class="logo" style="text-align:center;margin-bottom:12px;">
-        <img src="/public/images/cogniq/support_avatar.png" alt="COGNIQ" style="height:100px;">
-      </div>
-
+  
       <div id="supportLangBar" style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
         ${['ru','en','fr','es'].map(lang => `
           <button data-lang="${lang}" onclick="supportSetLang('${lang}')" style="background:none;border:none;padding:0;cursor:pointer;${lang === currentLang ? 'filter:brightness(1.3)drop-shadow(0 0 6px #f472b6);' : ''}">
