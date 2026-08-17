@@ -69,7 +69,7 @@ function loadFiatPanel() {
   if (footer) footer.style.display = 'none';
   
   document.getElementById('dynamicContent').innerHTML = `
-    <div class="fiat-card">
+  <div class="fiat-card" style="max-width:480px;width:100%;margin:0 auto;padding:24px 16px;position:relative;z-index:3;background:rgba(10,20,38,0.9);border-radius:20px;">
       <button id="fiatBackBtn" style="background:none;border:none;padding:0;cursor:pointer;margin-bottom:16px;">
         <img src="/public/images/cogniq/exchange_back_${currentLang}.png" style="height:44px;width:auto;display:block;">
       </button>
