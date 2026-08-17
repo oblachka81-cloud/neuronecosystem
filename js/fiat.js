@@ -387,6 +387,7 @@ function fiatRenderExchangers() {
       </div>
     `;
   }).join('');
+  fiatUpdateLoadMoreBtn();
 }
 
 function fiatGoToExchanger(changerId) {
@@ -448,4 +449,21 @@ function fiatSelectCurrency(id) {
   fiatUpdateSelectors();
   fiatLoadRates();
   fiatCloseModal();
+}
+function fiatLoadMoreExchangers() {
+  fiatDisplayedCount += 10;
+  fiatCurrentRates = fiatAllRates.slice(0, fiatDisplayedCount);
+  fiatRenderExchangers();
+}
+
+function fiatUpdateLoadMoreBtn() {
+  const btn = document.getElementById('fiatLoadMoreBtn');
+  if (btn) {
+    if (fiatDisplayedCount < fiatAllRates.length) {
+      btn.style.display = 'block';
+      btn.textContent = `🔽 Загрузить ещё (осталось ${fiatAllRates.length - fiatDisplayedCount})`;
+    } else {
+      btn.style.display = 'none';
+    }
+  }
 }
