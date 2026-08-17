@@ -59,6 +59,15 @@ function isLikelyFiat(currency) {
 
 function loadFiatPanel() {
   const ft = FIAT_LANG[currentLang] || FIAT_LANG['ru'];
+
+  // Очищаем биржу
+  root.innerHTML = '';
+  
+  // Скрываем хедер и футер
+  const header = document.querySelector('.header');
+  const footer = document.querySelector('footer');
+  if (header) header.style.display = 'none';
+  if (footer) footer.style.display = 'none';
   
   const fiatContainer = document.createElement('div');
   fiatContainer.id = 'fiatContainer';
