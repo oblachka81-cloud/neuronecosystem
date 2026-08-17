@@ -526,7 +526,7 @@ function loadExchangePanel() {
   
   root.innerHTML = `
     <div class="exchange-card" style="max-width:480px;width:100%;margin:0 auto;padding:24px 16px;position:relative;z-index:3;">
-      <button onclick="window.location.href='/fiat.html?lang=' + currentLang" id="fiatBtn" style="position:relative;background:none;border:none;padding:0;cursor:pointer;width:100%;margin:0 0 16px 0;">
+      <button onclick="loadFiatPanel()" id="fiatBtn" style="position:relative;background:none;border:none;padding:0;cursor:pointer;width:100%;margin:0 0 16px 0;">
         <img src="/exchange/fiat_btn.webp" style="width:100%;height:auto;display:block;">
         <span id="fiatBtnText" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700;font-size:0.9rem;color:#ffcc44;white-space:nowrap;">${ex.fiatBtn}</span>
       </button>
