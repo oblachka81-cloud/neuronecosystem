@@ -60,15 +60,18 @@ function isLikelyFiat(currency) {
 
 function loadFiatPanel() {
   const ft = FIAT_LANG[currentLang] || FIAT_LANG['ru'];
-  
-  document.getElementById('dynamicContent').innerHTML = '';
+
+  root.innerHTML = '';
   
   const header = document.querySelector('.header');
   const footer = document.querySelector('footer');
   if (header) header.style.display = 'none';
   if (footer) footer.style.display = 'none';
   
-  document.getElementById('dynamicContent').innerHTML = `
+  const fiatContainer = document.createElement('div');
+  fiatContainer.id = 'fiatContainer';
+  fiatContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;';
+  fiatContainer.innerHTML = `
   <div class="fiat-card" style="max-width:480px;width:100%;margin:0 auto;padding:24px 16px;position:relative;z-index:3;background:rgba(10,20,38,0.9);border-radius:20px;">
       <button id="fiatBackBtn" style="background:none;border:none;padding:0;cursor:pointer;margin-bottom:16px;">
         <img src="/public/images/cogniq/exchange_back_${currentLang}.png" style="height:44px;width:auto;display:block;">
