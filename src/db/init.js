@@ -392,7 +392,7 @@ await pool.query(`CREATE INDEX IF NOT EXISTS idx_users_balance ON users (balance
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS simple_game_pending BOOLEAN DEFAULT false`);
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_simple_game_date DATE`);
 
-
+await pool.query(`DROP TABLE IF EXISTS crash_bets_multi CASCADE`);
 // Новая таблица ставок (мультиплеер)
 await pool.query(`
   CREATE TABLE IF NOT EXISTS crash_bets_multi (
