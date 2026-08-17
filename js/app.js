@@ -16,7 +16,7 @@ let currentState = {
   channelBonusClaimed: !!localStorage.getItem('channelBonusClaimed')
 };
 
-const root = document.getElementById('dynamicContent');
+window.root = document.getElementById('dynamicContent');
 const totalScoreSpan = document.getElementById('totalScoreBadge');
 const gamesLeftSpan = document.getElementById('gamesLeftBadge');
 
