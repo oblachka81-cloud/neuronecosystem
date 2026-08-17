@@ -49,14 +49,6 @@ function loadSupportPanel() {
   root.innerHTML = `
     <div class="support-card" style="max-width:480px;width:100%;margin:0 auto;padding:16px;display:flex;flex-direction:column;height:calc(100vh - 140px);min-height:400px;">
   
-      <div id="supportLangBar" style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
-        ${['ru','en','fr','es'].map(lang => `
-          <button data-lang="${lang}" onclick="supportSetLang('${lang}')" style="background:none;border:none;padding:0;cursor:pointer;${lang === currentLang ? 'filter:brightness(1.3)drop-shadow(0 0 6px #f472b6);' : ''}">
-            <img src="/public/images/cogniq/support_lang_${lang}.png" style="height:34px;width:auto;display:block;">
-          </button>
-        `).join('')}
-      </div>
-
       <button onclick="supportOpenFAQ()" style="background:none;border:none;padding:0;cursor:pointer;width:100%;margin-bottom:8px;">
         <img src="/public/images/cogniq/support_faq_btn.png" style="width:100%;height:36px;display:block;object-fit:contain;">
       </button>
@@ -95,12 +87,6 @@ function supportSetMode(mode) {
   supportMode = mode;
   document.getElementById('supportModeSupport').style.filter = mode === 'support' ? 'brightness(1.3) drop-shadow(0 0 6px #f472b6)' : 'brightness(0.5)';
   document.getElementById('supportModeChat').style.filter = mode === 'chat' ? 'brightness(1.3) drop-shadow(0 0 6px #f472b6)' : 'brightness(0.5)';
-}
-
-function supportSetLang(lang) {
-  currentLang = lang;
-  localStorage.setItem('support_lang', lang);
-  loadSupportPanel();
 }
 
 function supportOpenFAQ() {
