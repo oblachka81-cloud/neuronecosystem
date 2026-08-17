@@ -8,6 +8,17 @@ async function loadProfilePanel() {
       root.innerHTML = `<div class="loader">${t.errAuth}</div>`;
       return;
     }
+    
+    // Меняем лого в хедере на аватар пользователя
+    const logoImg = document.querySelector('.logo-wrap img');
+    if (logoImg && data.photo_url) {
+      logoImg.src = BASE_URL + data.photo_url;
+      logoImg.style.cssText = 'height:120px;width:120px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,255,255,0.5);';
+    } else if (logoImg) {
+      logoImg.src = 'main/game_logo.webp';
+      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+    }
+    
     renderProfilePanel(data);
   } catch(e) {
     root.innerHTML = `<div class="loader">${t.errConn}</div>`;
@@ -50,9 +61,6 @@ function renderProfilePanel(data) {
 
   root.innerHTML = `
     <div class="profile-panel">
-      <div class="profile-avatar-wrap">
-        ${avatarHtml}
-      </div>
 
 <div style="position:relative; margin-bottom:6px;">
   <img src="/public/images/cogniq/profile_nickname_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
