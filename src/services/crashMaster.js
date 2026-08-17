@@ -24,6 +24,21 @@ const PHASES = {
 async function startNewRound() {
   const client = await pool.connect();
   try {
+    // Очистка старых раундов (оставляем только 100 последних)
+await client.query(`
+  DELETE FROM crash_rounds 
+  WHERE id NOT IN (
+    SELECT id FROM crash_rounds ORDER BY id DESC LIMIT 100
+  )
+`);
+
+// Очистка старых ставок
+await client.query(`
+  DELETE FROM crash_bets_multi 
+  WHERE round_id NOT IN (
+    SELECT id FROM crash_rounds ORDER BY id DESC LIMIT 100
+  )
+`);
     const crashPoint = generateCrashPoint();
     const serverSeed = crypto.randomBytes(16).toString('hex');
     const seedHash = crypto.createHash('sha256').update(serverSeed).digest('hex');
@@ -58,10 +73,15 @@ async function startNewRound() {
     schedulePhases();
     
   } catch (e) {
-    await client.query('ROLLBACK');
-    console.error('[CRASH] startNewRound error:', e);
-    setTimeout(startNewRound, 5000);
-  } finally {
+  await client.query('ROLLBACK');
+  console.error('[CRASH] startNewRound error:', e);
+  // Один ретрай через 30 секунд (максимум 1 раз)
+  setTimeout(() => {
+    if (!currentRound.id || currentRound.phase === 'crashed' || currentRound.phase === 'idle') {
+      startNewRound();
+    }
+  }, 30000);
+} finally {
     client.release();
   }
 }
