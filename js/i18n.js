@@ -640,6 +640,7 @@ function setLang(lang) {
   if (currentTab === 'leaderboard') loadLeaderboard();
   else if (currentTab === 'wallet') showWalletPanel();
   else if (currentTab === 'profile') loadProfilePanel();
+  else if (currentTab === 'support') loadSupportPanel();
   else loadWelcome();
 }
 
