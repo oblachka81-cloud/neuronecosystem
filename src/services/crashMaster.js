@@ -24,31 +24,34 @@ const PHASES = {
 async function startNewRound() {
   const client = await pool.connect();
   try {
-    // Очистка старых раундов (оставляем только 100 последних)
-await client.query(`
-  DELETE FROM crash_rounds 
-  WHERE id NOT IN (
-    SELECT id FROM crash_rounds ORDER BY id DESC LIMIT 100
-  )
-`);
-
-// Очистка старых ставок
-await client.query(`
-  DELETE FROM crash_bets_multi 
-  WHERE round_id NOT IN (
-    SELECT id FROM crash_rounds ORDER BY id DESC LIMIT 100
-  )
-`);
+    await client.query('BEGIN');
+    
+    // 1. Очистка старых ставок
+    await client.query(`
+      DELETE FROM crash_bets_multi 
+      WHERE round_id NOT IN (
+        SELECT id FROM crash_rounds ORDER BY id DESC LIMIT 100
+      )
+    `);
+    
+    // 2. Очистка старых раундов
+    await client.query(`
+      DELETE FROM crash_rounds 
+      WHERE id NOT IN (
+        SELECT id FROM crash_rounds ORDER BY id DESC LIMIT 100
+      )
+    `);
+    
     const crashPoint = generateCrashPoint();
     const serverSeed = crypto.randomBytes(16).toString('hex');
     const seedHash = crypto.createHash('sha256').update(serverSeed).digest('hex');
     
-    await client.query('BEGIN');
-    
+    // 3. Завершаем предыдущие активные раунды
     await client.query(
       `UPDATE crash_rounds SET phase = 'finished' WHERE phase IN ('waiting','betting','flying')`
     );
     
+    // 4. Создаём новый раунд
     const res = await client.query(
       `INSERT INTO crash_rounds (crash_point, server_seed, seed_hash, phase, started_at)
        VALUES ($1, $2, $3, 'waiting', NOW())
@@ -73,15 +76,14 @@ await client.query(`
     schedulePhases();
     
   } catch (e) {
-  await client.query('ROLLBACK');
-  console.error('[CRASH] startNewRound error:', e);
-  // Один ретрай через 30 секунд (максимум 1 раз)
-  setTimeout(() => {
-    if (!currentRound.id || currentRound.phase === 'crashed' || currentRound.phase === 'idle') {
-      startNewRound();
-    }
-  }, 30000);
-} finally {
+    await client.query('ROLLBACK');
+    console.error('[CRASH] startNewRound error:', e);
+    setTimeout(() => {
+      if (!currentRound.id || currentRound.phase === 'crashed' || currentRound.phase === 'idle') {
+        startNewRound();
+      }
+    }, 30000);
+  } finally {
     client.release();
   }
 }
