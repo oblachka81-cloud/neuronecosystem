@@ -28,7 +28,7 @@ async function startNewRound() {
     const seedHash = crypto.createHash('sha256').update(serverSeed).digest('hex');
     
     currentRound = {
-      id: Date.now(),
+      id: Math.floor(Date.now() / 1000),
       phase: 'waiting',
       crashPoint,
       serverSeed,
