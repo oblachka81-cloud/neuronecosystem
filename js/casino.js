@@ -632,6 +632,8 @@ function handlePhaseChange(state) {
   
   if (phase === 'waiting') {
   crashGraphPoints = [];
+  // Очищаем canvas полностью
+  if (cCtx) cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
   document.getElementById('casinoCrashMult').textContent = '---';
   document.getElementById('casinoCrashMult').style.color = '#334455';
   document.getElementById('casinoCrashLabel').textContent = '⏳ СЛЕДУЮЩИЙ РАУНД...';
@@ -642,6 +644,8 @@ function handlePhaseChange(state) {
   
   if (phase === 'betting') {
   crashGraphPoints = [1.0];
+  // Чистим canvas и рисуем стартовую линию
+  if (cCtx) cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
   document.getElementById('casinoCrashMult').textContent = '1.00x';
   document.getElementById('casinoCrashMult').style.color = '#ffaa00';
   document.getElementById('casinoCrashLabel').textContent = '🔥 ДЕЛАЙ СТАВКУ!';
