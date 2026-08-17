@@ -63,33 +63,48 @@ function switchTab(tab) {
   const logoImg = document.querySelector('.logo-wrap img');
   
   if (tab === 'casino') {
-  if (header) header.style.display = 'none';
-  if (footer) footer.style.display = 'none';
-}
-else if (tab === 'exchange') {
-  if (header) header.style.display = '';
-  if (footer) footer.style.display = '';
-  if (logoImg) logoImg.src = '/public/images/cogniq/exchange_logo.png';
-}
+    if (header) header.style.display = 'none';
+    if (footer) footer.style.display = 'none';
+  }
+  else if (tab === 'exchange') {
+    if (header) header.style.display = '';
+    if (footer) footer.style.display = '';
+    if (logoImg) {
+      logoImg.src = '/public/images/cogniq/exchange_logo.png';
+      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+    }
+  }
   else if (tab === 'bank') {
     if (header) header.style.display = '';
     if (footer) footer.style.display = '';
-    if (logoImg) logoImg.src = 'main/bank_logo.webp';
+    if (logoImg) {
+      logoImg.src = 'main/bank_logo.webp';
+      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+    }
   } 
   else if (tab === 'shop') {
     if (header) header.style.display = '';
     if (footer) footer.style.display = '';
-    if (logoImg) logoImg.src = 'shop/shop_logo.webp';
+    if (logoImg) {
+      logoImg.src = 'shop/shop_logo.webp';
+      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+    }
   }
-    else if (tab === 'support') {
-  if (header) header.style.display = '';
-  if (footer) footer.style.display = '';
-  if (logoImg) logoImg.src = '/public/images/cogniq/support_avatar.png';
-}
+  else if (tab === 'support') {
+    if (header) header.style.display = '';
+    if (footer) footer.style.display = '';
+    if (logoImg) {
+      logoImg.src = '/public/images/cogniq/support_avatar.png';
+      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+    }
+  }
   else {
     if (header) header.style.display = '';
     if (footer) footer.style.display = '';
-    if (logoImg) logoImg.src = 'main/game_logo.webp';
+    if (logoImg) {
+      logoImg.src = 'main/game_logo.webp';
+      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+    }
   }
   
   document.getElementById('tabGame').classList.toggle('active', tab === 'game');
