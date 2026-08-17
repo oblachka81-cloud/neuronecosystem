@@ -119,32 +119,10 @@ module.exports = async function initDB(pool, loadQuestionsFromDB) {
       status VARCHAR(20) DEFAULT 'active',
       created_at TIMESTAMP DEFAULT NOW()
     )`,
-    `CREATE TABLE IF NOT EXISTS crash_bets (
-      telegram_id BIGINT PRIMARY KEY,
-      bet_amount INT NOT NULL,
-      round_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      crash_point NUMERIC(10,2),
-      server_seed TEXT,
-      status VARCHAR(20) DEFAULT 'active',
-      expires_at TIMESTAMP
-    )`,
+    
   ];
   for (const m of migrations) await pool.query(m);
 
-// Клинап зависших crash ставок при старте сервера
-try {
-  await pool.query(`
-    UPDATE crash_bets SET status = 'crashed'
-    WHERE status = 'active' AND round_start < NOW() - INTERVAL '10 minutes'
-  `);
-  await pool.query(`
-    UPDATE crash_bets SET status = 'crashed'
-    WHERE status = 'waiting' AND round_start < NOW() - INTERVAL '1 hour'
-  `);
-  console.log('[CRASH] Stale bets cleaned up on startup');
-} catch (e) {
-  console.log('[CRASH] Cleanup skipped (table not yet created)');
-}
 
 // Клинап зависших BJ сессий при старте сервера
 try {
@@ -413,19 +391,7 @@ await pool.query(`CREATE INDEX IF NOT EXISTS idx_users_balance ON users (balance
 `);
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS simple_game_pending BOOLEAN DEFAULT false`);
 await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_simple_game_date DATE`);
-    // Новая таблица раундов
-await pool.query(`
-  CREATE TABLE IF NOT EXISTS crash_rounds (
-    id SERIAL PRIMARY KEY,
-    crash_point NUMERIC(5,2) NOT NULL,
-    server_seed VARCHAR(64) NOT NULL,
-    seed_hash VARCHAR(128) NOT NULL,
-    phase VARCHAR(20) NOT NULL DEFAULT 'waiting',
-    started_at TIMESTAMPTZ,
-    crashed_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-  )
-`);
+
 
 // Новая таблица ставок (мультиплеер)
 await pool.query(`
@@ -444,7 +410,6 @@ await pool.query(`
 
 await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_bets_multi_round ON crash_bets_multi(round_id)`);
 await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_bets_multi_user ON crash_bets_multi(telegram_id)`);
-await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_rounds_phase ON crash_rounds(phase)`);
 
   await loadQuestionsFromDB();
   console.log('БД инициализирована');
