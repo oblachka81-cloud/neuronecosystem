@@ -14,11 +14,31 @@ function loadCasinoPanel() {
 
   // 2. Переводы
   const ct = {
-    ru: { balance: 'Доступно IMPULSE', back: 'На главную', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'История', spin: 'Крутить', bet: 'Ставка', cashout: 'Забрать', start: 'Начать', hit: 'Ещё', stand: 'Стоп', deal: 'Раздать' },
-    en: { balance: 'Available IMPULSE', back: 'Back to Main', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'History', spin: 'Spin', bet: 'Bet', cashout: 'Cash Out', start: 'Start', hit: 'Hit', stand: 'Stand', deal: 'Deal' },
-    fr: { balance: 'IMPULSE disponible', back: 'Retour', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'Historique', spin: 'Tourner', bet: 'Mise', cashout: 'Retirer', start: 'Commencer', hit: 'Tirer', stand: 'Rester', deal: 'Distribuer' },
-    es: { balance: 'IMPULSE disponible', back: 'Volver', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'Historial', spin: 'Girar', bet: 'Apuesta', cashout: 'Retirar', start: 'Iniciar', hit: 'Pedir', stand: 'Plantarse', deal: 'Repartir' }
-  }[currentLang] || { balance: 'Available IMPULSE', back: 'Back', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'History', spin: 'Spin', bet: 'Bet', cashout: 'Cash Out', start: 'Start', hit: 'Hit', stand: 'Stand', deal: 'Deal' };
+  ru: { 
+    balance: 'Доступно IMPULSE', back: 'На главную', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'История', spin: 'Крутить', bet: 'Ставка', cashout: 'Забрать', start: 'Начать', hit: 'Ещё', stand: 'Стоп', deal: 'Раздать',
+    waiting: '⏳ СЛЕДУЮЩИЙ РАУНД...', betting: '🔥 ДЕЛАЙ СТАВКУ!', flying: '🚀 ЛЕТИМ! ЖМИ ЗАБРАТЬ!', crashed: '💥 КРАШ!',
+    waitingStatus: 'Подождите...', bettingStatus: 'Успей за 3 секунды!', flyingStatus: 'Забирай до краша!'
+  },
+  en: { 
+    balance: 'Available IMPULSE', back: 'Back to Main', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'History', spin: 'Spin', bet: 'Bet', cashout: 'Cash Out', start: 'Start', hit: 'Hit', stand: 'Stand', deal: 'Deal',
+    waiting: '⏳ NEXT ROUND...', betting: '🔥 PLACE YOUR BET!', flying: '🚀 FLYING! CASH OUT!', crashed: '💥 CRASHED!',
+    waitingStatus: 'Wait...', bettingStatus: 'Bet within 3 seconds!', flyingStatus: 'Cash out before crash!'
+  },
+  fr: { 
+    balance: 'IMPULSE disponible', back: 'Retour', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'Historique', spin: 'Tourner', bet: 'Mise', cashout: 'Retirer', start: 'Commencer', hit: 'Tirer', stand: 'Rester', deal: 'Distribuer',
+    waiting: '⏳ PROCHAIN TOUR...', betting: '🔥 PLACEZ VOTRE MISE!', flying: '🚀 ÇA VOLE ! RETIREZ !', crashed: '💥 CRASH !',
+    waitingStatus: 'Attendez...', bettingStatus: 'Pariez dans 3 secondes !', flyingStatus: 'Retirez avant le crash !'
+  },
+  es: { 
+    balance: 'IMPULSE disponible', back: 'Volver', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'Historial', spin: 'Girar', bet: 'Apuesta', cashout: 'Retirar', start: 'Iniciar', hit: 'Pedir', stand: 'Plantarse', deal: 'Repartir',
+    waiting: '⏳ PRÓXIMA RONDA...', betting: '🔥 ¡HAZ TU APUESTA!', flying: '🚀 ¡VOLANDO! ¡RETIRA!', crashed: '💥 ¡CRASH!',
+    waitingStatus: 'Espera...', bettingStatus: '¡Apuesta en 3 segundos!', flyingStatus: '¡Retira antes del crash!'
+  }
+}[currentLang] || { 
+  balance: 'Available IMPULSE', back: 'Back', roulette: '🎡 FORTUNA', slots: '⚡ SPARK', crash: '💥 CRASH', bj: '🔮 XXI', mines: '💣 MINES', history: 'History', spin: 'Spin', bet: 'Bet', cashout: 'Cash Out', start: 'Start', hit: 'Hit', stand: 'Stand', deal: 'Deal',
+  waiting: '⏳ NEXT ROUND...', betting: '🔥 PLACE YOUR BET!', flying: '🚀 FLYING! CASH OUT!', crashed: '💥 CRASHED!',
+  waitingStatus: 'Wait...', bettingStatus: 'Bet within 3 seconds!', flyingStatus: 'Cash out before crash!'
+};
 
   // 3. HTML Структура (ВСТАВЬ СЮДА ВЕСЬ casinoContainer.innerHTML БЛОК)
   const casinoContainer = document.createElement('div');
@@ -636,8 +656,8 @@ function handlePhaseChange(state) {
   if (cCtx) cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
   document.getElementById('casinoCrashMult').textContent = '---';
   document.getElementById('casinoCrashMult').style.color = '#334455';
-  document.getElementById('casinoCrashLabel').textContent = '⏳ СЛЕДУЮЩИЙ РАУНД...';
-  document.getElementById('casinoCrashStatus').textContent = 'Подождите, раунд скоро начнётся';
+  document.getElementById('casinoCrashLabel').textContent = ct.waiting || '⏳ NEXT ROUND...';
+  document.getElementById('casinoCrashStatus').textContent = ct.waitingStatus || 'Wait...';
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     updateCrashMainButton('disabled');
   }
@@ -648,8 +668,8 @@ function handlePhaseChange(state) {
   if (cCtx) cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
   document.getElementById('casinoCrashMult').textContent = '1.00x';
   document.getElementById('casinoCrashMult').style.color = '#ffaa00';
-  document.getElementById('casinoCrashLabel').textContent = '🔥 ДЕЛАЙ СТАВКУ!';
-  document.getElementById('casinoCrashStatus').textContent = 'Успей поставить за 3 секунды!';
+  document.getElementById('casinoCrashLabel').textContent = ct.betting || '🔥 PLACE YOUR BET!';
+  document.getElementById('casinoCrashStatus').textContent = ct.bettingStatus || 'Bet within 3 seconds!';
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     
     if (!state.my_bet) {
@@ -661,8 +681,8 @@ function handlePhaseChange(state) {
   
   if (phase === 'flying') {
   crashLastMult = state.multiplier || 1.0;
-  document.getElementById('casinoCrashLabel').textContent = '🚀 ЛЕТИМ! ЖМИ ЗАБРАТЬ!';
-  document.getElementById('casinoCrashStatus').textContent = 'Забирай до краша!';
+  document.getElementById('casinoCrashLabel').textContent = ct.flying || '🚀 FLYING! CASH OUT!';
+  document.getElementById('casinoCrashStatus').textContent = ct.flyingStatus || 'Cash out before crash!';
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_active.png';
     
     if (state.my_bet && state.my_bet.status === 'active') {
@@ -675,8 +695,8 @@ function handlePhaseChange(state) {
   if (phase === 'crashed') {
   document.getElementById('casinoCrashMult').textContent = state.crash_point.toFixed(2) + 'x';
   document.getElementById('casinoCrashMult').style.color = '#ef4444';
-  document.getElementById('casinoCrashLabel').textContent = '💥 КРАШ!';
-  document.getElementById('casinoCrashStatus').textContent = `Краш на x${state.crash_point.toFixed(2)}`;
+  document.getElementById('casinoCrashLabel').textContent = ct.crashed || '💥 CRASHED!';
+  document.getElementById('casinoCrashStatus').textContent = `x${state.crash_point.toFixed(2)}`;
     document.getElementById('casinoCrashBg').src = '/public/images/cogniq/krash_display_bg_crashed.png';
     
     if (state.my_bet) {
