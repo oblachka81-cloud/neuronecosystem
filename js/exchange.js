@@ -464,7 +464,7 @@ function exchangeRenderPairGrid(id, pairsList) {
   grid.innerHTML = pairsList.map(p => {
     const rate = exchangeRates[`${p.from}/${p.to}`];
     return `<div class="pair-card" onclick="exchangeSelectPair('${p.from}','${p.to}')" style="position:relative;background:none;border:none;padding:0;">
-      <img src="/public/images/cogniq/exchange_pair_card.png" style="width:100%;display:block;">
+      <img src="/public/images/cogniq/exchange_pair_card.webp" style="width:100%;display:block;">
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 36px 0 12px;">
         <div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:4px;">${p.name}</div>
         <div style="font-size:0.75rem;color:#ffcc44;">${rate ? rate.toFixed(4) : '—'}</div>
@@ -532,7 +532,7 @@ function loadExchangePanel() {
       </button>
 
       <div style="position:relative;margin-bottom:16px;">
-        <img src="/public/images/cogniq/exchange_wallet_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+        <img src="/public/images/cogniq/exchange_wallet_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
         <div style="position:relative;z-index:1;padding:16px;">
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <div>
@@ -545,20 +545,20 @@ function loadExchangePanel() {
       </div>
 
       <div style="position:relative;margin-bottom:16px;">
-        <img src="/public/images/cogniq/exchange_coming_soon_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+        <img src="/public/images/cogniq/exchange_coming_soon_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
         <div style="position:relative;z-index:1;padding:16px;display:flex;align-items:center;justify-content:center;gap:12px;">
           <div>
             <div style="font-size:0.95rem;font-weight:700;color:#ffcc44;">COGNIQ / USDT</div>
             <div style="font-size:0.78rem;color:#aa9955;">Premium Trading Pair</div>
           </div>
           <button onclick="showListingInfo()" style="background:none;border:none;padding:0;cursor:pointer;">
-            <img src="/public/images/cogniq/exchange_lock_btn.png" style="height:44px;width:auto;display:block;">
+            <img src="/public/images/cogniq/exchange_lock_btn.webp" style="height:44px;width:auto;display:block;">
           </button>
         </div>
       </div>
 
       <div style="position:relative;margin-bottom:16px;">
-        <img src="/public/images/cogniq/exchange_swap_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+        <img src="/public/images/cogniq/exchange_swap_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
         <div style="position:relative;z-index:1;padding:18px;">
           <div style="margin-bottom:12px;">
             <div style="font-size:0.75rem;color:#5577aa;margin-bottom:4px;" id="fromLabel">${ex.fromLabel}</div>
@@ -580,7 +580,7 @@ function loadExchangePanel() {
 
           <div style="display:flex;justify-content:center;margin:8px 0;">
             <button onclick="exchangeSwapCurrencies()" style="background:none;border:none;padding:0;cursor:pointer;">
-              <img src="/public/images/cogniq/exchange_swap_arrows.png" style="width:36px;height:36px;display:block;">
+              <img src="/public/images/cogniq/exchange_swap_arrows.webp" style="width:36px;height:36px;display:block;">
             </button>
           </div>
 
@@ -608,21 +608,21 @@ function loadExchangePanel() {
           </div>
 
           <button id="swapBtn" onclick="exchangeDoSwap()" disabled style="background:none;border:none;padding:0;cursor:pointer;width:100%;">
-            <img src="/public/images/cogniq/exchange_swap_btn.png" style="width:100%;height:auto;display:block;">
+            <img src="/public/images/cogniq/exchange_swap_btn.webp" style="width:100%;height:auto;display:block;">
           </button>
         </div>
       </div>
 
       <div style="margin-bottom:16px;">
         <button onclick="openExchangeInfoModal()" style="background:none;border:none;padding:0;cursor:pointer;display:block;margin-bottom:10px;width:100%;">
-         <img id="exchangeInfoImg" src="/public/images/cogniq/exchange_info_${currentLang}.png" style="width:100%;height:auto;display:block;">
+         <img id="exchangeInfoImg" src="/public/images/cogniq/exchange_info_${currentLang}.webp" style="width:100%;height:auto;display:block;">
         </button>
         <div style="display:flex;gap:6px;margin-bottom:10px;">
           <button id="tabCrypto" onclick="exchangeSwitchPairTab('crypto')" style="background:none;border:none;padding:0;cursor:pointer;flex:1;">
-            <img src="/public/images/cogniq/exchange_tab_crypto.png" style="width:100%;height:auto;display:block;">
+            <img src="/public/images/cogniq/exchange_tab_crypto.webp" style="width:100%;height:auto;display:block;">
           </button>
           <button id="tabXstocks" onclick="exchangeSwitchPairTab('xstocks')" style="background:none;border:none;padding:0;cursor:pointer;flex:1;">
-            <img src="/public/images/cogniq/exchange_tab_xstocks.png" style="width:100%;height:auto;display:block;">
+            <img src="/public/images/cogniq/exchange_tab_xstocks.webp" style="width:100%;height:auto;display:block;">
           </button>
         </div>
         <div id="pairsCrypto" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
