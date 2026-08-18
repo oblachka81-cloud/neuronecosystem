@@ -23,7 +23,7 @@ startBtnHtml = `<button id="startNewBtn" ${startBtnDisabled} style="position:rel
     : '';
 
   const phraseIndex = Math.floor(Math.random() * 6) + 1;
-const phraseImg = `/public/images/cogniq/quiz_phrase_${currentLang}_${phraseIndex}.png`;
+const phraseImg = `/main/quiz_phrase_${currentLang}_${phraseIndex}.webp`;
 
 root.innerHTML = `
   <div class="welcome-card">
