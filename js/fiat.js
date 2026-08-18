@@ -75,11 +75,11 @@ function loadFiatPanel() {
   fiatContainer.innerHTML = `
     <div class="fiat-card" style="max-width:480px;width:100%;margin:0 auto;padding:24px 16px;position:relative;z-index:3;">
       <button id="fiatBackBtn" style="background:none;border:none;padding:0;cursor:pointer;margin-bottom:16px;">
-        <img src="/public/images/cogniq/exchange_back_${currentLang}.png" style="height:44px;width:auto;display:block;">
+        <img src="/public/images/cogniq/exchange_back_${currentLang}.webp" style="height:44px;width:auto;display:block;">
       </button>
 
       <div style="text-align:center;margin-bottom:20px;">
-        <img src="/public/images/cogniq/exchange_logo.png" alt="NEURON" style="height:100px;width:auto;display:block;margin:0 auto;">
+        <img src="/public/images/cogniq/exchange_logo.webp" alt="NEURON" style="height:100px;width:auto;display:block;margin:0 auto;">
       </div>
 
       <div style="display:flex;gap:8px;background:transparent;padding:0;border:none;">
