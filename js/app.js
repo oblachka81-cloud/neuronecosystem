@@ -254,3 +254,22 @@ function preloadTabImages() {
   ];
   imgs.forEach(src => { const i = new Image(); i.src = src; });
 }
+// ==================== ПЛАВНЫЙ ПОКАЗ ВКЛАДОК ====================
+(function() {
+  const obs = new MutationObserver(() => {
+    const imgs = root.querySelectorAll('img');
+    if (!imgs.length) return;
+    root.classList.add('panel-loading');
+    let left = imgs.length;
+    const done = () => { if (--left <= 0) root.classList.remove('panel-loading'); };
+    imgs.forEach(img => {
+      if (img.complete && img.naturalWidth > 0) done();
+      else {
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+      }
+    });
+    setTimeout(() => root.classList.remove('panel-loading'), 700);
+  });
+  obs.observe(root, { childList: true });
+})();
