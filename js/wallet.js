@@ -230,7 +230,7 @@ function showWalletPanel() {
     const shortAddr = `${addr.slice(0,6)}...${addr.slice(-4)}`;
     walletAddrHtml = `
       <div style="position:relative;margin-bottom:8px;">
-  <img src="/public/images/cogniq/wallet_connect_frame.png" style="width:100%;display:block;opacity:0.65;">
+  <img src="/wallet/wallet_connect_frame.webp" style="width:100%;display:block;opacity:0.65;">
   <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 14px;">
     <div style="display:flex;justify-content:space-between;align-items:center;">
       <div>
@@ -245,7 +245,7 @@ function showWalletPanel() {
 
     tonBalanceHtml = `
       <div style="position:relative;margin-bottom:8px;">
-  <img src="/public/images/cogniq/wallet_gram_frame.png" style="width:100%;display:block;opacity:0.65;">
+  <img src="/wallet/wallet_gram_frame.webp" style="width:100%;display:block;opacity:0.65;">
   <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:6px;">
     <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;">GRAM</span>
     <span style="font-size:1.6rem;font-weight:900;color:#00ccff;" id="tonBalanceVal">⏳</span>
@@ -254,7 +254,7 @@ function showWalletPanel() {
 
     usdtBalanceHtml = `
       <div style="position:relative;margin-bottom:8px;">
-  <img src="/public/images/cogniq/wallet_usdt_frame.png" style="width:100%;display:block;opacity:0.65;">
+  <img src="/wallet/wallet_usdt_frame.webp" style="width:100%;display:block;opacity:0.65;">
   <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:6px;">
     <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;">USDT</span>
     <span style="font-size:1.6rem;font-weight:900;color:#00ddaa;" id="usdtBalanceVal">⏳</span>
@@ -264,21 +264,21 @@ function showWalletPanel() {
     depositBtn = `
   <div style="display:flex;gap:8px;margin-bottom:8px;">
   <button id="walletDepositBtn" style="position:relative;background:none;border:none;padding:0;cursor:pointer;flex:1;">
-    <img src="/public/images/cogniq/wallet_deposit_frame.png" style="width:100%;display:block;opacity:0.65;">
+    <img src="/wallet/wallet_deposit_frame.webp" style="width:100%;display:block;opacity:0.65;">
     <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700;font-size:0.85rem;color:#00ffaa;">${t.walletDepositBtn}</span>
   </button>
   <button id="walletSendBtn" style="position:relative;background:none;border:none;padding:0;cursor:pointer;flex:1;">
-    <img src="/public/images/cogniq/wallet_send_frame.png" style="width:100%;display:block;opacity:0.65;">
+    <img src="/wallet/wallet_send_frame.webp" style="width:100%;display:block;opacity:0.65;">
     <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700;font-size:0.85rem;color:#00ffaa;">${t.walletSendBtn}</span>
   </button>
 </div>`;
 
     walletActionBtn = canWithdraw
-  ? `<button class="wallet-btn-big wallet-btn-withdraw" id="walletWithdrawBtn" style="position:relative;background:url('/public/images/cogniq/btn_wallet_withdraw.png') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:pointer;width:100%;margin-bottom:8px;">${t.walletWithdrawBtn(score)}</button>`
-  : `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;background:url('/public/images/cogniq/btn_wallet_withdraw.png') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
+  ? `<button class="wallet-btn-big wallet-btn-withdraw" id="walletWithdrawBtn" style="position:relative;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:pointer;width:100%;margin-bottom:8px;">${t.walletWithdrawBtn(score)}</button>`
+  : `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
   } else {
     walletAddrHtml = `<button class="wallet-btn-big wallet-btn-connect" id="walletConnectBtn">${t.walletBtnConnect}</button>`;
-    walletActionBtn = `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;background:url('/public/images/cogniq/btn_wallet_withdraw.png') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
+    walletActionBtn = `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
     depositBtn = `
   <div style="display:flex;gap:8px;margin-bottom:8px;">
     <button class="wallet-btn-big" disabled
@@ -300,7 +300,7 @@ function showWalletPanel() {
   root.innerHTML = `
   <div class="wallet-panel">
     <div style="position:relative;margin-bottom:8px;">
-  <img src="/public/images/cogniq/wallet_balance_frame.png" style="width:100%;display:block;opacity:0.65;">
+  <img src="/wallet/wallet_balance_frame.webp" style="width:100%;display:block;opacity:0.65;">
   <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
     <div style="font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#00ffff,#aa66ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${score.toLocaleString()}</div>
     <div style="font-size:0.82rem;color:#334466;margin-top:4px;">${t.walletBalanceLabel}</div>
@@ -313,7 +313,7 @@ function showWalletPanel() {
     ${withdrawHint}
     ${walletActionBtn}
     <button onclick="document.getElementById('dynamicContent').innerHTML = ''; switchTab('bank')" style="position:relative;background:none;border:none;padding:0;cursor:pointer;width:100%;margin-top:8px;">
-      <img src="/public/images/cogniq/wallet_to_bank_frame.png" style="width:100%;display:block;opacity:0.65;">
+      <img src="/wallet/wallet_to_bank_frame.webp" style="width:100%;display:block;opacity:0.65;">
       <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700;font-size:0.9rem;color:#00ffaa;">${t.walletToBank}</span>
     </button>
     <div class="wallet-section-title" style="margin-top:16px;">${t.walletLastOps}</div>
