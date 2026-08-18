@@ -215,3 +215,42 @@ function loadWelcome(retryCount = 0) {
       });
   });
 }
+function preloadTabImages() {
+  const imgs = [
+    // Кошелёк
+    '/wallet/wallet_balance_frame.webp',
+    '/wallet/wallet_gram_frame.webp',
+    '/wallet/wallet_usdt_frame.webp',
+    '/wallet/wallet_connect_frame.webp',
+    '/wallet/wallet_deposit_frame.webp',
+    '/wallet/wallet_send_frame.webp',
+    '/wallet/wallet_to_bank_frame.webp',
+    '/wallet/btn_wallet_withdraw.webp',
+    // Банк
+    '/bank/bank_balance_frame.webp',
+    '/bank/bank_deposit_frame.webp',
+    '/bank/bank_term_30.webp',
+    '/bank/bank_term_60.webp',
+    '/bank/bank_term_90.webp',
+    '/bank/bank_exchange_frame.webp',
+    '/bank/bank_transfer_frame.webp',
+    '/bank/bank_sell_frame.webp',
+    // Профиль
+    '/profile/profile_nickname_frame.webp',
+    '/profile/profile_achievements_frame.webp',
+    '/profile/profile_privacy_frame.webp',
+    '/profile/profile_stats_frame.webp',
+    '/profile/profile_avatar_frame.webp',
+    // Магазин
+    'shop/shop_pack_frame.webp',
+    'shop/shop_vip_frame.webp',
+    'shop/shop_premium_frame.webp',
+    'shop/shop_impulse_frame.webp',
+    'shop/shop_frame_card.webp',
+    // Саппорт
+    '/support/support_faq_btn.webp',
+    '/support/support_mode_support.webp',
+    '/support/support_mode_chat.webp'
+  ];
+  imgs.forEach(src => { const i = new Image(); i.src = src; });
+}
