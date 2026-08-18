@@ -136,3 +136,5 @@ button:has(img):active img {
 #dynamicContent > * {
   animation: fadeInUp 0.3s ease;
 }
+#dynamicContent { transition: opacity 0.15s ease; }
+#dynamicContent.panel-loading { opacity: 0; }
