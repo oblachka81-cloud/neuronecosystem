@@ -216,8 +216,9 @@ function loadWelcome(retryCount = 0) {
   });
 }
 function preloadTabImages() {
+  const L = currentLang || 'ru';
   const imgs = [
-    // Кошелёк
+    // ===== КОШЕЛЁК =====
     '/wallet/wallet_balance_frame.webp',
     '/wallet/wallet_gram_frame.webp',
     '/wallet/wallet_usdt_frame.webp',
@@ -226,7 +227,7 @@ function preloadTabImages() {
     '/wallet/wallet_send_frame.webp',
     '/wallet/wallet_to_bank_frame.webp',
     '/wallet/btn_wallet_withdraw.webp',
-    // Банк
+    // ===== БАНК =====
     '/bank/bank_balance_frame.webp',
     '/bank/bank_deposit_frame.webp',
     '/bank/bank_term_30.webp',
@@ -235,22 +236,53 @@ function preloadTabImages() {
     '/bank/bank_exchange_frame.webp',
     '/bank/bank_transfer_frame.webp',
     '/bank/bank_sell_frame.webp',
-    // Профиль
+    `/bank/bank_deposit_btn_${L}.webp`,
+    `/bank/bank_send_btn_${L}.webp`,
+    `/bank/bank_buy_btn_${L}.webp`,
+    // ===== ПРОФИЛЬ =====
     '/profile/profile_nickname_frame.webp',
     '/profile/profile_achievements_frame.webp',
     '/profile/profile_privacy_frame.webp',
     '/profile/profile_stats_frame.webp',
     '/profile/profile_avatar_frame.webp',
-    // Магазин
+    `/profile/profile_save_btn_${L}.webp`,
+    // ===== МАГАЗИН =====
     'shop/shop_pack_frame.webp',
     'shop/shop_vip_frame.webp',
     'shop/shop_premium_frame.webp',
     'shop/shop_impulse_frame.webp',
     'shop/shop_frame_card.webp',
-    // Саппорт
+    'shop/shop_neon_basic_frame.webp',
+    'shop/shop_neon_pulse_frame.webp',
+    'shop/shop_neon_gold_frame.webp',
+    `shop/shop_impulse_game_btn_${L}.webp`,
+    // ===== САППОРТ =====
     '/support/support_faq_btn.webp',
     '/support/support_mode_support.webp',
-    '/support/support_mode_chat.webp'
+    '/support/support_mode_chat.webp',
+    // ===== FIAT =====
+    '/exchange/fiat_btn.webp',
+    '/exchange/fiat_tab.webp',
+    '/exchange/fiat_selector.webp',
+    '/exchange/fiat_calc.webp',
+    // ===== БИРЖА =====
+    '/public/images/cogniq/exchange_pair_card.webp',
+    '/public/images/cogniq/exchange_wallet_frame.webp',
+    '/public/images/cogniq/exchange_coming_soon_frame.webp',
+    '/public/images/cogniq/exchange_lock_btn.webp',
+    '/public/images/cogniq/exchange_swap_arrows.webp',
+    '/public/images/cogniq/exchange_swap_btn.webp',
+    '/public/images/cogniq/exchange_swap_frame.webp',
+    '/public/images/cogniq/exchange_tab_crypto.webp',
+    '/public/images/cogniq/exchange_tab_xstocks.webp',
+    `/public/images/cogniq/exchange_info_${L}.webp`,
+    `/public/images/cogniq/exchange_back_${L}.webp`,
+    // ===== МЕЛОЧИ =====
+    'main/btn_music_off.webp',
+    'main/btn_lang_en.webp',
+    'main/btn_lang_es.webp',
+    'main/btn_lang_fr.webp',
+    'main/btn_lang_ru.webp'
   ];
   imgs.forEach(src => { const i = new Image(); i.src = src; });
 }
