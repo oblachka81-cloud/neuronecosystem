@@ -50,7 +50,7 @@ function loadSupportPanel() {
     <div class="support-card" style="max-width:480px;width:100%;margin:0 auto;padding:16px;display:flex;flex-direction:column;height:calc(100vh - 140px);min-height:400px;">
   
       <button onclick="supportOpenFAQ()" style="background:none;border:none;padding:0;cursor:pointer;width:100%;margin-bottom:8px;">
-        <img src="/public/images/cogniq/support_faq_btn.png" style="width:100%;height:36px;display:block;object-fit:contain;">
+        <img src="/support/support_faq_btn.webp" style="width:100%;height:36px;display:block;object-fit:contain;">
       </button>
 
       <div id="supportFaqModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;justify-content:center;align-items:flex-start;padding-top:60px;" onclick="if(event.target===this)supportCloseFAQ()">
@@ -62,10 +62,10 @@ function loadSupportPanel() {
 
       <div style="display:flex;gap:6px;margin-bottom:8px;">
         <button id="supportModeSupport" onclick="supportSetMode('support')" style="background:none;border:none;padding:0;cursor:pointer;flex:1;${supportMode === 'support' ? 'filter:brightness(1.3)drop-shadow(0 0 6px #f472b6);' : ''}">
-          <img src="/public/images/cogniq/support_mode_support.png" style="width:100%;height:auto;display:block;">
+          <img src="/support/support_mode_support.webp" style="width:100%;height:auto;display:block;">
         </button>
         <button id="supportModeChat" onclick="supportSetMode('chat')" style="background:none;border:none;padding:0;cursor:pointer;flex:1;${supportMode === 'chat' ? 'filter:brightness(1.3)drop-shadow(0 0 6px #f472b6);' : ''}">
-          <img src="/public/images/cogniq/support_mode_chat.png" style="width:100%;height:auto;display:block;">
+          <img src="/support/support_mode_chat.webp" style="width:100%;height:auto;display:block;">
         </button>
       </div>
 
@@ -121,7 +121,7 @@ function supportAddMessage(text, type) {
   div.style.cssText = `margin-bottom:8px;padding:8px 12px;border-radius:12px;font-size:0.85rem;line-height:1.4;max-width:100%;display:flex;align-items:flex-start;gap:8px;`;
   
   if (type === 'ai') {
-    div.innerHTML = `<img src="/public/images/cogniq/support_avatar.png" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;"><div style="flex:1;color:#66ccff;font-weight:600;">${text}</div>`;
+    div.innerHTML = `<img src="/support/support_avatar.webp" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;"><div style="flex:1;color:#66ccff;font-weight:600;">${text}</div>`;
   } else {
     div.innerHTML = `<div style="flex:1;text-align:right;color:#ffcc66;font-weight:500;">${text}</div>`;
   }
