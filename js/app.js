@@ -62,51 +62,60 @@ function switchTab(tab) {
   const footer = document.querySelector('footer');
   const logoImg = document.querySelector('.logo-wrap img');
   
-  if (tab === 'casino' || tab === 'fiat') {
-    if (header) header.style.display = 'none';
-    if (footer) footer.style.display = 'none';
-  }
-  else if (tab === 'exchange') {
-    if (header) header.style.display = '';
-    if (footer) footer.style.display = '';
-    if (logoImg) {
-      logoImg.src = '/public/images/cogniq/exchange_logo.webp';
-      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
-    }
-  }
-  else if (tab === 'bank') {
-    if (header) header.style.display = '';
-    if (footer) footer.style.display = '';
-    if (logoImg) {
-      logoImg.src = 'main/bank_logo.webp';
-      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
-    }
-  } 
-  else if (tab === 'shop') {
-    if (header) header.style.display = '';
-    if (footer) footer.style.display = '';
-    if (logoImg) {
-      logoImg.src = 'shop/shop_logo.webp';
-      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
-    }
-  }
-  else if (tab === 'support') {
-    if (header) header.style.display = '';
-    if (footer) footer.style.display = '';
-    if (logoImg) {
-      logoImg.src = '/support/support_avatar.webp';
-      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
-    }
-  }
-  else {
-    if (header) header.style.display = '';
-    if (footer) footer.style.display = '';
-    if (logoImg) {
-      logoImg.src = 'main/game_logo.webp';
-      logoImg.style.cssText = 'height:100px;width:auto;display:block;';
-    }
-  }
+  // Плавное затухание
+  if (logoImg) logoImg.classList.add('loading');
   
+  setTimeout(() => {
+    if (tab === 'casino' || tab === 'fiat') {
+      if (header) header.style.display = 'none';
+      if (footer) footer.style.display = 'none';
+    }
+    else if (tab === 'exchange') {
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      if (logoImg) {
+        logoImg.src = '/public/images/cogniq/exchange_logo.webp';
+        logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+      }
+    }
+    else if (tab === 'bank') {
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      if (logoImg) {
+        logoImg.src = 'main/bank_logo.webp';
+        logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+      }
+    } 
+    else if (tab === 'shop') {
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      if (logoImg) {
+        logoImg.src = 'shop/shop_logo.webp';
+        logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+      }
+    }
+    else if (tab === 'support') {
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      if (logoImg) {
+        logoImg.src = '/support/support_avatar.webp';
+        logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+      }
+    }
+    else {
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      if (logoImg) {
+        logoImg.src = 'main/game_logo.webp';
+        logoImg.style.cssText = 'height:100px;width:auto;display:block;';
+      }
+    }
+    
+    // Плавное появление
+    if (logoImg) logoImg.classList.remove('loading');
+  }, 100);
+  
+  // Остальной код switchTab...
   document.getElementById('tabGame').classList.toggle('active', tab === 'game');
   document.getElementById('tabLeader').classList.toggle('active', tab === 'leaderboard');
   document.getElementById('tabWallet').classList.toggle('active', tab === 'wallet');
