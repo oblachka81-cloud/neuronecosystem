@@ -70,7 +70,7 @@ function switchTab(tab) {
     if (header) header.style.display = '';
     if (footer) footer.style.display = '';
     if (logoImg) {
-      logoImg.src = '/public/images/cogniq/exchange_logo.png';
+      logoImg.src = '/public/images/cogniq/exchange_logo.webp';
       logoImg.style.cssText = 'height:100px;width:auto;display:block;';
     }
   }
