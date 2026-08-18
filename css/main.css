@@ -133,3 +133,6 @@ button:has(img):active img {
 .logo-wrap img.loading {
   opacity: 0;
 }
+#dynamicContent > * {
+  animation: fadeInUp 0.3s ease;
+}
