@@ -61,7 +61,7 @@ function renderProfilePanel(data) {
 
   root.innerHTML = `
     <div class="profile-panel">
-
+${avatarHtml
 <div style="position:relative; margin-bottom:6px;">
   <img src="/profile/profile_nickname_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;opacity:0.65;" alt="">
   <div style="position:relative;z-index:1;background:none;border:none;padding:14px 18px;">
