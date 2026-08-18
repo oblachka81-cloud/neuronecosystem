@@ -94,7 +94,7 @@ function switchTab(tab) {
     if (header) header.style.display = '';
     if (footer) footer.style.display = '';
     if (logoImg) {
-      logoImg.src = '/public/images/cogniq/support_avatar.png';
+      logoImg.src = '/support/support_avatar.webp';
       logoImg.style.cssText = 'height:100px;width:auto;display:block;';
     }
   }
