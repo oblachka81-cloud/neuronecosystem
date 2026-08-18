@@ -126,3 +126,10 @@ button:has(img):active img {
   filter: brightness(0.7);
   transition: filter 0.1s ease;
 }
+.logo-wrap img {
+  transition: opacity 0.2s ease;
+}
+
+.logo-wrap img.loading {
+  opacity: 0;
+}
