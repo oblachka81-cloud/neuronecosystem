@@ -47,6 +47,16 @@
 .reel-outer.winning { border-color: #ffaa00; box-shadow: 0 0 30px rgba(255,170,0,0.9), 0 0 60px rgba(255,170,0,0.4), inset 0 0 30px rgba(255,170,0,0.12); animation: reelPulse 0.5s ease-in-out infinite alternate; }
 .reel-outer.winning-4 { border-color: #ff00cc; box-shadow: 0 0 30px rgba(255,0,200,0.9), 0 0 60px rgba(255,0,200,0.4), inset 0 0 30px rgba(255,0,200,0.12); animation: reelPulse4 0.4s ease-in-out infinite alternate; }
 .reel-outer.winning-5 { border-color: #00ffff; box-shadow: 0 0 40px rgba(0,255,255,1.0), 0 0 80px rgba(0,255,255,0.5), inset 0 0 40px rgba(0,255,255,0.18); animation: reelPulse5 0.3s ease-in-out infinite alternate; }
+.reel-outer.winning-2 {
+  border-color: #00ffaa;
+  box-shadow: 0 0 20px rgba(0,255,170,0.6), 0 0 40px rgba(0,255,170,0.3), inset 0 0 20px rgba(0,255,170,0.08);
+  animation: reelPulse2 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes reelPulse2 {
+  from { box-shadow: 0 0 15px rgba(0,255,170,0.5), 0 0 30px rgba(0,255,170,0.2), inset 0 0 15px rgba(0,255,170,0.06); }
+  to { box-shadow: 0 0 25px rgba(0,255,170,0.8), 0 0 50px rgba(0,255,170,0.4), inset 0 0 25px rgba(0,255,170,0.12); }
+}
 .slot-result { text-align: center; min-height: 54px; margin-bottom: 6px; position: relative; z-index: 2; }
 .slot-result-combo { font-size: 1.6rem; font-weight: 900; letter-spacing: 8px; background: linear-gradient(90deg, #ff6600, #ffaa00, #ff00cc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none; min-height: 32px; animation: comboAppear 0.4s cubic-bezier(0.22,0.61,0.36,1) both; }
 .slot-result-msg { font-size: 0.9rem; margin-top: 6px; font-weight: 700; }
