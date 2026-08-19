@@ -48,30 +48,30 @@ function loadCasinoPanel() {
     <div class="casino-card">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
     <button id="casinoBackBtn" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-      <img id="casinoBackBtnImg" src="/public/images/cogniq/back_btn_${currentLang}.png" style="height:44px;width:auto;display:block;">
+      <img id="casinoBackBtnImg" src="/games/casino/back_btn_${currentLang}.webp" style="height:44px;width:auto;display:block;">
     </button>
     <button id="casinoDailyImpulseBtn" onclick="window.casinoClaimDailyImpulse()" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-      <img id="casinoDailyImpulseBtnImg" src="/public/images/cogniq/btn_daily_impulse.png" style="height:44px;width:auto;display:block;">
+      <img id="casinoDailyImpulseBtnImg" src="/games/casino/btn_daily_impulse.webp" style="height:44px;width:auto;display:block;">
     </button>
   </div>
   <div class="neuron-logo">
-    <img src="/public/images/cogniq/neuron_logo.png" alt="NEURON" style="height:128px;width:auto;display:block;">
+    <img src="/games/casino/neuron_logo.webp" alt="NEURON" style="height:128px;width:auto;display:block;">
   </div>
   <div class="casino-tabs" style="display:flex;gap:4px;background:transparent;border:none;padding:0;">
     <button class="casino-tab active" data-tab="roulette" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-      <img src="/public/images/cogniq/tab_btn_fortuna.png" style="width:100%;height:auto;display:block;">
+      <img src="/games/casino/tab_btn_fortuna.webp" style="width:100%;height:auto;display:block;">
     </button>
     <button class="casino-tab" data-tab="slots" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-      <img src="/public/images/cogniq/tab_btn_spark.png" style="width:100%;height:auto;display:block;">
+      <img src="/games/casino/tab_btn_spark.webp" style="width:100%;height:auto;display:block;">
     </button>
     <button class="casino-tab" data-tab="crash" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-      <img src="/public/images/cogniq/tab_btn_crash.png" style="width:100%;height:auto;display:block;">
+      <img src="/games/casino/tab_btn_crash.webp" style="width:100%;height:auto;display:block;">
     </button>
     <button class="casino-tab" data-tab="blackjack" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-      <img src="/public/images/cogniq/tab_btn_xxi.png" style="width:100%;height:auto;display:block;">
+      <img src="/games/casino/tab_btn_xxi.webp" style="width:100%;height:auto;display:block;">
     </button>
     <button class="casino-tab" data-tab="mines" style="background:none;border:none;padding:0;cursor:pointer;flex:1;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-      <img src="/public/images/cogniq/tab_btn_mines.png" style="width:100%;height:auto;display:block;">
+      <img src="/games/casino/tab_btn_mines.webp" style="width:100%;height:auto;display:block;">
     </button>
   </div>
   <div class="balance-row" style="margin-bottom:2px;">
