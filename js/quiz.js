@@ -8,7 +8,7 @@ function showWelcome(totalScore, gamesPlayed) {
     <div class="super-game-card" style="position:relative;background:transparent;border:none;padding:0;">
   <img src="main/super_game_frame_${currentLang}.webp" style="width:100%;display:block;opacity:0.65;" alt="">
   <div style="position:absolute;bottom:25px;left:0;right:0;display:flex;gap:8px;justify-content:center;padding:0 16px;">
-  <img src="main/btn_super_stars.webp" id="buyStarsBtn" style="cursor:pointer;height:44px;width:auto;opacity:0.65;" onclick="buyStars()">
+  <img src="main/btn_super_stars.webp" id="buyStarsBtn" style="cursor:pointer;height:44px;width:auto;opacity:0.65;">
   <img src="main/btn_super_usdt.webp" id="buyUsdtBtn" style="cursor:pointer;height:44px;width:auto;opacity:0.65;" onclick="openTonModal()">
 </div>
 </div>`;
