@@ -342,5 +342,17 @@ router.get('/api/exchange/rate', requireInitData, authRateLimit, async (req, res
   const wallet = process.env.TON_OPERATION_WALLET;
   res.json({ rate: 200, address: wallet || 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv', min_usdt: 1, max_usdt: 100 });
 });
+// ==================== NEURON LIVE MARKET ====================
+router.get('/api/market/tickers', publicRateLimit, async (req, res) => {
+  const category = req.query.category === 'xstocks' ? 'xstocks' : 'crypto';
+  try {
+    const tickers = await getTickers(CATEGORIES[category]);
+    if (!Object.keys(tickers).length) throw new Error('CEX empty');
+    res.json({ success: true, source: 'CEX', tickers });
+  } catch (e) {
+    console.error('[MARKET] CEX error:', e.message);
+    res.json({ success: false, source: 'CEX', tickers: {} });
+  }
+});
 
 module.exports = router;
