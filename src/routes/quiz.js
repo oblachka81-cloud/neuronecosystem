@@ -348,7 +348,7 @@ router.post('/api/answer', requireInitDataStrict, authRateLimit, async (req, res
         } catch (e) {
           console.warn(`[STREAK] milestone card failed for ${userId}: ${e.message}`);
           const t = STREAK_TRANSLATIONS.milestone[streakLang] || STREAK_TRANSLATIONS.milestone['en'];
-          try { await withRetry(() => bot.telegram.sendMessage(userId, t(newStreakCount))); } catch (e2) {}
+          try { await withRetry(() => _bot.telegram.sendMessage(userId, t(newStreakCount))); } catch (e2) {}
         }
       }
     }
