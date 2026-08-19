@@ -7,6 +7,7 @@ const { bestchangeCache, bestchangeFetch, CACHE_TTL_MS } = require('../services/
 const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuote, toUnitsForSwap, toAssetId, safePayload, requestQuoteWithFee } = require('../services/exchange');
 const { logTx } = require('../services/burn');
 const { BESTCHANGE_API_KEY, BESTCHANGE_PARTNER_ID } = require('../config');
+const { getTickers, CATEGORIES } = require('../services/mexc');
 
 // ==================== BESTCHANGE ====================
 router.get('/api/bestchange/currencies/:lang', publicRateLimit, async (req, res) => {
