@@ -369,7 +369,7 @@ router.post('/api/answer', requireInitDataStrict, authRateLimit, async (req, res
 
     await client.query('COMMIT');
 
-    checkAndUnlockAchievements(userId, bot).catch(e => console.error('[ACHIEVEMENTS] check error:', e.message));
+    checkAndUnlockAchievements(userId, req.app.get('bot')).catch(e => console.error('[ACHIEVEMENTS] check error:', e.message));
 
     const freeGamesLeft = calcGamesLeft({ ...user, games_today: newGamesToday, extra_games: user.extra_games || 0 });
 
