@@ -74,7 +74,7 @@ function initCasinoSpark() {
     document.getElementById('casinoSlotSpinBtn').disabled = true;
     document.getElementById('casinoSlotResultCombo').textContent = '';
     document.getElementById('casinoSlotResultMsg').textContent = '';
-    for (let i = 0; i < 5; i++) document.getElementById('casino-reel-outer-' + i).classList.remove('winning', 'winning-4', 'winning-5');
+    for (let i = 0; i < 5; i++) document.getElementById('casino-reel-outer-' + i).classList.remove('winning', 'winning-2', 'winning-4', 'winning-5');
 
     const oldBalance = getBalance();
 
