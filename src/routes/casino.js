@@ -94,13 +94,13 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
     }
 
     const symbols = [
-      '/public/images/cogniq/spark_sym_btc.png',
-      '/public/images/cogniq/spark_sym_eth.png',
-      '/public/images/cogniq/spark_sym_sol.png',
-      '/public/images/cogniq/spark_sym_trx.png',
-      '/public/images/cogniq/spark_sym_ton.png',
-      '/public/images/cogniq/spark_sym_xrp.png',
-      '/public/images/cogniq/spark_sym_cogniq.png'
+      '/games/spark/spark_sym_btc.webp',
+      '/games/spark/spark_sym_eth.webp',
+      '/games/spark/spark_sym_sol.webp',
+      '/games/spark/spark_sym_trx.webp',
+      '/games/spark/spark_sym_ton.webp',
+      '/games/spark/spark_sym_xrp.webp',
+      '/games/spark/spark_sym_cogniq.webp'
     ];
 
     const buf = crypto.randomBytes(5);
