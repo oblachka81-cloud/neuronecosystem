@@ -55,10 +55,6 @@ router.post('/api/create-stars-invoice', requireInitData, publicRateLimit, async
       });
     }
 
-    await client.query(
-      `UPDATE users SET last_super_game_date = $1, super_replay_used = false WHERE telegram_id = $2`,
-      [today, userId]
-    );
 
     const bot = req.app.get('bot');
     let link;
