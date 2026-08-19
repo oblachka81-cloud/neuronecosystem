@@ -84,31 +84,31 @@ function loadCasinoPanel() {
         <div class="wheel-panel" style="padding:80px 20px 14px;margin-bottom:2px;">
           <div class="wheel-wrap" style="position:relative;width:min(330px,65vw,50vh);height:min(330px,65vw,50vh);margin:0 auto 16px;filter:drop-shadow(0 0 24px rgba(255,140,0,0.5));">
             <div class="wheel-pointer" style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:1.4rem;color:#ffd700;filter:drop-shadow(0 0 10px #ffaa00);z-index:2;">▼</div>
-            <canvas id="casinoWheelCanvas" class="wheel-svg" width="220" height="220" style="width:100%;height:100%;border-radius:50%;box-shadow:0 0 50px rgba(255,170,0,0.4),0 0 100px rgba(255,80,0,0.2);"></canvas>
+            <canvas id="casinoWheelCanvas" class="wheel-svg" width="220" height="220" style="width:100%;height:100%;border-radius:50%;box-shadow:0 0 50px rgba(255,170,0,0.4), 0 0 100px rgba(255,80,0,0.2);"></canvas>
             <div class="wheel-center" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;background:radial-gradient(circle,#1e2e48,#07111f);border:3px solid #ffaa00;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 24px rgba(255,170,0,0.7),inset 0 0 16px rgba(0,0,0,0.5);">
               <span class="wheel-center-num" id="casinoWheelResult" style="font-size:1.4rem;font-weight:900;color:#ffaa00;">?</span>
             </div>
           </div>
         </div>
         <button id="casinoSpinBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;margin-bottom:14px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">
-          <img id="casinoSpinBtnImg" src="/public/images/cogniq/fortuna_btn_spin_${currentLang}.png" style="width:100%;height:auto;display:block;">
+          <img id="casinoSpinBtnImg" src="/games/fortuna/fortuna_btn_spin_${currentLang}.webp" style="width:100%;height:auto;display:block;">
         </button>
         <div class="result-color" id="casinoRouletteResultColor" style="font-size:1rem;font-weight:700;margin-top:6px;text-align:center;min-height:24px;margin-bottom:4px;"></div>
         <div class="result-message" id="casinoRouletteResultMsg" style="font-size:0.88rem;margin-top:4px;color:#aabbcc;text-align:center;min-height:20px;margin-bottom:12px;"></div>
         <div style="position:relative;margin-bottom:14px;">
-          <img src="/public/images/cogniq/fortuna_bets_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
+          <img src="/games/fortuna/fortuna_bets_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
           <div class="bet-form" style="position:relative;z-index:1;background:none;border:none;padding:24px 18px 18px 18px;">
             <div class="input-row" style="display:flex;gap:10px;margin-bottom:12px;"><input type="number" id="casinoRouletteBet" placeholder="Amount (10-100 IMPULSE)" min="10" max="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;"></div>
             <div class="bet-types" id="casinoRouletteBetTypes" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-              <button class="wheel-bet-btn" data-type="red" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_red.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="black" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_black.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="even" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_even.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="odd" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_odd.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="low" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_low.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="high" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_high.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="dozen1" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_dozen1.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="dozen2" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_dozen2.png" style="width:100%;height:auto;display:block;"></button>
-              <button class="wheel-bet-btn" data-type="dozen3" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/public/images/cogniq/fortuna_btn_dozen3.png" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="red" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_red.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="black" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_black.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="even" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_even.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="odd" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_odd.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="low" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_low.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="high" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_high.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="dozen1" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_dozen1.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="dozen2" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_dozen2.webp" style="width:100%;height:auto;display:block;"></button>
+              <button class="wheel-bet-btn" data-type="dozen3" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_dozen3.webp" style="width:100%;height:auto;display:block;"></button>
             </div>
           </div>
         </div>
@@ -358,89 +358,9 @@ function casinoShowToast(msg, dur = 3000) {
   window.casinoGetBalance = () => balance;
   window.casinoSetBalance = (v) => { balance = v; };
   if (window.initCasinoMines) window.initCasinoMines();
+  if (window.initCasinoFortuna) window.initCasinoFortuna();
 
 // === 1. РУЛЕТКА ===
-const WHEEL_NUMBERS = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
-const RED_NUMBERS = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
-const wCanvas = document.getElementById('casinoWheelCanvas');
-const wCtx = wCanvas.getContext('2d');
-const TOTAL = WHEEL_NUMBERS.length, SLICE = (2*Math.PI)/TOTAL;
-let wAngle = 0, wTarget = 0, wSpinning = false, wOnDone = null;
-
-function drawWheel(angle) {
-  const cx=110, cy=110, r=108;
-  wCtx.clearRect(0,0,220,220);
-  for(let i=0;i<TOTAL;i++){
-    const start = angle + i*SLICE - Math.PI/2, end = start + SLICE;
-    wCtx.beginPath(); wCtx.moveTo(cx,cy); wCtx.arc(cx,cy,r,start,end); wCtx.closePath();
-    wCtx.fillStyle = WHEEL_NUMBERS[i]===0 ? '#00aa44' : RED_NUMBERS.includes(WHEEL_NUMBERS[i]) ? '#cc2200' : '#111111';
-    wCtx.fill(); wCtx.strokeStyle = 'rgba(255,170,0,0.2)'; wCtx.lineWidth = 0.8; wCtx.stroke();
-    wCtx.save(); wCtx.translate(cx,cy); wCtx.rotate(start+SLICE/2); wCtx.textAlign = 'right'; wCtx.fillStyle = '#ffffff'; wCtx.font = 'bold 9px Inter,sans-serif'; wCtx.fillText(WHEEL_NUMBERS[i], r-4, 3); wCtx.restore();
-  }
-  wCtx.beginPath(); wCtx.arc(cx,cy,r,0,2*Math.PI); wCtx.strokeStyle = '#ffaa00'; wCtx.lineWidth = 3; wCtx.stroke();
-}
-
-function spinWheelTo(num, callback) {
-  const idx = WHEEL_NUMBERS.indexOf(num);
-  const base = -(idx*SLICE + SLICE/2);
-  const fullSpins = (5 + Math.floor(Math.random()*4)) * 2*Math.PI;
-  const cur = ((wAngle % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
-  const tgt = ((base % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
-  let delta = tgt - cur; if(delta <= 0) delta += 2*Math.PI;
-  wTarget = wAngle + fullSpins + delta; wSpinning = true; wOnDone = callback; animateWheel();
-}
-
-function animateWheel() {
-  const rem = wTarget - wAngle;
-  if(rem <= 0.01) { wAngle = wTarget; drawWheel(wAngle); wSpinning = false; if(wOnDone){wOnDone(); wOnDone=null;} return; }
-  wAngle += Math.max(0.01, Math.min(0.18, rem * 0.045));
-  drawWheel(wAngle); requestAnimationFrame(animateWheel);
-}
-
-requestAnimationFrame(function loop(){ if(!wSpinning){wAngle+=0.003; drawWheel(wAngle);} requestAnimationFrame(loop); });
-drawWheel(wAngle);
-
-document.querySelectorAll('#casinoRouletteBetTypes .wheel-bet-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#casinoRouletteBetTypes .wheel-bet-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  });
-});
-
-document.getElementById('casinoSpinBtn').addEventListener('click', async () => {
-  if(wSpinning) return;
-  const amount = parseInt(document.getElementById('casinoRouletteBet').value);
-  if(!amount || amount < 10 || amount > 100) { casinoShowToast('Ставка: 10-100 IMPULSE'); return; }
-  const selected = document.querySelector('#casinoRouletteBetTypes .wheel-bet-btn.selected');
-  if(!selected) { casinoShowToast('Выберите тип ставки'); return; }
-  
-  wSpinning = true; document.getElementById('casinoSpinBtn').disabled = true;
-  try {
-    const r = await authFetch(`${BASE_URL}/api/casino/spin`, {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({bet_amount: amount, bet_type: selected.dataset.type})
-    });
-    const data = await r.json();
-    if(data.error) { casinoShowToast(data.error); wSpinning = false; document.getElementById('casinoSpinBtn').disabled = false; return; }
-    
-    spinWheelTo(data.result, () => {
-      const balEl = document.getElementById('casinoBalanceAmount');
-      if(balEl) balEl.textContent = (data.new_balance || 0).toLocaleString();
-      document.getElementById('casinoWheelResult').textContent = data.result;
-      const isRed = RED_NUMBERS.includes(data.result);
-      const colorText = data.result === 0 ? '🟢 Зеро' : (isRed ? '🔴 Красное' : '⚫ Чёрное');
-      document.getElementById('casinoRouletteResultColor').textContent = colorText;
-      document.getElementById('casinoRouletteResultMsg').textContent = data.win > 0 ? `+${data.win} IMPULSE` : 'Проигрыш';
-      document.getElementById('casinoRouletteResultMsg').style.color = data.win > 0 ? '#00ffaa' : '#ff4455';
-      wSpinning = false; document.getElementById('casinoSpinBtn').disabled = false;
-      
-      const list = document.getElementById('casinoRouletteHistory');
-      const item = document.createElement('div'); item.className = 'history-item';
-      item.innerHTML = `<span>${data.result} — ${colorText}</span><span class="${data.win>0?'win':'lose'}">${data.win>0?'+':''}${data.win} IMPULSE</span>`;
-      list.insertBefore(item, list.firstChild); if(list.children.length > 15) list.removeChild(list.lastChild);
-    });
-  } catch(e) { casinoShowToast('Ошибка соединения'); wSpinning = false; document.getElementById('casinoSpinBtn').disabled = false; }
-});
 
 // === 2. СЛОТЫ ===
 const SLOT_SYMBOLS = [
