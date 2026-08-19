@@ -103,30 +103,47 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
       '/games/spark/spark_sym_cogniq.webp'
     ];
 
-    const buf = crypto.randomBytes(5);
-    const roll = crypto.randomBytes(1)[0] / 255;
+    const buf = crypto.randomBytes(4);
+    const roll = buf.readUInt32BE(0) / 0x100000000;
     let reels = [];
 
     if (roll < 0.001) {
+      // 0.1% — Jackpot (5 cogniq)
       const cogniq = symbols[symbols.length - 1];
       reels = [cogniq, cogniq, cogniq, cogniq, cogniq];
-    } else if (roll < 0.006) {
+    } else if (roll < 0.005) {
+      // 0.4% — 5 одинаковых (кроме cogniq)
       const sym = symbols[buf[0] % (symbols.length - 1)];
       reels = [sym, sym, sym, sym, sym];
-    } else if (roll < 0.026) {
+    } else if (roll < 0.025) {
+      // 2% — 4 одинаковых
       const sym = symbols[buf[0] % symbols.length];
       const otherIndex = (buf[1] % (symbols.length - 1));
       const other = symbols[otherIndex === symbols.indexOf(sym) ? (otherIndex + 1) % symbols.length : otherIndex];
       reels = [sym, sym, sym, sym, other];
-    } else if (roll < 0.106) {
+    } else if (roll < 0.125) {
+      // 10% — 3 одинаковых
       const sym = symbols[buf[0] % symbols.length];
       reels = [sym, sym, sym,
         symbols[(buf[1] % (symbols.length - 1) + 1) % symbols.length],
         symbols[(buf[2] % (symbols.length - 2) + 2) % symbols.length]
       ];
+    } else if (roll < 0.325) {
+      // 20% — 2 одинаковых
+      const sym = symbols[buf[0] % symbols.length];
+      reels = [sym, sym,
+        symbols[(buf[1] % (symbols.length - 1) + 1) % symbols.length],
+        symbols[(buf[2] % (symbols.length - 2) + 2) % symbols.length],
+        symbols[(buf[3] % (symbols.length - 3) + 3) % symbols.length]
+      ];
     } else {
+      // 67.5% — проигрыш (все разные)
+      const used = new Set();
       for (let i = 0; i < 5; i++) {
-        reels.push(symbols[buf[i] % symbols.length]);
+        let idx;
+        do { idx = Math.floor(Math.random() * symbols.length); } while (used.has(idx));
+        used.add(idx);
+        reels.push(symbols[idx]);
       }
     }
 
@@ -142,14 +159,16 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
     let jackpot = false;
 
     if (maxCount === 5 && topSymbol.includes('cogniq')) {
-      win = bet_amount * 50;
+      win = bet_amount * 100;
       jackpot = true;
     } else if (maxCount === 5) {
-      win = bet_amount * 20;
+      win = bet_amount * 25;
     } else if (maxCount === 4) {
-      win = bet_amount * 5;
+      win = bet_amount * 7;
     } else if (maxCount === 3) {
-      win = bet_amount * 2;
+      win = bet_amount * 3;
+    } else if (maxCount === 2) {
+      win = Math.floor(bet_amount * 1.5);
     }
 
     const newBalance = user.rows[0].balance - bet_amount + win;
