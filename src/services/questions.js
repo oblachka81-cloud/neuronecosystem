@@ -51,6 +51,8 @@ async function loadQuestionsFromDB() {
     lang: r.lang || 'ru',
     translations: r.translations || {}
   }));
+  state.questionsCache.length = 0;
+  state.questionsCache.push(...mapped);
   console.log(`Загружено ${state.questionsCache.length} вопросов из БД`);
 }
 
