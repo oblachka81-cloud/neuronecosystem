@@ -105,7 +105,7 @@ function initCasinoSpark() {
         const counts = {}; data.reels.forEach(s => counts[s] = (counts[s] || 0) + 1);
         const maxCount = Math.max(...Object.values(counts));
         const topSymbol = Object.keys(counts).find(k => counts[k] === maxCount);
-        let winClass = maxCount === 3 ? 'winning' : (maxCount === 4 ? 'winning-4' : (maxCount === 5 ? 'winning-5' : ''));
+        let winClass = maxCount === 2 ? 'winning-2' : maxCount === 3 ? 'winning' : (maxCount === 4 ? 'winning-4' : (maxCount === 5 ? 'winning-5' : ''));
         data.reels.forEach((sym, i) => { if (sym === topSymbol && winClass) document.getElementById('casino-reel-outer-' + i).classList.add(winClass); });
       }
 
