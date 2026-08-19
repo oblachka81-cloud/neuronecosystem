@@ -343,7 +343,8 @@ router.post('/api/answer', requireInitDataStrict, authRateLimit, async (req, res
         const streakLang = user.language_code || 'en';
         try {
           const card = await generateStreakMilestoneCard({ streak_count: newStreakCount, language_code: streakLang });
-          await withRetry(() => bot.telegram.sendPhoto(userId, { source: card }));
+          const _bot = req.app.get('bot');
+          await withRetry(() => _bot.telegram.sendPhoto(userId, { source: card }));
         } catch (e) {
           console.warn(`[STREAK] milestone card failed for ${userId}: ${e.message}`);
           const t = STREAK_TRANSLATIONS.milestone[streakLang] || STREAK_TRANSLATIONS.milestone['en'];
