@@ -15,9 +15,9 @@ let currentRound = {
 
 // === КОНФИГ ФАЗ ===
 const PHASES = {
-  WAITING_DURATION: 3000,
-  BETTING_DURATION: 5000,
-  CRASHED_DURATION: 5000,
+  WAITING_DURATION: 3000,   // пауза между раундами (ставки ещё закрыты)
+  BETTING_DURATION: 5000,   // окно ставок
+  CRASHED_DURATION: 5000,   // пауза после краша (показать результат)
 };
 
 // === ЗАПУСК НОВОГО РАУНДА (БЕЗ записи в БД) ===
