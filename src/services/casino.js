@@ -51,9 +51,10 @@ function minesMultiplier(total, mines, opened) {
 
 function generateCrashPoint() {
   const r = crypto.randomBytes(4).readUInt32BE(0) / 0x100000000;
-  if (r < 0.05) return 1.00;
-  // Экспоненциальное: чаще 1-3x, редко 10x, очень редко 100x
-  const crash = Math.floor((1 / (1 - r)) * 100) / 100;
+  const houseEdge = 0.04; // 4% — край казино на ЛЮБОМ множителе
+  if (r < houseEdge) return 1.00;
+  // Формула честного краша: (1 - houseEdge) / (1 - r)
+  const crash = Math.floor(((1 - houseEdge) / (1 - r)) * 100) / 100;
   return Math.min(crash, 100.00);
 }
 
