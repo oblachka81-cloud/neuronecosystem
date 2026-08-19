@@ -231,7 +231,7 @@ function loadCasinoPanel() {
       <!-- MINES -->
       <div id="casinoSectionMines" class="casino-game-section" style="display:none;">
         <div style="position:relative;margin-bottom:16px;border-radius:0;">
-          <img src="/public/images/cogniq/mines_field_bg.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <img src="/games/mines/mines_field_bg.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
           <div style="position:relative;z-index:1;padding:22px 23px 10px 8px;text-align:center;">
             <div style="font-size:0.85rem;color:#ffaa00;margin-bottom:8px;">💣 MINES</div>
             <div id="casinoMinesMult" style="font-size:1.8rem;font-weight:900;color:#ffaa00;text-shadow:0 0 20px rgba(255,170,0,0.7);margin-bottom:8px;min-height:44px;">x1.00</div>
@@ -239,14 +239,14 @@ function loadCasinoPanel() {
           </div>
         </div>
         <div style="position:relative;margin-bottom:14px;">
-          <img src="/public/images/cogniq/mines_bets_frame.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
+          <img src="/games/mines/mines_bets_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
           <div style="position:relative;z-index:1;padding:18px;">
             <input type="number" id="casinoMinesBet" value="50" min="10" max="100" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
-              <button onclick="window.casinoSetMinesBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_10.png" style="width:100%;height:auto;display:block;"></button>
-              <button onclick="window.casinoSetMinesBet(25)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_25.png" style="width:100%;height:auto;display:block;"></button>
-              <button onclick="window.casinoSetMinesBet(50)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_50.png" style="width:100%;height:auto;display:block;"></button>
-              <button onclick="window.casinoSetMinesBet(100)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_100.png" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetMinesBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/games/mines/mines_btn_10.webp" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetMinesBet(25)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/games/mines/mines_btn_25.webp" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetMinesBet(50)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/games/mines/mines_btn_50.webp" style="width:100%;height:auto;display:block;"></button>
+              <button onclick="window.casinoSetMinesBet(100)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/games/mines/mines_btn_100.webp" style="width:100%;height:auto;display:block;"></button>
             </div>
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
               <label style="font-size:0.8rem;color:#5577aa;white-space:nowrap;">💣 Мин:</label>
@@ -254,8 +254,8 @@ function loadCasinoPanel() {
               <input type="range" id="casinoMinesRange" min="1" max="24" value="3" style="flex:1;accent-color:#ffaa00;">
             </div>
             <div style="display:flex;gap:12px;">
-              <button id="casinoMinesCashoutBtn" style="flex:1;background:none;border:none;padding:0;cursor:pointer;display:none;"><img src="/public/images/cogniq/mines_btn_cashout.png" style="width:100%;height:auto;display:block;"></button>
-              <button id="casinoMinesStartBtn" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/public/images/cogniq/mines_btn_start.png" style="width:100%;height:auto;display:block;"></button>
+              <button id="casinoMinesCashoutBtn" style="flex:1;background:none;border:none;padding:0;cursor:pointer;display:none;"><img src="/games/mines/mines_btn_cashout.webp" style="width:100%;height:auto;display:block;"></button>
+              <button id="casinoMinesStartBtn" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/games/mines/mines_btn_start.webp" style="width:100%;height:auto;display:block;"></button>
             </div>
           </div>
         </div>
@@ -354,6 +354,10 @@ function casinoShowToast(msg, dur = 3000) {
   document.body.appendChild(el);
   setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, dur);
 }
+  window.casinoShowToast = casinoShowToast;
+  window.casinoGetBalance = () => balance;
+  window.casinoSetBalance = (v) => { balance = v; };
+  if (window.initCasinoMines) window.initCasinoMines();
 
 // === 1. РУЛЕТКА ===
 const WHEEL_NUMBERS = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
@@ -1252,183 +1256,6 @@ updateCrashMainButton('disabled');
   bjUpdateButtons('idle');
 
   // === 5. MINES ===
-  let mActive = false, mOpened = [], mBet = 0, mCount = 3;
-
-  function mBuildField(disabled = true) {
-    const field = document.getElementById('casinoMinesField');
-    field.innerHTML = '';
-    for(let i=0; i<25; i++) {
-      const cell = document.createElement('div');
-      cell.className = 'mines-cell' + (disabled ? ' disabled' : '');
-      cell.dataset.index = i;
-      cell.innerHTML = '<img src="/public/images/cogniq/mines_cell_closed.png" style="width:100%;height:auto;display:block;">';
-      if(!disabled) {
-        cell.addEventListener('click', () => mOpenCell(i));
-      }
-      field.appendChild(cell);
-    }
-  }
-  mBuildField(true);
-
-  document.getElementById('casinoMinesStartBtn').addEventListener('click', async () => {
-    const bet = parseInt(document.getElementById('casinoMinesBet').value) || 0;
-    const mines = parseInt(document.getElementById('casinoMinesCount').value) || 3;
-    if(bet < 10 || bet > 100) { casinoShowToast('Ставка: 10-100 IMPULSE'); return; }
-    if(mines < 1 || mines > 24) { casinoShowToast('Мины: 1-24'); return; }
-
-    document.getElementById('casinoMinesStartBtn').disabled = true;
-    try {
-      const r = await authFetch(`${BASE_URL}/api/casino/mines/start`, {
-        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({bet, mines})
-      });
-      const data = await r.json();
-      if(!data.ok) { casinoShowToast(data.error || 'Ошибка'); document.getElementById('casinoMinesStartBtn').disabled = false; return; }
-
-      if(data.balance !== undefined) {
-        balance = data.balance;
-        const balEl = document.getElementById('casinoBalanceAmount');
-        if(balEl) balEl.textContent = balance.toLocaleString();
-      }
-
-      mActive = true; mOpened = []; mBet = bet; mCount = mines;
-      document.getElementById('casinoMinesMult').textContent = 'x' + (data.multiplier || '1.00');
-      document.getElementById('casinoMinesMult').style.color = '#ffaa00';
-      document.getElementById('casinoMinesStartBtn').style.display = 'none';
-      document.getElementById('casinoMinesCashoutBtn').style.display = 'block';
-      document.getElementById('casinoMinesCashoutBtn').disabled = true;
-      document.getElementById('casinoMinesBet').disabled = true;
-      document.getElementById('casinoMinesCount').disabled = true;
-      document.getElementById('casinoMinesRange').disabled = true;
-      mBuildField(false);
-    } catch(e) {
-      casinoShowToast('Ошибка сервера');
-      document.getElementById('casinoMinesStartBtn').disabled = false;
-    }
-  });
-
-  async function mOpenCell(index) {
-    if(!mActive) return;
-    const cells = document.querySelectorAll('#casinoMinesField .mines-cell');
-    if(cells[index].classList.contains('opened') || cells[index].classList.contains('mine')) return;
-
-    cells.forEach(c => c.classList.add('disabled'));
-    try {
-      const r = await authFetch(`${BASE_URL}/api/casino/mines/open`, {
-        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({cell: index})
-      });
-      const data = await r.json();
-      if(!data.ok) { casinoShowToast(data.error || 'Ошибка'); cells.forEach(c => c.classList.remove('disabled')); return; }
-
-      if(data.result === 'mine') {
-        mActive = false;
-        cells[index].classList.add('mine');
-        cells[index].innerHTML = '<img src="/public/images/cogniq/mines_cell_bang.png" style="width:100%;height:auto;">';
-        if(data.grid) {
-          data.grid.forEach((isMine, i) => {
-            if(isMine && i !== index) { cells[i].classList.add('mine'); cells[i].innerHTML = '<img src="/public/images/cogniq/mines_cell_bang.png" style="width:100%;height:auto;">'; }
-          });
-        }
-        document.getElementById('casinoMinesMult').textContent = ' ВЗРЫВ!';
-        document.getElementById('casinoMinesMult').style.color = '#ef4444';
-        document.getElementById('casinoMinesCashoutBtn').style.display = 'none';
-        document.getElementById('casinoMinesStartBtn').style.display = 'block';
-        document.getElementById('casinoMinesStartBtn').disabled = false;
-        document.getElementById('casinoMinesBet').disabled = false;
-        document.getElementById('casinoMinesCount').disabled = false;
-        document.getElementById('casinoMinesRange').disabled = false;
-        
-        if(data.balance !== undefined) {
-          balance = data.balance;
-          const balEl = document.getElementById('casinoBalanceAmount');
-          if(balEl) balEl.textContent = balance.toLocaleString();
-        }
-        
-        casinoShowToast(`-${mBet} IMPULSE — Взрыв!`, 3000);
-        
-        const list = document.getElementById('casinoMinesHistory');
-        const item = document.createElement('div'); item.className = 'history-item';
-        item.innerHTML = `<span>💣 Mines ${mCount}</span><span class="lose">-${mBet} IMPULSE</span>`;
-        list.insertBefore(item, list.firstChild); if(list.children.length > 15) list.removeChild(list.lastChild);
-        return;
-      }
-
-      cells[index].classList.add('opened');
-      cells[index].classList.remove('disabled');
-      cells[index].innerHTML = '<img src="/public/images/cogniq/mines_cell_cogniq.png" style="width:100%;height:auto;">';
-      mOpened.push(index);
-      document.getElementById('casinoMinesMult').textContent = 'x' + data.multiplier.toFixed(2);
-      document.getElementById('casinoMinesMult').style.color = '#ffaa00';
-      document.getElementById('casinoMinesCashoutBtn').disabled = false;
-
-      cells.forEach((c, i) => {
-        if(!c.classList.contains('opened') && !c.classList.contains('mine')) c.classList.remove('disabled');
-      });
-
-      if(data.result === 'autowin') {
-        mActive = false;
-        if(data.balance !== undefined) { balance = data.balance; }
-        const balEl = document.getElementById('casinoBalanceAmount');
-        if(balEl && data.balance !== undefined) balEl.textContent = data.balance.toLocaleString();
-        document.getElementById('casinoMinesMult').textContent = '🏆 x' + data.multiplier.toFixed(2);
-        document.getElementById('casinoMinesMult').style.color = '#00ffaa';
-        document.getElementById('casinoMinesCashoutBtn').style.display = 'none';
-        document.getElementById('casinoMinesStartBtn').style.display = 'block';
-        document.getElementById('casinoMinesStartBtn').disabled = false;
-        document.getElementById('casinoMinesBet').disabled = false;
-        document.getElementById('casinoMinesCount').disabled = false;
-        document.getElementById('casinoMinesRange').disabled = false;
-        casinoShowToast(`+${data.payout} IMPULSE — Все открыто!`, 4000);
-        
-        const list = document.getElementById('casinoMinesHistory');
-        const item = document.createElement('div'); item.className = 'history-item';
-        item.innerHTML = `<span>💣 Mines ${mCount}</span><span class="win">+${data.payout} IMPULSE</span>`;
-        list.insertBefore(item, list.firstChild); if(list.children.length > 15) list.removeChild(list.lastChild);
-      }
-    } catch(e) {
-      casinoShowToast('Ошибка сервера');
-      cells.forEach(c => { if(!c.classList.contains('opened') && !c.classList.contains('mine')) c.classList.remove('disabled'); });
-    }
-  }
-
-  document.getElementById('casinoMinesCashoutBtn').addEventListener('click', async () => {
-    if(!mActive) return;
-    document.getElementById('casinoMinesCashoutBtn').disabled = true;
-    try {
-      const r = await authFetch(`${BASE_URL}/api/casino/mines/cashout`, {
-        method: 'POST', headers: {'Content-Type': 'application/json'}
-      });
-      const data = await r.json();
-      if(!data.ok) { casinoShowToast(data.error || 'Ошибка'); document.getElementById('casinoMinesCashoutBtn').disabled = false; return; }
-
-      mActive = false;
-      
-      if(data.balance !== undefined) { balance = data.balance; }
-      
-      const balEl = document.getElementById('casinoBalanceAmount');
-      if(balEl && data.balance !== undefined) balEl.textContent = data.balance.toLocaleString();
-      document.getElementById('casinoMinesMult').textContent = '✅ x' + data.multiplier.toFixed(2);
-      document.getElementById('casinoMinesMult').style.color = '#00ffaa';
-      document.getElementById('casinoMinesCashoutBtn').style.display = 'none';
-      document.getElementById('casinoMinesStartBtn').style.display = 'block';
-      document.getElementById('casinoMinesStartBtn').disabled = false;
-      document.getElementById('casinoMinesBet').disabled = false;
-      document.getElementById('casinoMinesCount').disabled = false;
-      document.getElementById('casinoMinesRange').disabled = false;
-
-      const cells = document.querySelectorAll('#casinoMinesField .mines-cell');
-      cells.forEach(c => c.classList.add('disabled'));
-
-      const list = document.getElementById('casinoMinesHistory');
-      const item = document.createElement('div'); item.className = 'history-item';
-      item.innerHTML = `<span>💣 Mines ${mCount}</span><span class="win">+${data.payout} IMPULSE</span>`;
-      list.insertBefore(item, list.firstChild); if(list.children.length > 15) list.removeChild(list.lastChild);
-      
-      casinoShowToast(`+${data.payout} IMPULSE — x${data.multiplier.toFixed(2)}!`, 4000);
-    } catch(e) {
-      casinoShowToast('Ошибка сервера');
-      document.getElementById('casinoMinesCashoutBtn').disabled = false;
-    }
-  });
 
   // Кнопка назад
   document.getElementById('casinoBackBtn').addEventListener('click', () => {
