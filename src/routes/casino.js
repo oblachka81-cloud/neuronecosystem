@@ -128,8 +128,8 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
         symbols[(buf[1] % (symbols.length - 1) + 1) % symbols.length],
         symbols[(buf[2] % (symbols.length - 2) + 2) % symbols.length]
       ];
-    } else if (roll < 0.325) {
-      // 20% — 2 одинаковых
+    } else if (roll < 0.275) {
+      // 15% — 2 одинаковых
       const sym = symbols[buf[0] % symbols.length];
       reels = [sym, sym,
         symbols[(buf[1] % (symbols.length - 1) + 1) % symbols.length],
@@ -168,7 +168,7 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
     } else if (maxCount === 3) {
       win = bet_amount * 3;
     } else if (maxCount === 2) {
-      win = Math.floor(bet_amount * 1.5);
+      win = bet_amount * 2;
     }
 
     const newBalance = user.rows[0].balance - bet_amount + win;
