@@ -1,4 +1,4 @@
-// ==================== KRASH (💥 MULTIPLAYER) ====================
+// ==================== KRASH (MULTIPLAYER) ====================
 let crashPollTimer = null;
 let crashState = { phase: 'idle' };
 let crashLastMult = 1.0;
