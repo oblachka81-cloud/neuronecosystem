@@ -43,7 +43,7 @@ async function pickGameQuestions(recentQuestions = []) {
 
 async function loadQuestionsFromDB() {
   const { rows } = await pool.query('SELECT * FROM questions ORDER BY id');
-  state.questionsCache = rows.map(r => ({
+  const mapped = rows.map(r => ({
     id: r.id,
     text: r.text,
     options: typeof r.options === 'string' ? JSON.parse(r.options) : r.options,
