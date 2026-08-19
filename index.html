@@ -42,6 +42,11 @@
   <link rel="stylesheet" href="css/exchange.css">
 </head>
 <body>
+  <script>
+window.addEventListener('error', function(e){
+  alert('⚠️ ' + e.message + ' | файл: ' + (e.filename||'').split('/').pop() + ' строка ' + e.lineno);
+});
+</script>
 <div id="particles"></div>
 <div id="liveBgVideo" style="position: fixed; inset: 0; z-index: 0; opacity: 0; transition: opacity 1.5s ease; pointer-events: none; overflow: hidden;">
     <video id="mainBgVid" muted playsinline loop preload="auto" style="width: 100%; height: 100%; object-fit: cover;">
