@@ -632,6 +632,7 @@ function setLang(lang) {
   document.getElementById('tabCasinoImg').src = 'main/tab_impulse_' + currentLang + '.webp';
   document.getElementById('tabExchangeImg').src = 'main/tab_exchange_' + lang + '.webp';
   document.getElementById('supportBtnImg').src = 'main/support_btn_' + lang + '.webp';
+  if (window.updateFortunaSpinBtn) window.updateFortunaSpinBtn();
   updateTonModal();
   updateScoresUI(currentState.totalScore);
   updateGamesLeftUI(currentState.freeGamesLeft);
@@ -643,6 +644,7 @@ function setLang(lang) {
   else if (currentTab === 'support') loadSupportPanel();
   else loadWelcome();
 }
+  
 
 function updateTonModal() {
   const el = id => document.getElementById(id);
