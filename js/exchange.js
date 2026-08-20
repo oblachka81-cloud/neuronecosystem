@@ -493,21 +493,40 @@ async function loadMarketTape(category) {
     const res = await fetch(`${BASE_URL}/api/market/tickers?category=${tapeCategory}`);
     const data = await res.json();
     if (!data.success || !Object.keys(data.tickers).length) return;
-    const items = Object.entries(data.tickers).map(([sym, t]) => {
-      let chg = '';
-      if (isFinite(t.change24h)) {
-        const pct = t.change24h * 100;
-        const up = pct >= 0;
-        chg = `<span style="color:${up ? '#00ffaa' : '#ff5566'}">${up ? '▲' : '▼'}${Math.abs(pct).toFixed(1)}%</span>`;
-      }
-      return `<span style="padding:0 16px;font-size:0.8rem;font-weight:600;color:#ffcc44;">${TAPE_ICONS[sym] || '•'} ${sym} ${tapeFmt(t.price)} ${chg}</span>`;
-    }).join('');
-    inner.innerHTML = items + items;
+    const entries = Object.entries(data.tickers);
+    
     if (switched || !inner.dataset.animated) {
+      // Первый рендер или переключение чипа — полный рендер + запуск анимации
+      const items = entries.map(([sym, t]) => {
+        let chg = '';
+        if (isFinite(t.change24h)) {
+          const pct = t.change24h * 100;
+          const up = pct >= 0;
+          chg = `<span class="tape-chg" style="color:${up ? '#00ffaa' : '#ff5566'}">${up ? '▲' : '▼'}${Math.abs(pct).toFixed(1)}%</span>`;
+        }
+        return `<span class="tape-item" style="padding:0 16px;font-size:0.8rem;font-weight:600;color:#ffcc44;">${TAPE_ICONS[sym] || '•'} ${sym} <span class="tape-price">${tapeFmt(t.price)}</span> ${chg}</span>`;
+      }).join('');
+      inner.innerHTML = items + items;
       inner.style.animation = 'none';
       void inner.offsetWidth;
       inner.style.animation = `tapeScroll ${Math.max(8, inner.scrollWidth / 200)}s linear infinite`;
       inner.dataset.animated = '1';
+    } else {
+      // Обновление — меняем только цифры, анимация продолжается
+      const spans = inner.querySelectorAll('.tape-item');
+      entries.forEach(([sym, t], idx) => {
+        const el = spans[idx];
+        if (!el) return;
+        const priceEl = el.querySelector('.tape-price');
+        const chgEl = el.querySelector('.tape-chg');
+        if (priceEl) priceEl.textContent = tapeFmt(t.price);
+        if (chgEl && isFinite(t.change24h)) {
+          const pct = t.change24h * 100;
+          const up = pct >= 0;
+          chgEl.textContent = `${up ? '▲' : '▼'}${Math.abs(pct).toFixed(1)}%`;
+          chgEl.style.color = up ? '#00ffaa' : '#ff5566';
+        }
+      });
     }
   } catch (e) { console.error('[TAPE]', e); }
 }
