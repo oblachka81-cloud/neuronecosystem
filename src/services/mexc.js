@@ -91,4 +91,26 @@ async function getKlines(symbol, interval = '1h', limit = 48) {
   return (Array.isArray(data) ? data : []).map(k => ({ t: k[0], o: +k[1], h: +k[2], l: +k[3], c: +k[4] }));
 }
 
-module.exports = { getTickers, getKlines, CANDIDATES, CATEGORIES };
+// спарклайны (24 свечи по 1ч), кэш 60 сек
+const sparkCache = { data: {}, ts: 0 };
+async function getSparks(symbols, interval = '1h', limit = 24) {
+  const key = symbols.join(',');
+  const now = Date.now();
+  if (sparkCache.data[key] && now - sparkCache.ts < 60000) return sparkCache.data[key];
+  const set = await spotSet();
+  const out = {};
+  await Promise.allSettled(symbols.map(async (s) => {
+    const cands = CANDIDATES[s] || [];
+    const pair = cands.find(c => set.has(c)) || cands[0];
+    if (!pair) return;
+    try {
+      const d = await fetchJson(`${MEXC_BASE}/api/v3/klines?symbol=${pair}&interval=${interval}&limit=${limit}`);
+      if (Array.isArray(d)) out[s] = d.map(k => +k[4]);
+    } catch (e) {}
+  }));
+  sparkCache.data[key] = out;
+  sparkCache.ts = now;
+  return out;
+}
+
+module.exports = { getTickers, getKlines, getSparks, CANDIDATES, CATEGORIES };
