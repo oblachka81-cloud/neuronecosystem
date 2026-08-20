@@ -673,7 +673,7 @@ function loadExchangePanel() {
       </div>
 
       <div id="tickerTapeWrap" style="overflow:hidden;position:relative;margin:0 0 16px 0;border:1px solid rgba(255,170,0,0.25);border-radius:12px;background:rgba(10,16,32,0.7);height:38px;">
-        <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;"></div>
+        <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
       </div>
 
       <div style="margin-bottom:16px;">
