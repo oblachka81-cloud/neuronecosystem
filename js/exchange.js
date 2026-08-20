@@ -551,24 +551,70 @@ function candlesSvg(candles) {
 }
 
 let liveChartSymbol = 'TON';
+let liveChartCategory = 'crypto';
+let liveInterval = '60m';
 const liveChartCache = {};
-async function loadLiveChart(symbol) {
-  liveChartSymbol = symbol || liveChartSymbol;
+const LIVE_ASSETS = { crypto: ['TON', 'BTC', 'XAUt0'], xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx'] };
+const LIVE_INTERVALS = [['60m', '1H'], ['4h', '4H'], ['1d', '1D'], ['1w', '1W']];
+
+function renderLiveChips() {
+  const wrap = document.getElementById('liveChartChips');
+  if (!wrap) return;
+  let html = LIVE_ASSETS[liveChartCategory].map(a =>
+    `<button onclick="liveSelectAsset('${a}')" style="padding:3px 7px;border-radius:8px;border:1px solid rgba(255,170,0,0.25);background:${a === liveChartSymbol ? 'rgba(255,170,0,0.3)' : 'rgba(0,0,0,0.4)'};color:#ffcc44;font-size:0.58rem;font-weight:700;cursor:pointer;">${a}</button>`
+  ).join('');
+  html += LIVE_INTERVALS.map(([iv, lb]) =>
+    `<button onclick="liveSetInterval('${iv}')" style="padding:3px 7px;border-radius:8px;border:1px solid rgba(85,119,170,0.4);background:${iv === liveInterval ? 'rgba(85,119,170,0.35)' : 'rgba(0,0,0,0.4)'};color:#88aadd;font-size:0.58rem;font-weight:700;cursor:pointer;${iv === '60m' ? 'margin-left:auto;' : ''}">${lb}</button>`
+  ).join('');
+  wrap.innerHTML = html;
+}
+
+function liveSelectAsset(sym) {
+  liveChartSymbol = sym;
+  liveChartCategory = LIVE_ASSETS.crypto.includes(sym) ? 'crypto' : 'xstocks';
+  renderLiveChips();
+  loadLiveChart();
+}
+
+function liveSetInterval(iv) {
+  liveInterval = iv;
+  renderLiveChips();
+  loadLiveChart();
+}
+
+function setLiveScale(scale) {
+  const et = document.getElementById('liveScaleTop');
+  const em = document.getElementById('liveScaleMid');
+  const eb = document.getElementById('liveScaleBot');
+  if (et) et.textContent = tapeFmt(scale[0]);
+  if (em) em.textContent = tapeFmt(scale[1]);
+  if (eb) eb.textContent = tapeFmt(scale[2]);
+}
+
+async function loadLiveChart() {
   const body = document.getElementById('liveChartBody');
-  const title = document.getElementById('liveChartTitle');
   if (!body) return;
-  if (title) title.textContent = `${TAPE_ICONS[liveChartSymbol] || ''} ${liveChartSymbol}/USDT · 1H`;
-  if (liveChartCache[liveChartSymbol]) body.innerHTML = liveChartCache[liveChartSymbol];
+  const title = document.getElementById('liveChartTitle');
+  const lb = (LIVE_INTERVALS.find(([iv]) => iv === liveInterval) || ['', '1H'])[1];
+  if (title) title.textContent = `${TAPE_ICONS[liveChartSymbol] || ''} ${liveChartSymbol}/USDT · ${lb}`;
+  const key = `${liveChartSymbol}_${liveInterval}`;
+  if (liveChartCache[key]) {
+    body.innerHTML = liveChartCache[key].html;
+    setLiveScale(liveChartCache[key].scale);
+    return;
+  }
   try {
-    const res = await fetch(`${BASE_URL}/api/market/klines?symbol=${liveChartSymbol}&interval=60m&limit=48`);
+    const res = await fetch(`${BASE_URL}/api/market/klines?symbol=${liveChartSymbol}&interval=${liveInterval}&limit=48`);
     const data = await res.json();
-    if (data.success) {
+    if (data.success && data.candles.length) {
       const html = candlesSvg(data.candles);
-      liveChartCache[liveChartSymbol] = html;
+      const max = Math.max(...data.candles.map(c => c.h));
+      const min = Math.min(...data.candles.map(c => c.l));
+      const scale = [max, (max + min) / 2, min];
+      liveChartCache[key] = { html, scale };
       const b = document.getElementById('liveChartBody');
       if (b) b.innerHTML = html;
-    } else if (!liveChartCache[liveChartSymbol]) {
-      body.innerHTML = '<div style="color:#5577aa;text-align:center;padding:20px;">—</div>';
+      setLiveScale(scale);
     }
   } catch (e) {}
 }
@@ -639,7 +685,10 @@ function exchangeSwitchPairTab(tab) {
     tabCryptoImg.style.filter = 'brightness(0.6)';
   }
   loadMarketTape(tab === 'crypto' ? 'crypto' : 'xstocks');
-  loadLiveChart(tab === 'crypto' ? 'TON' : 'AAPLx');
+  liveChartCategory = tab === 'crypto' ? 'crypto' : 'xstocks';
+  liveChartSymbol = tab === 'crypto' ? 'TON' : 'AAPLx';
+  renderLiveChips();
+  loadLiveChart();
 }
 
 function exchangeSelectPair(from, to) {
@@ -768,7 +817,13 @@ function loadExchangePanel() {
           <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
           <span style="font-size:0.6rem;color:#5577aa;">NEURON Live Market</span>
         </div>
-        <div id="liveChartBody" style="height:110px;margin-bottom:8px;overflow:hidden;"></div>
+        <div id="liveChartChips" style="display:flex;gap:4px;margin-bottom:6px;"></div>
+        <div style="position:relative;height:110px;margin-bottom:8px;">
+          <div id="liveChartBody" style="height:100%;overflow:hidden;"></div>
+          <span id="liveScaleTop" style="position:absolute;top:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
+          <span id="liveScaleMid" style="position:absolute;top:50%;right:4px;transform:translateY(-50%);font-size:0.55rem;color:#7799bb;z-index:2;"></span>
+          <span id="liveScaleBot" style="position:absolute;bottom:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
+        </div>
         <div id="tickerTapeWrap" style="overflow:hidden;position:relative;height:30px;border-top:1px solid rgba(255,170,0,0.15);">
           <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
         </div>
@@ -833,7 +888,8 @@ function loadExchangePanel() {
     st.textContent = '@keyframes tapeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}';
     document.head.appendChild(st);
   }
-  loadLiveChart('TON');
+  renderLiveChips();
+  loadLiveChart();
   loadMarketTape('crypto');
   if (!window._tapeInterval) window._tapeInterval = setInterval(() => loadMarketTape(), 30000);
   const noteInner = document.getElementById('tapeNoteInner');
