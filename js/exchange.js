@@ -267,6 +267,7 @@ const EXCHANGE_LANG = {
 };
 
 let exchangeRates = {};
+let marketTickers = {};
 let exchangeWalletConnected = false;
 let exchangeWalletAddress = '';
 
@@ -464,14 +465,23 @@ function exchangeRenderPairs() {
 
 function exchangeRenderPairGrid(id, pairsList) {
   const grid = document.getElementById(id);
-  const isXstocks = (id === 'pairsXstocks');
   grid.innerHTML = pairsList.map(p => {
     const rate = exchangeRates[`${p.from}/${p.to}`];
+    const asset = p.from !== 'USDT' ? p.from : p.to;
+    const mkt = marketTickers[asset];
+    let pct = '', spark = '';
+    if (mkt && isFinite(mkt.change24h)) {
+      const pc = mkt.change24h * 100;
+      const up = pc >= 0;
+      pct = `<span style="font-size:0.68rem;font-weight:700;color:${up ? '#00ffaa' : '#ff5566'};">${up ? '▲' : '▼'}${Math.abs(pc).toFixed(1)}%</span>`;
+      spark = sparkSvg(mkt.spark, up);
+    }
     return `<div class="pair-card" onclick="exchangeSelectPair('${p.from}','${p.to}')" style="position:relative;background:none;border:none;padding:0;">
       <img src="/public/images/cogniq/exchange_pair_card.webp" style="width:100%;display:block;">
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 36px 0 12px;">
-        <div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:4px;">${p.name}</div>
-        <div style="font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'}</div>
+        <div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:2px;">${p.name}</div>
+        <div style="display:flex;align-items:baseline;gap:6px;font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'} ${pct}</div>
+        ${spark}
       </div>
     </div>`;
   }).join('');
@@ -486,6 +496,32 @@ function tapeFmt(p) {
   if (p >= 1000) return p.toLocaleString('en-US', { maximumFractionDigits: 0 });
   if (p >= 10) return p.toFixed(2);
   return p.toFixed(4);
+}
+
+function sparkSvg(spark, up) {
+  if (!spark || spark.length < 2) return '';
+  const min = Math.min(...spark), max = Math.max(...spark);
+  const range = max - min || 1;
+  const pts = spark.map((v, i) => {
+    const x = (i / (spark.length - 1)) * 100;
+    const y = 12 - ((v - min) / range) * 10 + 1;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const color = up ? '#00ffaa' : '#ff5566';
+  return `<svg viewBox="0 0 100 14" preserveAspectRatio="none" style="width:100%;height:14px;display:block;opacity:0.75;"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+async function loadMarketExtras() {
+  try {
+    const [c, x] = await Promise.allSettled([
+      fetch(`${BASE_URL}/api/market/tickers?category=crypto`).then(r => r.json()),
+      fetch(`${BASE_URL}/api/market/tickers?category=xstocks`).then(r => r.json())
+    ]);
+    for (const r of [c, x]) {
+      if (r.status === 'fulfilled' && r.value.success) Object.assign(marketTickers, r.value.tickers);
+    }
+    exchangeRenderPairs();
+  } catch (e) { console.error('[MARKET]', e); }
 }
 
 function fmtRate(r) {
@@ -753,6 +789,8 @@ function loadExchangePanel() {
   if (noteInner) {
     noteInner.style.animation = `tapeScroll ${Math.max(20, noteInner.scrollWidth / 40)}s linear infinite`;
   }
+  loadMarketExtras();
+  if (!window._mktInterval) window._mktInterval = setInterval(loadMarketExtras, 60000);
 
   // Модалка информации
   const infoModal = document.createElement('div');
