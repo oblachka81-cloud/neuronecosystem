@@ -8,7 +8,7 @@ const MEXC_BASE = 'https://api.mexc.com';
 const CANDIDATES = {
   TON:   ['GRAMUSDT', 'TONUSDT'],   // TON на MEXC = GRAM
   BTC:   ['BTCUSDT'],
-  XAUt0: ['XAUTUSDT', 'GOLDUSDT', 'PAXGUSDT'],
+  XAUt0: ['GOLD(XAUT)USDT', 'XAUTUSDT', 'GOLDUSDT', 'PAXGUSDT'],
   AAPLx: ['AAPLXUSDT', 'AAPLUSDT'],
   NVDAx: ['NVDAXUSDT', 'NVDAUSDT'],
   TSLAx: ['TSLAXUSDT', 'TSLAUSDT'],
