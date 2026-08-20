@@ -720,13 +720,20 @@ function loadExchangePanel() {
         </div>
       </div>
 
-      <div id="tickerTapeWrap" style="overflow:hidden;position:relative;margin:0 0 16px 0;border:1px solid rgba(255,170,0,0.25);border-radius:12px;background:rgba(10,16,32,0.7);height:38px;">
-        <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
-      </div>
-      <div id="tapeNoteWrap" style="overflow:hidden;position:relative;margin:-8px 0 16px 0;height:22px;">
-        <div id="tapeNoteInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;">
-          <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
-          <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+      <div id="liveMarketWrap" style="position:relative;margin:0 0 16px 0;border:1px solid rgba(255,170,0,0.25);border-radius:14px;background:rgba(10,16,32,0.75);padding:10px 10px 6px 10px;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
+          <span style="font-size:0.6rem;color:#5577aa;">NEURON Live Market</span>
+        </div>
+        <div id="liveChartBody" style="height:110px;margin-bottom:8px;"></div>
+        <div id="tickerTapeWrap" style="overflow:hidden;position:relative;height:30px;border-top:1px solid rgba(255,170,0,0.15);">
+          <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
+        </div>
+        <div id="tapeNoteWrap" style="overflow:hidden;position:relative;height:20px;">
+          <div id="tapeNoteInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;">
+            <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+            <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+          </div>
         </div>
       </div>
 
