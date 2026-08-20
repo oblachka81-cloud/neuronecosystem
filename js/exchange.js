@@ -488,6 +488,13 @@ function tapeFmt(p) {
   return p.toFixed(4);
 }
 
+function fmtRate(r) {
+  if (!isFinite(r)) return '—';
+  if (r >= 10000) return r.toFixed(2);
+  if (r >= 1) return r.toFixed(4);
+  return parseFloat(r.toPrecision(4)).toString();
+}
+
 async function loadMarketTape(category) {
   const switched = category && category !== tapeCategory;
   tapeCategory = category || tapeCategory;
