@@ -502,11 +502,11 @@ async function loadMarketTape(category) {
       }
       return `<span style="padding:0 16px;font-size:0.8rem;font-weight:600;color:#ffcc44;">${TAPE_ICONS[sym] || '•'} ${sym} ${tapeFmt(t.price)} ${chg}</span>`;
     }).join('');
-    inner.innerHTML = items + items + items + items;  // 4 копии для длинной ленты
+    inner.innerHTML = items + items;
     if (switched || !inner.dataset.animated) {
       inner.style.animation = 'none';
       void inner.offsetWidth;
-      inner.style.animation = `tapeScroll ${Math.max(20, inner.scrollWidth / 50)}s linear infinite`;  // медленнее, всё успеет
+      inner.style.animation = `tapeScroll ${Math.max(8, inner.scrollWidth / 200)}s linear infinite`;
       inner.dataset.animated = '1';
     }
   } catch (e) { console.error('[TAPE]', e); }
