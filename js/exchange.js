@@ -555,7 +555,7 @@ let liveChartCategory = 'crypto';
 let liveInterval = '60m';
 const liveChartCache = {};
 const LIVE_ASSETS = { crypto: ['TON', 'BTC', 'XAUt0'], xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx'] };
-const LIVE_INTERVALS = [['60m', '1H'], ['4h', '4H'], ['1d', '1D'], ['1w', '1W']];
+const LIVE_INTERVALS = [['1m', '1m'], ['3m', '3m'], ['5m', '5m'], ['15m', '15m'], ['60m', '1H'], ['4h', '4H'], ['1d', '1D'], ['1w', '1W']];
 
 function renderLiveChips() {
   const wrap = document.getElementById('liveChartChips');
@@ -591,14 +591,14 @@ function setLiveScale(scale) {
   if (eb) eb.textContent = tapeFmt(scale[2]);
 }
 
-async function loadLiveChart() {
+async function loadLiveChart(force) {
   const body = document.getElementById('liveChartBody');
   if (!body) return;
   const title = document.getElementById('liveChartTitle');
   const lb = (LIVE_INTERVALS.find(([iv]) => iv === liveInterval) || ['', '1H'])[1];
   if (title) title.textContent = `${TAPE_ICONS[liveChartSymbol] || ''} ${liveChartSymbol}/USDT · ${lb}`;
   const key = `${liveChartSymbol}_${liveInterval}`;
-  if (liveChartCache[key]) {
+  if (!force && liveChartCache[key]) {
     body.innerHTML = liveChartCache[key].html;
     setLiveScale(liveChartCache[key].scale);
     return;
