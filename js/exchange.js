@@ -552,7 +552,7 @@ function candlesSvg(candles) {
 
 let liveChartSymbol = 'BTC';
 let liveChartCategory = 'crypto';
-let liveInterval = '60m';
+let liveInterval = '1m';
 const liveChartCache = {};
 const LIVE_ASSETS = { crypto: ['TON', 'BTC', 'XAUt0'], xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx'] };
 const LIVE_INTERVALS = [['1m', '1m'], ['5m', '5m'], ['60m', '1H'], ['1d', '1D']];
