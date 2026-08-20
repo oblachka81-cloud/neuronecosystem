@@ -1,15 +1,15 @@
 // ==================== БИРЖА ====================
 const LISTING_TEXTS = {
-  ru: 'Листинг COGNIQ запланирован на III-IV квартал 2026 года. Точная дата будет объявлена дополнительно. Следите за новостями в нашем Telegram-канале.',
-  en: 'COGNIQ listing is scheduled for Q3-Q4 2026. Exact date to be announced. Follow our Telegram channel for updates.',
-  fr: 'Le listing COGNIQ est prévu pour Q3-Q4 2026. La date exacte sera annoncée. Suivez notre canal Telegram.',
-  es: 'El listing de COGNIQ está previsto para Q3-Q4 2026. La fecha exacta será anunciada. Sigue nuestro canal de Telegram.'
+  ru: 'Листинг COGNIQ запланирован на I-II квартал 2027 года. Точная дата будет объявлена дополнительно. Следите за новостями в нашем Telegram-канале.',
+  en: 'COGNIQ listing is scheduled for Q1-Q2 2027. Exact date to be announced. Follow our Telegram channel for updates.',
+  fr: 'Le listing COGNIQ est prévu pour Q1-Q2 2027. La date exacte sera annoncée. Suivez notre canal Telegram.',
+  es: 'El listing de COGNIQ está previsto para Q1-Q2 2027. La fecha exacta será anunciada. Sigue nuestro canal de Telegram.'
 };
 
 const EXCHANGE_INFO_TEXTS = {
   ru: `
     <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — часть экосистемы</p>
-    <p style="margin-bottom:12px;">NEURON Exchange — неотъемлемая часть блокчейн-экосистемы NEURON. Платформа в реальном времени мониторит ведущие децентрализованные биржи экосистемы TON и автоматически выбирает для Вас наилучший курс в момент совершения свопа.</p>
+    <p style="margin-bottom:12px;">NEURON Exchange — неотъемлемая часть блокчейн-экосистемы NEURON. Платформа в реальном времени мониторит ведущие централизованные (CEX) и децентрализованные (DEX) биржи, информирует Вас о курсах, настроениях на глобальном рынке и автоматически выбирает для Вас наилучший ончейн-курс DEX в момент совершения свопа.</p>
     <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
     
@@ -53,7 +53,7 @@ const EXCHANGE_INFO_TEXTS = {
   `,
   en: `
     <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — Part of the Ecosystem</p>
-    <p style="margin-bottom:12px;">NEURON Exchange is an integral part of the NEURON blockchain ecosystem. The platform monitors leading decentralized exchanges in the TON ecosystem in real time and automatically selects the best rate for your swap.</p>
+    <p style="margin-bottom:12px;">NEURON Exchange is an integral part of the NEURON blockchain ecosystem. The platform monitors leading centralized (CEX) and decentralized (DEX) exchanges in real time, keeps you informed about rates and global market sentiment, and automatically selects the best on-chain DEX rate for you at the moment of the swap.</p>
     <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
     
@@ -97,7 +97,7 @@ const EXCHANGE_INFO_TEXTS = {
   `,
   fr: `
     <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — Partie de l'écosystème</p>
-    <p style="margin-bottom:12px;">NEURON Exchange fait partie intégrante de l'écosystème blockchain NEURON. La plateforme surveille les principales bourses décentralisées de l'écosystème TON en temps réel et sélectionne automatiquement le meilleur taux pour votre échange.</p>
+    <p style="margin-bottom:12px;">NEURON Exchange fait partie intégrante de l'écosystème blockchain NEURON. La plateforme surveille en temps réel les principales bourses centralisées (CEX) et décentralisées (DEX), vous informe des cours et du sentiment du marché mondial, et sélectionne automatiquement le meilleur cours DEX on-chain au moment de votre swap.</p>
     <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
     
@@ -140,7 +140,7 @@ const EXCHANGE_INFO_TEXTS = {
   `,
   es: `
     <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">1. NEURON EXCHANGE — Parte del ecosistema</p>
-    <p style="margin-bottom:12px;">NEURON Exchange es parte integral del ecosistema blockchain NEURON. La plataforma monitorea los principales exchanges descentralizados del ecosistema TON en tiempo real y selecciona automáticamente la mejor tasa.</p>
+    <p style="margin-bottom:12px;">NEURON Exchange es parte integral del ecosistema blockchain NEURON. La plataforma monitorea en tiempo real los principales exchanges centralizados (CEX) y descentralizados (DEX), le informa sobre las tasas y el sentimiento del mercado global, y selecciona automáticamente la mejor tasa DEX on-chain en el momento del swap.</p>
     <p style="text-align:center;color:#fbbf24;font-weight:700;margin-bottom:16px;">STON.fi · DeDust · Megaton Finance</p>
     <hr style="border-color:rgba(255,255,255,0.1);margin:16px 0;">
     
