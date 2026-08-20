@@ -530,6 +530,48 @@ function fmtRate(r) {
   if (r >= 1) return r.toFixed(4);
   return parseFloat(r.toPrecision(4)).toString();
 }
+// ==================== NEURON LIVE ГРАФИК ====================
+function candlesSvg(candles) {
+  if (!candles || !candles.length) return '<div style="color:#5577aa;text-align:center;padding:20px;">—</div>';
+  const W = 320, H = 160;
+  const min = Math.min(...candles.map(c => c.l));
+  const max = Math.max(...candles.map(c => c.h));
+  const range = max - min || 1;
+  const cw = (W - 12) / candles.length;
+  let s = '';
+  candles.forEach((c, i) => {
+    const x = 6 + i * cw + cw / 2;
+    const y = v => ((max - v) / range) * (H - 20) + 10;
+    const up = c.c >= c.o;
+    const col = up ? '#00ffaa' : '#ff5566';
+    s += `<line x1="${x}" y1="${y(c.h)}" x2="${x}" y2="${y(c.l)}" stroke="${col}" stroke-width="1"/>`;
+    s += `<rect x="${x - cw * 0.3}" y="${Math.min(y(c.o), y(c.c))}" width="${cw * 0.6}" height="${Math.max(2, Math.abs(y(c.o) - y(c.c)))}" fill="${col}"/>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;">${s}</svg>`;
+}
+
+let liveChartSymbol = 'TON';
+const liveChartCache = {};
+async function loadLiveChart(symbol) {
+  liveChartSymbol = symbol || liveChartSymbol;
+  const body = document.getElementById('liveChartBody');
+  const title = document.getElementById('liveChartTitle');
+  if (!body) return;
+  if (title) title.textContent = `${TAPE_ICONS[liveChartSymbol] || ''} ${liveChartSymbol}/USDT · 1H`;
+  if (liveChartCache[liveChartSymbol]) body.innerHTML = liveChartCache[liveChartSymbol];
+  try {
+    const res = await fetch(`${BASE_URL}/api/market/klines?symbol=${liveChartSymbol}&interval=60m&limit=48`);
+    const data = await res.json();
+    if (data.success) {
+      const html = candlesSvg(data.candles);
+      liveChartCache[liveChartSymbol] = html;
+      const b = document.getElementById('liveChartBody');
+      if (b) b.innerHTML = html;
+    } else if (!liveChartCache[liveChartSymbol]) {
+      body.innerHTML = '<div style="color:#5577aa;text-align:center;padding:20px;">—</div>';
+    }
+  } catch (e) {}
+}
 
 async function loadMarketTape(category) {
   const switched = category && category !== tapeCategory;
@@ -597,6 +639,7 @@ function exchangeSwitchPairTab(tab) {
     tabCryptoImg.style.filter = 'brightness(0.6)';
   }
   loadMarketTape(tab === 'crypto' ? 'crypto' : 'xstocks');
+  loadLiveChart(tab === 'crypto' ? 'TON' : 'AAPLx');
 }
 
 function exchangeSelectPair(from, to) {
@@ -790,6 +833,7 @@ function loadExchangePanel() {
     st.textContent = '@keyframes tapeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}';
     document.head.appendChild(st);
   }
+  loadLiveChart('TON');
   loadMarketTape('crypto');
   if (!window._tapeInterval) window._tapeInterval = setInterval(() => loadMarketTape(), 30000);
   const noteInner = document.getElementById('tapeNoteInner');
