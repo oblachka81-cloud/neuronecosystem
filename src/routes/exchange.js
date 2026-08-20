@@ -364,7 +364,7 @@ router.get('/api/market/tickers', publicRateLimit, async (req, res) => {
 
 router.get('/api/market/klines', publicRateLimit, async (req, res) => {
   const symbol = req.query.symbol;
-  const allowed = ['60m', '4h', '1d', '1w'];
+ const allowed = ['1m', '3m', '5m', '15m', '60m', '4h', '1d', '1w']; 
   const interval = allowed.includes(req.query.interval) ? req.query.interval : '60m';
   try {
     const candles = await getKlines(symbol, interval, 48);
