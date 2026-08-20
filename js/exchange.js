@@ -473,6 +473,41 @@ function exchangeRenderPairGrid(id, pairsList) {
   }).join('');
 }
 
+// ==================== NEURON LIVE ЛЕНТА ====================
+let tapeCategory = 'crypto';
+const TAPE_ICONS = { TON: '💎', BTC: '₿', XAUt0: '🥇', AAPLx: '', NVDAx: '🟩', TSLAx: '🚗', AMZNx: '📦', SPYx: '📈' };
+
+function tapeFmt(p) {
+  if (!isFinite(p)) return '—';
+  if (p >= 1000) return p.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  if (p >= 10) return p.toFixed(2);
+  return p.toFixed(4);
+}
+
+async function loadMarketTape(category) {
+  tapeCategory = category || tapeCategory;
+  const inner = document.getElementById('tapeInner');
+  if (!inner) return;
+  try {
+    const res = await fetch(`${BASE_URL}/api/market/tickers?category=${tapeCategory}`);
+    const data = await res.json();
+    if (!data.success || !Object.keys(data.tickers).length) return;
+    const items = Object.entries(data.tickers).map(([sym, t]) => {
+      let chg = '';
+      if (isFinite(t.change24h)) {
+        const pct = t.change24h * 100;
+        const up = pct >= 0;
+        chg = `<span style="color:${up ? '#00ffaa' : '#ff5566'}">${up ? '▲' : '▼'}${Math.abs(pct).toFixed(1)}%</span>`;
+      }
+      return `<span style="padding:0 16px;font-size:0.8rem;font-weight:600;color:#ffcc44;">${TAPE_ICONS[sym] || '•'} ${sym} ${tapeFmt(t.price)} ${chg}</span>`;
+    }).join('');
+    inner.innerHTML = items + items;
+    inner.style.animation = 'none';
+    void inner.offsetWidth;
+    inner.style.animation = `tapeScroll ${Math.max(12, inner.scrollWidth / 60)}s linear infinite`;
+  } catch (e) { console.error('[TAPE]', e); }
+}
+
 function exchangeSwitchPairTab(tab) {
   const crypto = document.getElementById('pairsCrypto');
   const xstocks = document.getElementById('pairsXstocks');
@@ -490,6 +525,7 @@ function exchangeSwitchPairTab(tab) {
     tabXstocksImg.style.filter = 'brightness(1.2)';
     tabCryptoImg.style.filter = 'brightness(0.6)';
   }
+  loadMarketTape(tab === 'crypto' ? 'crypto' : 'xstocks');
 }
 
 function exchangeSelectPair(from, to) {
@@ -613,6 +649,10 @@ function loadExchangePanel() {
         </div>
       </div>
 
+      <div id="tickerTapeWrap" style="overflow:hidden;position:relative;margin:0 0 16px 0;border:1px solid rgba(255,170,0,0.25);border-radius:12px;background:rgba(10,16,32,0.7);height:38px;">
+        <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;"></div>
+      </div>
+
       <div style="margin-bottom:16px;">
         <button onclick="openExchangeInfoModal()" style="background:none;border:none;padding:0;cursor:pointer;display:block;margin-bottom:10px;width:100%;">
          <img id="exchangeInfoImg" src="/public/images/cogniq/exchange_info_${currentLang}.webp" style="width:100%;height:auto;display:block;">
@@ -660,6 +700,14 @@ function loadExchangePanel() {
     exchangeLoadRates();
   exchangeLoadHistory();
   setInterval(exchangeLoadRates, 60000);
+  if (!document.getElementById('tapeStyle')) {
+    const st = document.createElement('style');
+    st.id = 'tapeStyle';
+    st.textContent = '@keyframes tapeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}';
+    document.head.appendChild(st);
+  }
+  loadMarketTape('crypto');
+  if (!window._tapeInterval) window._tapeInterval = setInterval(() => loadMarketTape(), 30000);
 
   // Модалка информации
   const infoModal = document.createElement('div');
