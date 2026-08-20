@@ -547,7 +547,7 @@ function candlesSvg(candles) {
     s += `<line x1="${x}" y1="${y(c.h)}" x2="${x}" y2="${y(c.l)}" stroke="${col}" stroke-width="1"/>`;
     s += `<rect x="${x - cw * 0.3}" y="${Math.min(y(c.o), y(c.c))}" width="${cw * 0.6}" height="${Math.max(2, Math.abs(y(c.o) - y(c.c)))}" fill="${col}"/>`;
   });
-  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;">${s}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:100%;display:block;">${s}</svg>`;
 }
 
 let liveChartSymbol = 'TON';
@@ -768,7 +768,7 @@ function loadExchangePanel() {
           <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
           <span style="font-size:0.6rem;color:#5577aa;">NEURON Live Market</span>
         </div>
-        <div id="liveChartBody" style="height:110px;margin-bottom:8px;"></div>
+        <div id="liveChartBody" style="height:110px;margin-bottom:8px;overflow:hidden;"></div>
         <div id="tickerTapeWrap" style="overflow:hidden;position:relative;height:30px;border-top:1px solid rgba(255,170,0,0.15);">
           <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
         </div>
