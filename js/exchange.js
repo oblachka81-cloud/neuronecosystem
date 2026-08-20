@@ -563,8 +563,8 @@ function renderLiveChips() {
   let html = LIVE_ASSETS[liveChartCategory].map(a =>
     `<button onclick="liveSelectAsset('${a}')" style="padding:3px 7px;border-radius:8px;border:1px solid rgba(255,170,0,0.25);background:${a === liveChartSymbol ? 'rgba(255,170,0,0.3)' : 'rgba(0,0,0,0.4)'};color:#ffcc44;font-size:0.58rem;font-weight:700;cursor:pointer;">${a}</button>`
   ).join('');
-  html += LIVE_INTERVALS.map(([iv, lb]) =>
-    `<button onclick="liveSetInterval('${iv}')" style="padding:3px 7px;border-radius:8px;border:1px solid rgba(85,119,170,0.4);background:${iv === liveInterval ? 'rgba(85,119,170,0.35)' : 'rgba(0,0,0,0.4)'};color:#88aadd;font-size:0.58rem;font-weight:700;cursor:pointer;${iv === '60m' ? 'margin-left:auto;' : ''}">${lb}</button>`
+  html += LIVE_INTERVALS.map(([iv, lb], idx) =>
+    `<button onclick="liveSetInterval('${iv}')" style="padding:3px 7px;border-radius:8px;border:1px solid rgba(85,119,170,0.4);background:${iv === liveInterval ? 'rgba(85,119,170,0.35)' : 'rgba(0,0,0,0.4)'};color:#88aadd;font-size:0.58rem;font-weight:700;cursor:pointer;${idx === 0 ? 'margin-left:auto;' : ''}">${lb}</button>`
   ).join('');
   wrap.innerHTML = html;
 }
