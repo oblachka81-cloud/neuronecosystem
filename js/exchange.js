@@ -533,14 +533,14 @@ function fmtRate(r) {
 // ==================== NEURON LIVE ГРАФИК ====================
 function candlesSvg(candles) {
   if (!candles || !candles.length) return '<div style="color:#5577aa;text-align:center;padding:20px;">—</div>';
-  const W = 320, H = 160;
+  const W = 320, H = 160, L = 6, R = 46;
   const min = Math.min(...candles.map(c => c.l));
   const max = Math.max(...candles.map(c => c.h));
   const range = max - min || 1;
-  const cw = (W - 12) / candles.length;
+  const cw = (W - L - R) / candles.length;
   let s = '';
   candles.forEach((c, i) => {
-    const x = 6 + i * cw + cw / 2;
+    const x = L + i * cw + cw / 2;
     const y = v => ((max - v) / range) * (H - 20) + 10;
     const up = c.c >= c.o;
     const col = up ? '#00ffaa' : '#ff5566';
@@ -813,7 +813,7 @@ function loadExchangePanel() {
       </div>
 
       <div id="liveMarketWrap" style="margin:0 0 16px 0;border-radius:16px;padding:2px;background:linear-gradient(135deg,#ffffff 0%,#aebcd4 20%,#f2f6fc 45%,#8496b4 70%,#e6ecf5 100%);box-shadow:0 0 14px rgba(170,195,240,0.28);">
-        <div style="border-radius:14px;background:rgba(8,14,30,0.92);padding:10px 10px 6px 10px;overflow:hidden;position:relative;">
+        <div style="border-radius:14px;background:rgba(10,16,32,0.75);padding:10px 10px 6px 10px;overflow:hidden;position:relative;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
             <span style="font-size:0.6rem;color:#5577aa;">NEURON Live Market</span>
