@@ -812,8 +812,8 @@ function loadExchangePanel() {
         </div>
       </div>
 
-      <div id="liveMarketWrap" style="position:relative;margin:0 0 16px 0;border:1px solid rgba(255,170,0,0.25);border-radius:14px;background:rgba(10,16,32,0.75);padding:10px 10px 6px 10px;overflow:hidden;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div id="liveMarketWrap" style="position:relative;margin:0 0 16px 0;border-radius:14px;background:rgba(10,16,32,0.75);padding:10px 10px 6px 10px;overflow:hidden;">
+        <img src="/public/images/cogniq/exchange_live_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:3;pointer-events:none;" alt="">
           <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
           <span style="font-size:0.6rem;color:#5577aa;">NEURON Live Market</span>
         </div>
