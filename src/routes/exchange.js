@@ -7,7 +7,7 @@ const { bestchangeCache, bestchangeFetch, CACHE_TTL_MS } = require('../services/
 const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuote, toUnitsForSwap, toAssetId, safePayload, requestQuoteWithFee } = require('../services/exchange');
 const { logTx } = require('../services/burn');
 const { BESTCHANGE_API_KEY, BESTCHANGE_PARTNER_ID } = require('../config');
-const { getTickers, getSparks, CATEGORIES } = require('../services/mexc');
+const { getTickers, getKlines, getSparks, CATEGORIES } = require('../services/mexc');
 
 // ==================== BESTCHANGE ====================
 router.get('/api/bestchange/currencies/:lang', publicRateLimit, async (req, res) => {
@@ -359,6 +359,18 @@ router.get('/api/market/tickers', publicRateLimit, async (req, res) => {
   } catch (e) {
     console.error('[MARKET] CEX error:', e.message);
     res.json({ success: false, source: 'CEX', tickers: {} });
+  }
+});
+
+router.get('/api/market/klines', publicRateLimit, async (req, res) => {
+  const symbol = req.query.symbol;
+  const allowed = ['60m', '4h', '1d', '1w'];
+  const interval = allowed.includes(req.query.interval) ? req.query.interval : '60m';
+  try {
+    const candles = await getKlines(symbol, interval, 48);
+    res.json({ success: candles.length > 0, candles });
+  } catch (e) {
+    res.json({ success: false, candles: [] });
   }
 });
 
