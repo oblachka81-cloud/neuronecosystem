@@ -812,7 +812,7 @@ function loadExchangePanel() {
         </div>
       </div>
 
-      <div id="liveMarketWrap" style="margin:0 0 16px 0;border-radius:16px;padding:2px;background:linear-gradient(135deg,#ffffff 0%,#aebcd4 20%,#f2f6fc 45%,#8496b4 70%,#e6ecf5 100%);box-shadow:0 0 14px rgba(170,195,240,0.28);">
+      <div id="liveMarketWrap" style="position:relative;margin:0 0 16px 0;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.4), inset 0 0 10px rgba(255,255,255,0.12);">
         <div style="border-radius:14px;background:transparent;padding:10px 10px 6px 10px;overflow:hidden;position:relative;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
             <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
