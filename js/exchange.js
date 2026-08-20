@@ -900,7 +900,7 @@ function loadExchangePanel() {
   }
   loadMarketExtras();
   if (!window._mktInterval) window._mktInterval = setInterval(loadMarketExtras, 60000);
-  if (!window._chartInterval) window._chartInterval = setInterval(() => loadLiveChart(true), 30000);
+  if (!window._chartInterval) window._chartInterval = setInterval(() => loadLiveChart(true), 5000);
   // Модалка информации
   const infoModal = document.createElement('div');
   infoModal.id = 'exchangeInfoModal';
