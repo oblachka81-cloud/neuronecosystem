@@ -471,7 +471,7 @@ function exchangeRenderPairGrid(id, pairsList) {
       <img src="/public/images/cogniq/exchange_pair_card.webp" style="width:100%;display:block;">
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 36px 0 12px;">
         <div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:4px;">${p.name}</div>
-        <div style="font-size:0.75rem;color:#ffcc44;">${rate ? rate.toFixed(4) : '—'}</div>
+        <div style="font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'}</div>
       </div>
     </div>`;
   }).join('');
