@@ -82,7 +82,7 @@ async function getTickers(symbols) {
 }
 
 // свечи — пригодятся для графиков позже
-async function getKlines(symbol, interval = '1h', limit = 48) {
+async function getKlines(symbol, interval = '60m', limit = 48) {
   const set = await spotSet();
   const cands = CANDIDATES[symbol] || [];
   const pair = cands.find(c => set.has(c)) || cands[0];
@@ -93,7 +93,7 @@ async function getKlines(symbol, interval = '1h', limit = 48) {
 
 // спарклайны (24 свечи по 1ч), кэш 60 сек
 const sparkCache = { data: {}, ts: 0 };
-async function getSparks(symbols, interval = '1h', limit = 24) {
+async function getSparks(symbols, interval = '60m', limit = 24) {
   const key = symbols.join(',');
   const now = Date.now();
   if (sparkCache.data[key] && now - sparkCache.ts < 60000) return sparkCache.data[key];
