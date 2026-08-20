@@ -550,12 +550,12 @@ function candlesSvg(candles) {
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:100%;display:block;">${s}</svg>`;
 }
 
-let liveChartSymbol = 'TON';
+let liveChartSymbol = 'BTC';
 let liveChartCategory = 'crypto';
 let liveInterval = '60m';
 const liveChartCache = {};
 const LIVE_ASSETS = { crypto: ['TON', 'BTC', 'XAUt0'], xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx'] };
-const LIVE_INTERVALS = [['1m', '1m'], ['3m', '3m'], ['5m', '5m'], ['15m', '15m'], ['60m', '1H'], ['4h', '4H'], ['1d', '1D'], ['1w', '1W']];
+const LIVE_INTERVALS = [['1m', '1m'], ['5m', '5m'], ['60m', '1H'], ['1d', '1D']];
 
 function renderLiveChips() {
   const wrap = document.getElementById('liveChartChips');
@@ -686,7 +686,7 @@ function exchangeSwitchPairTab(tab) {
   }
   loadMarketTape(tab === 'crypto' ? 'crypto' : 'xstocks');
   liveChartCategory = tab === 'crypto' ? 'crypto' : 'xstocks';
-  liveChartSymbol = tab === 'crypto' ? 'TON' : 'AAPLx';
+  liveChartSymbol = tab === 'crypto' ? 'BTC' : 'AAPLx';
   renderLiveChips();
   loadLiveChart();
 }
