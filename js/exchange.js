@@ -202,6 +202,7 @@ const EXCHANGE_LANG = {
     toastNeedWallet: 'Сначала подключите кошелёк',
     toastEnterAmount: 'Введите сумму',
     fiatBtn: '💳 Купить / Продать crypto',
+    tapeNote: 'NEURON Blockchain Systems — глобальный мониторинг биржевых курсов CEX 24/7. Ваш своп на платформе NEURON исполняется по лучшему ончейн-курсу DEX: мгновенно, без посредников. Дополнительная информация — в разделе «Информация».',
   },
   en: {
     walletLabel: 'Connected Wallet',
@@ -221,6 +222,7 @@ const EXCHANGE_LANG = {
     toastNeedWallet: 'Connect wallet first',
     toastEnterAmount: 'Enter amount',
     fiatBtn: '💳 Buy / Sell crypto',
+    tapeNote: 'NEURON Blockchain Systems — global monitoring of CEX exchange rates 24/7. Your swap on the NEURON platform is executed at the best on-chain DEX rate: instantly, with no intermediaries. Additional information is available in the "Information" section.',
   },
   fr: {
     walletLabel: 'Portefeuille connecté',
@@ -240,6 +242,7 @@ const EXCHANGE_LANG = {
     toastNeedWallet: 'Connectez d\'abord le portefeuille',
     toastEnterAmount: 'Entrez le montant',
     fiatBtn: '💳 Acheter / Vendre crypto',
+    tapeNote: 'NEURON Blockchain Systems — surveillance mondiale des cours CEX 24h/24, 7j/7. Votre swap sur la plateforme NEURON est exécuté au meilleur cours on-chain DEX : instantanément, sans intermédiaire. Informations complémentaires dans la section « Information ».',
   },
   es: {
     walletLabel: 'Cartera conectada',
@@ -259,6 +262,7 @@ const EXCHANGE_LANG = {
     toastNeedWallet: 'Conecta la cartera primero',
     toastEnterAmount: 'Ingresa el monto',
     fiatBtn: '💳 Comprar / Vender crypto',
+    tapeNote: 'NEURON Blockchain Systems — monitoreo global de tasas CEX 24/7. Tu swap en la plataforma NEURON se ejecuta al mejor tipo on-chain DEX: al instante y sin intermediarios. Información adicional en la sección "Información".',
   }
 };
 
@@ -531,6 +535,7 @@ async function loadMarketTape(category) {
   } catch (e) { console.error('[TAPE]', e); }
 }
 
+
 function exchangeSwitchPairTab(tab) {
   const crypto = document.getElementById('pairsCrypto');
   const xstocks = document.getElementById('pairsXstocks');
@@ -675,6 +680,12 @@ function loadExchangePanel() {
       <div id="tickerTapeWrap" style="overflow:hidden;position:relative;margin:0 0 16px 0;border:1px solid rgba(255,170,0,0.25);border-radius:12px;background:rgba(10,16,32,0.7);height:38px;">
         <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
       </div>
+      <div id="tapeNoteWrap" style="overflow:hidden;position:relative;margin:-8px 0 16px 0;height:22px;">
+        <div id="tapeNoteInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;">
+          <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+          <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+        </div>
+      </div>
 
       <div style="margin-bottom:16px;">
         <button onclick="openExchangeInfoModal()" style="background:none;border:none;padding:0;cursor:pointer;display:block;margin-bottom:10px;width:100%;">
@@ -731,6 +742,10 @@ function loadExchangePanel() {
   }
   loadMarketTape('crypto');
   if (!window._tapeInterval) window._tapeInterval = setInterval(() => loadMarketTape(), 30000);
+  const noteInner = document.getElementById('tapeNoteInner');
+  if (noteInner) {
+    noteInner.style.animation = `tapeScroll ${Math.max(20, noteInner.scrollWidth / 40)}s linear infinite`;
+  }
 
   // Модалка информации
   const infoModal = document.createElement('div');
