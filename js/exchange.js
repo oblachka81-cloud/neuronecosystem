@@ -812,26 +812,27 @@ function loadExchangePanel() {
         </div>
       </div>
 
-      <div id="liveMarketWrap" style="position:relative;margin:0 0 16px 0;border-radius:14px;background:rgba(10,16,32,0.75);padding:10px 10px 6px 10px;overflow:hidden;">
-        <img src="/public/images/cogniq/exchange_live_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:3;pointer-events:none;" alt="">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
-          <span style="font-size:0.6rem;color:#5577aa;">NEURON Live Market</span>
-        </div>
-        <div id="liveChartChips" style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;"></div>
-        <div style="position:relative;height:110px;margin-bottom:8px;">
-          <div id="liveChartBody" style="height:100%;overflow:hidden;"></div>
-          <span id="liveScaleTop" style="position:absolute;top:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
-          <span id="liveScaleMid" style="position:absolute;top:50%;right:4px;transform:translateY(-50%);font-size:0.55rem;color:#7799bb;z-index:2;"></span>
-          <span id="liveScaleBot" style="position:absolute;bottom:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
-        </div>
-        <div id="tickerTapeWrap" style="overflow:hidden;position:relative;height:30px;border-top:1px solid rgba(255,170,0,0.15);">
-          <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
-        </div>
-        <div id="tapeNoteWrap" style="overflow:hidden;position:relative;height:20px;">
-          <div id="tapeNoteInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;">
-            <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
-            <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+      <div id="liveMarketWrap" style="margin:0 0 16px 0;border-radius:16px;padding:2px;background:linear-gradient(135deg,#ffffff 0%,#aebcd4 20%,#f2f6fc 45%,#8496b4 70%,#e6ecf5 100%);box-shadow:0 0 14px rgba(170,195,240,0.28);">
+        <div style="border-radius:14px;background:rgba(8,14,30,0.92);padding:10px 10px 6px 10px;overflow:hidden;position:relative;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span id="liveChartTitle" style="font-size:0.72rem;font-weight:700;color:#ffcc44;">💎 TON/USDT · 1H</span>
+            <span style="font-size:0.6rem;color:#5577aa;">NEURON Live Market</span>
+          </div>
+          <div id="liveChartChips" style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;"></div>
+          <div style="position:relative;height:110px;margin-bottom:8px;">
+            <div id="liveChartBody" style="height:100%;overflow:hidden;"></div>
+            <span id="liveScaleTop" style="position:absolute;top:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
+            <span id="liveScaleMid" style="position:absolute;top:50%;right:4px;transform:translateY(-50%);font-size:0.55rem;color:#7799bb;z-index:2;"></span>
+            <span id="liveScaleBot" style="position:absolute;bottom:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
+          </div>
+          <div id="tickerTapeWrap" style="overflow:hidden;position:relative;height:30px;border-top:1px solid rgba(255,170,0,0.15);">
+            <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
+          </div>
+          <div id="tapeNoteWrap" style="overflow:hidden;position:relative;height:20px;">
+            <div id="tapeNoteInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;">
+              <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+              <span style="padding:0 24px;font-size:0.6rem;color:#5577aa;">${ex.tapeNote}</span>
+            </div>
           </div>
         </div>
       </div>
