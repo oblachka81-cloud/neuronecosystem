@@ -8,6 +8,7 @@ const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuo
 const { logTx } = require('../services/burn');
 const { BESTCHANGE_API_KEY, BESTCHANGE_PARTNER_ID } = require('../config');
 const { getTickers, CATEGORIES } = require('../services/mexc');
+const { getTickers, getSparks, CATEGORIES } = require('../services/mexc');
 
 // ==================== BESTCHANGE ====================
 router.get('/api/bestchange/currencies/:lang', publicRateLimit, async (req, res) => {
@@ -345,9 +346,16 @@ router.get('/api/exchange/rate', requireInitData, authRateLimit, async (req, res
 // ==================== NEURON LIVE MARKET ====================
 router.get('/api/market/tickers', publicRateLimit, async (req, res) => {
   const category = req.query.category === 'xstocks' ? 'xstocks' : 'crypto';
+  let tickers = {};
   try {
-    const tickers = await getTickers(CATEGORIES[category]);
+    tickers = await getTickers(CATEGORIES[category]);
     if (!Object.keys(tickers).length) throw new Error('CEX empty');
+    try {
+      const sparks = await getSparks(CATEGORIES[category]);
+      for (const s of Object.keys(tickers)) {
+        if (sparks[s]) tickers[s].spark = sparks[s];
+      }
+    } catch (e) {}
     res.json({ success: true, source: 'CEX', tickers });
   } catch (e) {
     console.error('[MARKET] CEX error:', e.message);
