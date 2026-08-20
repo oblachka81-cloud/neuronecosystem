@@ -508,7 +508,7 @@ function sparkSvg(spark, up) {
     return `${x.toFixed(1)},${y.toFixed(1)}`;
   }).join(' ');
   const color = up ? '#00ffaa' : '#ff5566';
-  return `<svg viewBox="0 0 100 14" preserveAspectRatio="none" style="width:100%;height:14px;display:block;opacity:0.75;"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>`;
+  return `<svg viewBox="0 0 100 14" preserveAspectRatio="none" style="width:68%;height:14px;display:block;opacity:0.75;margin-top:2px;"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
 async function loadMarketExtras() {
