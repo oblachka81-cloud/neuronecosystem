@@ -439,7 +439,7 @@ const EXCHANGE_CRYPTO_PAIRS = [
   { name: 'TON/USDT', from: 'TON', to: 'USDT' },
   { name: 'USDT/TON', from: 'USDT', to: 'TON' },
   { name: 'BTC/USDT', from: 'BTC', to: 'USDT' },
-  { name: 'BTC/TON', from: 'BTC', to: 'TON' },
+  { name: 'USDT/BTC', from: 'USDT', to: 'BTC' },
   { name: 'XAUt0/USDT', from: 'XAUt0', to: 'USDT' },
   { name: 'USDT/XAUt0', from: 'USDT', to: 'XAUt0' }
 ];
