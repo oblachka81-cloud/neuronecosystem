@@ -102,11 +102,22 @@ async function getSparks(symbols, interval = '1h', limit = 24) {
   await Promise.allSettled(symbols.map(async (s) => {
     const cands = CANDIDATES[s] || [];
     const pair = cands.find(c => set.has(c)) || cands[0];
-    if (!pair) return;
+    if (!pair) {
+      console.log(`[SPARKS] ${s}: no pair found`);
+      return;
+    }
     try {
-      const d = await fetchJson(`${MEXC_BASE}/api/v3/klines?symbol=${pair}&interval=${interval}&limit=${limit}`);
-      if (Array.isArray(d)) out[s] = d.map(k => +k[4]);
-    } catch (e) {}
+      const url = `${MEXC_BASE}/api/v3/klines?symbol=${pair}&interval=${interval}&limit=${limit}`;
+      const d = await fetchJson(url);
+      if (Array.isArray(d) && d.length) {
+        out[s] = d.map(k => +k[4]);
+        console.log(`[SPARKS] ${s} (${pair}): ${d.length} candles`);
+      } else {
+        console.log(`[SPARKS] ${s} (${pair}): empty response`, d);
+      }
+    } catch (e) {
+      console.log(`[SPARKS] ${s} (${pair}) error:`, e.message);
+    }
   }));
   sparkCache.data[key] = out;
   sparkCache.ts = now;
