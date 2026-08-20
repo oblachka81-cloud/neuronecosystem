@@ -1,19 +1,19 @@
 // src/services/mexc.js
 // NEURON Blockchain Systems — CEX market data
-// Внутренний источник не раскрываем, наружу отдаём как "CEX"
+// Источник не раскрываем, наружу отдаём как "CEX"
 
 const MEXC_BASE = 'https://api.mexc.com';
 
-// наш символ -> пара на CEX
-const MEXC_SYMBOLS = {
-  TON:   'TONUSDT',
-  BTC:   'BTCUSDT',
-  XAUt0: 'XAUTUSDT',
-  AAPLx: 'AAPLXUSDT',
-  NVDAx: 'NVDAXUSDT',
-  TSLAx: 'TSLAXUSDT',
-  AMZNx: 'AMZNXUSDT',
-  SPYx:  'SPYXUSDT',
+// наш символ -> кандидаты пар (первая живая = рабочая)
+const CANDIDATES = {
+  TON:   ['GRAMUSDT', 'TONUSDT'],   // TON на MEXC = GRAM
+  BTC:   ['BTCUSDT'],
+  XAUt0: ['XAUTUSDT', 'GOLDUSDT', 'PAXGUSDT'],
+  AAPLx: ['AAPLXUSDT', 'AAPLUSDT'],
+  NVDAx: ['NVDAXUSDT', 'NVDAUSDT'],
+  TSLAx: ['TSLAXUSDT', 'TSLAUSDT'],
+  AMZNx: ['AMZNXUSDT', 'AMZNUSDT'],
+  SPYx:  ['SPYXUSDT', 'SP500USDT'],
 };
 
 const CATEGORIES = {
@@ -34,9 +34,30 @@ async function fetchJson(url, ms = 6000) {
   } finally { clearTimeout(t); }
 }
 
+// все живые пары спота (кэш 1 час)
+let _spotSet = null, _spotTs = 0;
+async function spotSet() {
+  if (_spotSet && Date.now() - _spotTs < 3600000) return _spotSet;
+  try {
+    const d = await fetchJson(`${MEXC_BASE}/api/v3/exchangeInfo`, 8000);
+    _spotSet = new Set((d.symbols || []).map(s => s.symbol));
+    _spotTs = Date.now();
+  } catch (e) {
+    if (!_spotSet) _spotSet = new Set();
+  }
+  return _spotSet;
+}
+
 // цена + % за 24ч
 async function getTickers(symbols) {
-  const pairs = symbols.map(s => MEXC_SYMBOLS[s]).filter(Boolean);
+  const set = await spotSet();
+  const pairs = [];
+  const backMap = {};
+  for (const s of symbols) {
+    const cands = CANDIDATES[s] || [];
+    const pair = cands.find(c => set.has(c)) || cands[0];
+    if (pair) { pairs.push(pair); backMap[pair] = s; }
+  }
   if (!pairs.length) return {};
 
   const key = pairs.join(',');
@@ -48,7 +69,7 @@ async function getTickers(symbols) {
 
   const out = {};
   for (const item of (Array.isArray(list) ? list : [list])) {
-    const internal = Object.keys(MEXC_SYMBOLS).find(k => MEXC_SYMBOLS[k] === item.symbol);
+    const internal = backMap[item.symbol];
     if (!internal) continue;
     out[internal] = {
       price: parseFloat(item.lastPrice),
@@ -60,12 +81,14 @@ async function getTickers(symbols) {
   return out;
 }
 
-// свечи — пригодятся на шаге 4 (графики)
+// свечи — пригодятся для графиков позже
 async function getKlines(symbol, interval = '1h', limit = 48) {
-  const pair = MEXC_SYMBOLS[symbol];
+  const set = await spotSet();
+  const cands = CANDIDATES[symbol] || [];
+  const pair = cands.find(c => set.has(c)) || cands[0];
   if (!pair) return [];
   const data = await fetchJson(`${MEXC_BASE}/api/v3/klines?symbol=${pair}&interval=${interval}&limit=${limit}`);
   return (Array.isArray(data) ? data : []).map(k => ({ t: k[0], o: +k[1], h: +k[2], l: +k[3], c: +k[4] }));
 }
 
-module.exports = { getTickers, getKlines, MEXC_SYMBOLS, CATEGORIES };
+module.exports = { getTickers, getKlines, CANDIDATES, CATEGORIES };
