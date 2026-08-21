@@ -74,7 +74,7 @@ function loadCasinoPanel() {
       <img src="/games/casino/tab_btn_mines.webp" style="width:100%;height:auto;display:block;">
     </button>
   </div>
-  <div class="balance-row" style="margin:6px 0 2px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.35);padding:12px 16px;text-align:center;">
+  <div class="balance-row" style="margin:6px 0 2px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.35);padding:12px 16px;text-align:center;background:none;">
     <div class="balance-label" id="casinoBalanceLabel" style="font-size:0.74rem;color:#8888aa;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:4px;">Available IMPULSE</div>
     <div class="balance-amount" id="casinoBalanceAmount" style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#00ffff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">—</div>
   </div>
@@ -224,6 +224,11 @@ function loadCasinoPanel() {
       </div>
 
       <!-- MINES -->
+      <style>
+      #casinoMinesField{width:100%;}
+      #casinoMinesField > *{width:100% !important;min-width:0 !important;max-width:none !important;}
+      #casinoMinesField img{width:100%;height:auto;display:block;}
+    </style>
       <div id="casinoSectionMines" class="casino-game-section" style="display:none;">
         <div style="margin-bottom:16px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,170,0,0.25);padding:14px 14px 8px;">
           <div style="text-align:center;">
