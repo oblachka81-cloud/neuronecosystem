@@ -95,6 +95,13 @@ body.fr [data-ru]{display:none;}body.fr [data-fr]{display:block;}body.fr span[da
 body.es [data-ru]{display:none;}body.es [data-es]{display:block;}body.es span[data-es]{display:inline;}body.es span[data-ru]{display:none;}
 span[data-en],span[data-fr],span[data-es]{display:none;}
 @media(max-width:480px){.logo{font-size:2.2em;}.modules-grid{grid-template-columns:1fr 1fr;}.economy-split{flex-direction:column;}.impulse-grid{grid-template-columns:1fr 1fr;}}
+.crest{height:150px;}
+.logo-sub{display:block;margin-top:6px;font-size:0.85em;font-weight:800;letter-spacing:5px;background:linear-gradient(90deg,var(--gold3),var(--gold2),var(--gold),var(--gold2),var(--gold3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.partner-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.chip{position:relative;border-radius:12px;padding:7px 14px;font-size:0.78em;font-weight:700;color:var(--plat);background:rgba(5,7,15,0.55);backdrop-filter:blur(6px);}
+.chip::before{content:'';position:absolute;inset:0;border-radius:inherit;border:1.5px solid transparent;background:linear-gradient(120deg,#f8fbff,#9fb4d8 30%,#e6ecf7 50%,#7d92b8 70%,#f8fbff) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);mask-composite:exclude;pointer-events:none;}
+.chip.gold{color:var(--gold);}
+.chip.gold::before{background:linear-gradient(120deg,#ffe9a8,#e8d9a0,#8a744a,#e8d9a0,#ffe9a8) border-box;}
 </style>
 </head>
 <body>
@@ -107,8 +114,9 @@ span[data-en],span[data-fr],span[data-es]{display:none;}
 <div id="particles"></div>
 <a class="back-link" href="/">← <span data-ru>Играть</span><span data-en>Play</span><span data-fr>Jouer</span><span data-es>Jugar</span></a>
 <header>
-<img class="crest" src="/games/casino/neuron_logo.webp" alt="NEURON">
+<img class="crest" src="main/game_logo.webp" alt="NEURON">
 <div><span class="logo">NEURON</span><span class="version-badge">v4.0</span></div>
+<span class="logo-sub">BLOCKCHAIN ECOSYSTEM</span>
 <p class="subtitle">
 <span data-ru>Игровая экосистема в Telegram • TON blockchain • 4 языка</span>
 <span data-en>Gaming Ecosystem in Telegram • TON blockchain • 4 languages</span>
@@ -130,11 +138,12 @@ span[data-en],span[data-fr],span[data-es]{display:none;}
 
 <section>
 <h2 data-ru>1. Введение</h2><h2 data-en>1. Introduction</h2><h2 data-fr>1. Introduction</h2><h2 data-es>1. Introducción</h2>
-<p data-ru>NEURON — полноценная игровая экосистема внутри Telegram с собственным токеном <strong>COGNIQ</strong> на блокчейне TON. Викторина, игровой хаб IMPULSE, банк, биржа с живыми графиками, fiat on-ramp, магазин, профиль с достижениями и система наград — всё объединено единой валютой.</p>
-<p data-en>NEURON is a full-featured gaming ecosystem inside Telegram with its own token <strong>COGNIQ</strong> on the TON blockchain. Quiz, IMPULSE gaming hub, bank, exchange with live charts, fiat on-ramp, shop, profile with achievements and reward system — all united by a single currency.</p>
-<p data-fr>NEURON est un écosystème de jeu complet dans Telegram avec son propre token <strong>COGNIQ</strong> sur TON. Quiz, hub IMPULSE, banque, bourse avec graphiques live, fiat on-ramp, boutique, profil avec succès et récompenses — tous unis par une seule monnaie.</p>
-<p data-es>NEURON es un ecosistema de juego completo dentro de Telegram con su propio token <strong>COGNIQ</strong> en TON. Quiz, hub IMPULSE, banco, exchange con gráficos live, fiat on-ramp, tienda, perfil con logros y recompensas — todos unidos por una sola moneda.</p>
-<p data-ru>Миссия: сделать обучение увлекательным и вознаграждаемым. Каждый правильный ответ — шаг к новым знаниям и реальным наградам в сети TON.</p>
+<p data-ru><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> — растущая экосистема на платформе Telegram с собственным токеном <strong style="color:var(--gold);">COGNIQ</strong> на блокчейне <strong style="color:#00ccff;">TON</strong>.</p>
+<p data-en><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> is a growing ecosystem on the Telegram platform with its own <strong style="color:var(--gold);">COGNIQ</strong> token on the <strong style="color:#00ccff;">TON</strong> blockchain.</p>
+<p data-fr><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> est un écosystème en croissance sur Telegram avec son propre token <strong style="color:var(--gold);">COGNIQ</strong> sur la blockchain <strong style="color:#00ccff;">TON</strong>.</p>
+<p data-es><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> es un ecosistema en crecimiento en Telegram con su propio token <strong style="color:var(--gold);">COGNIQ</strong> en la blockchain <strong style="color:#00ccff;">TON</strong>.</p>
+<p data-ru><strong style="color:var(--green);">Викторина с вознаграждением</strong>, игровой хаб <strong style="color:var(--gold);">IMPULSE</strong>, <strong style="color:var(--plat);">NEURON Exchange</strong>, <strong style="color:#10b981;">NEURON Bank</strong>, <strong style="color:var(--green);">Fiat On-Ramp</strong>, <strong style="color:var(--gold2);">NEURON Shop</strong> и профиль с достижениями — всё объединено единой валютой.</p>
+<p data-en>A <strong style="color:var(--green);">reward-powered quiz
 <p data-en>Mission: make learning fun and rewarding. Every correct answer is a step toward new knowledge and real rewards on the TON network.</p>
 <p data-fr>Mission : rendre l'apprentissage amusant et rémunérateur. Chaque bonne réponse mène à de nouvelles connaissances et de vraies récompenses sur TON.</p>
 <p data-es>Misión: hacer el aprendizaje divertido y recompensado. Cada respuesta correcta es un paso hacia nuevos conocimientos y recompensas reales en TON.</p>
