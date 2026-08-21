@@ -1,10 +1,10 @@
 const UA = { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36' } };
 
 const WORLD_SYMBOLS = [
-  { key: 'XAU', yahoo: 'XAUUSD=X', label: 'GOLD' },
-  { key: 'XAG', yahoo: 'XAGUSD=X', label: 'SILVER' },
-  { key: 'XPT', yahoo: 'XPTUSD=X', label: 'PLATINUM' },
-  { key: 'XPD', yahoo: 'XPDUSD=X', label: 'PALLADIUM' },
+  { key: 'XAU', yahoo: 'GC=F', label: 'GOLD' },
+  { key: 'XAG', yahoo: 'SI=F', label: 'SILVER' },
+  { key: 'XPT', yahoo: 'PL=F', label: 'PLATINUM' },
+  { key: 'XPD', yahoo: 'PA=F', label: 'PALLADIUM' },
   { key: 'WTI', yahoo: 'CL=F', label: 'OIL WTI' },
   { key: 'BRENT', yahoo: 'BZ=F', label: 'BRENT' },
   { key: 'SPX', yahoo: '^GSPC', label: 'S&P 500' },
