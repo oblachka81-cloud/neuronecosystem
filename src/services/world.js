@@ -13,6 +13,7 @@ const WORLD_SYMBOLS = [
   { key: 'EURUSD', yahoo: 'EURUSD=X', label: 'EUR/USD' },
   { key: 'GBPUSD', yahoo: 'GBPUSD=X', label: 'GBP/USD' },
   { key: 'USDJPY', yahoo: 'USDJPY=X', label: 'USD/JPY' },
+  { key: 'USDRUB', yahoo: 'USDRUB=X', label: 'USD/RUB' },
   { key: 'DXY', yahoo: 'DX-Y.NYB', label: 'DOLLAR INDEX' }
 ];
 
