@@ -398,7 +398,7 @@ function fiatRenderExchangers() {
     const badge = idx === 0 ? '🥇 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : '';
     const borderCol = idx < 3 ? 'rgba(233,238,247,0.55)' : 'rgba(233,238,247,0.2)';
     const glow = idx === 0 ? 'box-shadow:0 0 12px rgba(175,200,245,0.35);' : '';
-    const ratingHtml = (changer.rating || 0) > 0 ? `⭐ ${(changer.rating || 0).toFixed(1)}` : '💬';
+    const ratingHtml = `⭐ ${(changer.rating || 0).toFixed(1)}`;
 
     return `
       <div style="background:rgba(4,8,20,0.35);border:2px solid ${borderCol};border-radius:16px;${glow}padding:14px;margin-bottom:10px;">
