@@ -824,6 +824,8 @@ function loadExchangePanel() {
             <span id="liveScaleTop" style="position:absolute;top:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
             <span id="liveScaleMid" style="position:absolute;top:50%;right:4px;transform:translateY(-50%);font-size:0.55rem;color:#7799bb;z-index:2;"></span>
             <span id="liveScaleBot" style="position:absolute;bottom:2px;right:4px;font-size:0.55rem;color:#7799bb;z-index:2;"></span>
+            <div id="livePriceLine" style="position:absolute;left:0;right:46px;border-top:1px dashed rgba(255,255,255,0.5);z-index:1;pointer-events:none;"></div>
+            <span id="livePriceTag" style="position:absolute;right:2px;transform:translateY(-50%);font-size:0.55rem;font-weight:700;color:#fff;background:rgba(0,255,170,0.3);padding:1px 3px;border-radius:4px;z-index:2;"></span>
           </div>
           <div id="tickerTapeWrap" style="overflow:hidden;position:relative;height:30px;border-top:1px solid rgba(255,170,0,0.15);">
             <div id="tapeInner" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div>
