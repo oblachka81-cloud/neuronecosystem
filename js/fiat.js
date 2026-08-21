@@ -205,16 +205,22 @@ async function fiatLoadCurrencies() {
       const fiat = fiatAllCurrencies.filter(isLikelyFiat);
       const crypto = fiatAllCurrencies.filter(c => !isLikelyFiat(c));
       
-      // Приоритет: Т-Банк (Тинькофф) RUB
-const defaultFromFiat = fiat.find(c => 
-  (c.viewname || '').toLowerCase().includes('т-банк') || 
-  (c.viewname || '').toLowerCase().includes('t-bank') ||
-  (c.viewname || '').toLowerCase().includes('тинькофф') ||
-  (c.viewname || '').toLowerCase().includes('tinkoff')
-) || fiat.find(c => 
-  (c.viewname || '').toLowerCase().includes('сбер') || 
-  (c.viewname || '').toLowerCase().includes('sber')
-) || fiat.find(c => (c.viewname || '').includes('RUB')) || fiat[0];
+      // Фиат по умолчанию — по языку (глобально)
+      const fiatPrefs = {
+        ru: [/т-банк|t-bank|тинькофф|tinkoff/i, /сбер|sber/i],
+        en: [/usd/i],
+        fr: [/eur/i],
+        es: [/eur/i]
+      };
+      let defaultFromFiat = null;
+      for (const rx of (fiatPrefs[currentLang] || fiatPrefs.en)) {
+        defaultFromFiat = fiat.find(c =>
+          (rx.test(c.viewname || '') || rx.test(c.name || '')) &&
+          !(c.viewname || '').toLowerCase().includes('cash')
+        );
+        if (defaultFromFiat) break;
+      }
+      defaultFromFiat = defaultFromFiat || fiat.find(c => (c.viewname || '').includes('RUB')) || fiat[0];
 
 // Приоритет: USDT BEP-20 → TRC-20 → ERC-20 → TON → Tether
 const defaultToCrypto = crypto.find(c => 
