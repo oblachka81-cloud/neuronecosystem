@@ -243,23 +243,21 @@ function showWalletPanel() {
   </div>
 </div>`;
 
-    tonBalanceHtml = `
-      <div style="position:relative;margin-bottom:8px;">
-  <img src="/wallet/wallet_gram_frame.webp" style="width:100%;display:block;opacity:0.65;">
-  <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:6px;">
-    <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;"></span>
-    <span style="font-size:1.6rem;font-weight:900;color:#00ccff;" id="tonBalanceVal">⏳</span>
-  </div>
-</div>`;
+      tonBalanceHtml = `
+      <div style="position:relative;height:84px;margin-bottom:8px;">
+        <img src="/wallet/wallet_gram_frame.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;border-radius:16px;">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:1.5rem;font-weight:900;color:#00ccff;" id="tonBalanceVal">⏳</span>
+        </div>
+      </div>`;
 
     usdtBalanceHtml = `
-      <div style="position:relative;margin-bottom:8px;">
-  <img src="/wallet/wallet_usdt_frame.webp" style="width:100%;display:block;opacity:0.65;">
-  <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:6px;">
-    <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;"></span>
-    <span style="font-size:1.6rem;font-weight:900;color:#00ddaa;" id="usdtBalanceVal">⏳</span>
-  </div>
-</div>`;
+      <div style="position:relative;height:84px;margin-bottom:8px;">
+        <img src="/wallet/wallet_usdt_frame.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;border-radius:16px;">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:1.5rem;font-weight:900;color:#00ddaa;" id="usdtBalanceVal">⏳</span>
+        </div>
+      </div>`;
 
     depositBtn = `
   <div style="display:flex;gap:8px;margin-bottom:8px;">
@@ -273,12 +271,13 @@ function showWalletPanel() {
   </button>
 </div>`;
 
-    walletActionBtn = canWithdraw
-  ? `<button class="wallet-btn-big wallet-btn-withdraw" id="walletWithdrawBtn" style="position:relative;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:pointer;width:100%;margin-bottom:8px;">${t.walletWithdrawBtn(score)}</button>`
-  : `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
+  
+  walletActionBtn = canWithdraw
+  ? `<button class="wallet-btn-big wallet-btn-withdraw" id="walletWithdrawBtn" style="position:relative;display:block;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;height:84px;border-radius:16px;font-size:0.97rem;font-weight:800;color:white;cursor:pointer;width:100%;margin-bottom:8px;">${t.walletWithdrawBtn(score)}</button>`
+  : `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;display:block;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;height:84px;border-radius:16px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
   } else {
     walletAddrHtml = `<button class="wallet-btn-big wallet-btn-connect" id="walletConnectBtn">${t.walletBtnConnect}</button>`;
-    walletActionBtn = `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;padding:13px 22px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
+    walletActionBtn = `<button class="wallet-btn-big wallet-btn-withdraw wallet-btn-withdraw-disabled" disabled style="position:relative;display:block;background:url('/wallet/btn_wallet_withdraw.webp') center/100% 100% no-repeat;border:none;height:84px;border-radius:16px;font-size:0.97rem;font-weight:800;color:white;cursor:not-allowed;width:100%;margin-bottom:8px;opacity:0.5;">${t.walletWithdrawBtn(score)}</button>`;
     depositBtn = `
   <div style="display:flex;gap:8px;margin-bottom:8px;">
     <button class="wallet-btn-big" disabled
@@ -311,8 +310,8 @@ function showWalletPanel() {
     ${depositBtn}
     ${withdrawHint}
     ${walletActionBtn}
-    <button onclick="document.getElementById('dynamicContent').innerHTML = ''; switchTab('bank')" style="position:relative;background:none;border:none;padding:0;cursor:pointer;width:100%;margin-top:8px;">
-      <img src="/wallet/wallet_to_bank_frame.webp" style="width:100%;display:block;opacity:0.65;">
+    <button onclick="document.getElementById('dynamicContent').innerHTML = ''; switchTab('bank')" style="position:relative;display:block;background:none;border:none;padding:0;cursor:pointer;width:100%;height:84px;margin-top:8px;">
+      <img src="/wallet/wallet_to_bank_frame.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;border-radius:16px;">
       <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:700;font-size:0.9rem;color:#00ffaa;">${t.walletToBank}</span>
     </button>
     <div class="wallet-section-title" style="margin-top:16px;">${t.walletLastOps}</div>
