@@ -247,7 +247,7 @@ function showWalletPanel() {
       <div style="position:relative;margin-bottom:8px;">
   <img src="/wallet/wallet_gram_frame.webp" style="width:100%;display:block;opacity:0.65;">
   <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:6px;">
-    <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;">GRAM</span>
+    <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;"></span>
     <span style="font-size:1.6rem;font-weight:900;color:#00ccff;" id="tonBalanceVal">⏳</span>
   </div>
 </div>`;
@@ -256,7 +256,7 @@ function showWalletPanel() {
       <div style="position:relative;margin-bottom:8px;">
   <img src="/wallet/wallet_usdt_frame.webp" style="width:100%;display:block;opacity:0.65;">
   <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:6px;">
-    <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;">USDT</span>
+    <span style="font-size:0.78rem;color:#334466;letter-spacing:1px;"></span>
     <span style="font-size:1.6rem;font-weight:900;color:#00ddaa;" id="usdtBalanceVal">⏳</span>
   </div>
 </div>`;
