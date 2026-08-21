@@ -299,13 +299,12 @@ function showWalletPanel() {
 
   root.innerHTML = `
   <div class="wallet-panel">
-    <div style="position:relative;margin-bottom:8px;">
-  <img src="/wallet/wallet_balance_frame.webp" style="width:100%;display:block;opacity:0.65;">
-  <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <div style="font-size:2.6rem;font-weight:900;background:linear-gradient(135deg,#00ffff,#aa66ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${score.toLocaleString()}</div>
-    <div style="font-size:0.82rem;color:#334466;margin-top:4px;">${t.walletBalanceLabel}</div>
-  </div>
-</div>
+    <div style="position:relative;height:84px;margin-bottom:8px;">
+      <img src="/wallet/wallet_balance_frame.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;border-radius:16px;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
+        <div style="font-size:2.1rem;font-weight:900;background:linear-gradient(135deg,#00ffff,#aa66ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${score.toLocaleString()}</div>
+      </div>
+    </div>
     ${tonBalanceHtml}
     ${usdtBalanceHtml}
     ${walletAddrHtml}
