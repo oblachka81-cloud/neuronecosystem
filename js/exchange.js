@@ -591,6 +591,16 @@ function setLiveScale(scale) {
   if (eb) eb.textContent = tapeFmt(scale[2]);
 }
 
+function setLiveLine(line) {
+  const el = document.getElementById('livePriceLine');
+  const tag = document.getElementById('livePriceTag');
+  if (!el || !tag || !line) return;
+  el.style.top = line.pct + '%';
+  tag.style.top = line.pct + '%';
+  tag.textContent = line.tag;
+  tag.style.background = line.up ? 'rgba(0,255,170,0.3)' : 'rgba(255,85,102,0.3)';
+}
+
 async function loadLiveChart(force) {
   const body = document.getElementById('liveChartBody');
   if (!body) return;
@@ -601,6 +611,7 @@ async function loadLiveChart(force) {
   if (!force && liveChartCache[key]) {
     body.innerHTML = liveChartCache[key].html;
     setLiveScale(liveChartCache[key].scale);
+    setLiveLine(liveChartCache[key].line);
     return;
   }
   try {
@@ -610,11 +621,16 @@ async function loadLiveChart(force) {
       const html = candlesSvg(data.candles);
       const max = Math.max(...data.candles.map(c => c.h));
       const min = Math.min(...data.candles.map(c => c.l));
+      const range = max - min || 1;
       const scale = [max, (max + min) / 2, min];
-      liveChartCache[key] = { html, scale };
+      const last = data.candles[data.candles.length - 1].c;
+      const prev = data.candles.length > 1 ? data.candles[data.candles.length - 2].c : last;
+      const line = { pct: (((max - last) / range) * 140 + 10) / 160 * 100, tag: tapeFmt(last), up: last >= prev };
+      liveChartCache[key] = { html, scale, line };
       const b = document.getElementById('liveChartBody');
       if (b) b.innerHTML = html;
       setLiveScale(scale);
+      setLiveLine(line);
     }
   } catch (e) {}
 }
