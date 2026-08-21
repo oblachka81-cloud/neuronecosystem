@@ -22,75 +22,57 @@ function loadBankPanel() {
   dynamicContent.innerHTML = `
   <div style="max-width:520px;margin:0 auto;">
     
-    <div style="position:relative;margin-bottom:20px;">
-      <img src="/bank/bank_balance_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;" alt="">
-      <div style="position:relative;z-index:1;padding:20px 18px;text-align:center;">
-        <div style="font-size:0.74rem;color:#8888aa;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;">${bt.balanceLabel}</div>
-        <div id="bankBalanceAmount" style="font-size:2.2rem;font-weight:900;background:linear-gradient(90deg,#00ffff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">0</div>
-      </div>
+    <div style="margin-bottom:20px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(168,85,247,0.25);padding:20px 18px;text-align:center;">
+      <div style="font-size:0.74rem;color:#8888aa;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;">${bt.balanceLabel}</div>
+      <div id="bankBalanceAmount" style="font-size:2.2rem;font-weight:900;background:linear-gradient(90deg,#00ffff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">0</div>
     </div>
     
-    <div style="position:relative;margin-bottom:18px;">
-      <img src="/bank/bank_deposit_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
-      <div style="position:relative;z-index:1;padding:20px;">
-        <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.newDeposit}</div>
-        <div style="display:flex;gap:10px;margin-bottom:12px;"><input type="number" id="bankDepositAmount" placeholder="${bt.amountPlaceholder}" min="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;"></div>
-        <div id="bankTermBtns" style="display:flex;gap:8px;margin-bottom:12px;">
-         <button class="term-btn active" data-term="30" style="flex:1;padding:10px;border:none;border-radius:13px;background:rgba(18,18,42,0.6);color:#a855f7;font-size:0.8rem;font-weight:600;cursor:pointer;"><img src="/bank/bank_term_30.webp" style="width:100%;height:auto;display:block;pointer-events:none;"></button>
-         <button class="term-btn" data-term="60" style="flex:1;padding:10px;border:none;border-radius:13px;background:rgba(18,18,42,0.6);color:#6677aa;font-size:0.8rem;font-weight:600;cursor:pointer;"><img src="/bank/bank_term_60.webp" style="width:100%;height:auto;display:block;pointer-events:none;"></button>
+    <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(168,85,247,0.25);padding:20px;">
+      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.newDeposit}</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;"><input type="number" id="bankDepositAmount" placeholder="${bt.amountPlaceholder}" min="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;"></div>
+      <div id="bankTermBtns" style="display:flex;gap:8px;margin-bottom:12px;">
+        <button class="term-btn active" data-term="30" style="flex:1;padding:10px;border:none;border-radius:13px;background:rgba(18,18,42,0.6);color:#a855f7;font-size:0.8rem;font-weight:600;cursor:pointer;"><img src="/bank/bank_term_30.webp" style="width:100%;height:auto;display:block;pointer-events:none;"></button>
+        <button class="term-btn" data-term="60" style="flex:1;padding:10px;border:none;border-radius:13px;background:rgba(18,18,42,0.6);color:#6677aa;font-size:0.8rem;font-weight:600;cursor:pointer;"><img src="/bank/bank_term_60.webp" style="width:100%;height:auto;display:block;pointer-events:none;"></button>
         <button class="term-btn" data-term="90" style="flex:1;padding:10px;border:none;border-radius:13px;background:rgba(18,18,42,0.6);color:#6677aa;font-size:0.8rem;font-weight:600;cursor:pointer;"><img src="/bank/bank_term_90.webp" style="width:100%;height:auto;display:block;pointer-events:none;"></button>
-     </div>
-        <div id="bankDepositInfo" style="background:rgba(0,0,0,0.35);border:1px solid rgba(168,85,247,0.1);border-radius:12px;padding:10px 14px;margin-bottom:14px;text-align:center;font-size:0.87rem;color:#8899bb;">${bt.depositInfo(0, 5, 30)}</div>
-        <button id="bankDepositBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;"><img src="/bank/bank_deposit_btn_${currentLang}.webp" style="width:100%;height:auto;display:block;"></button>
+      </div>
+      <div id="bankDepositInfo" style="background:rgba(0,0,0,0.35);border:1px solid rgba(168,85,247,0.1);border-radius:12px;padding:10px 14px;margin-bottom:14px;text-align:center;font-size:0.87rem;color:#8899bb;">${bt.depositInfo(0, 5, 30)}</div>
+      <button id="bankDepositBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;"><img src="/bank/bank_deposit_btn_${currentLang}.webp" style="width:100%;height:auto;display:block;"></button>
+    </div>
+    
+    <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(168,85,247,0.25);padding:20px;">
+      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.impulseExchangeTitle}</div>
+      <div style="text-align:center;font-size:0.85rem;color:#5599bb;margin-bottom:4px;"><span id="bankImpulseRate">${bt.impulseRate}</span></div>
+      <div style="text-align:center;font-size:0.85rem;color:#445577;margin-bottom:12px;" id="bankImpulseBalanceDisplay">${bt.impulseBalance(0)}</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:stretch;">
+        <input type="number" id="bankImpulseCogniqAmount" placeholder="COGNIQ (10-1000)" min="10" max="1000" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;">
+        <button id="bankImpulseBuyBtn" style="background:none;border:none;padding:0;cursor:pointer;flex-shrink:0;"><img src="/bank/bank_buy_btn_${currentLang}.webp" style="height:44px;width:auto;display:block;"></button>
+      </div>
+      <div style="text-align:center;font-size:0.85rem;color:#00ffaa;" id="bankImpulseCalc">${bt.impulseCalcEmpty}</div>
+    </div>
+    
+    <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(168,85,247,0.25);padding:20px;">
+      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.exchangeTitle}</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:stretch;">
+        <input type="number" id="bankExchangeAmount" placeholder="Сумма USDT" min="1" max="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;">
+        <button id="bankExchangeBuyBtn" style="background:none;border:none;padding:0;cursor:pointer;flex-shrink:0;"><img src="/bank/bank_buy_btn_${currentLang}.webp" style="height:44px;width:auto;display:block;"></button>
+      </div>
+      <div style="text-align:center;font-size:0.85rem;color:#5566aa;">
+        <span id="bankExchangeRate">1 USDT = 200 COGNIQ</span> &nbsp;·&nbsp;
+        <span id="bankExchangeCalc" style="color:#00ffaa;">${bt.exCalcEmpty}</span>
       </div>
     </div>
     
-    <div style="position:relative;margin-bottom:18px;">
-      <img src="/bank/bank_exchange_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
-      <div style="position:relative;z-index:1;padding:20px;">
-        <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.impulseExchangeTitle}</div>
-        <div style="text-align:center;font-size:0.85rem;color:#5599bb;margin-bottom:4px;"><span id="bankImpulseRate">${bt.impulseRate}</span></div>
-        <div style="text-align:center;font-size:0.85rem;color:#445577;margin-bottom:12px;" id="bankImpulseBalanceDisplay">${bt.impulseBalance(0)}</div>
-        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:stretch;">
-          <input type="number" id="bankImpulseCogniqAmount" placeholder="COGNIQ (10-1000)" min="10" max="1000" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;">
-          <button id="bankImpulseBuyBtn" style="background:none;border:none;padding:0;cursor:pointer;flex-shrink:0;"><img src="/bank/bank_buy_btn_${currentLang}.webp" style="height:44px;width:auto;display:block;"></button>
-        </div>
-        <div style="text-align:center;font-size:0.85rem;color:#00ffaa;" id="bankImpulseCalc">${bt.impulseCalcEmpty}</div>
-      </div>
+    <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(168,85,247,0.25);padding:20px;">
+      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.transferTitle}</div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;"><input type="text" id="bankTransferTo" placeholder="${bt.transferTo}" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;"></div>
+      <div style="display:flex;gap:10px;margin-bottom:12px;"><input type="number" id="bankTransferAmount" placeholder="${bt.transferAmount}" min="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;"></div>
+      <div style="text-align:center;font-size:0.85rem;color:#5566aa;margin-bottom:8px;"><span id="bankTransferCalc">${bt.transferCalc}</span></div>
+      <button id="bankTransferBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;"><img src="/bank/bank_send_btn_${currentLang}.webp" style="width:100%;height:auto;display:block;"></button>
     </div>
     
-    <div style="position:relative;margin-bottom:18px;">
-      <img src="/bank/bank_exchange_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
-      <div style="position:relative;z-index:1;padding:20px;">
-        <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.exchangeTitle}</div>
-        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:stretch;">
-          <input type="number" id="bankExchangeAmount" placeholder="Сумма USDT" min="1" max="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;">
-          <button id="bankExchangeBuyBtn" style="background:none;border:none;padding:0;cursor:pointer;flex-shrink:0;"><img src="/bank/bank_buy_btn_${currentLang}.webp" style="height:44px;width:auto;display:block;"></button>
-        </div>
-        <div style="text-align:center;font-size:0.85rem;color:#5566aa;">
-          <span id="bankExchangeRate">1 USDT = 200 COGNIQ</span> &nbsp;·&nbsp;
-          <span id="bankExchangeCalc" style="color:#00ffaa;">${bt.exCalcEmpty}</span>
-        </div>
-      </div>
-    </div>
-    
-    <div style="position:relative;margin-bottom:18px;">
-      <img src="/bank/bank_transfer_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
-      <div style="position:relative;z-index:1;padding:20px;">
-        <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.transferTitle}</div>
-        <div style="display:flex;gap:10px;margin-bottom:12px;"><input type="text" id="bankTransferTo" placeholder="${bt.transferTo}" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;"></div>
-        <div style="display:flex;gap:10px;margin-bottom:12px;"><input type="number" id="bankTransferAmount" placeholder="${bt.transferAmount}" min="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;"></div>
-        <div style="text-align:center;font-size:0.85rem;color:#5566aa;margin-bottom:8px;"><span id="bankTransferCalc">${bt.transferCalc}</span></div>
-        <button id="bankTransferBtn" style="background:none;border:none;padding:0;cursor:pointer;width:100%;"><img src="/bank/bank_send_btn_${currentLang}.webp" style="width:100%;height:auto;display:block;"></button>
-      </div>
-    </div>
-    
-    <div style="position:relative;margin-bottom:18px;">
-      <img src="/bank/bank_sell_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
-      <div style="position:relative;z-index:1;padding:20px;opacity:0.4;pointer-events:none;">
-        <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.sellTitle}</div>
-        <div style="text-align:center;color:#445566;padding:14px;font-size:0.85rem;">${bt.sellSoon}</div>
-      </div>
+    <div style="margin-bottom:18px;border:2px solid rgba(233,238,247,0.4);border-radius:16px;padding:20px;opacity:0.4;pointer-events:none;">
+      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.sellTitle}</div>
+      <div style="text-align:center;color:#445566;padding:14px;font-size:0.85rem;">${bt.sellSoon}</div>
     </div>
     
     <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;margin-top:4px;">${bt.activeStakes}</div>
