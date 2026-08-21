@@ -8,7 +8,7 @@ const { COGNIQ_FEE, TOKEN_MAP, DECIMALS, OPERATIONAL_WALLET, omniston, isSwapQuo
 const { logTx } = require('../services/burn');
 const { BESTCHANGE_API_KEY, BESTCHANGE_PARTNER_ID } = require('../config');
 const { getTickers, getKlines, getSparks, CATEGORIES } = require('../services/mexc');
-
+const { getWorld } = require('../services/world');
 // ==================== BESTCHANGE ====================
 router.get('/api/bestchange/currencies/:lang', publicRateLimit, async (req, res) => {
   if (!BESTCHANGE_API_KEY) return res.status(503).json({ success: false, error: 'API key not configured' });
@@ -371,6 +371,15 @@ router.get('/api/market/klines', publicRateLimit, async (req, res) => {
     res.json({ success: candles.length > 0, candles });
   } catch (e) {
     res.json({ success: false, candles: [] });
+  }
+});
+
+router.get('/api/market/world', async (req, res) => {
+  try {
+    const data = await getWorld();
+    res.json({ success: Object.keys(data).length > 0, tickers: data });
+  } catch (e) {
+    res.json({ success: false, tickers: {} });
   }
 });
 
