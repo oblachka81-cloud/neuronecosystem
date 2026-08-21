@@ -571,11 +571,11 @@ function renderLeaderboard(data) {
           <div style="display:flex;gap:8px;width:100%;">
             <button id="refCopyBtn" style="position:relative;background:none;border:none;padding:0;cursor:pointer;flex:1;">
               <img src="leaderboard/btn_referral_frame.webp" style="width:100%;display:block;">
-              <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.75rem;color:#00ffaa;">🔗 ${t.referralBtn}</span>
+              <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.75rem;color:#00ffaa;"> ${t.referralBtn}</span>
             </button>
             <button id="refShareBtn" style="position:relative;background:none;border:none;padding:0;cursor:pointer;flex:1;">
               <img src="leaderboard/btn_referral_frame.webp" style="width:100%;display:block;">
-              <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.75rem;color:#00ffaa;">📤 ${t.referralShare}</span>
+              <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.75rem;color:#00ffaa;"> ${t.referralShare}</span>
             </button>
           </div>
         </div>
