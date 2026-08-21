@@ -74,9 +74,9 @@ function loadCasinoPanel() {
       <img src="/games/casino/tab_btn_mines.webp" style="width:100%;height:auto;display:block;">
     </button>
   </div>
-  <div class="balance-row" style="margin-bottom:2px;">
-    <div class="balance-label" id="casinoBalanceLabel">Available IMPULSE</div>
-    <div class="balance-amount" id="casinoBalanceAmount">—</div>
+  <div class="balance-row" style="margin:6px 0 2px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.35);padding:12px 16px;text-align:center;">
+    <div class="balance-label" id="casinoBalanceLabel" style="font-size:0.74rem;color:#8888aa;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:4px;">Available IMPULSE</div>
+    <div class="balance-amount" id="casinoBalanceAmount" style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#00ffff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">—</div>
   </div>
 
        <!-- ROULETTE -->
@@ -95,9 +95,8 @@ function loadCasinoPanel() {
         </button>
         <div class="result-color" id="casinoRouletteResultColor" style="font-size:1rem;font-weight:700;margin-top:6px;text-align:center;min-height:24px;margin-bottom:4px;"></div>
         <div class="result-message" id="casinoRouletteResultMsg" style="font-size:0.88rem;margin-top:4px;color:#aabbcc;text-align:center;min-height:20px;margin-bottom:12px;"></div>
-        <div style="position:relative;margin-bottom:14px;">
-          <img src="/games/fortuna/fortuna_bets_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
-          <div class="bet-form" style="position:relative;z-index:1;background:none;border:none;padding:24px 18px 18px 18px;">
+        <div style="margin-bottom:14px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,170,0,0.25);padding:14px;">
+          <div class="bet-form" style="background:none;border:none;">
             <div class="input-row" style="display:flex;gap:10px;margin-bottom:12px;"><input type="number" id="casinoRouletteBet" placeholder="Amount (10-100 IMPULSE)" min="10" max="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;"></div>
             <div class="bet-types" id="casinoRouletteBetTypes" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
               <button class="wheel-bet-btn" data-type="red" style="background:none;border:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"><img src="/games/fortuna/fortuna_btn_red.webp" style="width:100%;height:auto;display:block;"></button>
@@ -128,9 +127,8 @@ function loadCasinoPanel() {
             </div>
           </div>
         </div>
-        <div style="position:relative;margin-bottom:14px;">
-          <img src="/games/spark/spark_bets_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
-          <div style="position:relative;z-index:1;padding:18px;">
+        <div style="margin-bottom:14px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,170,0,0.25);padding:14px;">
+          <div>
             <input type="number" id="casinoSlotBet" placeholder="${ct.bet} (10-100)" min="10" max="100" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
             <div style="display:flex;gap:6px;margin-bottom:14px;">
               <button onclick="window.casinoSetSlotBet(10)" style="flex:1;background:none;border:none;padding:0;cursor:pointer;"><img src="/games/spark/btn_bet_10.webp" style="width:100%;height:auto;display:block;"></button>
@@ -147,9 +145,8 @@ function loadCasinoPanel() {
 
       <!-- CRASH -->
       <div id="casinoSectionCrash" class="casino-game-section" style="display:none;">
-        <div style="position:relative;margin-bottom:14px;border-radius:18px;overflow:hidden;">
-          <img src="/games/krash/crash_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
-          <div style="position:relative;z-index:1;padding:8px;">
+        <div style="margin-bottom:14px;border:2px solid #e9eef7;border-radius:18px;box-shadow:0 0 16px rgba(255,170,0,0.25);overflow:hidden;padding:8px;">
+          <div>
             <div style="position:relative;margin-bottom:12px;">
               <img id="casinoCrashBg" src="/games/krash/krash_display_bg_active.webp" style="width:100%;height:auto;display:block;">
               <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
@@ -170,9 +167,8 @@ function loadCasinoPanel() {
             </div>
           </div>
         </div>
-        <div style="position:relative;margin-bottom:14px;">
-          <img src="/games/krash/crash_bet_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
-          <div style="position:relative;z-index:1;padding:18px;">
+        <div style="margin-bottom:14px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,170,0,0.25);padding:14px;">
+          <div>
             <input type="number" id="casinoCrashBetInput" value="50" min="10" max="100" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
               <button onclick="window.casinoSetCrashBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/games/krash/krash_btn_10.webp" style="width:100%;height:auto;display:block;"></button>
@@ -204,9 +200,8 @@ function loadCasinoPanel() {
         
         <div id="casinoBjInsuranceBar" style="display:none;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.35);border-radius:12px;padding:10px 14px;margin-bottom:10px;font-size:0.83em;color:#c084fc;text-align:center;cursor:pointer;"></div>
         
-        <div style="position:relative;margin-bottom:14px;">
-          <img src="/games/xxi/xxi_bet_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
-          <div style="position:relative;z-index:1;padding:18px;">
+        <div style="margin-bottom:14px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,170,0,0.25);padding:14px;">
+          <div>
             <input type="number" id="casinoBjBet" value="50" min="10" max="500" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
             <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;">
               <button onclick="window.casinoSetBjBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/games/xxi/xxi_btn_10.webp" style="width:100%;height:auto;display:block;"></button>
@@ -230,17 +225,15 @@ function loadCasinoPanel() {
 
       <!-- MINES -->
       <div id="casinoSectionMines" class="casino-game-section" style="display:none;">
-        <div style="position:relative;margin-bottom:16px;border-radius:0;">
-          <img src="/games/mines/mines_field_bg.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
-          <div style="position:relative;z-index:1;padding:22px 23px 10px 8px;text-align:center;">
+        <div style="margin-bottom:16px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,170,0,0.25);padding:14px 14px 8px;">
+          <div style="text-align:center;">
             <div style="font-size:0.85rem;color:#ffaa00;margin-bottom:8px;">💣 MINES</div>
             <div id="casinoMinesMult" style="font-size:1.8rem;font-weight:900;color:#ffaa00;text-shadow:0 0 20px rgba(255,170,0,0.7);margin-bottom:8px;min-height:44px;">x1.00</div>
             <div id="casinoMinesField" style="display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:16px;"></div>
           </div>
         </div>
-        <div style="position:relative;margin-bottom:14px;">
-          <img src="/games/mines/mines_bets_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;pointer-events:none;" alt="">
-          <div style="position:relative;z-index:1;padding:18px;">
+        <div style="margin-bottom:14px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,170,0,0.25);padding:14px;">
+          <div>
             <input type="number" id="casinoMinesBet" value="50" min="10" max="100" style="width:100%;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;margin-bottom:10px;">
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
               <button onclick="window.casinoSetMinesBet(10)" style="background:none;border:none;padding:0;cursor:pointer;"><img src="/games/mines/mines_btn_10.webp" style="width:100%;height:auto;display:block;"></button>
