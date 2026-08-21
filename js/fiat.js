@@ -82,6 +82,16 @@ function loadFiatPanel() {
         <img src="/public/images/cogniq/exchange_logo.webp" alt="NEURON" style="height:100px;width:auto;display:block;margin:0 auto;">
       </div>
 
+      <div style="position:relative;margin:0 0 16px 0;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.4);padding:10px 10px 8px;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:0.72rem;font-weight:700;color:#e6ecf5;display:flex;align-items:center;gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:#00ffaa;box-shadow:0 0 8px #00ffaa;animation:livePulse 1.6s infinite;"></span>GLOBAL MARKETS · LIVE</span>
+          <span style="font-size:0.6rem;color:#5577aa;">NEURON World Board</span>
+        </div>
+        <div style="overflow:hidden;height:24px;"><div id="worldLineMetals" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div></div>
+        <div style="overflow:hidden;height:24px;border-top:1px solid rgba(233,238,247,0.15);"><div id="worldLineCommod" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div></div>
+        <div style="overflow:hidden;height:24px;border-top:1px solid rgba(233,238,247,0.15);"><div id="worldLineFx" style="display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;width:max-content;"></div></div>
+      </div>
+
       <div style="display:flex;gap:8px;background:transparent;padding:0;border:none;">
         <button class="fiat-mode-btn active" id="fiatBuyBtn" onclick="fiatSetMode('buy')" style="position:relative;flex:1;padding:0;border:none;background:none;cursor:pointer;">
           <img src="/exchange/fiat_tab.webp" style="width:100%;height:52px;display:block;object-fit:fill;border-radius:12px;">
@@ -153,6 +163,14 @@ function loadFiatPanel() {
   
   fiatLoadPartnerId();
   Promise.all([fiatLoadCurrencies(), fiatLoadChangers()]);
+  if (!document.getElementById('tapeStyle')) {
+    const st = document.createElement('style');
+    st.id = 'tapeStyle';
+    st.textContent = '@keyframes tapeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}@keyframes livePulse{0%,100%{opacity:1}50%{opacity:0.2}}';
+    document.head.appendChild(st);
+  }
+  loadWorldBoard();
+  if (!window._worldInterval) window._worldInterval = setInterval(loadWorldBoard, 30000);
 }
 
 function fiatSetMode(mode) {
@@ -467,3 +485,43 @@ function fiatUpdateLoadMoreBtn() {
     }
   }
 }
+
+// ==================== NEURON WORLD BOARD ====================
+const WORLD_LINES = {
+  worldLineMetals: ['XAU', 'XAG', 'XPT', 'XPD'],
+  worldLineCommod: ['WTI', 'BRENT', 'SPX', 'NDX', 'DJI'],
+  worldLineFx: ['EURUSD', 'GBPUSD', 'USDJPY', 'DXY', 'USDRUB']
+};
+const WORLD_ICONS = { XAU: '🥇', XAG: '🥈', XPT: '⚪', XPD: '🔘', WTI: '🛢️', BRENT: '🛢️', SPX: '📈', NDX: '💻', DJI: '🏭', EURUSD: '💶', GBPUSD: '💷', USDJPY: '💴', DXY: '💵', USDRUB: '🇷🇺' };
+
+function worldFmt(p) {
+  if (!isFinite(p)) return '—';
+  if (p >= 1000) return p.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  if (p >= 10) return p.toFixed(2);
+  return p.toFixed(4);
+}
+
+async function loadWorldBoard() {
+  try {
+    const res = await fetch(`${BASE_URL}/api/market/world`);
+    const data = await res.json();
+    if (!data.success) return;
+    Object.entries(WORLD_LINES).forEach(([id, keys]) => {
+      const inner = document.getElementById(id);
+      if (!inner) return;
+      const items = keys.map(k => {
+        const t = data.tickers[k];
+        if (!t) return '';
+        const pct = t.change24h * 100;
+        const up = pct >= 0;
+        return `<span style="padding:0 14px;font-size:0.75rem;font-weight:600;color:#e6ecf5;">${WORLD_ICONS[k]} ${t.label} <span style="color:#ffcc44;">${worldFmt(t.price)}</span> <span style="color:${up ? '#00ffaa' : '#ff5566'};">${up ? '▲' : '▼'}${Math.abs(pct).toFixed(1)}%</span></span>`;
+      }).join('');
+      if (!items) return;
+      inner.innerHTML = items + items;
+      inner.style.animation = 'none';
+      void inner.offsetWidth;
+      inner.style.animation = `tapeScroll ${Math.max(12, inner.scrollWidth / 120)}s linear infinite`;
+    });
+  } catch (e) {}
+}
+
