@@ -82,12 +82,6 @@ root.innerHTML = `
     else window.open('/whitepaper.html', '_blank');
   });
 
-  const wpBtn = document.getElementById('whitepaperBtn');
-  if (wpBtn) wpBtn.addEventListener('click', () => {
-    if (window.Telegram?.WebApp?.openLink) window.Telegram.WebApp.openLink(window.location.origin + '/whitepaper.html');
-    else window.open('/whitepaper.html', '_blank');
-  });
-
 
   const miniRefBtn = document.getElementById('miniRefBtn');
   if (miniRefBtn) miniRefBtn.addEventListener('click', () => {
