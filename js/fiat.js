@@ -367,7 +367,7 @@ function fiatRenderExchangers() {
   const fromIsFiat = isLikelyFiat(fiatFrom);
   
   list.innerHTML = fiatCurrentRates.map((r, idx) => {
-    const changer = fiatChangersMap[r.changer] || { name: `Exchange #${r.changer}`, rating: 0, reviews: {} };
+    const changer = fiatChangersMap[r.changer] || fiatChangersMap[String(r.changer)] || { name: `Exchange #${r.changer}`, rating: 0, reviews: {} };
     const reviews = changer.reviews || {};
     const totalReviews = (reviews.positive || 0) + (reviews.neutral || 0) + (reviews.closed || 0);
     const rate = parseFloat(r.rate) || 0;
