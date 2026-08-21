@@ -130,7 +130,7 @@ function loadFiatPanel() {
       </div>
 
       <div style="font-size:0.85rem;font-weight:700;color:#ffaa00;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
-        <span id="fiatExchangersTitle">${ft.exchangersTitle}</span>
+        <span id="fiatExchangersTitle">🏆 TOP EXCHANGERS</span>
         <span id="fiatExchangersCount" style="color:#5577aa;font-size:0.75rem;font-weight:400;"></span>
       </div>
       <div id="fiatExchangersList">
