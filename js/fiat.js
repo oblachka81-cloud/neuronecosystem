@@ -121,10 +121,9 @@ function loadFiatPanel() {
         </div>
       </div>
 
-      <div style="position:relative;background:none;border:none;padding:0;margin-bottom:16px;">
-        <img src="/exchange/fiat_calc.webp" style="width:100%;height:180px;display:block;object-fit:fill;border-radius:12px;">
-        <input type="number" id="fiatCalcInput" placeholder="0.00" oninput="fiatCalculate()" inputmode="decimal" style="position:absolute;top:16px;left:16px;right:16px;width:auto;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;padding:14px;color:#fff;font-size:1.1rem;font-weight:700;outline:none;">
-        <div style="position:absolute;bottom:16px;left:16px;right:16px;background:rgba(0,255,170,0.05);border-radius:10px;padding:12px;text-align:center;">
+      <div style="position:relative;margin-bottom:16px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.4);padding:14px;overflow:hidden;">
+        <input type="number" id="fiatCalcInput" placeholder="0.00" oninput="fiatCalculate()" inputmode="decimal" style="width:100%;background:rgba(0,0,0,0.45);border:1px solid rgba(233,238,247,0.25);border-radius:12px;padding:14px;color:#fff;font-size:1.1rem;font-weight:700;outline:none;margin-bottom:12px;">
+        <div style="background:rgba(0,255,170,0.06);border:1px solid rgba(0,255,170,0.2);border-radius:12px;padding:12px;text-align:center;">
           <div id="fiatCalcResult" style="font-size:1.3rem;font-weight:800;color:#00ffaa;">≈ 0.00</div>
           <div id="fiatCalcRate" style="font-size:0.75rem;color:#5577aa;margin-top:4px;">—</div>
         </div>
@@ -396,11 +395,16 @@ function fiatRenderExchangers() {
       }
     }
     
+    const badge = idx === 0 ? '🥇 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : '';
+    const borderCol = idx < 3 ? 'rgba(233,238,247,0.55)' : 'rgba(233,238,247,0.2)';
+    const glow = idx === 0 ? 'box-shadow:0 0 12px rgba(175,200,245,0.35);' : '';
+    const ratingHtml = (changer.rating || 0) > 0 ? `⭐ ${(changer.rating || 0).toFixed(1)}` : '💬';
+
     return `
-      <div style="background:rgba(10,20,38,0.8);border:1px solid ${idx === 0 ? 'rgba(0,255,170,0.4)' : 'rgba(255,170,0,0.15)'};border-radius:14px;padding:14px;margin-bottom:10px;">
+      <div style="background:rgba(4,8,20,0.35);border:2px solid ${borderCol};border-radius:16px;${glow}padding:14px;margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;">
-          <div style="font-size:0.95rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${idx === 0 ? '🥇 ' : ''}${changer.name}</div>
-          <div style="display:flex;align-items:center;gap:4px;font-size:0.8rem;color:#ffcc44;flex-shrink:0;">⭐ ${(changer.rating || 0).toFixed(1)} (${totalReviews})</div>
+          <div style="font-size:0.95rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${badge}${changer.name}</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:0.8rem;color:#ffcc44;flex-shrink:0;">${ratingHtml} (${totalReviews})</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:0.78rem;">
           <div style="color:#ffaa00;">💰 <strong>${rateText}</strong></div>
