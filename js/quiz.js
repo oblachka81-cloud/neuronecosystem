@@ -31,9 +31,10 @@ function showWelcome(totalScore, gamesPlayed) {
   const superTitle = { ru: 'СУПЕР ИГРА X-15', en: 'SUPER GAME X-15', fr: 'SUPER JEU X-15', es: 'SUPER JUEGO X-15' }[currentLang] || 'SUPER GAME X-15';
 
   const superGameCard = `
-    <div style="position:relative;margin:14px 0 14px;${METAL}border-radius:18px;box-shadow:0 0 14px rgba(175,200,245,0.35),inset 0 1px 0 rgba(255,255,255,0.2);padding:32px 16px 16px;text-align:center;">
+    <div style="position:relative;margin:14px 0 14px;border-radius:18px;box-shadow:0 0 14px rgba(175,200,245,0.35);padding:32px 16px 16px;text-align:center;">
+      <div style="position:absolute;inset:0;border:2px solid transparent;background:linear-gradient(120deg,#f8fbff,#9fb4d8 30%,#e6ecf7 50%,#7d92b8 70%,#f8fbff) border-box;border-radius:18px;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;"></div>
       <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#8a744a,#e8d9a0,#8a744a);color:#1a1408;font-weight:800;font-size:0.95rem;letter-spacing:2px;padding:6px 22px;border-radius:10px;white-space:nowrap;">${superTitle}</div>
-      <div style="display:flex;gap:8px;justify-content:center;align-items:center;">
+      <div style="position:relative;display:flex;gap:8px;justify-content:center;align-items:center;">
         <img src="main/btn_super_stars.webp" id="buyStarsBtn" style="cursor:pointer;height:44px;width:auto;display:block;">
         <img src="main/btn_super_usdt.webp" id="buyUsdtBtn" style="cursor:pointer;height:44px;width:auto;display:block;" onclick="openTonModal()">
       </div>
