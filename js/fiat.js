@@ -265,7 +265,7 @@ async function fiatLoadChangers() {
     const data = await res.json();
     if (data.success && data.data?.changers) {
       fiatChangersMap = {};
-      data.data.changers.forEach(c => fiatChangersMap[c.id] = c);
+      data.data.changers.forEach(c => { fiatChangersMap[String(c.id)] = c; fiatChangersMap[c.id] = c; });
     }
   } catch (e) {}
 }
