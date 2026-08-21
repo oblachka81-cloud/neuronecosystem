@@ -4,30 +4,46 @@ function showWelcome(totalScore, gamesPlayed) {
   if(oldAnsweredBtn) oldAnsweredBtn.remove();
   const phrase = t.phrases[Math.floor(Math.random() * t.phrases.length)];
   const freeGamesLeft = currentState.freeGamesLeft;
-  const superGameCard = `
-    <div class="super-game-card" style="position:relative;background:transparent;border:none;padding:0;">
-  <img src="main/super_game_frame_${currentLang}.webp" style="width:100%;display:block;opacity:0.65;" alt="">
-  <div style="position:absolute;bottom:25px;left:0;right:0;display:flex;gap:8px;justify-content:center;padding:0 16px;">
-  <img src="main/btn_super_stars.webp" id="buyStarsBtn" style="cursor:pointer;height:44px;width:auto;opacity:0.65;">
-  <img src="main/btn_super_usdt.webp" id="buyUsdtBtn" style="cursor:pointer;height:44px;width:auto;opacity:0.65;" onclick="openTonModal()">
-</div>
-</div>`;
+  const SVG = (p) => `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#cfd8e6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const I_GAMEPAD = SVG('<path d="M7 6h10a5 5 0 0 1 5 5v2a2 2 0 0 1-4 0v-1H6v1a2 2 0 0 1-4 0v-2a5 5 0 0 1 5-5z"/><path d="M7 9v4M5 11h4"/><circle cx="16" cy="10" r="0.6"/><circle cx="18" cy="12" r="0.6"/>');
+  const I_USERS = SVG('<circle cx="9" cy="8" r="3"/><path d="M4 19c0-3 2.2-5 5-5s5 2 5 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.5c2.3.2 4 2 4 4.5"/>');
+  const I_GIFT = SVG('<rect x="4" y="10" width="16" height="9" rx="1.5"/><path d="M4 10h16M12 7v12"/><path d="M12 7c-2 0-4.5-.8-4.5-2.5S10 2.5 12 7zM12 7c2 0 4.5-.8 4.5-2.5S14 2.5 12 7z"/>');
+  const I_BOOK = SVG('<path d="M12 6c-2-1.8-6-1.8-8-.8v13c2-1 6-1 8 .8 2-1.8 6-1.8 8-.8v-13c-2-1-6-1-8 .8z"/><path d="M12 6v13"/>');
+  const I_STAR = SVG('<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1.1 5.8-5.3-2.9-5.3 2.9 1.1-5.8-4.3-4.1 5.9-.8z"/>');
+  const I_GEM = SVG('<path d="M7 4h10l4 5-9 11L3 9z"/><path d="M3 9h18M9.5 4l2.5 5 2.5-5"/>');
+  const I_HEX = `<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#cfd8e6" stroke-width="1.5"><path d="M12 2.5l8 4.75v9.5l-8 4.75-8-4.75v-9.5z"/><text x="12" y="15.5" text-anchor="middle" font-size="9" fill="#cfd8e6" stroke="none" font-family="serif">N</text></svg>`;
 
-  let startBtnHtml = '';
-let startBtnText = currentState.superGamePending ? t.startSuperBtn : (freeGamesLeft > 0 ? t.startBtn(freeGamesLeft) : t.limitBtn);
-let startBtnDisabled = (!currentState.superGamePending && freeGamesLeft <= 0) ? 'disabled' : '';
-startBtnHtml = `<button id="startNewBtn" ${startBtnDisabled} style="position:relative;background:none;border:none;padding:0;width:100%;cursor:pointer;${startBtnDisabled?'opacity:0.5;pointer-events:none;':''}"><img src="main/btn_frame_start.webp" style="width:100%;display:block;opacity:0.7;"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.88rem;color:#00ffaa;">${startBtnText}</span></button>`;
+  const menuBtn = (id, icon, label, attrs = '', extraStyle = '') => `
+    <button ${id ? `id="${id}"` : ''} ${attrs} style="display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;margin-top:10px;background:rgba(4,8,20,0.35);border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 12px rgba(175,200,245,0.25);cursor:pointer;color:#00ffaa;font-size:0.88rem;font-weight:600;${extraStyle}">
+      <span style="flex-shrink:0;">${icon}</span>
+      <span style="flex:1;text-align:center;">${label}</span>
+      <span style="flex-shrink:0;">${I_HEX}</span>
+    </button>`;
+
+  const superTitle = { ru: 'СУПЕР ИГРА X-15', en: 'SUPER GAME X-15', fr: 'SUPER JEU X-15', es: 'SUPER JUEGO X-15' }[currentLang] || 'SUPER GAME X-15';
+
+  const superGameCard = `
+    <div style="position:relative;margin:14px 0 14px;border:2px solid #e9eef7;border-radius:18px;box-shadow:0 0 16px rgba(175,200,245,0.3);padding:34px 16px 16px;text-align:center;">
+      <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#8a744a,#e8d9a0,#8a744a);color:#1a1408;font-weight:800;font-size:0.95rem;letter-spacing:2px;padding:6px 22px;border-radius:10px;white-space:nowrap;">${superTitle}</div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button id="buyStarsBtn" style="display:flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(4,8,20,0.5);border:1px solid #e9eef7;border-radius:12px;color:#dfe6f2;font-size:0.9rem;font-weight:700;cursor:pointer;">${I_STAR} 100 Stars</button>
+        <button id="buyUsdtBtn" onclick="openTonModal()" style="display:flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(4,8,20,0.5);border:1px solid #e9eef7;border-radius:12px;color:#dfe6f2;font-size:0.9rem;font-weight:700;cursor:pointer;">${I_GEM} 1 USDT</button>
+      </div>
+    </div>`;
+
+  let startBtnText = currentState.superGamePending ? t.startSuperBtn : (freeGamesLeft > 0 ? t.startBtn(freeGamesLeft) : t.limitBtn);
+  let startBtnDisabled = (!currentState.superGamePending && freeGamesLeft <= 0) ? 'disabled' : '';
+  const startBtnHtml = menuBtn('startNewBtn', I_GAMEPAD, startBtnText, startBtnDisabled, startBtnDisabled ? 'opacity:0.5;pointer-events:none;' : '');
 
   const replayBtnHtml = currentState.lastGameWasSuper && !currentState.superGameReplayUsed
     ? `<button class="replay-btn" id="replayBtn">${t.replayBtn}</button>`
     : '';
 
-  const phraseIndex = Math.floor(Math.random() * 6) + 1;
-const phraseImg = `/main/quiz_phrase_${currentLang}_${phraseIndex}.webp`;
-
 root.innerHTML = `
   <div class="welcome-card">
-    <img src="${phraseImg}" alt="NEURON" style="width:100%;max-width:400px;height:auto;display:block;margin:0 auto 12px;opacity:0.65;">
+    <div style="border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.3);padding:14px 18px;text-align:center;margin:0 auto 12px;max-width:400px;">
+      <div style="font-size:1.05rem;font-weight:600;color:#dfe6f2;letter-spacing:1px;">${phrase}</div>
+    </div>
       ${superGameCard}
       ${startBtnHtml}
       ${replayBtnHtml}
@@ -43,13 +59,20 @@ root.innerHTML = `
         <div id="dailyQResult" style="color: #00ffaa; font-size: 0.9rem; margin-bottom: 12px;"></div>
         <button id="dailyQAnswerBtn" style="display:none; background: linear-gradient(90deg, #00aa88, #00ddaa); border: none; border-radius: 40px; padding: 12px 20px; font-size: 0.9rem; font-weight: 700; color: white; cursor: pointer; width: 100%;">${t.dailyQAnswerBtn}</button>
       </div>
-      <button id="miniRefBtn" style="position:relative;background:none;border:none;padding:0;width:100%;cursor:pointer;margin-top:10px;"><img src="/main/btn_frame_invite.webp" style="width:100%;display:block;opacity:0.65;"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.88rem;color:#00ffaa;">${t.referralMiniBtn}</span></button>
+      ${menuBtn('miniRefBtn', I_USERS, t.referralMiniBtn)}
       ${localStorage.getItem('channelBonusClaimed') === '1' ? '' : `
-      <button onclick="window.open('https://t.me/NeuronGame_bot?start=channel','_blank');" style="position:relative;background:none;border:none;padding:0;width:100%;cursor:pointer;margin-top:8px;"><img src="/main/btn_frame_channel.webp" style="width:100%;display:block;opacity:0.65;"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.88rem;color:#00ffaa;">📢 ${t.channelBonusBtn}</span></button>
-      <button id="channelBonusBtn" style="position:relative;background:none;border:none;padding:0;width:100%;cursor:pointer;margin-top:8px;"><img src="/main/btn_frame_channel.webp" style="width:100%;display:block;opacity:0.65;"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.88rem;color:#00ffaa;">${t.channelClaimBtn || '🎁 Забрать бонус'}</span></button>
-    `}
-      <button onclick="if(window.Telegram?.WebApp?.openLink){tg.openLink(window.location.origin + '/whitepaper.html');}else{window.open('/whitepaper.html','_blank');}" style="position:relative;background:none;border:none;padding:0;width:100%;cursor:pointer;margin-top:8px;"><img src="/main/btn_frame_whitepaper.webp" style="width:100%;display:block;opacity:0.65;"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.88rem;color:#00ffaa;"> Whitepaper</span></button>
+        ${menuBtn('', I_GIFT, `📢 ${t.channelBonusBtn}`, `onclick="window.open('https://t.me/NeuronGame_bot?start=channel','_blank')"`)}
+        ${menuBtn('channelBonusBtn', I_GIFT, t.channelClaimBtn || '🎁 Забрать бонус')}
+      `}
+      ${menuBtn('whitepaperBtn', I_BOOK, 'Whitepaper')}
     </div>`;
+
+  const wpBtn = document.getElementById('whitepaperBtn');
+  if (wpBtn) wpBtn.addEventListener('click', () => {
+    if (window.Telegram?.WebApp?.openLink) window.Telegram.WebApp.openLink(window.location.origin + '/whitepaper.html');
+    else window.open('/whitepaper.html', '_blank');
+  });
+
 
   const miniRefBtn = document.getElementById('miniRefBtn');
   if (miniRefBtn) miniRefBtn.addEventListener('click', () => {
