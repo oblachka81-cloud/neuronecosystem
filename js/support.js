@@ -118,22 +118,24 @@ function supportRenderFAQ() {
 function supportAddMessage(text, type) {
   const container = document.getElementById('supportChatMessages');
   const div = document.createElement('div');
-  div.style.cssText = `margin-bottom:8px;padding:8px 12px;border-radius:12px;font-size:0.85rem;line-height:1.4;max-width:100%;display:flex;align-items:flex-start;gap:8px;`;
-  
-  // Получаем фото пользователя из Telegram WebApp, либо ставим заглушку, если его нет
-  const userPhoto = window.Telegram?.WebApp?.user?.photo_url || '/support/default_user.webp';
   
   if (type === 'ai') {
+    // СООБЩЕНИЕ ОТ БОТА (слева)
+    div.style.cssText = `margin-bottom:8px;display:flex;align-items:flex-start;gap:8px;max-width:85%;`;
     div.innerHTML = `
       <img src="/support/support_avatar.webp" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;border:1px solid rgba(102,204,255,0.3);">
-      <div style="flex:1;color:#66ccff;font-weight:600;word-break:break-word;">${text}</div>
+      <div style="flex:1;color:#66ccff;font-weight:600;font-size:0.85rem;line-height:1.4;word-break:break-word;">${text}</div>
     `;
   } else {
-    // Для пользователя: текст справа, аватарка справа от текста (через flex-direction или порядок элементов)
-    div.style.flexDirection = 'row-reverse'; // Меняем порядок: сначала текст, потом картинка
+    // СООБЩЕНИЕ ОТ ПОЛЬЗОВАТЕЛЯ (справа)
+    div.style.cssText = `margin-bottom:8px;display:flex;align-items:flex-start;gap:8px;flex-direction:row-reverse;justify-content:flex-end;max-width:85%;margin-left:auto;`;
+    
+    // Берем аватарку из глобальной переменной currentUser (как в профиле)
+    const userPhoto = window.currentUser?.photo_url || '/main/game_logo.webp';
+    
     div.innerHTML = `
-      <div style="flex:1;text-align:right;color:#ffcc66;font-weight:500;word-break:break-word;">${text}</div>
-      <img src="${userPhoto}" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,204,102,0.3);object-fit:cover;">
+      <img src="${userPhoto}" onerror="this.src='/main/game_logo.webp'" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,204,102,0.3);object-fit:cover;">
+      <div style="flex:1;text-align:right;color:#ffcc66;font-weight:500;font-size:0.85rem;line-height:1.4;word-break:break-word;">${text}</div>
     `;
   }
   
