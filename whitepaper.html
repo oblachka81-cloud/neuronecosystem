@@ -103,6 +103,11 @@ body.fr [data-ru]{display:none;}body.fr [data-fr]{display:block;}body.fr span[da
 body.es [data-ru]{display:none;}body.es [data-es]{display:block;}body.es span[data-es]{display:inline;}body.es span[data-ru]{display:none;}
 span[data-en],span[data-fr],span[data-es]{display:none;}
 @media(max-width:480px){.logo{font-size:2.2em;}.modules-grid{grid-template-columns:1fr 1fr;}.economy-split{flex-direction:column;}.impulse-grid{grid-template-columns:1fr 1fr;}}
+.partner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:16px;margin-top:20px;}
+.partner-logo{position:relative;background:rgba(5,7,15,0.55);backdrop-filter:blur(8px);border-radius:16px;padding:16px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;border:1px solid var(--border);}
+.partner-logo:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(232,217,160,0.15);border-color:var(--gold2);}
+.partner-logo img{max-width:100%;max-height:60px;object-fit:contain;filter:grayscale(20%) brightness(0.9);transition:filter 0.3s;}
+.partner-logo:hover img{filter:grayscale(0%) brightness(1.1);}
 </style>
 </head>
 <body>
@@ -138,37 +143,42 @@ span[data-en],span[data-fr],span[data-es]{display:none;}
 </header>
 <main>
 
-<section>
-<h2 data-ru>1. Введение</h2><h2 data-en>1. Introduction</h2><h2 data-fr>1. Introduction</h2><h2 data-es>1. Introducción</h2>
-<p data-ru><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> — растущая блокчейн-экосистема в Telegram с собственным токеном <strong style="color:var(--gold);">COGNIQ</strong> на блокчейне <strong style="color:#00ccff;">TON</strong>.</p>
-<p data-en><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> is a growing blockchain ecosystem in Telegram with its own <strong style="color:var(--gold);">COGNIQ</strong> token on the <strong style="color:#00ccff;">TON</strong> blockchain.</p>
-<p data-fr><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> est un écosystème blockchain en croissance dans Telegram avec son propre token <strong style="color:var(--gold);">COGNIQ</strong> sur la blockchain <strong style="color:#00ccff;">TON</strong>.</p>
-<p data-es><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> es un ecosistema blockchain en crecimiento en Telegram con su propio token <strong style="color:var(--gold);">COGNIQ</strong> en la blockchain <strong style="color:#00ccff;">TON</strong>.</p>
-<p data-ru><strong style="color:var(--green);">Викторина с вознаграждением</strong>, игровой хаб <strong style="color:var(--gold);">IMPULSE</strong>, <strong style="color:var(--plat);">NEURON Exchange</strong>, <strong style="color:#10b981;">NEURON Bank</strong>, <strong style="color:var(--green);">Fiat On-Ramp</strong>, <strong style="color:var(--gold2);">NEURON Shop</strong> и профиль с достижениями — всё объединено единой валютой.</p>
-<p data-en>A <strong style="color:var(--green);">reward-powered quiz</strong>, <strong style="color:var(--gold);">IMPULSE</strong> gaming hub, <strong style="color:var(--plat);">NEURON Exchange</strong>, <strong style="color:#10b981;">NEURON Bank</strong>, <strong style="color:var(--green);">Fiat On-Ramp</strong>, <strong style="color:var(--gold2);">NEURON Shop</strong> and achievement profile — all united by one currency.</p>
-<p data-fr><strong style="color:var(--green);">Quiz rémunéré</strong>, hub de jeux <strong style="color:var(--gold);">IMPULSE</strong>, <strong style="color:var(--plat);">NEURON Exchange</strong>, <strong style="color:#10b981;">NEURON Bank</strong>, <strong style="color:var(--green);">Fiat On-Ramp</strong>, <strong style="color:var(--gold2);">NEURON Shop</strong> et profil avec succès — tous unis par une seule monnaie.</p>
-<p data-es><strong style="color:var(--green);">Quiz con recompensas</strong>, hub de juegos <strong style="color:var(--gold);">IMPULSE</strong>, <strong style="color:var(--plat);">NEURON Exchange</strong>, <strong style="color:#10b981;">NEURON Bank</strong>, <strong style="color:var(--green);">Fiat On-Ramp</strong>, <strong style="color:var(--gold2);">NEURON Shop</strong> y perfil con logros — todos unidos por una moneda.</p>
+  <section>
+<h2 data-ru>1. Введение</h2><h2 data-en>1. Introduction</h2><h2 data-fr>1. Introduction</h2 data-es>1. Introducción</h2>
+
+<p data-ru><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> — это инновационная GameFi и Learn-to-Earn платформа, встроенная прямо в Telegram. Экосистема работает на быстром и масштабируемом блокчейне <strong style="color:#00ccff;">TON</strong> и использует собственный утилитарный токен <strong style="color:var(--gold);">COGNIQ</strong> как единую валюту для всех взаимодействий.</p>
+<p data-en><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> is an innovative GameFi and Learn-to-Earn platform embedded directly into Telegram. The ecosystem runs on the fast and scalable <strong style="color:#00ccff;">TON</strong> blockchain and uses its own utility token, <strong style="color:var(--gold);">COGNIQ</strong>, as the single currency for all interactions.</p>
+<p data-fr><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> est une plateforme innovante de GameFi et de Learn-to-Earn intégrée directement dans Telegram. L'écosystème fonctionne sur la blockchain <strong style="color:#00ccff;">TON</strong>, rapide et évolutive, et utilise son propre token utilitaire, <strong style="color:var(--gold);">COGNIQ</strong>, comme monnaie unique pour toutes les interactions.</p>
+<p data-es><strong style="color:var(--plat);">NEURON BLOCKCHAIN ECOSYSTEM</strong> es una plataforma innovadora de GameFi y Learn-to-Earn integrada directamente en Telegram. El ecosistema funciona en la blockchain rápida y escalable <strong style="color:#00ccff;">TON</strong> y utiliza su propio token utilitario, <strong style="color:var(--gold);">COGNIQ</strong>, como moneda única para todas las interacciones.</p>
+
+<p data-ru>Мы объединили образовательные викторины, азартный игровой хаб <strong style="color:var(--gold);">IMPULSE</strong>, децентрализованный <strong style="color:var(--plat);">NEURON Exchange</strong>, банковские функции (<strong style="color:#10b981;">NEURON Bank</strong>), фиатный шлюз (<strong style="color:var(--green);">Fiat On-Ramp</strong>) и магазин достижений (<strong style="color:var(--gold2);">NEURON Shop</strong>) в единый, бесшовный пользовательский опыт.</p>
+<p data-en>We have combined educational quizzes, the thrilling <strong style="color:var(--gold);">IMPULSE</strong> gaming hub, the decentralized <strong style="color:var(--plat);">NEURON Exchange</strong>, banking features (<strong style="color:#10b981;">NEURON Bank</strong>), a fiat gateway (<strong style="color:var(--green);">Fiat On-Ramp</strong>), and an achievement shop (<strong style="color:var(--gold2);">NEURON Shop</strong>) into a single, seamless user experience.</p>
+<p data-fr>Nous avons combiné des quiz éducatifs, le hub de jeux palpitant <strong style="color:var(--gold);">IMPULSE</strong>, le <strong style="color:var(--plat);">NEURON Exchange</strong> décentralisé, des fonctions bancaires (<strong style="color:#10b981;">NEURON Bank</strong>), une passerelle fiat (<strong style="color:var(--green);">Fiat On-Ramp</strong>) et une boutique de succès (<strong style="color:var(--gold2);">NEURON Shop</strong>) en une seule expérience utilisateur fluide.</p>
+<p data-es>Hemos combinado quizzes educativos, el emocionante hub de juegos <strong style="color:var(--gold);">IMPULSE</strong>, el <strong style="color:var(--plat);">NEURON Exchange</strong> descentralizado, funciones bancarias (<strong style="color:#10b981;">NEURON Bank</strong>), una pasarela fiat (<strong style="color:var(--green);">Fiat On-Ramp</strong>) y una tienda de logros (<strong style="color:var(--gold2);">NEURON Shop</strong>) en una experiencia de usuario única y fluida.</p>
+
 <div class="highlight green">
-<p data-ru>🎯 <strong>Миссия:</strong> сделать обучение увлекательным и вознаграждаемым. Каждый правильный ответ — шаг к новым знаниям и реальным наградам в сети TON.</p>
-<p data-en>🎯 <strong>Mission:</strong> make learning engaging and rewarding. Every correct answer is a step toward new knowledge and real rewards on the TON network.</p>
-<p data-fr>🎯 <strong>Mission :</strong> rendre l'apprentissage captivant et rémunérateur. Chaque bonne réponse est un pas vers de nouvelles connaissances et de vraies récompenses sur TON.</p>
-<p data-es>🎯 <strong>Misión:</strong> hacer el aprendizaje divertido y recompensado. Cada respuesta correcta es un paso hacia nuevos conocimientos y recompensas reales en TON.</p>
+<p data-ru>🎯 <strong>Миссия:</strong> Демократизировать доступ к крипто-знаниям и DeFi-инструментам. Мы превращаем обучение в увлекательный процесс, где каждый правильный ответ и каждое игровое решение конвертируется в реальную ценность и награды в сети TON. Твой интеллект — твой главный актив.</p>
+<p data-en>🎯 <strong>Mission:</strong> To democratize access to crypto knowledge and DeFi tools. We turn learning into an engaging process where every correct answer and gaming decision converts into real value and rewards on the TON network. Your intellect is your main asset.</p>
+<p data-fr>🎯 <strong>Mission :</strong> Démocratiser l'accès aux connaissances crypto et aux outils DeFi. Nous transformons l'apprentissage en un processus captivant où chaque bonne réponse et chaque décision de jeu se convertit en valeur réelle et en récompenses sur TON. Votre intellect est votre principal actif.</p>
+<p data-es>🎯 <strong>Misión:</strong> Democratizar el acceso al conocimiento cripto y a las herramientas DeFi. Convertimos el aprendizaje en un proceso divertido donde cada respuesta correcta y decisión de juego se convierte en valor real y recompensas en TON. Tu intelecto es tu principal activo.</p>
 </div>
-<p data-ru><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> интегрирована с лидерами мирового рынка:</p>
-<p data-en><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> is integrated with global market leaders:</p>
-<p data-fr><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> est intégrée avec les leaders du marché mondial :</p>
-<p data-es><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> está integrada con los líderes del mercado mundial:</p>
-<div class="partner-chips">
-<span class="chip">STON.fi</span>
-<span class="chip">DeDust</span>
-<span class="chip">Megaton Finance</span>
-<span class="chip">BestChange</span>
-<span class="chip">Exchanger</span>
-<span class="chip">MonitorEC</span>
-<span class="chip">Omniston</span>
-<span class="chip">Backed Finance</span>
-<span class="chip">Yahoo Finance</span>
-<span class="chip fire">MEXC</span>
+
+<p data-ru><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> интегрирована с ведущими протоколами и сервисами мирового уровня для обеспечения максимальной ликвидности, безопасности и удобства:</p>
+<p data-en><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> is integrated with world-class protocols and services to ensure maximum liquidity, security, and convenience:</p>
+<p data-fr><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> est intégrée aux protocoles et services de classe mondiale pour assurer une liquidité, une sécurité et une commodité maximales :</p>
+<p data-es><strong style="color:var(--gold);">NEURON Blockchain Ecosystem</strong> está integrada con protocolos y servicios de clase mundial para garantizar la máxima liquidez, seguridad y comodidad:</p>
+
+<div class="partner-grid">
+<div class="partner-logo"><img src="whitepaper/STON.fi.webp" alt="STON.fi" title="STON.fi"></div>
+<div class="partner-logo"><img src="whitepaper/DeDust.webp" alt="DeDust" title="DeDust"></div>
+<div class="partner-logo"><img src="whitepaper/Megaton_Finance.webp" alt="Megaton Finance" title="Megaton Finance"></div>
+<div class="partner-logo"><img src="whitepaper/BestChange.webp" alt="BestChange" title="BestChange"></div>
+<div class="partner-logo"><img src="whitepaper/Exchanger.webp" alt="Exchanger" title="Exchanger"></div>
+<div class="partner-logo"><img src="whitepaper/MonitorEC.webp" alt="MonitorEC" title="MonitorEC"></div>
+<div class="partner-logo"><img src="whitepaper/Omniston.webp" alt="Omniston" title="Omniston"></div>
+<div class="partner-logo"><img src="whitepaper/Backed_Finance.webp" alt="Backed Finance" title="Backed Finance"></div>
+<div class="partner-logo"><img src="whitepaper/Yahoo_Finance.webp" alt="Yahoo Finance" title="Yahoo Finance"></div>
+<div class="partner-logo"><img src="whitepaper/MEXC.webp" alt="MEXC" title="MEXC"></div>
 </div>
 </section>
 
