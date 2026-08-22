@@ -120,10 +120,21 @@ function supportAddMessage(text, type) {
   const div = document.createElement('div');
   div.style.cssText = `margin-bottom:8px;padding:8px 12px;border-radius:12px;font-size:0.85rem;line-height:1.4;max-width:100%;display:flex;align-items:flex-start;gap:8px;`;
   
+  // Получаем фото пользователя из Telegram WebApp, либо ставим заглушку, если его нет
+  const userPhoto = window.Telegram?.WebApp?.user?.photo_url || '/support/default_user.webp';
+  
   if (type === 'ai') {
-    div.innerHTML = `<img src="/support/support_avatar.webp" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;"><div style="flex:1;color:#66ccff;font-weight:600;">${text}</div>`;
+    div.innerHTML = `
+      <img src="/support/support_avatar.webp" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;border:1px solid rgba(102,204,255,0.3);">
+      <div style="flex:1;color:#66ccff;font-weight:600;word-break:break-word;">${text}</div>
+    `;
   } else {
-    div.innerHTML = `<div style="flex:1;text-align:right;color:#ffcc66;font-weight:500;">${text}</div>`;
+    // Для пользователя: текст справа, аватарка справа от текста (через flex-direction или порядок элементов)
+    div.style.flexDirection = 'row-reverse'; // Меняем порядок: сначала текст, потом картинка
+    div.innerHTML = `
+      <div style="flex:1;text-align:right;color:#ffcc66;font-weight:500;word-break:break-word;">${text}</div>
+      <img src="${userPhoto}" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,204,102,0.3);object-fit:cover;">
+    `;
   }
   
   container.appendChild(div);
