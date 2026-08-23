@@ -202,6 +202,8 @@ root.innerHTML = `
     });
   }
 
+  const duelsBtn = document.getElementById('duelsBtn');
+  if (duelsBtn) duelsBtn.addEventListener('click', () => loadDuelPanel());
   const startBtn = document.getElementById('startNewBtn');
   if (startBtn && !startBtn.disabled) {
     startBtn.addEventListener('click', () => {
