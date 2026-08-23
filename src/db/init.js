@@ -411,6 +411,42 @@ await pool.query(`
 await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_bets_multi_round ON crash_bets_multi(round_id)`);
 await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_bets_multi_user ON crash_bets_multi(telegram_id)`);
 
+    await pool.query(`
+    CREATE TABLE IF NOT EXISTS duels (
+      id SERIAL PRIMARY KEY,
+      player1_id BIGINT NOT NULL,
+      player2_id BIGINT,
+      stake INTEGER NOT NULL DEFAULT 0,
+      status VARCHAR(20) DEFAULT 'waiting',
+      question_ids JSONB DEFAULT '[]',
+      current_round INTEGER DEFAULT 0,
+      score1 INTEGER DEFAULT 0,
+      score2 INTEGER DEFAULT 0,
+      winner_id BIGINT,
+      created_at TIMESTAMP DEFAULT NOW(),
+      finished_at TIMESTAMP
+    )
+  `);
+  
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS duel_answers (
+      id SERIAL PRIMARY KEY,
+      duel_id INTEGER REFERENCES duels(id) ON DELETE CASCADE,
+      user_id BIGINT NOT NULL,
+      round INTEGER NOT NULL,
+      answer_idx INTEGER,
+      correct BOOLEAN DEFAULT false,
+      time_ms INTEGER DEFAULT 0,
+      points INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW(),
+      UNIQUE(duel_id, user_id, round)
+    )
+  `);
+  
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS duels_played INTEGER DEFAULT 0`);
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS duels_won INTEGER DEFAULT 0`);
+
+
   await loadQuestionsFromDB();
   console.log('БД инициализирована');
 };
