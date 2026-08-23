@@ -108,18 +108,20 @@ function supportCloseFAQ() {
 
 function supportRenderFAQ() {
   const faqList = SUPPORT_FAQ[currentLang] || SUPPORT_FAQ['ru'];
-  document.getElementById('supportFaqList').innerHTML = faqList.map(item => `
-    <div class="faq-card" onclick="this.classList.toggle('open')" style="background:rgba(10,20,38,0.7);border:1px solid rgba(255,170,0,0.2);border-radius:20px;padding:16px;margin-bottom:8px;cursor:pointer;">
+  const list = document.getElementById('supportFaqList');
+  if (!list) return;
+  
+  list.innerHTML = faqList.map(item => `
+    <div class="faq-card" style="background:rgba(10,20,38,0.7);border:1px solid rgba(255,170,0,0.2);border-radius:20px;padding:16px;margin-bottom:8px;cursor:pointer;">
       <div style="font-size:0.9rem;font-weight:700;color:#ffaa00;">${item.q}</div>
       <div class="faq-a" style="font-size:0.82rem;color:#ccddee;line-height:1.5;display:none;margin-top:8px;">${item.a}</div>
     </div>
   `).join('');
   
-  document.querySelectorAll('.faq-card').forEach(card => {
+  list.querySelectorAll('.faq-card').forEach(card => {
     card.addEventListener('click', function() {
-      this.classList.toggle('open');
       const a = this.querySelector('.faq-a');
-      if (a) a.style.display = this.classList.contains('open') ? 'block' : 'none';
+      a.style.display = (a.style.display === 'block') ? 'none' : 'block';
     });
   });
 }
