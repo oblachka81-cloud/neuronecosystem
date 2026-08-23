@@ -131,7 +131,10 @@ function supportAddMessage(text, type) {
     div.style.cssText = `margin-bottom:8px;display:flex;align-items:flex-start;gap:8px;flex-direction:row-reverse;justify-content:flex-end;max-width:85%;margin-left:auto;`;
     
     // Берем аватарку из глобальной переменной currentUser (как в профиле)
-    const userPhoto = window.currentUser?.photo_url || '/main/game_logo.webp';
+    // Предполагаем, что window.currentUser.photo_url заполняется при загрузке профиля
+    const userPhoto = window.currentUser?.photo_url 
+      ? (BASE_URL || '') + window.currentUser.photo_url 
+      : '/main/game_logo.webp';
     
     div.innerHTML = `
       <img src="${userPhoto}" onerror="this.src='/main/game_logo.webp'" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,204,102,0.3);object-fit:cover;">
