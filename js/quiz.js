@@ -729,7 +729,7 @@ function loadDuelPanel() {
 
   root.innerHTML = `
     <div class="duel-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
-      <button onclick="loadMainMenu()" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
+      <button onclick="duelBackToMenu()" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
 
       <div style="text-align:center;margin-bottom:20px;">
         <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#ffcc44,#e8d9a0,#ffcc44);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">⚔️ ${t.title}</div>
