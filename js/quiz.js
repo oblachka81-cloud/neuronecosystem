@@ -719,6 +719,7 @@ function duelBackToMenu() {
 }
 
 function loadDuelPanel() {
+  duelHideChrome();
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
   
   if (duelPollInterval) {
