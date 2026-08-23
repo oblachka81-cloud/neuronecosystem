@@ -43,7 +43,16 @@ const SUPPORT_UI = {
 
 let supportMode = 'support';
 
-function loadSupportPanel() {
+async function loadSupportPanel() {
+  // Подтягиваем данные пользователя для аватарки в чате
+  if (!window.currentUser) {
+    try {
+      const res = await authFetch(`${BASE_URL}/api/user/profile?lang=${currentLang}`);
+      const data = await res.json();
+      if (!data.error) window.currentUser = data;
+    } catch(e) {}
+  }
+  
   const s = SUPPORT_UI[currentLang] || SUPPORT_UI['ru'];
   
   root.innerHTML = `
@@ -133,7 +142,7 @@ function supportAddMessage(text, type) {
     // Берем аватарку из глобальной переменной currentUser (как в профиле)
     // Предполагаем, что window.currentUser.photo_url заполняется при загрузке профиля
     const userPhoto = window.currentUser?.photo_url 
-      ? (BASE_URL || '') + window.currentUser.photo_url 
+      ? BASE_URL + window.currentUser.photo_url 
       : '/main/game_logo.webp';
     
     div.innerHTML = `
