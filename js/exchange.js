@@ -772,60 +772,58 @@ function loadExchangePanel() {
         </div>
       </div>
 
-      <div style="position:relative;margin-bottom:16px;">
-        <img src="/public/images/cogniq/exchange_swap_frame.webp" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none;" alt="">
-        <div style="position:relative;z-index:1;padding:18px;">
-          <div style="margin-bottom:12px;">
-            <div style="font-size:0.75rem;color:#5577aa;margin-bottom:4px;" id="fromLabel">${ex.fromLabel}</div>
-            <div style="display:flex;gap:8px;">
-              <input type="number" id="fromAmount" placeholder="0.00" oninput="exchangeCalcSwap()" style="flex:1;padding:12px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:1rem;outline:none;">
-              <select id="fromCurrency" onchange="exchangeCalcSwap()" style="padding:12px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.9rem;outline:none;">
-                <option value="TON">TON</option>
-                <option value="USDT">USDT</option>
-                <option value="BTC">BTC</option>
-                <option value="XAUt0">XAUt0 (Gold)</option>
-                <option value="AAPLx">AAPLx</option>
-                <option value="NVDAx">NVDAx</option>
-                <option value="TSLAx">TSLAx</option>
-                <option value="AMZNx">AMZNx</option>
-                <option value="SPYx">SPYx</option>
-              </select>
-            </div>
-          </div>
+      <div style="position:relative;margin-bottom:16px;border-radius:20px;padding:14px;border:2px solid transparent;background:linear-gradient(160deg,rgba(16,22,40,0.88),rgba(6,10,20,0.92)) padding-box,linear-gradient(135deg,rgba(255,204,68,0.85) 0%,rgba(138,116,74,0.6) 25%,rgba(232,217,160,0.85) 50%,rgba(138,116,74,0.6) 75%,rgba(255,204,68,0.85) 100%) border-box;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 28px rgba(0,0,0,0.5),0 0 18px rgba(255,204,68,0.10),inset 0 1px 0 rgba(255,255,255,0.06);">
 
-          <div style="display:flex;justify-content:center;margin:8px 0;">
-            <button onclick="exchangeSwapCurrencies()" style="background:none;border:none;padding:0;cursor:pointer;">
-              <img src="/public/images/cogniq/exchange_swap_arrows.webp" style="width:36px;height:36px;display:block;">
-            </button>
+        <div style="margin-bottom:6px;">
+          <div style="font-size:0.68rem;color:#7799bb;margin-bottom:4px;letter-spacing:0.5px;" id="fromLabel">${ex.fromLabel}</div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="fromAmount" placeholder="0.00" oninput="exchangeCalcSwap()" style="flex:1;min-width:0;padding:10px 12px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,204,68,0.18);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;">
+            <select id="fromCurrency" onchange="exchangeCalcSwap()" style="padding:10px 8px;max-width:112px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,204,68,0.18);border-radius:12px;color:#ffcc44;font-size:0.82rem;font-weight:700;outline:none;">
+              <option value="TON">TON</option>
+              <option value="USDT">USDT</option>
+              <option value="BTC">BTC</option>
+              <option value="XAUt0">XAUt0 (Gold)</option>
+              <option value="AAPLx">AAPLx</option>
+              <option value="NVDAx">NVDAx</option>
+              <option value="TSLAx">TSLAx</option>
+              <option value="AMZNx">AMZNx</option>
+              <option value="SPYx">SPYx</option>
+            </select>
           </div>
+        </div>
 
-          <div style="margin-bottom:12px;">
-            <div style="font-size:0.75rem;color:#5577aa;margin-bottom:4px;" id="toLabel">${ex.toLabel}</div>
-            <div style="display:flex;gap:8px;">
-              <input type="number" id="toAmount" placeholder="0.00" readonly style="flex:1;padding:12px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:1rem;outline:none;">
-              <select id="toCurrency" onchange="exchangeCalcSwap()" style="padding:12px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,170,0,0.2);border-radius:12px;color:#fff;font-size:0.9rem;outline:none;">
-                <option value="USDT">USDT</option>
-                <option value="TON">TON</option>
-                <option value="BTC">BTC</option>
-                <option value="XAUt0">XAUt0 (Gold)</option>
-                <option value="AAPLx">AAPLx</option>
-                <option value="NVDAx">NVDAx</option>
-                <option value="TSLAx">TSLAx</option>
-                <option value="AMZNx">AMZNx</option>
-                <option value="SPYx">SPYx</option>
-              </select>
-            </div>
-          </div>
-
-          <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#5577aa;margin-bottom:12px;">
-            <span><span id="rateLabel">${ex.rateLabel}</span> <span id="rateInfo">—</span></span>
-            <span id="gasFeeLabel">${ex.gasFeeLabel}</span>
-          </div>
-
-          <button id="swapBtn" onclick="exchangeDoSwap()" disabled style="background:none;border:none;padding:0;cursor:pointer;width:100%;">
-            <img src="/public/images/cogniq/exchange_swap_btn.webp" style="width:100%;height:auto;display:block;">
+        <div style="display:flex;justify-content:center;margin:-2px 0;position:relative;z-index:2;">
+          <button onclick="exchangeSwapCurrencies()" style="background:rgba(8,12,24,0.95);border:1px solid rgba(255,204,68,0.4);border-radius:50%;padding:5px;cursor:pointer;box-shadow:0 0 12px rgba(255,204,68,0.25);">
+            <img src="/public/images/cogniq/exchange_swap_arrows.webp" style="width:28px;height:28px;display:block;">
           </button>
         </div>
+
+        <div style="margin-bottom:10px;">
+          <div style="font-size:0.68rem;color:#7799bb;margin-bottom:4px;letter-spacing:0.5px;" id="toLabel">${ex.toLabel}</div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="toAmount" placeholder="0.00" readonly style="flex:1;min-width:0;padding:10px 12px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,204,68,0.18);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;">
+            <select id="toCurrency" onchange="exchangeCalcSwap()" style="padding:10px 8px;max-width:112px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,204,68,0.18);border-radius:12px;color:#ffcc44;font-size:0.82rem;font-weight:700;outline:none;">
+              <option value="USDT">USDT</option>
+              <option value="TON">TON</option>
+              <option value="BTC">BTC</option>
+              <option value="XAUt0">XAUt0 (Gold)</option>
+              <option value="AAPLx">AAPLx</option>
+              <option value="NVDAx">NVDAx</option>
+              <option value="TSLAx">TSLAx</option>
+              <option value="AMZNx">AMZNx</option>
+              <option value="SPYx">SPYx</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:#7799bb;margin-bottom:10px;">
+          <span><span id="rateLabel">${ex.rateLabel}</span> <span id="rateInfo" style="color:#e8d9a0;">—</span></span>
+          <span id="gasFeeLabel">${ex.gasFeeLabel}</span>
+        </div>
+
+        <button id="swapBtn" onclick="exchangeDoSwap()" disabled style="background:none;border:none;padding:0;cursor:pointer;width:100%;">
+          <img src="/public/images/cogniq/exchange_swap_btn.webp" style="width:100%;height:auto;display:block;">
+        </button>
       </div>
 
       <div id="liveMarketWrap" style="position:relative;margin:0 0 16px 0;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(175,200,245,0.4), inset 0 0 10px rgba(255,255,255,0.12);">
