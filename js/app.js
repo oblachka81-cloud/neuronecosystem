@@ -209,6 +209,14 @@ function loadWelcome(retryCount = 0) {
         }).catch(()=>{});
         updateGamesLeftUI(currentState.freeGamesLeft);
         showWelcome(currentState.totalScore, currentState.gamesPlayed);
+        // Проверка на дуэль (если открыли по ссылке-приглашению)
+        const startParam = tg.initDataUnsafe?.start_param || '';
+        if (startParam && startParam.startsWith('duel_')) {
+          const duelId = startParam.replace('duel_', '');
+          setTimeout(() => {
+            loadDuelJoinPanel(duelId);
+          }, 1500);
+        }
         resolve();
       }).catch(() => {
         if (retryCount < 3) setTimeout(() => loadWelcome(retryCount + 1).then(resolve), 1000);
