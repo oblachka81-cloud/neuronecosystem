@@ -321,6 +321,7 @@ window.addEventListener('error', function(e){
 <script>
   const BASE_URL = window.location.origin;
   const urlParams = new URLSearchParams(window.location.search); 
+  const duelIdFromUrl = urlParams.get('duel');
   const tg = window.Telegram?.WebApp ?? {
     expand:()=>{}, MainButton:{hide:()=>{}}, initDataUnsafe:{}, initData:'',
     showAlert:(msg)=>alert(msg), openInvoice:(url,cb)=>{window.open(url);cb&&cb('cancelled')}
@@ -376,7 +377,13 @@ window.addEventListener('error', function(e){
     }
   });
 
-  setTimeout(() => startApp(1), 300);
+  setTimeout(() => {
+  startApp(1).then(() => {
+    if (duelIdFromUrl) {
+      setTimeout(() => loadDuelJoinPanel(duelIdFromUrl), 500);
+    }
+  });
+}, 300);
   setTimeout(preloadTabImages, 2000);
 
   (function() {
