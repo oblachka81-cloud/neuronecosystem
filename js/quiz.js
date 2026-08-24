@@ -800,9 +800,12 @@ function duelBackToMenu() {
   if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
   if (duelTimerInterval) { clearInterval(duelTimerInterval); duelTimerInterval = null; }
   
-  // Удаляем контейнер дуэлей
+  // Удаляем контейнеры
   const container = document.getElementById('duelContainer');
   if (container) container.remove();
+  
+  const joinContainer = document.getElementById('duelJoinContainer');
+  if (joinContainer) joinContainer.remove();
   
   // Показываем хедер и футер
   const header = document.querySelector('.header');
@@ -1417,18 +1420,25 @@ function duelFinishBattle() {
 function loadDuelJoinPanel(duelIdParam) {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
   
+  root.innerHTML = '';
+  
   const header = document.querySelector('.header');
   const footer = document.querySelector('footer');
   if (header) header.style.display = 'none';
   if (footer) footer.style.display = 'none';
-
-  root.innerHTML = `
-    <div class="duel-join-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
+  
+  // Создаём отдельный контейнер с фоном
+  const joinContainer = document.createElement('div');
+  joinContainer.id = 'duelJoinContainer';
+  joinContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;background:rgba(4,8,20,0.97);';
+  
+  joinContainer.innerHTML = `
+    <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
       <div style="font-size:3rem;margin-bottom:16px;">⚔️</div>
       <div style="font-size:1.5rem;font-weight:900;color:#ffcc44;margin-bottom:8px;">${t.title}</div>
       <div style="color:#7799bb;margin-bottom:24px;">ID: ${duelIdParam}</div>
       
-      <div id="duelJoinLoader" style="padding:20px;color:#ffcc44;">⏳ ...</div>
+      <div id="duelJoinLoader" style="padding:20px;color:#ffcc44;">⏳ Проверяем дуэль...</div>
       
       <div id="duelJoinActions" style="display:none;flex-direction:column;gap:12px;">
         <div style="background:rgba(10,20,38,0.7);border:1px solid rgba(255,204,68,0.3);border-radius:12px;padding:16px;margin-bottom:16px;">
@@ -1436,29 +1446,41 @@ function loadDuelJoinPanel(duelIdParam) {
           <div style="color:#fff;font-size:1.5rem;font-weight:800;" id="joinStakeAmount">0 COGNIQ</div>
         </div>
         <button onclick="duelAcceptInvite(${duelIdParam})" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">⚔️ ${t.title}</button>
-        <button onclick="switchTab('game')" style="width:100%;padding:14px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:14px;color:#ff6464;font-size:0.9rem;font-weight:600;cursor:pointer;">${t.backBtn}</button>
+        <button onclick="duelBackToMenu()" style="width:100%;padding:14px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:14px;color:#ff6464;font-size:0.9rem;font-weight:600;cursor:pointer;">${t.backBtn}</button>
       </div>
     </div>
   `;
-
+  
+  document.body.appendChild(joinContainer);
+  
   // Проверяем дуэль
   authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelIdParam}`)
     .then(r => r.json())
     .then(data => {
-      document.getElementById('duelJoinLoader').style.display = 'none';
+      console.log('[DUEL] State:', data);
+      const loader = document.getElementById('duelJoinLoader');
+      if (!loader) return;
+      
+      loader.style.display = 'none';
       if (data.success && data.duel.status === 'waiting') {
-        document.getElementById('joinStakeAmount').textContent = data.duel.stake + ' COGNIQ';
-        document.getElementById('duelJoinActions').style.display = 'flex';
+        const stakeEl = document.getElementById('joinStakeAmount');
+        if (stakeEl) stakeEl.textContent = data.duel.stake + ' COGNIQ';
+        const actions = document.getElementById('duelJoinActions');
+        if (actions) actions.style.display = 'flex';
       } else {
-        document.getElementById('duelJoinLoader').style.display = 'block';
-        document.getElementById('duelJoinLoader').textContent = t.opponentNotFound;
-        document.getElementById('duelJoinLoader').style.color = '#ff6464';
+        loader.style.display = 'block';
+        loader.textContent = t.opponentNotFound || 'Дуэль не найдена';
+        loader.style.color = '#ff6464';
       }
     })
-    .catch(() => {
-      document.getElementById('duelJoinLoader').style.display = 'block';
-      document.getElementById('duelJoinLoader').textContent = t.errConnect;
-      document.getElementById('duelJoinLoader').style.color = '#ff6464';
+    .catch((e) => {
+      console.error('[DUEL] State error:', e);
+      const loader = document.getElementById('duelJoinLoader');
+      if (loader) {
+        loader.style.display = 'block';
+        loader.textContent = t.errConnect || 'Ошибка';
+        loader.style.color = '#ff6464';
+      }
     });
 }
 
