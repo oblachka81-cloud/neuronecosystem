@@ -1008,4 +1008,74 @@ function duelFinishBattle(duelId, duelData) {
     } catch (e) {}
   }, 500);
 }
+// Экран принятия приглашения (для второго игрока)
+function loadDuelJoinPanel(duelId) {
+  const header = document.querySelector('.header');
+  const footer = document.querySelector('footer');
+  if (header) header.style.display = 'none';
+  if (footer) footer.style.display = 'none';
 
+  root.innerHTML = `
+    <div class="duel-join-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:16px;">⚔️</div>
+      <div style="font-size:1.5rem;font-weight:900;color:#ffcc44;margin-bottom:8px;">Вас пригласили на дуэль!</div>
+      <div style="color:#7799bb;margin-bottom:24px;">ID дуэли: ${duelId}</div>
+      
+      <div id="duelJoinLoader" style="padding:20px;color:#ffcc44;">⏳ Проверяем информацию...</div>
+      
+      <div id="duelJoinActions" style="display:none;flex-direction:column;gap:12px;">
+        <div style="background:rgba(10,20,38,0.7);border:1px solid rgba(255,204,68,0.3);border-radius:12px;padding:16px;margin-bottom:16px;">
+          <div style="color:#7799bb;font-size:0.8rem;">Ставка</div>
+          <div style="color:#fff;font-size:1.5rem;font-weight:800;" id="joinStakeAmount">0 COGNIQ</div>
+        </div>
+        <button onclick="duelAcceptInvite(${duelId})" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">⚔️ Принять вызов</button>
+        <button onclick="switchTab('game')" style="width:100%;padding:14px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:14px;color:#ff6464;font-size:0.9rem;font-weight:600;cursor:pointer;">Отмена</button>
+      </div>
+    </div>
+  `;
+
+  // Проверяем, жива ли ещё дуэль
+  authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`)
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('duelJoinLoader').style.display = 'none';
+      if (data.success && data.duel.status === 'waiting') {
+        document.getElementById('joinStakeAmount').textContent = data.duel.stake + ' COGNIQ';
+        document.getElementById('duelJoinActions').style.display = 'flex';
+      } else {
+        document.getElementById('duelJoinLoader').style.display = 'block';
+        document.getElementById('duelJoinLoader').textContent = 'Эта дуэль уже началась или не найдена.';
+        document.getElementById('duelJoinLoader').style.color = '#ff6464';
+      }
+    })
+    .catch(() => {
+      document.getElementById('duelJoinLoader').style.display = 'block';
+      document.getElementById('duelJoinLoader').textContent = 'Ошибка проверки дуэли.';
+      document.getElementById('duelJoinLoader').style.color = '#ff6464';
+    });
+}
+
+// Обработка нажатия "Принять вызов"
+async function duelAcceptInvite(duelId) {
+  try {
+    const res = await authFetch(`${BASE_URL}/api/duel/join`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, duel_id: duelId })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      // Успешно присоединились! Сразу запрашиваем состояние и начинаем бой
+      const stateRes = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
+      const stateData = await stateRes.json();
+      if (stateData.success) {
+        duelStartBattle(duelId, stateData.duel);
+      }
+    } else {
+      alert(data.message || 'Не удалось присоединиться');
+    }
+  } catch (e) {
+    alert('Ошибка соединения');
+  }
+}
