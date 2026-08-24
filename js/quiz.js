@@ -622,74 +622,10 @@ async function loadReferralStats() {
 
 // ==================== ДУЭЛИ ====================
 const DUEL_LANG = {
-  ru: {
-    title: 'Дуэли',
-    subtitle: '1 на 1 • 10 вопросов • ставка',
-    desc: 'Брось вызов другу или найди соперника. Ставки: 100 / 500 / 1000 COGNIQ. Победитель забирает банк, 5% сжигается навсегда.',
-    stake100: '100 COGNIQ',
-    stake500: '500 COGNIQ',
-    stake1000: '1000 COGNIQ',
-    createBtn: 'Создать дуэль',
-    waiting: 'Ожидание соперника...',
-    shareInvite: 'Отправить приглашение',
-    copyLink: 'Скопировать ссылку',
-    copied: '✅ Скопировано!',
-    backBtn: '← Назад',
-    errBalance: 'Недостаточно COGNIQ',
-    errCreate: 'Не удалось создать дуэль',
-    errConnect: 'Ошибка связи'
-  },
-  en: {
-    title: 'Duels',
-    subtitle: '1 vs 1 • 10 questions • stake',
-    desc: 'Challenge a friend or find an opponent. Stakes: 100 / 500 / 1000 COGNIQ. Winner takes the pot, 5% burned forever.',
-    stake100: '100 COGNIQ',
-    stake500: '500 COGNIQ',
-    stake1000: '1000 COGNIQ',
-    createBtn: 'Create duel',
-    waiting: 'Waiting for opponent...',
-    shareInvite: 'Send invite',
-    copyLink: 'Copy link',
-    copied: '✅ Copied!',
-    backBtn: '← Back',
-    errBalance: 'Not enough COGNIQ',
-    errCreate: 'Could not create duel',
-    errConnect: 'Connection error'
-  },
-  fr: {
-    title: 'Duels',
-    subtitle: '1 contre 1 • 10 questions • mise',
-    desc: 'Défiez un ami ou trouvez un adversaire. Mises: 100 / 500 / 1000 COGNIQ. Le gagnant prend le pot, 5% brûlés.',
-    stake100: '100 COGNIQ',
-    stake500: '500 COGNIQ',
-    stake1000: '1000 COGNIQ',
-    createBtn: 'Créer duel',
-    waiting: 'Attente adversaire...',
-    shareInvite: 'Envoyer invitation',
-    copyLink: 'Copier lien',
-    copied: '✅ Copié !',
-    backBtn: '← Retour',
-    errBalance: 'COGNIQ insuffisants',
-    errCreate: 'Impossible de créer le duel',
-    errConnect: 'Erreur de connexion'
-  },
-  es: {
-    title: 'Duelos',
-    subtitle: '1 vs 1 • 10 preguntas • apuesta',
-    desc: 'Reta a un amigo o encuentra un oponente. Apuestas: 100 / 500 / 1000 COGNIQ. El ganador se lleva el bote, 5% quemado.',
-    stake100: '100 COGNIQ',
-    stake500: '500 COGNIQ',
-    stake1000: '1000 COGNIQ',
-    createBtn: 'Crear duelo',
-    waiting: 'Esperando oponente...',
-    shareInvite: 'Enviar invitación',
-    copyLink: 'Copiar enlace',
-    copied: '✅ ¡Copiado!',
-    backBtn: '← Volver',
-    errBalance: 'COGNIQ insuficientes',
-    errCreate: 'No se pudo crear el duelo',
-    errConnect: 'Error de conexión'
-  }
+  ru: { title: 'Дуэли', subtitle: '1 на 1 • 10 вопросов • ставка', desc: 'Брось вызов другу или найди соперника. Ставки: 100 / 500 / 1000 COGNIQ. Победитель забирает банк, 5% сжигается навсегда.', waiting: 'Ожидание соперника...', shareInvite: 'Отправить приглашение', copyLink: 'Скопировать ссылку', copied: '✅ Скопировано!', backBtn: '← Назад', errBalance: 'Недостаточно COGNIQ', errCreate: 'Не удалось создать дуэль', errConnect: 'Ошибка связи' },
+  en: { title: 'Duels', subtitle: '1 vs 1 • 10 questions • stake', desc: 'Challenge a friend or find an opponent. Stakes: 100 / 500 / 1000 COGNIQ. Winner takes the pot, 5% burned forever.', waiting: 'Waiting for opponent...', shareInvite: 'Send invite', copyLink: 'Copy link', copied: '✅ Copied!', backBtn: '← Back', errBalance: 'Not enough COGNIQ', errCreate: 'Could not create duel', errConnect: 'Connection error' },
+  fr: { title: 'Duels', subtitle: '1 contre 1 • 10 questions • mise', desc: 'Défiez un ami ou trouvez un adversaire. Mises: 100 / 500 / 1000 COGNIQ. Le gagnant prend le pot, 5% brûlés.', waiting: 'Attente adversaire...', shareInvite: 'Envoyer invitation', copyLink: 'Copier lien', copied: '✅ Copié !', backBtn: '← Retour', errBalance: 'COGNIQ insuffisants', errCreate: 'Impossible de créer le duel', errConnect: 'Erreur de connexion' },
+  es: { title: 'Duelos', subtitle: '1 vs 1 • 10 preguntas • apuesta', desc: 'Reta a un amigo o encuentra un oponente. Apuestas: 100 / 500 / 1000 COGNIQ. El ganador se lleva el bote, 5% quemado.', waiting: 'Esperando oponente...', shareInvite: 'Enviar invitación', copyLink: 'Copiar enlace', copied: '✅ ¡Copiado!', backBtn: '← Volver', errBalance: 'COGNIQ insuficientes', errCreate: 'No se pudo crear el duelo', errConnect: 'Error de conexión' }
 };
 
 let duelPollInterval = null;
@@ -719,59 +655,55 @@ function duelBackToMenu() {
 }
 
 function loadDuelPanel() {
-  duelHideChrome();
-  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
-  
-  if (duelPollInterval) {
-    clearInterval(duelPollInterval);
-    duelPollInterval = null;
+  try {
+    duelHideChrome();
+    const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+
+    if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
+
+    root.innerHTML = `
+      <div class="duel-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
+        <button onclick="duelBackToMenu()" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
+
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#ffcc44,#e8d9a0,#ffcc44);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">⚔️ ${t.title}</div>
+          <div style="font-size:0.78rem;color:#7799bb;margin-top:4px;">${t.subtitle}</div>
+        </div>
+
+        <div style="background:rgba(10,20,38,0.6);border:1px solid rgba(255,204,68,0.25);border-radius:18px;padding:16px;margin-bottom:20px;">
+          <p style="font-size:0.85rem;color:#c8c8dc;line-height:1.5;">${t.desc}</p>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button onclick="duelCreate(100)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.35);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;">${t.stake100 || '100 COGNIQ'}</button>
+          <button onclick="duelCreate(500)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.55);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,204,68,0.2);">${t.stake500 || '500 COGNIQ'}</button>
+          <button onclick="duelCreate(1000)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,150,50,0.55);border-radius:14px;color:#ffaa44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,150,50,0.25);">${t.stake1000 || '1000 COGNIQ'}</button>
+        </div>
+
+        <div id="duelWaitingBlock" style="display:none;"></div>
+      </div>
+    `;
+  } catch (e) {
+    root.innerHTML = `<div style="color:#ff8888;padding:20px;font-size:0.85rem;word-break:break-all;">⚠️ loadDuelPanel: ${e.message}</div>`;
   }
-
-  root.innerHTML = `
-    <div class="duel-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
-      <button onclick="duelBackToMenu()" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
-
-      <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#ffcc44,#e8d9a0,#ffcc44);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">⚔️ ${t.title}</div>
-        <div style="font-size:0.78rem;color:#7799bb;margin-top:4px;">${t.subtitle}</div>
-      </div>
-
-      <div style="background:rgba(10,20,38,0.6);border:1px solid rgba(255,204,68,0.25);border-radius:18px;padding:16px;margin-bottom:20px;">
-        <p style="font-size:0.85rem;color:#c8c8dc;line-height:1.5;">${t.desc}</p>
-      </div>
-
-      <div style="display:flex;gap:8px;margin-bottom:16px;">
-        <button onclick="duelCreate(100)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.35);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;transition:all 0.2s;">${t.stake100}</button>
-        <button onclick="duelCreate(500)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.55);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;transition:all 0.2s;box-shadow:0 0 12px rgba(255,204,68,0.2);">${t.stake500}</button>
-        <button onclick="duelCreate(1000)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,150,50,0.55);border-radius:14px;color:#ffaa44;font-size:0.85rem;font-weight:800;cursor:pointer;transition:all 0.2s;box-shadow:0 0 12px rgba(255,150,50,0.25);">${t.stake1000}</button>
-      </div>
-
-      <div id="duelWaitingBlock" style="display:none;"></div>
-    </div>
-  `;
 }
 
 async function duelCreate(stake) {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
-  
+
   try {
     const res = await authFetch(`${BASE_URL}/api/duel/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: currentUser.telegram_id, stake })
+      body: JSON.stringify({ user_id: userId, stake })
     });
     const data = await res.json();
-    
+
     if (!data.success) {
-      if (data.message && data.message.includes('COGNIQ')) {
-        alert(t.errBalance);
-      } else {
-        alert(data.message || t.errCreate);
-      }
+      alert(data.message || t.errCreate);
       return;
     }
-    
-    // Показываем блок ожидания
+
     document.getElementById('duelWaitingBlock').innerHTML = `
       <div style="background:rgba(10,20,38,0.8);border:2px solid rgba(0,255,170,0.4);border-radius:18px;padding:20px;text-align:center;box-shadow:0 0 20px rgba(0,255,170,0.15);">
         <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:12px;">⏳ ${t.waiting}</div>
@@ -781,8 +713,7 @@ async function duelCreate(stake) {
       </div>
     `;
     document.getElementById('duelWaitingBlock').style.display = 'block';
-    
-    // Запускаем поллинг
+
     duelStartPolling(data.duelId);
   } catch (e) {
     alert(t.errConnect);
@@ -791,7 +722,7 @@ async function duelCreate(stake) {
 
 function duelShareInvite(link) {
   if (navigator.share) {
-    navigator.share({ title: 'NEURON Duel', text: 'Join my duel in NEURON!', url: link });
+    navigator.share({ title: 'NEURON Duel', text: 'Join my duel in NEURON! ⚔️', url: link });
   } else {
     window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join my duel in NEURON! ⚔️')}`, '_blank');
   }
@@ -803,23 +734,18 @@ function duelCopyLink(link, btn) {
     const originalText = btn.innerHTML;
     btn.innerHTML = t.copied;
     btn.style.color = '#00ffaa';
-    setTimeout(() => {
-      btn.innerHTML = originalText;
-      btn.style.color = '#ffcc44';
-    }, 2000);
-  }).catch(() => {
-    prompt('Скопируй ссылку:', link);
-  });
+    setTimeout(() => { btn.innerHTML = originalText; btn.style.color = '#ffcc44'; }, 2000);
+  }).catch(() => { prompt('Copy:', link); });
 }
 
 function duelStartPolling(duelId) {
   if (duelPollInterval) clearInterval(duelPollInterval);
-  
+
   duelPollInterval = setInterval(async () => {
     try {
-      const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${currentUser.telegram_id}&duel_id=${duelId}`);
+      const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
       const data = await res.json();
-      
+
       if (data.success && data.duel.status === 'active' && data.duel.player2) {
         clearInterval(duelPollInterval);
         duelPollInterval = null;
@@ -830,7 +756,6 @@ function duelStartPolling(duelId) {
 }
 
 function duelStartBattle(duelId, duelData) {
-  // Пока просто алерт, бой сделаем в Шаге 5
   alert(`⚔️ Соперник найден! Дуэль #${duelId} началась!\n\nТы: ${duelData.player1.nick}\nСоперник: ${duelData.player2.nick}`);
   loadDuelPanel();
 }
