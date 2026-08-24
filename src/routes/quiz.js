@@ -530,36 +530,34 @@ router.post('/api/use-hint', requireInitDataStrict, authRateLimit, async (req, r
       await client.query('COMMIT');
       return res.json({ removedIndices, newScore: newBalance });
     } else {
-      // Собираем индексы, которые уже были в этой игре
-const usedInGame = new Set(questionOrder);
+  // Собираем индексы, которые уже были в этой игре
+  const usedInGame = new Set(questionOrder);
 
-// Ищем свободные вопросы из всего кэша
-const available = [];
-for (let i = 0; i < questionsCache.length; i++) {
-  if (!usedInGame.has(i)) available.push(i);
-}
+  // Ищем свободные вопросы из всего кэша
+  const available = [];
+  for (let i = 0; i < questionsCache.length; i++) {
+    if (!usedInGame.has(i)) available.push(i);
+  }
 
-if (available.length === 0) {
-  await client.query('ROLLBACK');
-  return res.status(400).json({ 
-    error: userLang === 'en' ? 'No questions available for replacement' :
-           userLang === 'fr' ? 'Aucune question disponible pour le remplacement' :
-           userLang === 'es' ? 'No hay preguntas disponibles para reemplazar' :
-           'Нет вопросов для замены' 
-  });
-}
+  const userLang = lang || 'ru';
 
-// Берём случайный новый вопрос
-const newQIndex = available[Math.floor(Math.random() * available.length)];
-const newOrder = [...questionOrder];
-newOrder[currentIndex] = newQIndex;   // просто заменяем текущий
-      const swapIdx = available[Math.floor(Math.random() * available.length)];
-      const newOrder = [...questionOrder];
-      [newOrder[currentIndex], newOrder[swapIdx]] = [newOrder[swapIdx], newOrder[currentIndex]];
-      const newQ = questionsCache[newOrder[currentIndex]];
+  if (available.length === 0) {
+    await client.query('ROLLBACK');
+    return res.status(400).json({ 
+      error: userLang === 'en' ? 'No questions available for replacement' :
+             userLang === 'fr' ? 'Aucune question disponible pour le remplacement' :
+             userLang === 'es' ? 'No hay preguntas disponibles para reemplazar' :
+             'Нет вопросов для замены' 
+    });
+  }
 
-      const userLang = lang || 'ru';
-      const translatedQ = await translateQuestion(newQ, userLang);
+  // Берём случайный новый вопрос
+  const newQIndex = available[Math.floor(Math.random() * available.length)];
+  const newOrder = [...questionOrder];
+  newOrder[currentIndex] = newQIndex;
+  
+  const newQ = questionsCache[newQIndex];
+  const translatedQ = await translateQuestion(newQ, userLang);
 
       await client.query(
         `UPDATE users SET balance = $1, current_question_order = $2, current_hints_used = $3, daily_hints_used = CASE WHEN $5 THEN daily_hints_used + 1 ELSE daily_hints_used END WHERE telegram_id = $4`,
