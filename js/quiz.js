@@ -1061,7 +1061,39 @@ function duelRenderBattleScreen() {
 async function duelLoadQuestion() {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
   
-  // Обновляем раунд
+  // Синхронизируем раунд с сервером
+  try {
+    const stateRes = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
+    const stateData = await stateRes.json();
+    if (stateData.success) {
+      const serverRound = stateData.duel.currentRound || 0;
+      duelCurrentRound = serverRound + 1;
+      
+      if (stateData.duel.score1 !== undefined) {
+        duelScores.score1 = stateData.duel.score1;
+        const el1 = document.getElementById('duelScore1');
+        if (el1) el1.textContent = stateData.duel.score1;
+      }
+      if (stateData.duel.score2 !== undefined) {
+        duelScores.score2 = stateData.duel.score2;
+        const el2 = document.getElementById('duelScore2');
+        if (el2) el2.textContent = stateData.duel.score2;
+      }
+      
+      if (stateData.duel.questions && stateData.duel.questions.length > 0) {
+        duelQuestions = stateData.duel.questions;
+      }
+      
+      if (stateData.duel.status === 'finished') {
+        duelFinishBattle();
+        return;
+      }
+    }
+  } catch (e) {
+    console.error('[DUEL] sync round error:', e);
+  }
+  
+  // Обновляем отображение раунда
   const roundEl = document.getElementById('duelRoundNum');
   if (roundEl) roundEl.textContent = duelCurrentRound;
   
@@ -1082,19 +1114,8 @@ async function duelLoadQuestion() {
     }
   }
   
-  // Если вопросов нет — пробуем получить через API
-  try {
-    const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
-    const data = await res.json();
-    if (data.success && data.duel.questions && data.duel.questions.length >= duelCurrentRound) {
-      const question = data.duel.questions[duelCurrentRound - 1];
-      duelQuestions = data.duel.questions;
-      duelRenderQuestion(question);
-      duelStartTimer();
-    }
-  } catch (e) {
-    console.error('Load question error:', e);
-  }
+  // Если вопросов нет
+  console.error('[DUEL] Question not found for round:', duelCurrentRound);
 }
 
 
