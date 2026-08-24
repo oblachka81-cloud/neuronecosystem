@@ -287,10 +287,9 @@ router.post('/api/duel/answer', requireInitDataStrict, authRateLimit, async (req
     const isCorrect = (answerIdx === correctIndex);
 
     let points = 0;
-    if (isCorrect) {
-      const timeBonus = Math.max(0, Math.floor((15000 - Math.min(timeMs, 15000)) / 1000));
-      points = 10 + timeBonus;
-    }
+if (isCorrect) {
+  points = 10;
+}
 
     // Сохраняем ответ
     await client.query(
