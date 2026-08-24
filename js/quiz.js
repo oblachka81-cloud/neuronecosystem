@@ -985,9 +985,12 @@ function duelStartBattle(duelIdParam, duelDataParam) {
     score2: duelDataParam.score2 || 0 
   };
   
-  // Удаляем лобби
-  const container = document.getElementById('duelContainer');
-  if (container) container.remove();
+  // Удаляем лобби и контейнер приглашения
+const container = document.getElementById('duelContainer');
+if (container) container.remove();
+
+const joinContainer = document.getElementById('duelJoinContainer');
+if (joinContainer) joinContainer.remove();
   
   // Показываем хедер для боя
   const header = document.querySelector('.header');
@@ -1497,6 +1500,16 @@ async function duelAcceptInvite(duelIdParam) {
     const data = await res.json();
     
     if (data.success) {
+      // Удаляем контейнер приглашения
+      const joinContainer = document.getElementById('duelJoinContainer');
+      if (joinContainer) joinContainer.remove();
+      
+      // Показываем хедер и футер для боя
+      const header = document.querySelector('.header');
+      const footer = document.querySelector('footer');
+      if (header) header.style.display = '';
+      if (footer) footer.style.display = '';
+      
       // Получаем состояние и начинаем бой
       const stateRes = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelIdParam}`);
       const stateData = await stateRes.json();
