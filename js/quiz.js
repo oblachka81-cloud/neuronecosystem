@@ -630,32 +630,8 @@ const DUEL_LANG = {
 
 let duelPollInterval = null;
 
-function duelHideChrome() {
-  const h = document.querySelector('.header');
-  const s = document.getElementById('supportBtn');
-  const f = document.getElementById('footerEl');
-  if (h) h.style.display = 'none';
-  if (s) s.style.display = 'none';
-  if (f) f.style.display = 'none';
-}
-
-function duelShowChrome() {
-  const h = document.querySelector('.header');
-  const s = document.getElementById('supportBtn');
-  const f = document.getElementById('footerEl');
-  if (h) h.style.display = '';
-  if (s) s.style.display = '';
-  if (f) f.style.display = '';
-}
-
-function duelBackToMenu() {
-  if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
-  duelShowChrome();
-  showWelcome(currentState.totalScore, currentState.gamesPlayed);
-}
 
 function loadDuelPanel() {
-  duelHideChrome();
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
   if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
 
