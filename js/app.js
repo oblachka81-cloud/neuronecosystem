@@ -169,6 +169,20 @@ function startApp(attempt) {
     localStorage.setItem('neuron_uid', userId);
     localStorage.setItem('neuron_uname', userName);
   }
+  // === ПРОВЕРКА: ЕСЛИ ОТКРЫЛИ ПО ССЫЛКЕ-ПРИГЛАШЕНИЮ НА ДУЭЛЬ ===
+  const startParam = tg.initDataUnsafe?.start_param || 
+                     new URLSearchParams(window.location.search).get('start') || 
+                     new URLSearchParams(window.location.search).get('tgWebAppStartParam');
+  
+  if (startParam && startParam.startsWith('duel_')) {
+    const duelId = startParam.replace('duel_', '');
+    // Даём интерфейсу полсекунды инициализироваться, затем открываем экран принятия дуэли
+    setTimeout(() => {
+      loadDuelJoinPanel(duelId);
+    }, 500);
+    return; // Прерываем обычную загрузку меню
+  }
+  // ============================================================
   loadWelcome();
 }
 
