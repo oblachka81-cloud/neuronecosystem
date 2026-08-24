@@ -757,3 +757,255 @@ function duelStartBattle(duelId, duelData) {
   switchTab('game');
 }
 
+function duelStartBattle(duelId, duelData) {
+  // Удаляем лобби
+  const container = document.getElementById('duelContainer');
+  if (container) container.remove();
+  
+  // Показываем хедер для боя
+  const header = document.querySelector('.header');
+  const footer = document.querySelector('footer');
+  if (header) header.style.display = '';
+  if (footer) footer.style.display = '';
+  
+  // Запускаем экран боя
+  duelRenderBattleScreen(duelId, duelData);
+}
+
+function duelRenderBattleScreen(duelId, duelData) {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
+  root.innerHTML = `
+    <div class="duel-battle" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
+      <!-- СТОЛ С ИГРОКАМИ -->
+      <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:20px;padding:16px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <!-- Игрок 1 (Ты) -->
+          <div style="text-align:center;flex:1;">
+            <div style="width:60px;height:60px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+            <div style="font-size:0.8rem;font-weight:700;color:#00ffaa;">${duelData.player1.nick || 'Ты'}</div>
+            <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="score1">${duelData.score1 || 0}</div>
+          </div>
+          
+          <!-- VS -->
+          <div style="text-align:center;padding:0 12px;">
+            <div style="font-size:1.2rem;font-weight:900;color:#ffcc44;">VS</div>
+            <div style="font-size:0.7rem;color:#7799bb;margin-top:4px;">Раунд <span id="currentRound">1</span>/10</div>
+          </div>
+          
+          <!-- Игрок 2 (Соперник) -->
+          <div style="text-align:center;flex:1;">
+            <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+            <div style="font-size:0.8rem;font-weight:700;color:#ff6464;">${duelData.player2.nick || 'Соперник'}</div>
+            <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="score2">${duelData.score2 || 0}</div>
+          </div>
+        </div>
+        
+        <!-- ТАЙМЕР -->
+        <div style="text-align:center;padding:10px;background:rgba(0,0,0,0.4);border-radius:12px;">
+          <div style="font-size:0.75rem;color:#7799bb;margin-bottom:4px;">️ Время на ответ</div>
+          <div id="battleTimer" style="font-size:2rem;font-weight:900;color:#ffcc44;">15</div>
+        </div>
+      </div>
+      
+      <!-- ВОПРОС -->
+      <div id="battleQuestion" style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:16px;margin-bottom:16px;min-height:100px;display:flex;align-items:center;justify-content:center;">
+        <div style="font-size:1.1rem;font-weight:600;color:#fff;text-align:center;">Загрузка вопроса...</div>
+      </div>
+      
+      <!-- ВАРИАНТЫ ОТВЕТОВ -->
+      <div id="battleAnswers" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+        <!-- Кнопки будут здесь -->
+      </div>
+      
+      <!-- РЕЗУЛЬТАТ РАУНДА -->
+      <div id="roundResult" style="display:none;text-align:center;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.3);border-radius:12px;margin-bottom:16px;">
+        <div style="font-size:1.1rem;font-weight:700;color:#00ffaa;"></div>
+      </div>
+    </div>
+  `;
+  
+  // Запускаем логику боя
+  duelStartBattleLogic(duelId, duelData);
+}
+
+async function duelStartBattleLogic(duelId, duelData) {
+  window.duelCurrentRound = 1;
+  window.duelTimeLeft = 15;
+  window.duelAnswered = false;
+  
+  // Загружаем первый вопрос
+  await duelLoadQuestion(duelId, duelData);
+  
+  // Запускаем таймер
+  window.duelTimerInterval = setInterval(() => {
+    window.duelTimeLeft--;
+    const timerEl = document.getElementById('battleTimer');
+    if (timerEl) {
+      timerEl.textContent = window.duelTimeLeft;
+      if (window.duelTimeLeft <= 0) {
+        clearInterval(window.duelTimerInterval);
+        if (!window.duelAnswered) {
+          duelHandleAnswer(duelId, duelData, null, -1);
+        }
+      }
+    }
+  }, 1000);
+}
+
+async function duelLoadQuestion(duelId, duelData) {
+  try {
+    const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
+    const data = await res.json();
+    
+    if (data.success && data.duel.questions && data.duel.questions.length > 0) {
+      const question = data.duel.questions[window.duelCurrentRound - 1];
+      if (question) {
+        duelRenderQuestion(question);
+      }
+    }
+  } catch (e) {
+    console.error('Load question error:', e);
+  }
+}
+
+function duelRenderQuestion(question) {
+  const questionEl = document.getElementById('battleQuestion');
+  const answersEl = document.getElementById('battleAnswers');
+  
+  if (questionEl) {
+    questionEl.innerHTML = `<div style="font-size:1.1rem;font-weight:600;color:#fff;text-align:center;">${escapeHtml(question.text)}</div>`;
+  }
+  
+  if (answersEl) {
+    answersEl.innerHTML = '';
+    const letters = ['A', 'B', 'C', 'D'];
+    question.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.style.cssText = 'padding:14px;background:rgba(0,0,0,0.5);border:2px solid rgba(255,204,68,0.3);border-radius:12px;color:#fff;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;';
+      btn.innerHTML = `<div style="color:#ffcc44;font-size:0.75rem;margin-bottom:4px;">${letters[idx]}</div><div>${escapeHtml(opt)}</div>`;
+      btn.onclick = () => duelHandleAnswer(window.duelId, window.duelData, idx, question.correct);
+      answersEl.appendChild(btn);
+    });
+  }
+}
+
+async function duelHandleAnswer(duelId, duelData, answerIdx, correctIdx) {
+  if (window.duelAnswered) return;
+  window.duelAnswered = true;
+  
+  // Останавливаем таймер
+  if (window.duelTimerInterval) {
+    clearInterval(window.duelTimerInterval);
+  }
+  
+  const isCorrect = answerIdx === correctIdx;
+  const timeBonus = isCorrect ? Math.max(0, window.duelTimeLeft) : 0;
+  const points = isCorrect ? (10 + timeBonus) : 0;
+  
+  // Отправляем ответ на сервер
+  try {
+    await authFetch(`${BASE_URL}/api/duel/answer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: userId,
+        duel_id: duelId,
+        round: window.duelCurrentRound,
+        answer_idx: answerIdx !== null ? answerIdx : -1,
+        time_ms: (15 - window.duelTimeLeft) * 1000
+      })
+    });
+  } catch (e) {}
+  
+  // Показываем результат
+  const resultEl = document.getElementById('roundResult');
+  if (resultEl) {
+    resultEl.style.display = 'block';
+    resultEl.querySelector('div').textContent = isCorrect 
+      ? `✅ Правильно! +${points} очков` 
+      : answerIdx === null 
+        ? '⏱️ Время вышло!' 
+        : '❌ Неправильно';
+    resultEl.style.background = isCorrect ? 'rgba(0,255,170,0.1)' : 'rgba(255,100,100,0.1)';
+    resultEl.style.borderColor = isCorrect ? 'rgba(0,255,170,0.3)' : 'rgba(255,100,100,0.3)';
+  }
+  
+  // Подсвечиваем правильную кнопку
+  const buttons = document.querySelectorAll('#battleAnswers button');
+  if (buttons[correctIdx]) {
+    buttons[correctIdx].style.background = 'rgba(0,255,170,0.3)';
+    buttons[correctIdx].style.borderColor = '#00ffaa';
+  }
+  
+  // Ждём и переходим к следующему раунду
+  setTimeout(() => {
+    if (resultEl) resultEl.style.display = 'none';
+    window.duelCurrentRound++;
+    
+    if (window.duelCurrentRound > 10) {
+      // Дуэль окончена
+      duelFinishBattle(duelId, duelData);
+    } else {
+      // Следующий раунд
+      document.getElementById('currentRound').textContent = window.duelCurrentRound;
+      window.duelTimeLeft = 15;
+      window.duelAnswered = false;
+      document.getElementById('battleTimer').textContent = '15';
+      duelLoadQuestion(duelId, duelData);
+      
+      // Перезапускаем таймер
+      window.duelTimerInterval = setInterval(() => {
+        window.duelTimeLeft--;
+        const timerEl = document.getElementById('battleTimer');
+        if (timerEl) {
+          timerEl.textContent = window.duelTimeLeft;
+          if (window.duelTimeLeft <= 0) {
+            clearInterval(window.duelTimerInterval);
+            if (!window.duelAnswered) {
+              duelHandleAnswer(duelId, duelData, null, -1);
+            }
+          }
+        }
+      }, 1000);
+    }
+  }, 2000);
+}
+
+function duelFinishBattle(duelId, duelData) {
+  root.innerHTML = `
+    <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
+      <div style="font-size:2rem;font-weight:900;color:#ffcc44;margin-bottom:20px;"> Дуэль завершена!</div>
+      <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:20px;margin-bottom:20px;">
+        <div style="font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:12px;">Итоговый счёт:</div>
+        <div style="display:flex;justify-content:space-around;align-items:center;">
+          <div>
+            <div style="color:#00ffaa;font-size:0.9rem;">${duelData.player1.nick}</div>
+            <div style="font-size:2rem;font-weight:900;color:#fff;" id="finalScore1">0</div>
+          </div>
+          <div style="font-size:1.5rem;color:#7799bb;">VS</div>
+          <div>
+            <div style="color:#ff6464;font-size:0.9rem;">${duelData.player2.nick}</div>
+            <div style="font-size:2rem;font-weight:900;color:#fff;" id="finalScore2">0</div>
+          </div>
+        </div>
+      </div>
+      <button onclick="switchTab('game')" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">← Вернуться в меню</button>
+    </div>
+  `;
+  
+  // Получаем финальный счёт
+  setTimeout(async () => {
+    try {
+      const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
+      const data = await res.json();
+      if (data.success) {
+        const el1 = document.getElementById('finalScore1');
+        const el2 = document.getElementById('finalScore2');
+        if (el1) el1.textContent = data.duel.score1;
+        if (el2) el2.textContent = data.duel.score2;
+      }
+    } catch (e) {}
+  }, 500);
+}
+
