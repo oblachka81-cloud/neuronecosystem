@@ -66,7 +66,7 @@ function switchTab(tab) {
   if (logoImg) logoImg.classList.add('loading');
   
   setTimeout(() => {
-    if (tab === 'casino' || tab === 'fiat') {
+    if (tab === 'casino' || tab === 'fiat' || tab === 'duels') {
       if (header) header.style.display = 'none';
       if (footer) footer.style.display = 'none';
     }
@@ -128,6 +128,7 @@ function switchTab(tab) {
   if (currentState.pendingTimeout) { clearTimeout(currentState.pendingTimeout); currentState.pendingTimeout = null; }
   if (window._walletRefresh) { clearInterval(window._walletRefresh); window._walletRefresh = null; }
   if (tab === 'leaderboard') loadLeaderboard();
+  else if (tab === 'duels') loadDuelPanel();
   else if (tab === 'wallet') showWalletPanel();
   else if (tab === 'shop') loadShopPanel();
   else if (tab === 'profile') loadProfilePanel();
