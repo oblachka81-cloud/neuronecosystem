@@ -250,7 +250,7 @@ if (payload && payload.startsWith('duel_')) {
     try {
       const cardBuffer = await Promise.race([
         generateWelcomeCard(tgName, lang),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 20000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 120000))
       ]);
       await ctx.replyWithPhoto({ source: cardBuffer }, { reply_markup: keyboard });
     } catch (e) {
