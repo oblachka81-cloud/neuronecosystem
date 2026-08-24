@@ -374,13 +374,50 @@ router.post('/api/answer', requireInitDataStrict, authRateLimit, async (req, res
 
     const freeGamesLeft = calcGamesLeft({ ...user, games_today: newGamesToday, extra_games: user.extra_games || 0 });
 
-    let message = isCorrect
-      ? `✅ Правильно! +${tokensNow} COGNIQ. Счёт: ${newGameScore}`
-      : `❌ Неправильно. Правильный ответ: ${q.correct}.`;
+    // ===== Мультиязычные сообщения =====
+const msg = {
+  ru: {
+    correct: (t, s) => `✅ Правильно! +${t} COGNIQ. Счёт: ${s}`,
+    wrong:   (c)   => `❌ Неправильно. Правильный ответ: ${c}.`,
+    finished:(s)   => `\n\n🎉 Игра завершена! Ты набрал ${s} COGNIQ.`
+  },
+  en: {
+    correct: (t, s) => `✅ Correct! +${t} COGNIQ. Score: ${s}`,
+    wrong:   (c)   => `❌ Wrong. Correct answer: ${c}.`,
+    finished:(s)   => `\n\n🎉 Game finished! You scored ${s} COGNIQ.`
+  },
+  fr: {
+    correct: (t, s) => `✅ Correct ! +${t} COGNIQ. Score : ${s}`,
+    wrong:   (c)   => `❌ Incorrect. Bonne réponse : ${c}.`,
+    finished:(s)   => `\n\n🎉 Partie terminée ! Tu as marqué ${s} COGNIQ.`
+  },
+  es: {
+    correct: (t, s) => `✅ ¡Correcto! +${t} COGNIQ. Puntuación: ${s}`,
+    wrong:   (c)   => `❌ Incorrecto. Respuesta correcta: ${c}.`,
+    finished:(s)   => `\n\n🎉 ¡Juego terminado! Has conseguido ${s} COGNIQ.`
+  }
+};
 
-    if (isFinished) {
-      message += `\n\n🎉 Игра завершена! Ты набрал ${newGameScore} COGNIQ.`;
+const m = msg[userLang] || msg.ru;
+
+// Берём переведённый правильный ответ
+let correctText = q.correct;
+if (userLang && userLang !== 'ru') {
+  try {
+    const tq = await translateQuestion(q, userLang);
+    if (tq.options && tq.options[correctIndex] !== undefined) {
+      correctText = tq.options[correctIndex];
     }
+  } catch (e) {}
+}
+
+let message = isCorrect
+  ? m.correct(tokensNow, newGameScore)
+  : m.wrong(correctText);
+
+if (isFinished) {
+  message += m.finished(newGameScore);
+}
 
     const response = {
       correct: isCorrect,
