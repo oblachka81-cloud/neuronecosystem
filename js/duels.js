@@ -361,7 +361,7 @@ function duelRenderBattleScreen() {
   
   const battleContainer = document.createElement('div');
   battleContainer.id = 'duelBattleContainer';
-  battleContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;background:rgba(4,8,20,0.97);';
+  battleContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;background:transparent;';
   
   battleContainer.innerHTML = `
     <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
