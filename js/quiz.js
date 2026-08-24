@@ -933,6 +933,8 @@ async function duelCancel(duelId) {
 
 
 function duelStartPolling(duelId) {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
   if (duelPollInterval) clearInterval(duelPollInterval);
   
   duelPollInterval = setInterval(async () => {
