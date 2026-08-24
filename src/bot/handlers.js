@@ -13,6 +13,89 @@ function setupBotHandlers(bot) {
     const tgName = ctx.from.first_name || ctx.from.username || 'Player';
     const payload = ctx.startPayload;
     const lang = ctx.from.language_code || 'en';
+
+    // ==================== ОБРАБОТКА ДУЭЛИ ====================
+if (payload && payload.startsWith('duel_')) {
+  const duelId = parseInt(payload.replace('duel_', ''));
+  
+  if (duelId && !isNaN(duelId)) {
+    try {
+      const duelRes = await pool.query('SELECT * FROM duels WHERE id = $1', [duelId]);
+      
+      if (!duelRes.rows.length) {
+        const msgs = {
+          ru: '❌ Дуэль не найдена. Возможно, она уже завершена или отменена.',
+          en: '❌ Duel not found. It may have been completed or cancelled.',
+          fr: '❌ Duel introuvable. Il a peut-être été terminé ou annulé.',
+          es: '❌ Duelo no encontrado. Puede haber sido completado o cancelado.'
+        };
+        await ctx.reply(msgs[lang] || msgs['en']);
+        return;
+      }
+      
+      const duel = duelRes.rows[0];
+      
+      if (duel.status !== 'waiting') {
+        const msgs = {
+          ru: '❌ Эта дуэль уже началась или завершена.',
+          en: '❌ This duel has already started or finished.',
+          fr: '❌ Ce duel a déjà commencé ou est terminé.',
+          es: '❌ Este duelo ya ha comenzado o terminado.'
+        };
+        await ctx.reply(msgs[lang] || msgs['en']);
+        return;
+      }
+      
+      if (String(duel.player1_id) === String(tgId)) {
+        const msgs = {
+          ru: '⚠️ Вы не можете принять собственную дуэль. Отправьте ссылку другу!',
+          en: '⚠️ You cannot accept your own duel. Send the link to a friend!',
+          fr: '⚠️ Vous ne pouvez pas accepter votre propre duel. Envoyez le lien à un ami !',
+          es: '⚠️ No puedes aceptar tu propio duelo. ¡Envía el enlace a un amigo!'
+        };
+        await ctx.reply(msgs[lang] || msgs['en']);
+        return;
+      }
+      
+      await getOrCreateUser({ id: tgId, username: ctx.from.username, first_name: tgName, language_code: lang });
+      
+      const creatorRes = await pool.query('SELECT first_name, username, nickname FROM users WHERE telegram_id = $1', [duel.player1_id]);
+      const creatorName = creatorRes.rows[0]?.nickname || creatorRes.rows[0]?.username || creatorRes.rows[0]?.first_name || 'Игрок';
+      
+      const duelInviteMsgs = {
+        ru: `⚔️ **Вызов на дуэль!**\n\n${creatorName} вызывает вас на интеллектуальную битву!\n\nСтавка: ${duel.stake} COGNIQ\nВопросов: 10\n\nПобедитель забирает банк! 5% сжигается навсегда.`,
+        en: `⚔️ **Duel challenge!**\n\n${creatorName} challenges you to an intellectual battle!\n\nStake: ${duel.stake} COGNIQ\nQuestions: 10\n\nWinner takes the pot! 5% burned forever.`,
+        fr: `⚔️ **Défi en duel !**\n\n${creatorName} vous défie en bataille intellectuelle !\n\nMise : ${duel.stake} COGNIQ\nQuestions : 10\n\nLe gagnant prend le pot ! 5% brûlés.`,
+        es: `⚔️ **¡Desafío de duelo!**\n\n${creatorName} te reta a una batalla intelectual.\n\nApuesta: ${duel.stake} COGNIQ\nPreguntas: 10\n\n¡El ganador se lleva el bote! 5% quemado.`
+      };
+      
+      const webAppUrl = `${WEBAPP_URL}?duel=${duelId}`;
+      
+      const duelKeyboard = {
+        inline_keyboard: [[
+          { text: '⚔️ Принять вызов', web_app: { url: webAppUrl } }
+        ]]
+      };
+      
+      await ctx.reply(duelInviteMsgs[lang] || duelInviteMsgs['en'], {
+        reply_markup: duelKeyboard,
+        parse_mode: 'Markdown'
+      });
+      return;
+      
+    } catch (e) {
+      console.error('[BOT /start duel] error:', e.message);
+      const errMsgs = {
+        ru: '⚠️ Ошибка загрузки дуэли. Попробуйте позже.',
+        en: '⚠️ Error loading duel. Try again later.',
+        fr: '⚠️ Erreur de chargement du duel. Réessayez.',
+        es: '⚠️ Error cargando duelo. Inténtalo de nuevo.'
+      };
+      await ctx.reply(errMsgs[lang] || errMsgs['en']);
+      return;
+    }
+  }
+}
     
     if (payload === 'beta') {
       try {
