@@ -992,11 +992,11 @@ if (container) container.remove();
 const joinContainer = document.getElementById('duelJoinContainer');
 if (joinContainer) joinContainer.remove();
   
-  // Показываем хедер для боя
-  const header = document.querySelector('.header');
-  const footer = document.querySelector('footer');
-  if (header) header.style.display = '';
-  if (footer) footer.style.display = '';
+  // Скрываем хедер и футер во время боя
+const header = document.querySelector('.header');
+const footer = document.querySelector('footer');
+if (header) header.style.display = 'none';
+if (footer) footer.style.display = 'none';
   
   // Запускаем экран боя
   duelRenderBattleScreen();
