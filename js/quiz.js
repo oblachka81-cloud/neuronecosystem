@@ -634,26 +634,61 @@ let duelPollInterval = null;
 
 function loadDuelPanel() {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
-  if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
-
-  root.innerHTML = `
+  
+  // Очищаем root
+  root.innerHTML = '';
+  
+  // Скрываем хедер и футер
+  const header = document.querySelector('.header');
+  const footer = document.querySelector('footer');
+  if (header) header.style.display = 'none';
+  if (footer) footer.style.display = 'none';
+  
+  // Создаём контейнер дуэлей
+  const duelContainer = document.createElement('div');
+  duelContainer.id = 'duelContainer';
+  duelContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;';
+  
+  duelContainer.innerHTML = `
     <div class="duel-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
-      <button onclick="switchTab('game')" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
+      <button onclick="duelBackToMenu()" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
+
       <div style="text-align:center;margin-bottom:20px;">
         <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#ffcc44,#e8d9a0,#ffcc44);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">⚔️ ${t.title}</div>
         <div style="font-size:0.78rem;color:#7799bb;margin-top:4px;">${t.subtitle}</div>
       </div>
+
       <div style="background:rgba(10,20,38,0.6);border:1px solid rgba(255,204,68,0.25);border-radius:18px;padding:16px;margin-bottom:20px;">
         <p style="font-size:0.85rem;color:#c8c8dc;line-height:1.5;">${t.desc}</p>
       </div>
+
       <div style="display:flex;gap:8px;margin-bottom:16px;">
         <button onclick="duelCreate(100)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.35);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;">100 COGNIQ</button>
         <button onclick="duelCreate(500)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.55);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,204,68,0.2);">500 COGNIQ</button>
         <button onclick="duelCreate(1000)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,150,50,0.55);border-radius:14px;color:#ffaa44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,150,50,0.25);">1000 COGNIQ</button>
       </div>
+
       <div id="duelWaitingBlock" style="display:none;"></div>
     </div>
   `;
+  
+  // Добавляем контейнер в body
+  document.body.appendChild(duelContainer);
+}
+
+function duelBackToMenu() {
+  // Удаляем контейнер дуэлей
+  const container = document.getElementById('duelContainer');
+  if (container) container.remove();
+  
+  // Показываем хедер и футер
+  const header = document.querySelector('.header');
+  const footer = document.querySelector('footer');
+  if (header) header.style.display = '';
+  if (footer) footer.style.display = '';
+  
+  // Возвращаемся в меню
+  switchTab('game');
 }
 
 async function duelCreate(stake) {
