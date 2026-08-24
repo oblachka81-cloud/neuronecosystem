@@ -623,13 +623,131 @@ async function loadReferralStats() {
 // ==================== ДУЭЛИ ====================
 
 const DUEL_LANG = {
-  ru: { title: 'Дуэли', subtitle: '1 на 1 • 10 вопросов • ставка', desc: 'Брось вызов другу или найди соперника. Ставки: 100 / 500 / 1000 COGNIQ. Победитель забирает банк, 5% сжигается навсегда.', waiting: 'Ожидание соперника...', shareInvite: 'Отправить приглашение', copyLink: 'Скопировать ссылку', copied: '✅ Скопировано!', backBtn: '← Назад', errBalance: 'Недостаточно COGNIQ', errCreate: 'Не удалось создать дуэль', errConnect: 'Ошибка связи' },
-  en: { title: 'Duels', subtitle: '1 vs 1 • 10 questions • stake', desc: 'Challenge a friend or find an opponent. Stakes: 100 / 500 / 1000 COGNIQ. Winner takes the pot, 5% burned forever.', waiting: 'Waiting for opponent...', shareInvite: 'Send invite', copyLink: 'Copy link', copied: '✅ Copied!', backBtn: '← Back', errBalance: 'Not enough COGNIQ', errCreate: 'Could not create duel', errConnect: 'Connection error' },
-  fr: { title: 'Duels', subtitle: '1 contre 1 • 10 questions • mise', desc: 'Défiez un ami ou trouvez un adversaire. Mises: 100 / 500 / 1000 COGNIQ. Le gagnant prend le pot, 5% brûlés.', waiting: 'Attente adversaire...', shareInvite: 'Envoyer invitation', copyLink: 'Copier lien', copied: '✅ Copié !', backBtn: '← Retour', errBalance: 'COGNIQ insuffisants', errCreate: 'Impossible de créer le duel', errConnect: 'Erreur de connexion' },
-  es: { title: 'Duelos', subtitle: '1 vs 1 • 10 preguntas • apuesta', desc: 'Reta a un amigo o encuentra un oponente. Apuestas: 100 / 500 / 1000 COGNIQ. El ganador se lleva el bote, 5% quemado.', waiting: 'Esperando oponente...', shareInvite: 'Enviar invitación', copyLink: 'Copiar enlace', copied: '✅ ¡Copiado!', backBtn: '← Volver', errBalance: 'COGNIQ insuficientes', errCreate: 'No se pudo crear el duelo', errConnect: 'Error de conexión' }
+  ru: { 
+    title: 'Дуэли', 
+    subtitle: '1 на 1 • 10 вопросов • ставка', 
+    desc: 'Брось вызов другу или найди соперника. Ставки: 100 / 500 / 1000 COGNIQ. Победитель забирает банк, 5% сжигается навсегда.', 
+    waiting: 'Ожидание соперника...', 
+    shareInvite: 'Отправить приглашение', 
+    copyLink: 'Скопировать ссылку', 
+    copied: '✅ Скопировано!', 
+    backBtn: '← Назад', 
+    errBalance: 'Недостаточно COGNIQ', 
+    errCreate: 'Не удалось создать дуэль', 
+    errConnect: 'Ошибка связи',
+    cancelDuel: 'Отменить дуэль',
+    cancelConfirm: 'Отменить дуэль и вернуть ставку?',
+    roundLabel: 'Раунд',
+    of: 'из',
+    timeToAnswer: '⏱️ Время на ответ',
+    yourAnswer: 'Ваш ответ',
+    opponentAnswer: 'Ответ соперника',
+    waitingOpponent: 'Ждём соперника...',
+    youWin: '🏆 Вы победили!',
+    youLose: '😢 Вы проиграли',
+    draw: '🤝 Ничья! Ставки возвращены',
+    duelFinished: '⚔️ Дуэль завершена!',
+    returnToMenu: '← Вернуться в меню',
+    opponentNotFound: 'Соперник не найден',
+    duelCancelled: 'Дуэль отменена'
+  },
+  en: { 
+    title: 'Duels', 
+    subtitle: '1 vs 1 • 10 questions • stake', 
+    desc: 'Challenge a friend or find an opponent. Stakes: 100 / 500 / 1000 COGNIQ. Winner takes the pot, 5% burned forever.', 
+    waiting: 'Waiting for opponent...', 
+    shareInvite: 'Send invite', 
+    copyLink: 'Copy link', 
+    copied: '✅ Copied!', 
+    backBtn: '← Back', 
+    errBalance: 'Not enough COGNIQ', 
+    errCreate: 'Could not create duel', 
+    errConnect: 'Connection error',
+    cancelDuel: 'Cancel duel',
+    cancelConfirm: 'Cancel duel and refund stake?',
+    roundLabel: 'Round',
+    of: 'of',
+    timeToAnswer: '⏱️ Time to answer',
+    yourAnswer: 'Your answer',
+    opponentAnswer: 'Opponent answer',
+    waitingOpponent: 'Waiting for opponent...',
+    youWin: '🏆 You win!',
+    youLose: '😢 You lose',
+    draw: '🤝 Draw! Stakes refunded',
+    duelFinished: '⚔️ Duel finished!',
+    returnToMenu: '← Return to menu',
+    opponentNotFound: 'Opponent not found',
+    duelCancelled: 'Duel cancelled'
+  },
+  fr: { 
+    title: 'Duels', 
+    subtitle: '1 contre 1 • 10 questions • mise', 
+    desc: 'Défiez un ami ou trouvez un adversaire. Mises: 100 / 500 / 1000 COGNIQ. Le gagnant prend le pot, 5% brûlés.', 
+    waiting: 'Attente adversaire...', 
+    shareInvite: 'Envoyer invitation', 
+    copyLink: 'Copier lien', 
+    copied: '✅ Copié !', 
+    backBtn: '← Retour', 
+    errBalance: 'COGNIQ insuffisants', 
+    errCreate: 'Impossible de créer le duel', 
+    errConnect: 'Erreur de connexion',
+    cancelDuel: 'Annuler le duel',
+    cancelConfirm: 'Annuler le duel et rembourser la mise ?',
+    roundLabel: 'Manche',
+    of: 'de',
+    timeToAnswer: '⏱️ Temps de réponse',
+    yourAnswer: 'Votre réponse',
+    opponentAnswer: 'Réponse adversaire',
+    waitingOpponent: 'Attente de l\'adversaire...',
+    youWin: '🏆 Vous gagnez !',
+    youLose: '😢 Vous perdez',
+    draw: '🤝 Égalité ! Mises remboursées',
+    duelFinished: '⚔️ Duel terminé !',
+    returnToMenu: '← Retour au menu',
+    opponentNotFound: 'Adversaire introuvable',
+    duelCancelled: 'Duel annulé'
+  },
+  es: { 
+    title: 'Duelos', 
+    subtitle: '1 vs 1 • 10 preguntas • apuesta', 
+    desc: 'Reta a un amigo o encuentra un oponente. Apuestas: 100 / 500 / 1000 COGNIQ. El ganador se lleva el bote, 5% quemado.', 
+    waiting: 'Esperando oponente...', 
+    shareInvite: 'Enviar invitación', 
+    copyLink: 'Copiar enlace', 
+    copied: '✅ ¡Copiado!', 
+    backBtn: '← Volver', 
+    errBalance: 'COGNIQ insuficientes', 
+    errCreate: 'No se pudo crear el duelo', 
+    errConnect: 'Error de conexión',
+    cancelDuel: 'Cancelar duelo',
+    cancelConfirm: '¿Cancelar duelo y devolver apuesta?',
+    roundLabel: 'Ronda',
+    of: 'de',
+    timeToAnswer: '⏱️ Tiempo de respuesta',
+    yourAnswer: 'Tu respuesta',
+    opponentAnswer: 'Respuesta del oponente',
+    waitingOpponent: 'Esperando oponente...',
+    youWin: '🏆 ¡Ganas!',
+    youLose: '😢 Pierdes',
+    draw: '🤝 ¡Empate! Apuestas devueltas',
+    duelFinished: '⚔️ ¡Duelo terminado!',
+    returnToMenu: '← Volver al menú',
+    opponentNotFound: 'Oponente no encontrado',
+    duelCancelled: 'Duelo cancelado'
+  }
 };
 
 let duelPollInterval = null;
+let duelTimerInterval = null;
+let duelCurrentRound = 0;
+let duelTimeLeft = 15;
+let duelAnswered = false;
+let duelId = null;
+let duelData = null;
+let duelQuestions = [];
+let duelTotalRounds = 10;
+let duelScores = { score1: 0, score2: 0 };
+let duelWaitingForOpponent = false;
 
 
 function loadDuelPanel() {
@@ -676,7 +794,12 @@ function loadDuelPanel() {
   document.body.appendChild(duelContainer);
 }
 
+
 function duelBackToMenu() {
+  // Останавливаем все интервалы
+  if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
+  if (duelTimerInterval) { clearInterval(duelTimerInterval); duelTimerInterval = null; }
+  
   // Удаляем контейнер дуэлей
   const container = document.getElementById('duelContainer');
   if (container) container.remove();
@@ -687,9 +810,17 @@ function duelBackToMenu() {
   if (header) header.style.display = '';
   if (footer) footer.style.display = '';
   
+  // Сбрасываем состояние
+  duelId = null;
+  duelData = null;
+  duelQuestions = [];
+  duelAnswered = false;
+  duelWaitingForOpponent = false;
+  
   // Возвращаемся в меню
   switchTab('game');
 }
+
 
 async function duelCreate(stake) {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
@@ -701,63 +832,154 @@ async function duelCreate(stake) {
     });
     const data = await res.json();
     if (!data.success) {
-      alert(data.message || t.errCreate);
+      showToast(data.message || t.errCreate, 3000);
       return;
     }
+    
+    duelId = data.duelId;
+    
     document.getElementById('duelWaitingBlock').innerHTML = `
       <div style="background:rgba(10,20,38,0.8);border:2px solid rgba(0,255,170,0.4);border-radius:18px;padding:20px;text-align:center;box-shadow:0 0 20px rgba(0,255,170,0.15);">
         <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:12px;">⏳ ${t.waiting}</div>
         <div style="font-size:0.75rem;color:#7799bb;margin-bottom:14px;">ID: ${data.duelId}</div>
-        <button onclick="duelShareInvite('${data.inviteLink}')" style="width:100%;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.4);border-radius:12px;color:#00ffaa;font-weight:700;font-size:0.88rem;cursor:pointer;margin-bottom:8px;">📤 ${t.shareInvite}</button>
-        <button onclick="duelCopyLink('${data.inviteLink}', this)" style="width:100%;padding:12px;background:rgba(255,204,68,0.1);border:1px solid rgba(255,204,68,0.4);border-radius:12px;color:#ffcc44;font-weight:700;font-size:0.88rem;cursor:pointer;">🔗 ${t.copyLink}</button>
+        <button onclick="duelShareInvite('${data.inviteLink}', ${stake})" style="width:100%;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.4);border-radius:12px;color:#00ffaa;font-weight:700;font-size:0.88rem;cursor:pointer;margin-bottom:8px;">📤 ${t.shareInvite}</button>
+        <button onclick="duelCopyLink('${data.inviteLink}', this)" style="width:100%;padding:12px;background:rgba(255,204,68,0.1);border:1px solid rgba(255,204,68,0.4);border-radius:12px;color:#ffcc44;font-weight:700;font-size:0.88rem;cursor:pointer;margin-bottom:8px;">🔗 ${t.copyLink}</button>
+        <button onclick="duelCancel(${data.duelId})" style="width:100%;padding:12px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:12px;color:#ff6464;font-weight:700;font-size:0.88rem;cursor:pointer;">❌ ${t.cancelDuel}</button>
       </div>
     `;
     document.getElementById('duelWaitingBlock').style.display = 'block';
+    
+    // Запускаем поллинг
     duelStartPolling(data.duelId);
   } catch (e) {
-    alert(t.errConnect);
+    showToast(t.errConnect, 3000);
   }
 }
 
-function duelShareInvite(link) {
-  if (navigator.share) {
-    navigator.share({ title: 'NEURON Duel', text: 'Join my duel in NEURON! ⚔️', url: link });
-  } else {
-    window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Join my duel in NEURON! ⚔️')}`, '_blank');
+
+function duelShareInvite(link, stake) {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
+  const shareText = `⚔️ Вызов на дуэль в NEURON!\nСтавка: ${stake} COGNIQ\nПримешь вызов?`;
+  const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(shareText)}`;
+  
+  // Способ 1: Telegram WebApp API
+  if (tg && typeof tg.openTelegramLink === 'function') {
+    tg.openTelegramLink(shareUrl);
+    return;
   }
+  
+  // Способ 2: tg.openLink
+  if (tg && typeof tg.openLink === 'function') {
+    tg.openLink(shareUrl);
+    return;
+  }
+  
+  // Способ 3: Fallback
+  window.open(shareUrl, '_blank');
 }
+
 
 function duelCopyLink(link, btn) {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
-  navigator.clipboard.writeText(link).then(() => {
-    const originalText = btn.innerHTML;
-    btn.innerHTML = t.copied;
-    btn.style.color = '#00ffaa';
-    setTimeout(() => { btn.innerHTML = originalText; btn.style.color = '#ffcc44'; }, 2000);
-  }).catch(() => { prompt('Copy:', link); });
+  
+  const showSuccess = () => {
+    if (btn) {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = t.copied;
+      btn.style.color = '#00ffaa';
+      setTimeout(() => { btn.innerHTML = originalText; btn.style.color = '#ffcc44'; }, 2000);
+    } else {
+      showToast(t.copied, 2000);
+    }
+  };
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(showSuccess).catch(() => {
+      prompt('Copy:', link);
+      showSuccess();
+    });
+  } else {
+    prompt('Copy:', link);
+    showSuccess();
+  }
 }
+
+
+async function duelCancel(duelId) {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
+  if (!confirm(t.cancelConfirm)) return;
+  
+  try {
+    const res = await authFetch(`${BASE_URL}/api/duel/cancel`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId, duel_id: duelId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(t.duelCancelled, 2000);
+      if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
+      duelBackToMenu();
+      loadWelcome();
+    } else {
+      showToast(data.message || t.errConnect, 3000);
+    }
+  } catch (e) {
+    showToast(t.errConnect, 3000);
+  }
+}
+
 
 function duelStartPolling(duelId) {
   if (duelPollInterval) clearInterval(duelPollInterval);
+  
   duelPollInterval = setInterval(async () => {
     try {
       const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
       const data = await res.json();
-      if (data.success && data.duel.status === 'active' && data.duel.player2) {
+      
+      if (!data.success) {
+        clearInterval(duelPollInterval);
+        duelPollInterval = null;
+        return;
+      }
+      
+      if (data.duel.status === 'cancelled') {
+        clearInterval(duelPollInterval);
+        duelPollInterval = null;
+        showToast(t.duelCancelled, 2000);
+        duelBackToMenu();
+        return;
+      }
+      
+      if (data.duel.status === 'active' && data.duel.player2) {
         clearInterval(duelPollInterval);
         duelPollInterval = null;
         duelStartBattle(duelId, data.duel);
       }
-    } catch (e) {}
+    } catch (e) {
+      // Молча игнорируем ошибки поллинга
+    }
   }, 2000);
 }
 
-function duelStartBattle(duelId, duelData) {
-  alert(`⚔️ Соперник найден! Дуэль #${duelId} началась!\n\nТы: ${duelData.player1.nick}\nСоперник: ${duelData.player2.nick}`);
-  switchTab('game');
-}
 
-function duelStartBattle(duelId, duelData) {
+function duelStartBattle(duelIdParam, duelDataParam) {
+  // Сохраняем глобально
+  duelId = duelIdParam;
+  duelData = duelDataParam;
+  duelQuestions = duelDataParam.questions || [];
+  duelTotalRounds = duelQuestions.length || 10;
+  duelCurrentRound = 1;
+  duelTimeLeft = 15;
+  duelAnswered = false;
+  duelScores = { 
+    score1: duelDataParam.score1 || 0, 
+    score2: duelDataParam.score2 || 0 
+  };
+  
   // Удаляем лобби
   const container = document.getElementById('duelContainer');
   if (container) container.remove();
@@ -769,109 +991,114 @@ function duelStartBattle(duelId, duelData) {
   if (footer) footer.style.display = '';
   
   // Запускаем экран боя
-  duelRenderBattleScreen(duelId, duelData);
+  duelRenderBattleScreen();
 }
 
-function duelRenderBattleScreen(duelId, duelData) {
+
+function duelRenderBattleScreen() {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
+  const p1Name = duelData?.player1?.nick || 'Игрок 1';
+  const p2Name = duelData?.player2?.nick || 'Игрок 2';
   
   root.innerHTML = `
     <div class="duel-battle" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
       <!-- СТОЛ С ИГРОКАМИ -->
       <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:20px;padding:16px;margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <!-- Игрок 1 (Ты) -->
+          <!-- Игрок 1 -->
           <div style="text-align:center;flex:1;">
             <div style="width:60px;height:60px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-            <div style="font-size:0.8rem;font-weight:700;color:#00ffaa;">${duelData.player1.nick || 'Ты'}</div>
-            <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="score1">${duelData.score1 || 0}</div>
+            <div style="font-size:0.8rem;font-weight:700;color:#00ffaa;">${escapeHtml(p1Name)}</div>
+            <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore1">${duelScores.score1}</div>
           </div>
           
           <!-- VS -->
           <div style="text-align:center;padding:0 12px;">
             <div style="font-size:1.2rem;font-weight:900;color:#ffcc44;">VS</div>
-            <div style="font-size:0.7rem;color:#7799bb;margin-top:4px;">Раунд <span id="currentRound">1</span>/10</div>
+            <div style="font-size:0.7rem;color:#7799bb;margin-top:4px;">${t.roundLabel} <span id="duelRoundNum">${duelCurrentRound}</span>/${duelTotalRounds}</div>
           </div>
           
-          <!-- Игрок 2 (Соперник) -->
+          <!-- Игрок 2 -->
           <div style="text-align:center;flex:1;">
             <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-            <div style="font-size:0.8rem;font-weight:700;color:#ff6464;">${duelData.player2.nick || 'Соперник'}</div>
-            <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="score2">${duelData.score2 || 0}</div>
+            <div style="font-size:0.8rem;font-weight:700;color:#ff6464;">${escapeHtml(p2Name)}</div>
+            <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore2">${duelScores.score2}</div>
           </div>
         </div>
         
         <!-- ТАЙМЕР -->
         <div style="text-align:center;padding:10px;background:rgba(0,0,0,0.4);border-radius:12px;">
-          <div style="font-size:0.75rem;color:#7799bb;margin-bottom:4px;">️ Время на ответ</div>
-          <div id="battleTimer" style="font-size:2rem;font-weight:900;color:#ffcc44;">15</div>
+          <div style="font-size:0.75rem;color:#7799bb;margin-bottom:4px;">${t.timeToAnswer}</div>
+          <div id="duelTimer" style="font-size:2rem;font-weight:900;color:#ffcc44;">15</div>
         </div>
       </div>
       
       <!-- ВОПРОС -->
-      <div id="battleQuestion" style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:16px;margin-bottom:16px;min-height:100px;display:flex;align-items:center;justify-content:center;">
-        <div style="font-size:1.1rem;font-weight:600;color:#fff;text-align:center;">Загрузка вопроса...</div>
+      <div id="duelQuestionBlock" style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:16px;margin-bottom:16px;min-height:100px;display:flex;align-items:center;justify-content:center;">
+        <div style="font-size:1.1rem;font-weight:600;color:#fff;text-align:center;">${t.waitingOpponent}</div>
       </div>
       
       <!-- ВАРИАНТЫ ОТВЕТОВ -->
-      <div id="battleAnswers" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div id="duelAnswersBlock" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
         <!-- Кнопки будут здесь -->
       </div>
       
       <!-- РЕЗУЛЬТАТ РАУНДА -->
-      <div id="roundResult" style="display:none;text-align:center;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.3);border-radius:12px;margin-bottom:16px;">
+      <div id="duelRoundResult" style="display:none;text-align:center;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.3);border-radius:12px;margin-bottom:16px;">
         <div style="font-size:1.1rem;font-weight:700;color:#00ffaa;"></div>
       </div>
     </div>
   `;
   
-  // Запускаем логику боя
-  duelStartBattleLogic(duelId, duelData);
-}
-
-async function duelStartBattleLogic(duelId, duelData) {
-  window.duelCurrentRound = 1;
-  window.duelTimeLeft = 15;
-  window.duelAnswered = false;
-  
   // Загружаем первый вопрос
-  await duelLoadQuestion(duelId, duelData);
-  
-  // Запускаем таймер
-  window.duelTimerInterval = setInterval(() => {
-    window.duelTimeLeft--;
-    const timerEl = document.getElementById('battleTimer');
-    if (timerEl) {
-      timerEl.textContent = window.duelTimeLeft;
-      if (window.duelTimeLeft <= 0) {
-        clearInterval(window.duelTimerInterval);
-        if (!window.duelAnswered) {
-          duelHandleAnswer(duelId, duelData, null, -1);
-        }
-      }
-    }
-  }, 1000);
+  duelLoadQuestion();
 }
 
-async function duelLoadQuestion(duelId, duelData) {
+
+async function duelLoadQuestion() {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
+  // Обновляем раунд
+  const roundEl = document.getElementById('duelRoundNum');
+  if (roundEl) roundEl.textContent = duelCurrentRound;
+  
+  // Сбрасываем таймер
+  duelTimeLeft = 15;
+  duelAnswered = false;
+  
+  const timerEl = document.getElementById('duelTimer');
+  if (timerEl) timerEl.textContent = '15';
+  
+  // Получаем вопрос
+  if (duelQuestions.length >= duelCurrentRound) {
+    const question = duelQuestions[duelCurrentRound - 1];
+    if (question) {
+      duelRenderQuestion(question);
+      duelStartTimer();
+      return;
+    }
+  }
+  
+  // Если вопросов нет — пробуем получить через API
   try {
     const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
     const data = await res.json();
-    
-    if (data.success && data.duel.questions && data.duel.questions.length > 0) {
-      const question = data.duel.questions[window.duelCurrentRound - 1];
-      if (question) {
-        duelRenderQuestion(question);
-      }
+    if (data.success && data.duel.questions && data.duel.questions.length >= duelCurrentRound) {
+      const question = data.duel.questions[duelCurrentRound - 1];
+      duelQuestions = data.duel.questions;
+      duelRenderQuestion(question);
+      duelStartTimer();
     }
   } catch (e) {
     console.error('Load question error:', e);
   }
 }
 
+
 function duelRenderQuestion(question) {
-  const questionEl = document.getElementById('battleQuestion');
-  const answersEl = document.getElementById('battleAnswers');
+  const questionEl = document.getElementById('duelQuestionBlock');
+  const answersEl = document.getElementById('duelAnswersBlock');
   
   if (questionEl) {
     questionEl.innerHTML = `<div style="font-size:1.1rem;font-weight:600;color:#fff;text-align:center;">${escapeHtml(question.text)}</div>`;
@@ -884,132 +1111,284 @@ function duelRenderQuestion(question) {
       const btn = document.createElement('button');
       btn.style.cssText = 'padding:14px;background:rgba(0,0,0,0.5);border:2px solid rgba(255,204,68,0.3);border-radius:12px;color:#fff;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;';
       btn.innerHTML = `<div style="color:#ffcc44;font-size:0.75rem;margin-bottom:4px;">${letters[idx]}</div><div>${escapeHtml(opt)}</div>`;
-      btn.onclick = () => duelHandleAnswer(window.duelId, window.duelData, idx, question.correct);
+      btn.onclick = () => duelHandleAnswer(idx);
       answersEl.appendChild(btn);
     });
   }
 }
 
-async function duelHandleAnswer(duelId, duelData, answerIdx, correctIdx) {
-  if (window.duelAnswered) return;
-  window.duelAnswered = true;
+
+function duelStartTimer() {
+  if (duelTimerInterval) clearInterval(duelTimerInterval);
+  
+  duelTimerInterval = setInterval(() => {
+    duelTimeLeft--;
+    const timerEl = document.getElementById('duelTimer');
+    if (timerEl) {
+      timerEl.textContent = duelTimeLeft;
+      if (duelTimeLeft <= 5) timerEl.style.color = '#ff6464';
+      if (duelTimeLeft <= 0) {
+        clearInterval(duelTimerInterval);
+        duelTimerInterval = null;
+        if (!duelAnswered) {
+          duelHandleAnswer(-1); // Таймаут
+        }
+      }
+    }
+  }, 1000);
+}
+
+
+async function duelHandleAnswer(answerIdx) {
+  if (duelAnswered) return;
+  duelAnswered = true;
   
   // Останавливаем таймер
-  if (window.duelTimerInterval) {
-    clearInterval(window.duelTimerInterval);
+  if (duelTimerInterval) {
+    clearInterval(duelTimerInterval);
+    duelTimerInterval = null;
   }
   
-  const isCorrect = answerIdx === correctIdx;
-  const timeBonus = isCorrect ? Math.max(0, window.duelTimeLeft) : 0;
-  const points = isCorrect ? (10 + timeBonus) : 0;
+  const timeMs = (15 - duelTimeLeft) * 1000;
   
-  // Отправляем ответ на сервер
+  // Показываем, что ответ отправлен
+  const resultEl = document.getElementById('duelRoundResult');
+  if (resultEl) {
+    resultEl.style.display = 'block';
+    resultEl.querySelector('div').textContent = '⏳ Отправка ответа...';
+  }
+  
+  // Отправляем на сервер
   try {
-    await authFetch(`${BASE_URL}/api/duel/answer`, {
+    const res = await authFetch(`${BASE_URL}/api/duel/answer`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: userId,
         duel_id: duelId,
-        round: window.duelCurrentRound,
-        answer_idx: answerIdx !== null ? answerIdx : -1,
-        time_ms: (15 - window.duelTimeLeft) * 1000
+        round: duelCurrentRound,
+        answer_idx: answerIdx,
+        time_ms: timeMs
       })
     });
-  } catch (e) {}
-  
-  // Показываем результат
-  const resultEl = document.getElementById('roundResult');
-  if (resultEl) {
-    resultEl.style.display = 'block';
-    resultEl.querySelector('div').textContent = isCorrect 
-      ? `✅ Правильно! +${points} очков` 
-      : answerIdx === null 
+    const data = await res.json();
+    
+    if (!data.success) {
+      if (resultEl) {
+        resultEl.querySelector('div').textContent = data.message || 'Ошибка';
+        resultEl.style.background = 'rgba(255,100,100,0.1)';
+        resultEl.style.borderColor = 'rgba(255,100,100,0.3)';
+      }
+      return;
+    }
+    
+    // Подсвечиваем кнопки
+    const buttons = document.querySelectorAll('#duelAnswersBlock button');
+    if (data.correctIndex !== undefined && buttons[data.correctIndex]) {
+      buttons[data.correctIndex].style.background = 'rgba(0,255,170,0.3)';
+      buttons[data.correctIndex].style.borderColor = '#00ffaa';
+    }
+    if (answerIdx >= 0 && !data.isCorrect && buttons[answerIdx]) {
+      buttons[answerIdx].style.background = 'rgba(255,100,100,0.3)';
+      buttons[answerIdx].style.borderColor = '#ff6464';
+    }
+    if (answerIdx >= 0 && data.isCorrect && buttons[answerIdx]) {
+      buttons[answerIdx].style.background = 'rgba(0,255,170,0.3)';
+      buttons[answerIdx].style.borderColor = '#00ffaa';
+    }
+    
+    // Обновляем счёт
+    if (data.newScore1 !== undefined) {
+      duelScores.score1 = data.newScore1;
+      const el1 = document.getElementById('duelScore1');
+      if (el1) el1.textContent = data.newScore1;
+    }
+    if (data.newScore2 !== undefined) {
+      duelScores.score2 = data.newScore2;
+      const el2 = document.getElementById('duelScore2');
+      if (el2) el2.textContent = data.newScore2;
+    }
+    
+    // Показываем результат
+    const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+    const resultText = data.isCorrect 
+      ? `✅ Правильно! +${data.points} очков` 
+      : answerIdx === -1 
         ? '⏱️ Время вышло!' 
         : '❌ Неправильно';
-    resultEl.style.background = isCorrect ? 'rgba(0,255,170,0.1)' : 'rgba(255,100,100,0.1)';
-    resultEl.style.borderColor = isCorrect ? 'rgba(0,255,170,0.3)' : 'rgba(255,100,100,0.3)';
-  }
-  
-  // Подсвечиваем правильную кнопку
-  const buttons = document.querySelectorAll('#battleAnswers button');
-  if (buttons[correctIdx]) {
-    buttons[correctIdx].style.background = 'rgba(0,255,170,0.3)';
-    buttons[correctIdx].style.borderColor = '#00ffaa';
-  }
-  
-  // Ждём и переходим к следующему раунду
-  setTimeout(() => {
-    if (resultEl) resultEl.style.display = 'none';
-    window.duelCurrentRound++;
     
-    if (window.duelCurrentRound > 10) {
-      // Дуэль окончена
-      duelFinishBattle(duelId, duelData);
-    } else {
-      // Следующий раунд
-      document.getElementById('currentRound').textContent = window.duelCurrentRound;
-      window.duelTimeLeft = 15;
-      window.duelAnswered = false;
-      document.getElementById('battleTimer').textContent = '15';
-      duelLoadQuestion(duelId, duelData);
-      
-      // Перезапускаем таймер
-      window.duelTimerInterval = setInterval(() => {
-        window.duelTimeLeft--;
-        const timerEl = document.getElementById('battleTimer');
-        if (timerEl) {
-          timerEl.textContent = window.duelTimeLeft;
-          if (window.duelTimeLeft <= 0) {
-            clearInterval(window.duelTimerInterval);
-            if (!window.duelAnswered) {
-              duelHandleAnswer(duelId, duelData, null, -1);
-            }
-          }
-        }
-      }, 1000);
+    if (resultEl) {
+      resultEl.style.display = 'block';
+      resultEl.querySelector('div').textContent = resultText;
+      resultEl.style.background = data.isCorrect ? 'rgba(0,255,170,0.1)' : 'rgba(255,100,100,0.1)';
+      resultEl.style.borderColor = data.isCorrect ? 'rgba(0,255,170,0.3)' : 'rgba(255,100,100,0.3)';
     }
-  }, 2000);
+    
+    // Если оба ответили — ждём и переходим к следующему раунду
+    if (data.bothAnswered) {
+      if (data.duelFinished) {
+        // Дуэль окончена
+        setTimeout(() => duelFinishBattle(), 2000);
+      } else {
+        // Следующий раунд
+        setTimeout(() => {
+          if (resultEl) resultEl.style.display = 'none';
+          duelCurrentRound++;
+          duelLoadQuestion();
+        }, 2500);
+      }
+    } else {
+      // Ждём соперника
+      if (resultEl) {
+        resultEl.querySelector('div').textContent = resultText + ' — ' + t.waitingOpponent;
+      }
+      duelWaitForOpponent();
+    }
+    
+  } catch (e) {
+    console.error('[DUEL] answer error:', e);
+    if (resultEl) {
+      resultEl.querySelector('div').textContent = t.errConnect;
+      resultEl.style.background = 'rgba(255,100,100,0.1)';
+      resultEl.style.borderColor = 'rgba(255,100,100,0.3)';
+    }
+  }
 }
 
-function duelFinishBattle(duelId, duelData) {
-  root.innerHTML = `
-    <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
-      <div style="font-size:2rem;font-weight:900;color:#ffcc44;margin-bottom:20px;"> Дуэль завершена!</div>
-      <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:20px;margin-bottom:20px;">
-        <div style="font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:12px;">Итоговый счёт:</div>
-        <div style="display:flex;justify-content:space-around;align-items:center;">
-          <div>
-            <div style="color:#00ffaa;font-size:0.9rem;">${duelData.player1.nick}</div>
-            <div style="font-size:2rem;font-weight:900;color:#fff;" id="finalScore1">0</div>
-          </div>
-          <div style="font-size:1.5rem;color:#7799bb;">VS</div>
-          <div>
-            <div style="color:#ff6464;font-size:0.9rem;">${duelData.player2.nick}</div>
-            <div style="font-size:2rem;font-weight:900;color:#fff;" id="finalScore2">0</div>
-          </div>
-        </div>
-      </div>
-      <button onclick="switchTab('game')" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">← Вернуться в меню</button>
-    </div>
-  `;
+
+function duelWaitForOpponent() {
+  if (duelPollInterval) clearInterval(duelPollInterval);
   
-  // Получаем финальный счёт
-  setTimeout(async () => {
+  let pollCount = 0;
+  const maxPolls = 60; // 60 * 2 сек = 120 сек максимум
+  
+  duelPollInterval = setInterval(async () => {
+    pollCount++;
+    if (pollCount > maxPolls) {
+      clearInterval(duelPollInterval);
+      duelPollInterval = null;
+      return;
+    }
+    
     try {
       const res = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
       const data = await res.json();
-      if (data.success) {
-        const el1 = document.getElementById('finalScore1');
-        const el2 = document.getElementById('finalScore2');
-        if (el1) el1.textContent = data.duel.score1;
-        if (el2) el2.textContent = data.duel.score2;
+      
+      if (!data.success) return;
+      
+      const currentRoundAnswers = data.duel.answers?.filter(a => a.round === duelCurrentRound) || [];
+      
+      if (currentRoundAnswers.length === 2) {
+        clearInterval(duelPollInterval);
+        duelPollInterval = null;
+        
+        // Обновляем счёт
+        if (data.duel.score1 !== undefined) {
+          duelScores.score1 = data.duel.score1;
+          const el1 = document.getElementById('duelScore1');
+          if (el1) el1.textContent = data.duel.score1;
+        }
+        if (data.duel.score2 !== undefined) {
+          duelScores.score2 = data.duel.score2;
+          const el2 = document.getElementById('duelScore2');
+          if (el2) el2.textContent = data.duel.score2;
+        }
+        
+        // Проверяем, окончена ли дуэль
+        if (data.duel.status === 'finished') {
+          setTimeout(() => duelFinishBattle(), 1000);
+        } else {
+          // Следующий раунд
+          const resultEl = document.getElementById('duelRoundResult');
+          if (resultEl) resultEl.style.display = 'none';
+          setTimeout(() => {
+            duelCurrentRound++;
+            duelLoadQuestion();
+          }, 1500);
+        }
       }
     } catch (e) {}
-  }, 500);
+  }, 2000);
 }
-// Экран принятия приглашения (для второго игрока)
-function loadDuelJoinPanel(duelId) {
+
+
+function duelFinishBattle() {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
+  // Останавливаем все интервалы
+  if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
+  if (duelTimerInterval) { clearInterval(duelTimerInterval); duelTimerInterval = null; }
+  
+  // Получаем финальное состояние
+  authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`)
+    .then(r => r.json())
+    .then(data => {
+      let resultText;
+      let resultColor;
+      
+      if (data.success) {
+        duelScores.score1 = data.duel.score1 || duelScores.score1;
+        duelScores.score2 = data.duel.score2 || duelScores.score2;
+        
+        const myId = String(userId);
+        const winnerId = data.duel.winnerId ? String(data.duel.winnerId) : null;
+        
+        if (!winnerId) {
+          resultText = t.draw;
+          resultColor = '#ffcc44';
+        } else if (winnerId === myId) {
+          resultText = t.youWin;
+          resultColor = '#00ffaa';
+        } else {
+          resultText = t.youLose;
+          resultColor = '#ff6464';
+        }
+      } else {
+        resultText = t.duelFinished;
+        resultColor = '#ffcc44';
+      }
+      
+      const p1Name = duelData?.player1?.nick || 'Игрок 1';
+      const p2Name = duelData?.player2?.nick || 'Игрок 2';
+      
+      root.innerHTML = `
+        <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:900;color:${resultColor};margin-bottom:12px;">${resultText}</div>
+          <div style="font-size:1rem;color:#7799bb;margin-bottom:20px;">${t.duelFinished}</div>
+          <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:20px;margin-bottom:20px;">
+            <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:12px;">${t.roundLabel} ${duelTotalRounds}/${duelTotalRounds}</div>
+            <div style="display:flex;justify-content:space-around;align-items:center;">
+              <div>
+                <div style="color:#00ffaa;font-size:0.9rem;">${escapeHtml(p1Name)}</div>
+                <div style="font-size:2rem;font-weight:900;color:#fff;">${duelScores.score1}</div>
+              </div>
+              <div style="font-size:1.5rem;color:#7799bb;">VS</div>
+              <div>
+                <div style="color:#ff6464;font-size:0.9rem;">${escapeHtml(p2Name)}</div>
+                <div style="font-size:2rem;font-weight:900;color:#fff;">${duelScores.score2}</div>
+              </div>
+            </div>
+          </div>
+          <button onclick="duelBackToMenu()" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">${t.returnToMenu}</button>
+        </div>
+      `;
+    })
+    .catch(() => {
+      root.innerHTML = `
+        <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:900;color:#ffcc44;margin-bottom:12px;">${t.duelFinished}</div>
+          <button onclick="duelBackToMenu()" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">${t.returnToMenu}</button>
+        </div>
+      `;
+    });
+}
+
+
+// ==================== ПРИНЯТИЕ ПРИГЛАШЕНИЯ ====================
+
+function loadDuelJoinPanel(duelIdParam) {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
   const header = document.querySelector('.header');
   const footer = document.querySelector('footer');
   if (header) header.style.display = 'none';
@@ -1018,24 +1397,24 @@ function loadDuelJoinPanel(duelId) {
   root.innerHTML = `
     <div class="duel-join-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
       <div style="font-size:3rem;margin-bottom:16px;">⚔️</div>
-      <div style="font-size:1.5rem;font-weight:900;color:#ffcc44;margin-bottom:8px;">Вас пригласили на дуэль!</div>
-      <div style="color:#7799bb;margin-bottom:24px;">ID дуэли: ${duelId}</div>
+      <div style="font-size:1.5rem;font-weight:900;color:#ffcc44;margin-bottom:8px;">${t.title}</div>
+      <div style="color:#7799bb;margin-bottom:24px;">ID: ${duelIdParam}</div>
       
-      <div id="duelJoinLoader" style="padding:20px;color:#ffcc44;">⏳ Проверяем информацию...</div>
+      <div id="duelJoinLoader" style="padding:20px;color:#ffcc44;">⏳ ...</div>
       
       <div id="duelJoinActions" style="display:none;flex-direction:column;gap:12px;">
         <div style="background:rgba(10,20,38,0.7);border:1px solid rgba(255,204,68,0.3);border-radius:12px;padding:16px;margin-bottom:16px;">
-          <div style="color:#7799bb;font-size:0.8rem;">Ставка</div>
+          <div style="color:#7799bb;font-size:0.8rem;">${t.subtitle}</div>
           <div style="color:#fff;font-size:1.5rem;font-weight:800;" id="joinStakeAmount">0 COGNIQ</div>
         </div>
-        <button onclick="duelAcceptInvite(${duelId})" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">⚔️ Принять вызов</button>
-        <button onclick="switchTab('game')" style="width:100%;padding:14px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:14px;color:#ff6464;font-size:0.9rem;font-weight:600;cursor:pointer;">Отмена</button>
+        <button onclick="duelAcceptInvite(${duelIdParam})" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">⚔️ ${t.title}</button>
+        <button onclick="switchTab('game')" style="width:100%;padding:14px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:14px;color:#ff6464;font-size:0.9rem;font-weight:600;cursor:pointer;">${t.backBtn}</button>
       </div>
     </div>
   `;
 
-  // Проверяем, жива ли ещё дуэль
-  authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`)
+  // Проверяем дуэль
+  authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelIdParam}`)
     .then(r => r.json())
     .then(data => {
       document.getElementById('duelJoinLoader').style.display = 'none';
@@ -1044,38 +1423,40 @@ function loadDuelJoinPanel(duelId) {
         document.getElementById('duelJoinActions').style.display = 'flex';
       } else {
         document.getElementById('duelJoinLoader').style.display = 'block';
-        document.getElementById('duelJoinLoader').textContent = 'Эта дуэль уже началась или не найдена.';
+        document.getElementById('duelJoinLoader').textContent = t.opponentNotFound;
         document.getElementById('duelJoinLoader').style.color = '#ff6464';
       }
     })
     .catch(() => {
       document.getElementById('duelJoinLoader').style.display = 'block';
-      document.getElementById('duelJoinLoader').textContent = 'Ошибка проверки дуэли.';
+      document.getElementById('duelJoinLoader').textContent = t.errConnect;
       document.getElementById('duelJoinLoader').style.color = '#ff6464';
     });
 }
 
-// Обработка нажатия "Принять вызов"
-async function duelAcceptInvite(duelId) {
+
+async function duelAcceptInvite(duelIdParam) {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
   try {
     const res = await authFetch(`${BASE_URL}/api/duel/join`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: userId, duel_id: duelId })
+      body: JSON.stringify({ user_id: userId, duel_id: duelIdParam })
     });
     const data = await res.json();
     
     if (data.success) {
-      // Успешно присоединились! Сразу запрашиваем состояние и начинаем бой
-      const stateRes = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelId}`);
+      // Получаем состояние и начинаем бой
+      const stateRes = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelIdParam}`);
       const stateData = await stateRes.json();
       if (stateData.success) {
-        duelStartBattle(duelId, stateData.duel);
+        duelStartBattle(duelIdParam, stateData.duel);
       }
     } else {
-      alert(data.message || 'Не удалось присоединиться');
+      showToast(data.message || t.errConnect, 3000);
     }
   } catch (e) {
-    alert('Ошибка соединения');
+    showToast(t.errConnect, 3000);
   }
 }
