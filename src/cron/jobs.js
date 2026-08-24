@@ -4,7 +4,53 @@ const { postDailyQuestion, postWeeklyTop, sendStreakWarnings, postWeeklyAchievem
 const { checkTonUsdtPayments } = require('../services/tonPayments');
 
 function setupCron(bot, botUsername) {
-cron.schedule('*/30 * * * * *', () => checkTonUsdtPayments(bot));
+  cron.schedule('*/30 * * * * *', () => checkTonUsdtPayments(bot));
+  
+  // ==================== АВТООЧИСТКА ДУЭЛЕЙ ====================
+  // Каждые 15 минут удаляем "waiting" дуэли старше 30 минут
+  cron.schedule('*/15 * * * *', async () => {
+    try {
+      // Удаляем ответы для старых дуэлей
+      await pool.query(`
+        DELETE FROM duel_answers WHERE duel_id IN (
+          SELECT id FROM duels WHERE status = 'waiting' AND created_at < NOW() - INTERVAL '30 minutes'
+        )
+      `);
+      
+      // Удаляем старые дуэли и возвращаем ставки создателям
+      const staleDuels = await pool.query(`
+        SELECT id, player1_id, stake FROM duels 
+        WHERE status = 'waiting' AND created_at < NOW() - INTERVAL '30 minutes'
+      `);
+      
+      if (staleDuels.rows.length > 0) {
+        for (const duel of staleDuels.rows) {
+          // Возвращаем ставку создателю
+          await pool.query(
+            'UPDATE users SET balance = balance + $1 WHERE telegram_id = $2',
+            [duel.stake, duel.player1_id]
+          );
+          
+          // Логируем возврат
+          await pool.query(
+            'INSERT INTO transactions (user_id, type, amount, direction, description) VALUES ($1, $2, $3, $4, $5)',
+            [duel.player1_id, 'duel_refund', duel.stake, 'in', JSON.stringify({ duel_id: duel.id, reason: 'timeout' })]
+          );
+        }
+        
+        // Удаляем дуэли
+        await pool.query(`
+          DELETE FROM duels 
+          WHERE status = 'waiting' AND created_at < NOW() - INTERVAL '30 minutes'
+        `);
+        
+        console.log(`[DUELS] Auto-cleanup: ${staleDuels.rows.length} stale duels removed, stakes refunded`);
+      }
+    } catch (e) {
+      console.error('[DUELS] Cleanup error:', e.message);
+    }
+  });
+  
   cron.schedule('0 0 * * *', async () => {
     try {
       const { rows } = await pool.query(
