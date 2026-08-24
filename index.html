@@ -377,13 +377,7 @@ window.addEventListener('error', function(e){
     }
   });
 
-  setTimeout(() => {
-  startApp(1).then(() => {
-    if (duelIdFromUrl) {
-      setTimeout(() => loadDuelJoinPanel(duelIdFromUrl), 500);
-    }
-  });
-}, 300);
+  setTimeout(() => startApp(1), 300);
   setTimeout(preloadTabImages, 2000);
 
   (function() {
