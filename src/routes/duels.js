@@ -134,9 +134,9 @@ router.post('/api/duel/join', requireInitDataStrict, authRateLimit, async (req, 
 
     // Обновляем дуэль
     await client.query(
-      'UPDATE duels SET player2_id = $1, status = $2 WHERE id = $3',
-      [userId, 'active', duelId]
-    );
+  'UPDATE duels SET player2_id = $1, status = $2::VARCHAR(20) WHERE id = $3',
+  [userId, 'active', duelId]
+);
 
     await client.query('COMMIT');
     res.json({ success: true, duelId });
@@ -337,16 +337,16 @@ router.post('/api/duel/answer', requireInitDataStrict, authRateLimit, async (req
       let newStatus = duelFinished ? 'finished' : 'active';
 
       await client.query(
-        `UPDATE duels SET 
-          current_round = $1, 
-          score1 = $2, 
-          score2 = $3, 
-          status = $4, 
-          winner_id = $5, 
-          finished_at = CASE WHEN $4 = 'finished' THEN NOW() ELSE NULL END 
-        WHERE id = $6`,
-        [round, newScore1, newScore2, newStatus, winnerId, duelId]
-      );
+  `UPDATE duels SET 
+    current_round = $1, 
+    score1 = $2, 
+    score2 = $3, 
+    status = $4::VARCHAR(20), 
+    winner_id = $5, 
+    finished_at = CASE WHEN $4 = 'finished' THEN NOW() ELSE NULL END 
+  WHERE id = $6`,
+  [round, newScore1, newScore2, newStatus, winnerId, duelId]
+);
 
       if (duelFinished) {
         const totalPot = duel.stake * 2;
@@ -420,7 +420,7 @@ router.post('/api/duel/cancel', requireInitDataStrict, authRateLimit, async (req
     }
 
     await client.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [duel.stake, duel.player1_id]);
-    await client.query("UPDATE duels SET status = 'cancelled' WHERE id = $1", [duelId]);
+    await client.query("UPDATE duels SET status = 'cancelled'::VARCHAR(20) WHERE id = $1", [duelId]);
 
     await client.query('COMMIT');
     res.json({ success: true, message: 'Дуэль отменена, ставка возвращена' });
