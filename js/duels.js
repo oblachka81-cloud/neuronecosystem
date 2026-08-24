@@ -133,10 +133,8 @@ function loadDuelPanel() {
   
   root.innerHTML = '';
   
-  const header = document.querySelector('.header');
-  const footer = document.querySelector('footer');
-  if (header) header.style.display = 'none';
-  if (footer) footer.style.display = 'none';
+  const appRoot = document.getElementById('appRoot');
+  if (appRoot) appRoot.style.display = 'none';
   
   const duelContainer = document.createElement('div');
   duelContainer.id = 'duelContainer';
@@ -182,10 +180,8 @@ function duelBackToMenu() {
   const battleContainer = document.getElementById('duelBattleContainer');
   if (battleContainer) battleContainer.remove();
   
-  const header = document.querySelector('.header');
-  const footer = document.querySelector('footer');
-  if (header) header.style.display = '';
-  if (footer) footer.style.display = '';
+  const appRoot = document.getElementById('appRoot');
+  if (appRoot) appRoot.style.display = '';
   
   duelId = null;
   duelData = null;
@@ -345,10 +341,8 @@ function duelStartBattle(duelIdParam, duelDataParam) {
   const joinContainer = document.getElementById('duelJoinContainer');
   if (joinContainer) joinContainer.remove();
 
-  const header = document.querySelector('.header');
-  const footer = document.querySelector('footer');
-  if (header) header.style.display = 'none';
-  if (footer) footer.style.display = 'none';
+  const appRoot = document.getElementById('appRoot');
+  if (appRoot) appRoot.style.display = 'none';
   
   duelRenderBattleScreen();
 }
@@ -374,13 +368,13 @@ function duelRenderBattleScreen() {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
           <div style="text-align:center;flex:1;">
             ${p1Photo ? `
-<div style="width:60px;height:60px;border-radius:50%;border:2px solid #00ffaa;margin:0 auto 6px;overflow:hidden;background:rgba(0,255,170,0.2);">
-  <img src="${p1Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-  <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-</div>
-` : `
-<div style="width:60px;height:60px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-`}
+          <div style="width:60px;height:60px;border-radius:50%;border:2px solid #00ffaa;margin:0 auto 6px;overflow:hidden;background:rgba(0,255,170,0.2);">
+          <img src="${p1Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+         </div>
+        ` : `
+           <div style="width:60px;height:60px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+           `}
             <div style="font-size:0.8rem;font-weight:700;color:#00ffaa;">${escapeHtml(p1Name)}</div>
             <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore1">${duelScores.score1}</div>
           </div>
@@ -392,13 +386,13 @@ function duelRenderBattleScreen() {
           
           <div style="text-align:center;flex:1;">
             ${p2Photo ? `
-<div style="width:60px;height:60px;border-radius:50%;border:2px solid #ff6464;margin:0 auto 6px;overflow:hidden;background:rgba(255,100,100,0.2);">
-  <img src="${p2Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-  <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-</div>
-` : `
-<div style="width:60px;height:60px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-`}
+           <div style="width:60px;height:60px;border-radius:50%;border:2px solid #ff6464;margin:0 auto 6px;overflow:hidden;background:rgba(255,100,100,0.2);">
+          <img src="${p2Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+           <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+           </div>
+          ` : `
+          <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+           `}
             <div style="font-size:0.8rem;font-weight:700;color:#ff6464;">${escapeHtml(p2Name)}</div>
             <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore2">${duelScores.score2}</div>
           </div>
@@ -757,6 +751,9 @@ function loadDuelJoinPanel(duelIdParam) {
   const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
   
   root.innerHTML = '';
+
+  const appRoot = document.getElementById('appRoot');
+  if (appRoot) appRoot.style.display = 'none';
   
   const joinContainer = document.createElement('div');
   joinContainer.id = 'duelJoinContainer';
