@@ -675,16 +675,16 @@ function loadDuelPanel() {
         </div>
 
         <div style="display:flex;gap:8px;margin-bottom:16px;">
-          <button onclick="duelCreate(100)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.35);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;">${t.stake100 || '100 COGNIQ'}</button>
-          <button onclick="duelCreate(500)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.55);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,204,68,0.2);">${t.stake500 || '500 COGNIQ'}</button>
-          <button onclick="duelCreate(1000)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,150,50,0.55);border-radius:14px;color:#ffaa44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,150,50,0.25);">${t.stake1000 || '1000 COGNIQ'}</button>
+          <button onclick="duelCreate(100)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.35);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;">100 COGNIQ</button>
+          <button onclick="duelCreate(500)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.55);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,204,68,0.2);">500 COGNIQ</button>
+          <button onclick="duelCreate(1000)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,150,50,0.55);border-radius:14px;color:#ffaa44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,150,50,0.25);">1000 COGNIQ</button>
         </div>
 
         <div id="duelWaitingBlock" style="display:none;"></div>
       </div>
     `;
   } catch (e) {
-    root.innerHTML = `<div style="color:#ff8888;padding:20px;font-size:0.85rem;word-break:break-all;">⚠️ loadDuelPanel: ${e.message}</div>`;
+    root.innerHTML = `<div style="color:#ff8888;padding:20px;font-size:0.85rem;word-break:break-all;">️ loadDuelPanel: ${e.message}</div>`;
   }
 }
 
@@ -706,10 +706,10 @@ async function duelCreate(stake) {
 
     document.getElementById('duelWaitingBlock').innerHTML = `
       <div style="background:rgba(10,20,38,0.8);border:2px solid rgba(0,255,170,0.4);border-radius:18px;padding:20px;text-align:center;box-shadow:0 0 20px rgba(0,255,170,0.15);">
-        <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:12px;">⏳ ${t.waiting}</div>
+        <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:12px;"> ${t.waiting}</div>
         <div style="font-size:0.75rem;color:#7799bb;margin-bottom:14px;">ID: ${data.duelId}</div>
         <button onclick="duelShareInvite('${data.inviteLink}')" style="width:100%;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.4);border-radius:12px;color:#00ffaa;font-weight:700;font-size:0.88rem;cursor:pointer;margin-bottom:8px;">📤 ${t.shareInvite}</button>
-        <button onclick="duelCopyLink('${data.inviteLink}', this)" style="width:100%;padding:12px;background:rgba(255,204,68,0.1);border:1px solid rgba(255,204,68,0.4);border-radius:12px;color:#ffcc44;font-weight:700;font-size:0.88rem;cursor:pointer;">🔗 ${t.copyLink}</button>
+        <button onclick="duelCopyLink('${data.inviteLink}', this)" style="width:100%;padding:12px;background:rgba(255,204,68,0.1);border:1px solid rgba(255,204,68,0.4);border-radius:12px;color:#ffcc44;font-weight:700;font-size:0.88rem;cursor:pointer;"> ${t.copyLink}</button>
       </div>
     `;
     document.getElementById('duelWaitingBlock').style.display = 'block';
@@ -756,6 +756,6 @@ function duelStartPolling(duelId) {
 }
 
 function duelStartBattle(duelId, duelData) {
-  alert(`⚔️ Соперник найден! Дуэль #${duelId} началась!\n\nТы: ${duelData.player1.nick}\nСоперник: ${duelData.player2.nick}`);
+  alert(`️ Соперник найден! Дуэль #${duelId} началась!\n\nТы: ${duelData.player1.nick}\nСоперник: ${duelData.player2.nick}`);
   loadDuelPanel();
 }
