@@ -621,6 +621,12 @@ async function loadReferralStats() {
 }
 
 // ==================== ДУЭЛИ ====================
+// Скрываем хедер и футер
+  const header = document.querySelector('.header');
+  const footer = document.querySelector('footer');
+  if (header) header.style.display = 'none';
+  if (footer) footer.style.display = 'none';
+
 const DUEL_LANG = {
   ru: { title: 'Дуэли', subtitle: '1 на 1 • 10 вопросов • ставка', desc: 'Брось вызов другу или найди соперника. Ставки: 100 / 500 / 1000 COGNIQ. Победитель забирает банк, 5% сжигается навсегда.', waiting: 'Ожидание соперника...', shareInvite: 'Отправить приглашение', copyLink: 'Скопировать ссылку', copied: '✅ Скопировано!', backBtn: '← Назад', errBalance: 'Недостаточно COGNIQ', errCreate: 'Не удалось создать дуэль', errConnect: 'Ошибка связи' },
   en: { title: 'Duels', subtitle: '1 vs 1 • 10 questions • stake', desc: 'Challenge a friend or find an opponent. Stakes: 100 / 500 / 1000 COGNIQ. Winner takes the pot, 5% burned forever.', waiting: 'Waiting for opponent...', shareInvite: 'Send invite', copyLink: 'Copy link', copied: '✅ Copied!', backBtn: '← Back', errBalance: 'Not enough COGNIQ', errCreate: 'Could not create duel', errConnect: 'Connection error' },
@@ -637,7 +643,7 @@ function loadDuelPanel() {
 
   root.innerHTML = `
     <div class="duel-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
-      <button onclick="switchTab('game')" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
+      <button onclick="showChromeAndGoHome()" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
       <div style="text-align:center;margin-bottom:20px;">
         <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#ffcc44,#e8d9a0,#ffcc44);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">⚔️ ${t.title}</div>
         <div style="font-size:0.78rem;color:#7799bb;margin-top:4px;">${t.subtitle}</div>
@@ -718,5 +724,12 @@ function duelStartPolling(duelId) {
 
 function duelStartBattle(duelId, duelData) {
   alert(`⚔️ Соперник найден! Дуэль #${duelId} началась!\n\nТы: ${duelData.player1.nick}\nСоперник: ${duelData.player2.nick}`);
+  switchTab('game');
+}
+function showChromeAndGoHome() {
+  const header = document.querySelector('.header');
+  const footer = document.querySelector('footer');
+  if (header) header.style.display = '';
+  if (footer) footer.style.display = '';
   switchTab('game');
 }
