@@ -1228,18 +1228,17 @@ async function duelHandleAnswer(answerIdx) {
     
     // Если оба ответили — ждём и переходим к следующему раунду
     if (data.bothAnswered) {
-      if (data.duelFinished) {
-        // Дуэль окончена
-        setTimeout(() => duelFinishBattle(), 2000);
-      } else {
-        // Следующий раунд
-        setTimeout(() => {
-          if (resultEl) resultEl.style.display = 'none';
-          duelCurrentRound++;
-          duelLoadQuestion();
-        }, 2500);
-      }
-    } else {
+  if (data.duelFinished) {
+    setTimeout(() => duelFinishBattle(), 2000);
+  } else {
+    setTimeout(() => {
+      if (resultEl) resultEl.style.display = 'none';
+      // Сервер обновил current_round = round, следующий = round + 1
+      duelCurrentRound = round + 1;
+      duelLoadQuestion();
+    }, 2500);
+  }
+} else {
       // Ждём соперника
       if (resultEl) {
         resultEl.querySelector('div').textContent = resultText + ' — ' + t.waitingOpponent;
