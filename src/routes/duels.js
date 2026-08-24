@@ -12,10 +12,10 @@ async function getDuelQuestions() {
   return res.rows.map(r => r.id);
 }
 
-// POST /api/duel/create — создать дуэль (лобби)
+// POST /api/duel/create — создать дуэль
 router.post('/api/duel/create', requireInitDataStrict, authRateLimit, async (req, res) => {
   try {
-    const userId = req.body.user_id;
+    const userId = req.tgUser.id;
     const stake = parseInt(req.body.stake) || 100;
     
     if (![100, 500, 1000].includes(stake)) {
@@ -26,6 +26,17 @@ router.post('/api/duel/create', requireInitDataStrict, authRateLimit, async (req
     const userRes = await pool.query('SELECT balance FROM users WHERE telegram_id = $1', [userId]);
     if (!userRes.rows.length || userRes.rows[0].balance < stake) {
       return res.json({ success: false, message: 'Недостаточно COGNIQ' });
+    }
+
+    // Проверяем, нет ли уже активной дуэли у пользователя
+    const existingDuel = await pool.query(
+      `SELECT id FROM duels 
+       WHERE (player1_id = $1 OR player2_id = $1) 
+       AND status IN ('waiting', 'active')`,
+      [userId]
+    );
+    if (existingDuel.rows.length > 0) {
+      return res.json({ success: false, message: 'У вас уже есть активная дуэль' });
     }
 
     // Списываем ставку
@@ -54,57 +65,82 @@ router.post('/api/duel/create', requireInitDataStrict, authRateLimit, async (req
 
 // POST /api/duel/join — принять дуэль
 router.post('/api/duel/join', requireInitDataStrict, authRateLimit, async (req, res) => {
+  const client = await pool.connect();
   try {
-    const userId = req.body.user_id;
+    await client.query('BEGIN');
+    
+    const userId = req.tgUser.id;
     const duelId = parseInt(req.body.duel_id);
 
-    // Получаем дуэль
-    const duelRes = await pool.query('SELECT * FROM duels WHERE id = $1', [duelId]);
+    // Получаем дуэль с блокировкой
+    const duelRes = await client.query('SELECT * FROM duels WHERE id = $1 FOR UPDATE', [duelId]);
     if (!duelRes.rows.length) {
+      await client.query('ROLLBACK');
       return res.json({ success: false, message: 'Дуэль не найдена' });
     }
 
     const duel = duelRes.rows[0];
     if (duel.status !== 'waiting') {
-      return res.json({ success: false, message: 'Дуэль уже начата' });
+      await client.query('ROLLBACK');
+      return res.json({ success: false, message: 'Дуэль уже начата или завершена' });
     }
 
-    if (duel.player1_id == userId) {
+    if (String(duel.player1_id) === String(userId)) {
+      await client.query('ROLLBACK');
       return res.json({ success: false, message: 'Нельзя играть с самим собой' });
     }
 
+    // Проверяем, нет ли у пользователя другой активной дуэли
+    const existingDuel = await client.query(
+      `SELECT id FROM duels 
+       WHERE (player1_id = $1 OR player2_id = $1) 
+       AND status IN ('waiting', 'active')`,
+      [userId]
+    );
+    if (existingDuel.rows.length > 0) {
+      await client.query('ROLLBACK');
+      return res.json({ success: false, message: 'У вас уже есть активная дуэль' });
+    }
+
     // Проверяем баланс
-    const userRes = await pool.query('SELECT balance FROM users WHERE telegram_id = $1', [userId]);
+    const userRes = await client.query('SELECT balance FROM users WHERE telegram_id = $1', [userId]);
     if (!userRes.rows.length || userRes.rows[0].balance < duel.stake) {
+      await client.query('ROLLBACK');
       return res.json({ success: false, message: 'Недостаточно COGNIQ' });
     }
 
     // Списываем ставку у второго игрока
-    await pool.query('UPDATE users SET balance = balance - $1 WHERE telegram_id = $2', [duel.stake, userId]);
+    await client.query('UPDATE users SET balance = balance - $1 WHERE telegram_id = $2', [duel.stake, userId]);
 
     // Обновляем дуэль
-    await pool.query(
+    await client.query(
       'UPDATE duels SET player2_id = $1, status = $2 WHERE id = $3',
       [userId, 'active', duelId]
     );
 
+    await client.query('COMMIT');
     res.json({ success: true, duelId });
   } catch (e) {
+    await client.query('ROLLBACK');
     console.error('[DUEL] join error:', e);
     res.json({ success: false, message: 'Ошибка присоединения' });
+  } finally {
+    client.release();
   }
 });
 
-// GET /api/duel/state — состояние дуэли (для поллинга)
+// GET /api/duel/state — состояние дуэли
 router.get('/api/duel/state', requireInitData, authRateLimit, async (req, res) => {
   try {
-    const userId = req.query.user_id;
+    const userId = req.tgUser.id;
     const duelId = parseInt(req.query.duel_id);
 
     const duelRes = await pool.query(
       `SELECT d.*, 
               u1.nickname as p1_nick, u1.tg_photo_file_id as p1_photo,
-              u2.nickname as p2_nick, u2.tg_photo_file_id as p2_photo
+              u1.first_name as p1_first_name,
+              u2.nickname as p2_nick, u2.tg_photo_file_id as p2_photo,
+              u2.first_name as p2_first_name
        FROM duels d
        LEFT JOIN users u1 ON d.player1_id = u1.telegram_id
        LEFT JOIN users u2 ON d.player2_id = u2.telegram_id
@@ -119,36 +155,53 @@ router.get('/api/duel/state', requireInitData, authRateLimit, async (req, res) =
     const duel = duelRes.rows[0];
     const questionIds = duel.question_ids || [];
 
-    // Получаем вопросы
+    // Получаем вопросы БЕЗ правильных ответов (чтобы не читерить)
     let questions = [];
     if (questionIds.length > 0) {
       const qRes = await pool.query(
-        `SELECT id, text, options, correct FROM questions WHERE id = ANY($1)`,
+        `SELECT id, text, options FROM questions WHERE id = ANY($1)`,
         [questionIds]
       );
-      questions = qRes.rows;
+      // Сортируем в порядке questionIds
+      const qMap = {};
+      qRes.rows.forEach(q => qMap[q.id] = q);
+      questions = questionIds.map(id => qMap[id]).filter(Boolean);
     }
 
-    // Получаем ответы обоих игроков
+    // Получаем ответы обоих игроков для текущего раунда
     const answersRes = await pool.query(
       'SELECT * FROM duel_answers WHERE duel_id = $1 ORDER BY round',
       [duelId]
     );
 
+    // Проверяем, является ли userId участником
+    const isParticipant = String(duel.player1_id) === String(userId) || 
+                          (duel.player2_id && String(duel.player2_id) === String(userId));
+
     res.json({
       success: true,
+      isParticipant,
       duel: {
         id: duel.id,
         status: duel.status,
         stake: duel.stake,
-        currentRound: duel.current_round,
-        score1: duel.score1,
-        score2: duel.score2,
+        currentRound: duel.current_round || 0,
+        score1: duel.score1 || 0,
+        score2: duel.score2 || 0,
         winnerId: duel.winner_id,
-        player1: { id: duel.player1_id, nick: duel.p1_nick, photo: duel.p1_photo },
-        player2: duel.player2_id ? { id: duel.player2_id, nick: duel.p2_nick, photo: duel.p2_photo } : null,
+        player1: { 
+          id: duel.player1_id, 
+          nick: duel.p1_nick || duel.p1_first_name || 'Игрок 1', 
+          photo: duel.p1_photo 
+        },
+        player2: duel.player2_id ? { 
+          id: duel.player2_id, 
+          nick: duel.p2_nick || duel.p2_first_name || 'Игрок 2', 
+          photo: duel.p2_photo 
+        } : null,
         questions,
-        answers: answersRes.rows
+        answers: answersRes.rows,
+        totalRounds: questionIds.length
       }
     });
   } catch (e) {
@@ -160,11 +213,11 @@ router.get('/api/duel/state', requireInitData, authRateLimit, async (req, res) =
 // POST /api/duel/answer — отправить ответ
 router.post('/api/duel/answer', requireInitDataStrict, authRateLimit, async (req, res) => {
   try {
-    const userId = req.body.user_id;
+    const userId = req.tgUser.id;
     const duelId = parseInt(req.body.duel_id);
     const round = parseInt(req.body.round);
     const answerIdx = parseInt(req.body.answer_idx);
-    const timeMs = parseInt(req.body.time_ms) || 0;
+    const timeMs = parseInt(req.body.time_ms) || 15000;
 
     // Получаем дуэль
     const duelRes = await pool.query('SELECT * FROM duels WHERE id = $1', [duelId]);
@@ -177,7 +230,15 @@ router.post('/api/duel/answer', requireInitDataStrict, authRateLimit, async (req
       return res.json({ success: false, message: 'Дуэль не активна' });
     }
 
-    if (round !== duel.current_round + 1) {
+    // Проверяем, участник ли пользователь
+    const isPlayer1 = String(duel.player1_id) === String(userId);
+    const isPlayer2 = duel.player2_id && String(duel.player2_id) === String(userId);
+    if (!isPlayer1 && !isPlayer2) {
+      return res.json({ success: false, message: 'Вы не участник этой дуэли' });
+    }
+
+    // Проверяем раунд
+    if (round !== (duel.current_round || 0) + 1) {
       return res.json({ success: false, message: 'Неверный раунд' });
     }
 
@@ -188,25 +249,35 @@ router.post('/api/duel/answer', requireInitDataStrict, authRateLimit, async (req
       return res.json({ success: false, message: 'Вопрос не найден' });
     }
 
-    const qRes = await pool.query('SELECT correct FROM questions WHERE id = $1', [questionId]);
+    const qRes = await pool.query('SELECT correct, options FROM questions WHERE id = $1', [questionId]);
     if (!qRes.rows.length) {
       return res.json({ success: false, message: 'Вопрос не найден' });
     }
 
-    const correct = qRes.rows[0].correct;
-    const isCorrect = answerIdx === correct;
+    // ВАЖНО: correct — это строка с текстом правильного ответа
+    // Находим индекс правильного ответа в массиве options
+    const options = qRes.rows[0].options;
+    const correctText = qRes.rows[0].correct;
+    const correctIndex = options.findIndex(opt => opt === correctText);
+    
+    const isCorrect = (answerIdx === correctIndex);
 
     // Считаем очки: правильный ответ + бонус за скорость
     let points = 0;
     if (isCorrect) {
-      points = 10 + Math.max(0, Math.floor((15000 - timeMs) / 1000)); // базовые 10 + бонус за время
+      const timeBonus = Math.max(0, Math.floor((15000 - Math.min(timeMs, 15000)) / 1000));
+      points = 10 + timeBonus; // базовые 10 + бонус до 15
     }
 
     // Сохраняем ответ
     await pool.query(
       `INSERT INTO duel_answers (duel_id, user_id, round, answer_idx, correct, time_ms, points)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
-       ON CONFLICT (duel_id, user_id, round) DO NOTHING`,
+       ON CONFLICT (duel_id, user_id, round) DO UPDATE
+       SET answer_idx = EXCLUDED.answer_idx,
+           correct = EXCLUDED.correct,
+           time_ms = EXCLUDED.time_ms,
+           points = EXCLUDED.points`,
       [duelId, userId, round, answerIdx, isCorrect, timeMs, points]
     );
 
@@ -216,59 +287,121 @@ router.post('/api/duel/answer', requireInitDataStrict, authRateLimit, async (req
       [duelId, round]
     );
 
-    if (answersRes.rows.length === 2) {
-      // Оба ответили — обновляем счёт
-      const p1Answer = answersRes.rows.find(a => a.user_id == duel.player1_id);
-      const p2Answer = answersRes.rows.find(a => a.user_id == duel.player2_id);
+    let bothAnswered = answersRes.rows.length === 2;
+    let roundCompleted = false;
+    let duelFinished = false;
+    let winnerId = null;
+    let newScore1 = duel.score1 || 0;
+    let newScore2 = duel.score2 || 0;
 
-      const newScore1 = duel.score1 + (p1Answer?.points || 0);
-      const newScore2 = duel.score2 + (p2Answer?.points || 0);
-      const newRound = round;
+    if (bothAnswered) {
+      roundCompleted = true;
+      const p1Answer = answersRes.rows.find(a => String(a.user_id) === String(duel.player1_id));
+      const p2Answer = answersRes.rows.find(a => String(a.user_id) === String(duel.player2_id));
 
-      // Проверяем, закончилась ли дуэль
-      let newStatus = 'active';
-      let winnerId = null;
+      newScore1 += (p1Answer?.points || 0);
+      newScore2 += (p2Answer?.points || 0);
 
-      if (newRound >= (duel.question_ids || []).length) {
+      const totalRounds = questionIds.length;
+      
+      if (round >= totalRounds) {
         // Дуэль окончена
-        newStatus = 'finished';
+        duelFinished = true;
         if (newScore1 > newScore2) {
           winnerId = duel.player1_id;
         } else if (newScore2 > newScore1) {
           winnerId = duel.player2_id;
-        } else {
-          // Ничья — возврат ставок
-          await pool.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [duel.stake, duel.player1_id]);
-          await pool.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [duel.stake, duel.player2_id]);
         }
       }
 
+      let newStatus = duelFinished ? 'finished' : 'active';
+
       await pool.query(
-        `UPDATE duels SET current_round = $1, score1 = $2, score2 = $3, status = $4, winner_id = $5, finished_at = CASE WHEN $4 = 'finished' THEN NOW() ELSE finished_at END WHERE id = $6`,
-        [newRound, newScore1, newScore2, newStatus, winnerId, duelId]
+        `UPDATE duels SET 
+          current_round = $1, 
+          score1 = $2, 
+          score2 = $3, 
+          status = $4, 
+          winner_id = $5, 
+          finished_at = CASE WHEN $4 = 'finished' THEN NOW() ELSE NULL END 
+        WHERE id = $6`,
+        [round, newScore1, newScore2, newStatus, winnerId, duelId]
       );
 
-      // Если дуэль окончена и есть победитель — выплачиваем выигрыш
-      if (newStatus === 'finished' && winnerId) {
+      if (duelFinished) {
         const totalPot = duel.stake * 2;
         const burnAmount = Math.floor(totalPot * 0.05); // 5% сжигается
         const winAmount = totalPot - burnAmount;
 
-        await pool.query('UPDATE users SET balance = balance + $1, duels_won = duels_won + 1, duels_played = duels_played + 1 WHERE telegram_id = $2', [winAmount, winnerId]);
-        
-        // Обновляем статистику проигравшего
-        const loserId = winnerId == duel.player1_id ? duel.player2_id : duel.player1_id;
-        await pool.query('UPDATE users SET duels_played = duels_played + 1 WHERE telegram_id = $1', [loserId]);
+        if (winnerId) {
+          // Выплачиваем победителю
+          await pool.query(
+            'UPDATE users SET balance = balance + $1, duels_won = duels_won + 1, duels_played = duels_played + 1 WHERE telegram_id = $2', 
+            [winAmount, winnerId]
+          );
+          
+          // Обновляем статистику проигравшего
+          const loserId = String(winnerId) === String(duel.player1_id) ? duel.player2_id : duel.player1_id;
+          await pool.query('UPDATE users SET duels_played = duels_played + 1 WHERE telegram_id = $1', [loserId]);
 
-        // Записываем burn
-        await pool.query('INSERT INTO burn_pool (source, amount, telegram_id) VALUES ($1, $2, $3)', ['duel_burn', burnAmount, winnerId]);
+          // Записываем burn
+          await pool.query(
+            'INSERT INTO burn_pool (source, amount, telegram_id) VALUES ($1, $2, $3)', 
+            ['duel_burn', burnAmount, winnerId]
+          );
+        } else {
+          // Ничья — возврат ставок обоим
+          await pool.query('UPDATE users SET balance = balance + $1, duels_played = duels_played + 1 WHERE telegram_id = $2', [duel.stake, duel.player1_id]);
+          await pool.query('UPDATE users SET balance = balance + $1, duels_played = duels_played + 1 WHERE telegram_id = $2', [duel.stake, duel.player2_id]);
+        }
       }
     }
 
-    res.json({ success: true, points });
+    res.json({ 
+      success: true, 
+      points,
+      isCorrect,
+      correctIndex,
+      bothAnswered,
+      roundCompleted,
+      duelFinished,
+      winnerId,
+      newScore1,
+      newScore2
+    });
   } catch (e) {
     console.error('[DUEL] answer error:', e);
     res.json({ success: false, message: 'Ошибка ответа' });
+  }
+});
+
+// POST /api/duel/cancel — отменить ожидающую дуэль (возврат ставки)
+router.post('/api/duel/cancel', requireInitDataStrict, authRateLimit, async (req, res) => {
+  try {
+    const userId = req.tgUser.id;
+    const duelId = parseInt(req.body.duel_id);
+
+    const duelRes = await pool.query('SELECT * FROM duels WHERE id = $1', [duelId]);
+    if (!duelRes.rows.length) {
+      return res.json({ success: false, message: 'Дуэль не найдена' });
+    }
+
+    const duel = duelRes.rows[0];
+    if (duel.status !== 'waiting') {
+      return res.json({ success: false, message: 'Дуэль уже началась' });
+    }
+    if (String(duel.player1_id) !== String(userId)) {
+      return res.json({ success: false, message: 'Только создатель может отменить дуэль' });
+    }
+
+    // Возвращаем ставку создателю
+    await pool.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [duel.stake, duel.player1_id]);
+    await pool.query("UPDATE duels SET status = 'cancelled' WHERE id = $1", [duelId]);
+
+    res.json({ success: true, message: 'Дуэль отменена, ставка возвращена' });
+  } catch (e) {
+    console.error('[DUEL] cancel error:', e);
+    res.json({ success: false, message: 'Ошибка отмены дуэли' });
   }
 });
 
