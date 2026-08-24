@@ -718,5 +718,5 @@ function duelStartPolling(duelId) {
 
 function duelStartBattle(duelId, duelData) {
   alert(`⚔️ Соперник найден! Дуэль #${duelId} началась!\n\nТы: ${duelData.player1.nick}\nСоперник: ${duelData.player2.nick}`);
-  loadDuelPanel();
+  switchTab('game');
 }
