@@ -1,4 +1,5 @@
 const express = require('express');
+const BASE_URL = process.env.WEBAPP_URL || 'https://neuron.bothost.tech';
 const router = express.Router();
 const pool = require('../db/pool');
 const { requireInitData, requireInitDataStrict } = require('../middleware/auth');
@@ -211,8 +212,16 @@ router.get('/api/duel/state', requireInitData, authRateLimit, async (req, res) =
         score1: duel.score1 || 0,
         score2: duel.score2 || 0,
         winnerId: duel.winner_id,
-        player1: { id: duel.player1_id, nick: duel.p1_nick || duel.p1_first_name || 'Игрок 1', photo: duel.p1_photo },
-        player2: duel.player2_id ? { id: duel.player2_id, nick: duel.p2_nick || duel.p2_first_name || 'Игрок 2', photo: duel.p2_photo } : null,
+        player1: { 
+  id: duel.player1_id, 
+  nick: duel.p1_nick || duel.p1_first_name || 'Игрок 1', 
+  photo: duel.p1_photo ? `${BASE_URL}/api/tg-photo/${duel.player1_id}` : null 
+},
+player2: duel.player2_id ? { 
+  id: duel.player2_id, 
+  nick: duel.p2_nick || duel.p2_first_name || 'Игрок 2', 
+  photo: duel.p2_photo ? `${BASE_URL}/api/tg-photo/${duel.player2_id}` : null 
+} : null,
         questions,
         answers: answersRes.rows,
         totalRounds: questionIds.length
