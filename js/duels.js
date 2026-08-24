@@ -821,6 +821,12 @@ async function duelAcceptInvite(duelIdParam) {
     if (data.success) {
       const joinContainer = document.getElementById('duelJoinContainer');
       if (joinContainer) joinContainer.remove();
+
+      // Скрываем хедер и футер
+      const header = document.querySelector('.header');
+      const footer = document.querySelector('footer');
+      if (header) header.style.display = 'none';
+      if (footer) footer.style.display = 'none';
       
       const stateRes = await authFetch(`${BASE_URL}/api/duel/state?user_id=${userId}&duel_id=${duelIdParam}`);
       const stateData = await stateRes.json();
