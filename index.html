@@ -377,8 +377,14 @@ window.addEventListener('error', function(e){
     }
   });
 
-  setTimeout(() => startApp(1), 300);
-  setTimeout(preloadTabImages, 2000);
+  setTimeout(() => {
+  startApp(1);
+  if (duelIdFromUrl) {
+    setTimeout(() => loadDuelJoinPanel(duelIdFromUrl), 2500);
+  }
+}, 300);
+
+setTimeout(preloadTabImages, 2000);
 
   (function() {
     const videoContainer = document.getElementById('liveBgVideo');
