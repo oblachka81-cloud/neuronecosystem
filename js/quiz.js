@@ -1259,10 +1259,12 @@ async function duelHandleAnswer(answerIdx) {
 
 
 function duelWaitForOpponent() {
+  const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+  
   if (duelPollInterval) clearInterval(duelPollInterval);
   
   let pollCount = 0;
-  const maxPolls = 60; // 60 * 2 сек = 120 сек максимум
+  const maxPolls = 90; // 90 * 2 сек = 180 сек максимум
   
   duelPollInterval = setInterval(async () => {
     pollCount++;
@@ -1278,9 +1280,11 @@ function duelWaitForOpponent() {
       
       if (!data.success) return;
       
-      const currentRoundAnswers = data.duel.answers?.filter(a => a.round === duelCurrentRound) || [];
+      // Серверный current_round — последний ЗАВЕРШЁННЫЙ раунд
+      const serverRound = data.duel.currentRound || 0;
       
-      if (currentRoundAnswers.length === 2) {
+      // Если сервер сдвинулся вперёд — оба ответили
+      if (serverRound >= duelCurrentRound) {
         clearInterval(duelPollInterval);
         duelPollInterval = null;
         
@@ -1300,16 +1304,18 @@ function duelWaitForOpponent() {
         if (data.duel.status === 'finished') {
           setTimeout(() => duelFinishBattle(), 1000);
         } else {
-          // Следующий раунд
+          // Переходим к следующему раунду
           const resultEl = document.getElementById('duelRoundResult');
           if (resultEl) resultEl.style.display = 'none';
           setTimeout(() => {
-            duelCurrentRound++;
+            duelCurrentRound = serverRound + 1; // Синхронизируем с сервером
             duelLoadQuestion();
           }, 1500);
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      // Молча игнорируем
+    }
   }, 2000);
 }
 
