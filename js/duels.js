@@ -1,16 +1,5 @@
 // ==================== ДУЭЛИ (отдельный модуль) ====================
 
-// Делаем все функции глобальными
-window.DUEL_LANG = DUEL_LANG;
-window.loadDuelPanel = loadDuelPanel;
-window.duelBackToMenu = duelBackToMenu;
-window.duelCreate = duelCreate;
-window.duelShareInvite = duelShareInvite;
-window.duelCopyLink = duelCopyLink;
-window.duelCancel = duelCancel;
-window.duelAcceptInvite = duelAcceptInvite;
-window.loadDuelJoinPanel = loadDuelJoinPanel;
-
 const DUEL_LANG = {
   ru: { 
     title: 'Дуэли', 
