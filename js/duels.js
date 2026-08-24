@@ -368,7 +368,14 @@ function duelRenderBattleScreen() {
       <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:20px;padding:16px;margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
           <div style="text-align:center;flex:1;">
-            <div style="width:60px;height:60px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+            ${p1Photo ? `
+<div style="width:60px;height:60px;border-radius:50%;border:2px solid #00ffaa;margin:0 auto 6px;overflow:hidden;background:rgba(0,255,170,0.2);">
+  <img src="${p1Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+  <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+</div>
+` : `
+<div style="width:60px;height:60px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+`}
             <div style="font-size:0.8rem;font-weight:700;color:#00ffaa;">${escapeHtml(p1Name)}</div>
             <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore1">${duelScores.score1}</div>
           </div>
@@ -379,7 +386,14 @@ function duelRenderBattleScreen() {
           </div>
           
           <div style="text-align:center;flex:1;">
-            <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+            ${p2Photo ? `
+<div style="width:60px;height:60px;border-radius:50%;border:2px solid #ff6464;margin:0 auto 6px;overflow:hidden;background:rgba(255,100,100,0.2);">
+  <img src="${p2Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+  <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+</div>
+` : `
+<div style="width:60px;height:60px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
+`}
             <div style="font-size:0.8rem;font-weight:700;color:#ff6464;">${escapeHtml(p2Name)}</div>
             <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore2">${duelScores.score2}</div>
           </div>
