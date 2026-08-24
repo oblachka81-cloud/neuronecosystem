@@ -203,7 +203,7 @@ root.innerHTML = `
   }
 
   const duelsBtn = document.getElementById('duelsBtn');
-  if (duelsBtn) duelsBtn.addEventListener('click', () => loadDuelPanel());
+  if (duelsBtn) duelsBtn.addEventListener('click', () => switchTab('duels'));
   const startBtn = document.getElementById('startNewBtn');
   if (startBtn && !startBtn.disabled) {
     startBtn.addEventListener('click', () => {
