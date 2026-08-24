@@ -381,7 +381,7 @@ async function useHint(hintType) {
   const response = await authFetch(`${BASE_URL}/api/use-hint`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ user_id: userId, hint: hintType })
+    body: JSON.stringify({ user_id: userId, hint: hintType, lang: currentLang })
   });
   const data = await response.json();
   if (data.error) { tg.showAlert(data.error); return; }
