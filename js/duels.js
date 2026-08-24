@@ -354,6 +354,8 @@ function duelRenderBattleScreen() {
   
   const p1Name = duelData?.player1?.nick || 'Игрок 1';
   const p2Name = duelData?.player2?.nick || 'Игрок 2';
+  const p1Photo = duelData?.player1?.photo || '';
+  const p2Photo = duelData?.player2?.photo || '';
   
   root.innerHTML = '';
   
