@@ -57,6 +57,8 @@ function escapeHtml(str) {
 
 function switchTab(tab) {
   currentTab = tab;
+
+  vibrate('light');
   
   const header = document.querySelector('.header');
   const footer = document.querySelector('footer');
