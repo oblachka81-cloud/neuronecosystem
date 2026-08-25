@@ -145,23 +145,19 @@ function loadDuelPanel() {
       
       <!-- Назад -->
       <button onclick="duelBackToMenu()" style="
-        background:rgba(255,204,68,0.08);
-        border:1px solid rgba(255,204,68,0.25);
-        border-radius:12px;
-        color:#ffcc44;
-        font-size:0.85rem;
-        font-weight:700;
-        padding:8px 14px;
-        margin-bottom:20px;
+        position:relative;
+        width:145px;
+        height:90px;
+        padding:0;
+        background:none;
+        border:none;
         cursor:pointer;
         transition:all 0.2s;
-        display:inline-flex;
-        align-items:center;
-        gap:6px;
-        backdrop-filter:blur(10px);
-      " onmouseover="this.style.background='rgba(255,204,68,0.15)';this.style.transform='translateX(-3px)'" 
-         onmouseout="this.style.background='rgba(255,204,68,0.08)';this.style.transform='translateX(0)'">
-        ← ${t.backBtn}
+        overflow:hidden;
+        margin-bottom:20px;
+      " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.15)'" 
+         onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+        <img src="/main/btn_duel_back.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
       </button>
 
      <!-- Логотип дуэли -->
