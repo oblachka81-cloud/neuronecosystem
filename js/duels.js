@@ -309,6 +309,8 @@ function loadDuelPanel() {
 function duelBackToMenu() {
   if (duelPollInterval) { clearInterval(duelPollInterval); duelPollInterval = null; }
   if (duelTimerInterval) { clearInterval(duelTimerInterval); duelTimerInterval = null; }
+
+  if (window._duelCountdownInterval) { clearInterval(window._duelCountdownInterval); window._duelCountdownInterval = null; }
   
   const container = document.getElementById('duelContainer');
   if (container) container.remove();
@@ -350,18 +352,30 @@ async function duelCreate(stake) {
     
     document.getElementById('duelWaitingBlock').innerHTML = `
       <div style="
-        background:rgba(10,15,30,0.35);
+        background:rgba(10,15,30,0.8);
         border:1.5px solid rgba(220,220,225,0.5);
         border-radius:18px;
         padding:20px;
         text-align:center;
-        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.1);
         backdrop-filter:blur(8px);
       ">
-        <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:12px;text-shadow:0 0 8px rgba(0,255,170,0.3);"> ${t.waiting}</div>
+        <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:8px;">⏳ ${t.waiting}</div>
         <div style="font-size:0.75rem;color:#d4d4d8;margin-bottom:14px;letter-spacing:0.5px;">ID: ${data.duelId}</div>
         
-        <!-- Отправить приглашение (Зелёный) -->
+        <!-- ТАЙМЕР ОБРАТНОГО ОТСЧЁТА -->
+        <div style="
+          background:rgba(0,0,0,0.4);
+          border-radius:12px;
+          padding:10px;
+          margin-bottom:16px;
+          border:1px solid rgba(255,204,68,0.3);
+        ">
+          <div style="font-size:0.7rem;color:#d4d4d8;margin-bottom:4px;">Автоотмена через:</div>
+          <div id="duelCountdown" style="font-size:1.8rem;font-weight:900;color:#ffcc44;text-shadow:0 0 10px rgba(255,204,68,0.4);">2:00</div>
+        </div>
+        
+        <!-- Кнопки действий -->
         <button onclick="duelShareInvite('${data.inviteLink}', ${stake})" style="
           position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; margin-bottom:10px; border-radius:12px;
         " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
@@ -372,7 +386,6 @@ async function duelCreate(stake) {
           </div>
         </button>
 
-        <!-- Скопировать ссылку (Золотой) -->
         <button onclick="duelCopyLink('${data.inviteLink}', this)" style="
           position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; margin-bottom:10px; border-radius:12px;
         " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
@@ -383,7 +396,6 @@ async function duelCreate(stake) {
           </div>
         </button>
 
-        <!-- Отменить дуэль (Красный) -->
         <button onclick="duelCancel(${data.duelId})" style="
           position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; border-radius:12px;
         " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
@@ -393,10 +405,37 @@ async function duelCreate(stake) {
              ${t.cancelDuel}
           </div>
         </button>
-
       </div>
     `;
     document.getElementById('duelWaitingBlock').style.display = 'block';
+    
+    // 🔥 Запускаем локальный таймер для отображения
+    let countdown = 120;
+    const countdownEl = document.getElementById('duelCountdown');
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      if (countdownEl) {
+        const mins = Math.floor(countdown / 60);
+        const secs = countdown % 60;
+        countdownEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        
+        // Красный когда мало времени
+        if (countdown <= 30) {
+          countdownEl.style.color = '#ff6464';
+          countdownEl.style.textShadow = '0 0 10px rgba(255,100,100,0.6)';
+        }
+      }
+      if (countdown <= 0) {
+        clearInterval(countdownInterval);
+        if (countdownEl) {
+          countdownEl.textContent = '0:00';
+          countdownEl.style.color = '#ff6464';
+        }
+      }
+    }, 1000);
+    
+    // Сохраняем интервал чтобы очистить при переходе
+    window._duelCountdownInterval = countdownInterval;
     
     duelStartPolling(data.duelId);
   } catch (e) {
@@ -485,17 +524,26 @@ function duelStartPolling(duelIdParam) {
       
       if (!data.success) return;
       
-      if (data.duel.status === 'cancelled') {
+      // 🔥 Сервер сам отменил дуэль по таймауту (2 минуты)
+      if (data.timeExpired || data.duel.status === 'cancelled') {
         clearInterval(duelPollInterval);
         duelPollInterval = null;
-        showToast(t.duelCancelled, 2000);
-        duelBackToMenu();
+        if (window._duelCountdownInterval) {
+          clearInterval(window._duelCountdownInterval);
+          window._duelCountdownInterval = null;
+        }
+        showToast('⏱️ Время вышло. Дуэль отменена, ставка возвращена.', 3000);
+        setTimeout(() => duelBackToMenu(), 2000);
         return;
       }
       
       if (data.duel.status === 'active' && data.duel.player2) {
         clearInterval(duelPollInterval);
         duelPollInterval = null;
+        if (window._duelCountdownInterval) {
+          clearInterval(window._duelCountdownInterval);
+          window._duelCountdownInterval = null;
+        }
         duelStartBattle(duelIdParam, data.duel);
       }
     } catch (e) {}
