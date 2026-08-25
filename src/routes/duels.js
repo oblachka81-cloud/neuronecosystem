@@ -174,6 +174,42 @@ router.get('/api/duel/state', requireInitData, authRateLimit, async (req, res) =
     }
 
     const duel = duelRes.rows[0];
+
+    // 🔥 АВТООТМЕНА ПО ТАЙМАУТУ (2 минуты = 120 секунд)
+    if (duel.status === 'waiting') {
+      const createdAt = new Date(duel.created_at);
+      const now = new Date();
+      const secondsPassed = Math.floor((now - createdAt) / 1000);
+      const timeLimit = 120; 
+
+      if (secondsPassed >= timeLimit) {
+        // Время вышло! Отменяем дуэль и возвращаем ставку создателю
+        await pool.query(
+          `UPDATE duels SET status = 'cancelled', finished_at = NOW() WHERE id = $1`,
+          [duelId]
+        );
+        await pool.query(
+          `UPDATE users SET balance = balance + $1 WHERE telegram_id = $2`,
+          [duel.stake, duel.player1_id]
+        );
+        
+        return res.json({ 
+          success: true, 
+          timeExpired: true,
+          duel: { ...duel, status: 'cancelled' }
+        });
+      }
+      
+      // Время ещё есть, отдаём оставшиеся секунды фронту для таймера
+      const secondsLeft = Math.max(0, timeLimit - secondsPassed);
+      return res.json({ 
+        success: true, 
+        isParticipant: String(duel.player1_id) === String(userId),
+        duel: { ...duel, secondsLeft }
+      });
+    }
+
+    // Дальше стандартная логика для active/finished дуэлей
     const questionIds = duel.question_ids || [];
 
     let questions = [];
@@ -213,15 +249,15 @@ router.get('/api/duel/state', requireInitData, authRateLimit, async (req, res) =
         score2: duel.score2 || 0,
         winnerId: duel.winner_id,
         player1: { 
-  id: duel.player1_id, 
-  nick: duel.p1_nick || duel.p1_first_name || 'Игрок 1', 
-  photo: duel.p1_photo ? `${BASE_URL}/api/tg-photo/${duel.player1_id}` : null 
-},
-player2: duel.player2_id ? { 
-  id: duel.player2_id, 
-  nick: duel.p2_nick || duel.p2_first_name || 'Игрок 2', 
-  photo: duel.p2_photo ? `${BASE_URL}/api/tg-photo/${duel.player2_id}` : null 
-} : null,
+          id: duel.player1_id, 
+          nick: duel.p1_nick || duel.p1_first_name || 'Игрок 1', 
+          photo: duel.p1_photo ? `${BASE_URL}/api/tg-photo/${duel.player1_id}` : null 
+        },
+        player2: duel.player2_id ? { 
+          id: duel.player2_id, 
+          nick: duel.p2_nick || duel.p2_first_name || 'Игрок 2', 
+          photo: duel.p2_photo ? `${BASE_URL}/api/tg-photo/${duel.player2_id}` : null 
+        } : null,
         questions,
         answers: answersRes.rows,
         totalRounds: questionIds.length
