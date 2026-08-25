@@ -918,6 +918,7 @@ function duelFinishBattle() {
     .then(data => {
       let resultText;
       let resultColor;
+      let resultEmoji;
       
       if (data.success) {
         duelScores.score1 = data.duel.score1 || duelScores.score1;
@@ -929,16 +930,24 @@ function duelFinishBattle() {
         if (!winnerId) {
           resultText = t.draw;
           resultColor = '#ffcc44';
+          resultEmoji = '';
         } else if (winnerId === myId) {
           resultText = t.youWin;
           resultColor = '#00ffaa';
+          resultEmoji = '🏆';
+          // Запускаем конфетти при победе!
+          setTimeout(() => {
+            if (typeof launchConfettiTop === 'function') launchConfettiTop();
+          }, 300);
         } else {
           resultText = t.youLose;
           resultColor = '#ff6464';
+          resultEmoji = '😢';
         }
       } else {
         resultText = t.duelFinished;
         resultColor = '#ffcc44';
+        resultEmoji = '️';
       }
       
       const p1Name = duelData?.player1?.nick || 'Игрок 1';
@@ -948,21 +957,45 @@ function duelFinishBattle() {
       if (battleContainer) {
         battleContainer.innerHTML = `
           <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
-            <div style="font-size:1.8rem;font-weight:900;color:${resultColor};margin-bottom:12px;">${resultText}</div>
-            <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:20px;margin-bottom:20px;">
-              <div style="display:flex;justify-content:space-around;align-items:center;">
-                <div>
-                  <div style="color:#00ffaa;font-size:0.9rem;">${escapeHtml(p1Name)}</div>
-                  <div style="font-size:2rem;font-weight:900;color:#fff;">${duelScores.score1}</div>
+            
+            <!-- Результат с платиновой рамкой -->
+            <div style="
+              background:rgba(10,15,30,0.35);
+              border:1.5px solid rgba(220,220,225,0.5);
+              border-radius:20px;
+              padding:24px 16px;
+              margin-bottom:20px;
+              box-shadow:0 0 30px rgba(220,220,225,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+              backdrop-filter:blur(8px);
+            ">
+              <div style="font-size:2rem;font-weight:900;color:${resultColor};margin-bottom:16px;text-shadow:0 0 20px ${resultColor}40;">
+                ${resultEmoji} ${resultText}
+              </div>
+              
+              <!-- Счёт -->
+              <div style="display:flex;justify-content:space-around;align-items:center;padding:16px 0;">
+                <div style="flex:1;">
+                  <div style="color:#00ffaa;font-size:0.85rem;font-weight:700;margin-bottom:6px;">${escapeHtml(p1Name)}</div>
+                  <div style="font-size:2.5rem;font-weight:900;color:#fff;text-shadow:0 0 15px rgba(255,255,255,0.3);">${duelScores.score1}</div>
                 </div>
-                <div style="font-size:1.5rem;color:#7799bb;">VS</div>
-                <div>
-                  <div style="color:#ff6464;font-size:0.9rem;">${escapeHtml(p2Name)}</div>
-                  <div style="font-size:2rem;font-weight:900;color:#fff;">${duelScores.score2}</div>
+                <div style="font-size:1.5rem;color:#d4d4d8;padding:0 12px;">VS</div>
+                <div style="flex:1;">
+                  <div style="color:#ff6464;font-size:0.85rem;font-weight:700;margin-bottom:6px;">${escapeHtml(p2Name)}</div>
+                  <div style="font-size:2.5rem;font-weight:900;color:#fff;text-shadow:0 0 15px rgba(255,255,255,0.3);">${duelScores.score2}</div>
                 </div>
               </div>
             </div>
-            <button onclick="duelBackToMenu()" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">${t.returnToMenu}</button>
+            
+            <!-- Кнопка возврата (универсальная) -->
+            <button onclick="duelBackToMenu()" style="
+              position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; border-radius:12px;
+            " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
+               onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+              <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
+              <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.9rem;font-weight:800;color:#ffcc44;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(255,204,68,0.5);">
+                ← ${t.returnToMenu.replace('← ','')}
+              </div>
+            </button>
           </div>
         `;
       }
@@ -972,8 +1005,24 @@ function duelFinishBattle() {
       if (battleContainer) {
         battleContainer.innerHTML = `
           <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
-            <div style="font-size:1.8rem;font-weight:900;color:#ffcc44;margin-bottom:12px;">${t.duelFinished}</div>
-            <button onclick="duelBackToMenu()" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">${t.returnToMenu}</button>
+            <div style="
+              background:rgba(10,15,30,0.35);
+              border:1.5px solid rgba(220,220,225,0.5);
+              border-radius:20px;
+              padding:24px 16px;
+              margin-bottom:20px;
+              backdrop-filter:blur(8px);
+            ">
+              <div style="font-size:2rem;font-weight:900;color:#ffcc44;margin-bottom:16px;"> ${t.duelFinished}</div>
+            </div>
+            <button onclick="duelBackToMenu()" style="
+              position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; border-radius:12px;
+            ">
+              <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
+              <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.9rem;font-weight:800;color:#ffcc44;text-shadow:0 0 6px rgba(0,0,0,0.9);">
+                ← ${t.returnToMenu.replace('← ','')}
+              </div>
+            </button>
           </div>
         `;
       }
@@ -1041,7 +1090,7 @@ function loadDuelJoinPanel(duelIdParam) {
            onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
           <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
           <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.9rem;font-weight:800;color:#00ffaa;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,255,170,0.5);">
-            ⚔️ Принять вызов
+             Принять вызов
           </div>
         </button>
 
