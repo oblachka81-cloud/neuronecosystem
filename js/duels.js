@@ -164,27 +164,12 @@ function loadDuelPanel() {
         ← ${t.backBtn}
       </button>
 
-      <!-- Заголовок с анимацией свечения -->
-      <div style="text-align:center;margin-bottom:28px;position:relative;">
-        <div style="
-          font-size:2.1rem;
-          font-weight:900;
-          background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 45%,#ffcc44 100%);
-          -webkit-background-clip:text;
-          -webkit-text-fill-color:transparent;
-          background-clip:text;
-          letter-spacing:4px;
-          text-shadow:0 0 30px rgba(255,204,68,0.3);
-          margin-bottom:6px;
-          animation:glowPulse 2s ease-in-out infinite;
-        ">⚔️ ${t.title}</div>
-        <div style="
-          font-size:0.82rem;
-          color:#8ba3c1;
-          letter-spacing:0.5px;
-          font-weight:500;
-        ">${t.subtitle}</div>
-      </div>
+     <!-- Логотип дуэли -->
+      <div style="text-align:center;margin-bottom:24px;position:relative;">
+        <img src="/main/duel_logo_${currentLang}.webp" 
+             alt="Duel" 
+             style="width:260px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 25px rgba(255,204,68,0.35));">
+      </div> 
 
       <!-- Описание с градиентной рамкой -->
       <div style="
