@@ -158,10 +158,14 @@ function loadDuelPanel() {
         display:inline-flex;
         align-items:center;
         gap:6px;
-      ">${t.backBtn}</button>
+        backdrop-filter:blur(10px);
+      " onmouseover="this.style.background='rgba(255,204,68,0.15)';this.style.transform='translateX(-3px)'" 
+         onmouseout="this.style.background='rgba(255,204,68,0.08)';this.style.transform='translateX(0)'">
+        ← ${t.backBtn}
+      </button>
 
-      <!-- Заголовок -->
-      <div style="text-align:center;margin-bottom:28px;">
+      <!-- Заголовок с анимацией свечения -->
+      <div style="text-align:center;margin-bottom:28px;position:relative;">
         <div style="
           font-size:2.1rem;
           font-weight:900;
@@ -172,6 +176,7 @@ function loadDuelPanel() {
           letter-spacing:4px;
           text-shadow:0 0 30px rgba(255,204,68,0.3);
           margin-bottom:6px;
+          animation:glowPulse 2s ease-in-out infinite;
         ">⚔️ ${t.title}</div>
         <div style="
           font-size:0.82rem;
@@ -181,7 +186,7 @@ function loadDuelPanel() {
         ">${t.subtitle}</div>
       </div>
 
-      <!-- Описание -->
+      <!-- Описание с градиентной рамкой -->
       <div style="
         background:linear-gradient(145deg, rgba(12,22,42,0.85), rgba(8,16,32,0.9));
         border:1px solid rgba(255,204,68,0.22);
@@ -189,7 +194,17 @@ function loadDuelPanel() {
         padding:18px 16px;
         margin-bottom:24px;
         box-shadow:0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,204,68,0.08);
+        position:relative;
+        overflow:hidden;
       ">
+        <div style="
+          position:absolute;
+          top:0;
+          left:0;
+          right:0;
+          height:2px;
+          background:linear-gradient(90deg,transparent,rgba(255,204,68,0.4),transparent);
+        "></div>
         <p style="
           font-size:0.87rem;
           color:#c8d0e0;
@@ -220,9 +235,10 @@ function loadDuelPanel() {
           box-shadow:0 4px 15px rgba(0,0,0,0.25);
           position:relative;
           overflow:hidden;
-        ">
+        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 25px rgba(255,204,68,0.3)';this.style.borderColor='rgba(255,204,68,0.5)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(0,0,0,0.25)';this.style.borderColor='rgba(255,204,68,0.3)'">
           <div style="font-size:0.7rem;opacity:0.7;margin-bottom:4px;font-weight:600;">СТАВКА</div>
-          <div>100</div>
+          <div style="font-size:1.1rem;font-weight:900;">100</div>
           <div style="font-size:0.72rem;margin-top:2px;opacity:0.85;">COGNIQ</div>
         </button>
 
@@ -240,7 +256,9 @@ function loadDuelPanel() {
           box-shadow:0 0 20px rgba(0,255,170,0.18), 0 4px 15px rgba(0,0,0,0.3);
           position:relative;
           overflow:hidden;
-        ">
+          animation:hotPulse 2s ease-in-out infinite;
+        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 0 30px rgba(0,255,170,0.4), 0 8px 25px rgba(0,0,0,0.4)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 20px rgba(0,255,170,0.18), 0 4px 15px rgba(0,0,0,0.3)'">
           <div style="
             position:absolute;
             top:6px;
@@ -252,9 +270,10 @@ function loadDuelPanel() {
             padding:2px 6px;
             border-radius:8px;
             letter-spacing:0.5px;
+            animation:badgePulse 1.5s ease-in-out infinite;
           ">HOT</div>
           <div style="font-size:0.7rem;opacity:0.8;margin-bottom:4px;font-weight:600;">СТАВКА</div>
-          <div style="font-size:1.05rem;">500</div>
+          <div style="font-size:1.1rem;font-weight:900;">500</div>
           <div style="font-size:0.72rem;margin-top:2px;opacity:0.9;">COGNIQ</div>
         </button>
 
@@ -272,9 +291,10 @@ function loadDuelPanel() {
           box-shadow:0 0 18px rgba(255,150,50,0.15), 0 4px 15px rgba(0,0,0,0.3);
           position:relative;
           overflow:hidden;
-        ">
+        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 0 28px rgba(255,150,50,0.35), 0 8px 25px rgba(0,0,0,0.4)';this.style.borderColor='rgba(255,160,50,0.7)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 18px rgba(255,150,50,0.15), 0 4px 15px rgba(0,0,0,0.3)';this.style.borderColor='rgba(255,160,50,0.5)'">
           <div style="font-size:0.7rem;opacity:0.75;margin-bottom:4px;font-weight:600;">СТАВКА</div>
-          <div>1000</div>
+          <div style="font-size:1.1rem;font-weight:900;">1000</div>
           <div style="font-size:0.72rem;margin-top:2px;opacity:0.85;">COGNIQ</div>
         </button>
       </div>
@@ -285,6 +305,27 @@ function loadDuelPanel() {
   `;
   
   document.body.appendChild(duelContainer);
+  
+  // Добавляем CSS-анимации
+  if (!document.getElementById('duelAnimations')) {
+    const style = document.createElement('style');
+    style.id = 'duelAnimations';
+    style.textContent = `
+      @keyframes glowPulse {
+        0%, 100% { text-shadow: 0 0 30px rgba(255,204,68,0.3); }
+        50% { text-shadow: 0 0 40px rgba(255,204,68,0.5), 0 0 60px rgba(255,204,68,0.3); }
+      }
+      @keyframes hotPulse {
+        0%, 100% { box-shadow: 0 0 20px rgba(0,255,170,0.18), 0 4px 15px rgba(0,0,0,0.3); }
+        50% { box-shadow: 0 0 30px rgba(0,255,170,0.3), 0 4px 15px rgba(0,0,0,0.3); }
+      }
+      @keyframes badgePulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.05); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
 }
 
 
