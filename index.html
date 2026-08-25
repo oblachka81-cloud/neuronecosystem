@@ -326,7 +326,8 @@ window.addEventListener('error', function(e){
   const duelIdFromUrl = urlParams.get('duel');
   const tg = window.Telegram?.WebApp ?? {
     expand:()=>{}, MainButton:{hide:()=>{}}, initDataUnsafe:{}, initData:'',
-    showAlert:(msg)=>alert(msg), openInvoice:(url,cb)=>{window.open(url);cb&&cb('cancelled')}
+    showAlert:(msg)=>alert(msg), openInvoice:(url,cb)=>{window.open(url);cb&&cb('cancelled')},
+    HapticFeedback: null // 👈 1. ДОБАВЛЕНО
   };
 
   function authFetch(url, opts = {}) {
@@ -344,8 +345,11 @@ window.addEventListener('error', function(e){
     });
   }
 
-  try{tg.expand();}catch(e){}
-  try{tg.MainButton.hide();}catch(e){}
+  try {
+    if (tg.ready) tg.ready(); // 👈 2. ДОБАВЛЕНО (самое важное для вибрации!)
+    tg.expand();
+    tg.MainButton.hide();
+  } catch(e){}
 
   let userId, userName;
   let tonPaymentContext = 'super_game';
