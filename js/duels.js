@@ -146,8 +146,8 @@ function loadDuelPanel() {
       <!-- Назад -->
       <button onclick="duelBackToMenu()" style="
         position:relative;
-        width:145px;
-        height:90px;
+        width:100px;
+        height:50px;
         padding:0;
         background:none;
         border:none;
