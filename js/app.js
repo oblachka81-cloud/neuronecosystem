@@ -173,6 +173,7 @@ function startApp(attempt) {
   }
   loadWelcome();
   setTimeout(() => {
+    alert('КОД РАБОТАЕТ!');
     vibrate('heavy');
     showToast('📳 Тест вибрации при старте', 2000);
   }, 1500);
