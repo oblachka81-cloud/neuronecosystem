@@ -171,31 +171,27 @@ function loadDuelPanel() {
              style="width:260px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 25px rgba(255,204,68,0.35));">
       </div> 
 
-      <!-- Описание с градиентной рамкой -->
+      <!-- Описание с платиновой рамкой -->
       <div style="
-        background:linear-gradient(145deg, rgba(12,22,42,0.85), rgba(8,16,32,0.9));
-        border:1px solid rgba(255,204,68,0.22);
+        background:rgba(10,15,30,0.35);
+        border:1.5px solid rgba(220,220,225,0.5);
         border-radius:20px;
         padding:18px 16px;
         margin-bottom:24px;
-        box-shadow:0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,204,68,0.08);
-        position:relative;
-        overflow:hidden;
+        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.1);
+        backdrop-filter:blur(8px);
       ">
-        <div style="
-          position:absolute;
-          top:0;
-          left:0;
-          right:0;
-          height:2px;
-          background:linear-gradient(90deg,transparent,rgba(255,204,68,0.4),transparent);
-        "></div>
         <p style="
           font-size:0.87rem;
-          color:#c8d0e0;
+          background:linear-gradient(90deg,#d4d4d8 0%,#ffffff 50%,#d4d4d8 100%);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          background-clip:text;
           line-height:1.55;
           margin:0;
           text-align:center;
+          font-weight:500;
+          letter-spacing:0.3px;
         ">${t.desc}</p>
       </div>
 
