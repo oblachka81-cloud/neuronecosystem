@@ -1,20 +1,29 @@
 // ==================== ВИБРООТКЛИК (HAPTIC FEEDBACK) ====================
-// Функция для тактильного отклика в Telegram WebApp
 
 function vibrate(type = 'light') {
   try {
     const tg = window.Telegram?.WebApp;
-    if (tg && tg.HapticFeedback) {
-      // Уведомления (успех, ошибка, предупреждение)
+    
+    // 1. Проверяем, запущен ли вообще Telegram WebApp
+    if (!tg) {
+      if (typeof showToast === 'function') showToast('⚠️ Не в Telegram', 1500);
+      return;
+ }
+
+    // 2. Проверяем, есть ли поддержка вибрации на этом устройстве
+    if (tg.HapticFeedback) {
       if (['success', 'error', 'warning'].includes(type)) {
         tg.HapticFeedback.notificationOccurred(type);
-      } 
-      // Физические удары (light, medium, heavy, rigid, soft)
-      else {
+      } else {
         tg.HapticFeedback.impactOccurred(type);
       }
+      // Если всё ок, можно раскомментировать строку ниже для теста:
+      // if (typeof showToast === 'function') showToast('✅ Вибрация: ' + type, 1000);
+    } else {
+      // 3. Если устройство не поддерживает вибрацию в WebView
+      if (typeof showToast === 'function') showToast('⚠️ Вибрация не поддерживается', 1500);
     }
   } catch (e) {
-    // Игнорируем ошибки, если открыто не в Telegram
+    if (typeof showToast === 'function') showToast('❌ Ошибка Haptic', 1500);
   }
 }
