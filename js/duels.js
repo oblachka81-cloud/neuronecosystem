@@ -542,53 +542,83 @@ function duelRenderBattleScreen() {
   
   battleContainer.innerHTML = `
     <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
-      <div style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:20px;padding:16px;margin-bottom:16px;">
+      
+      <!-- СТОЛ С ИГРОКАМИ (платиновая рамка) -->
+      <div style="
+        background:rgba(10,15,30,0.35);
+        border:1.5px solid rgba(220,220,225,0.5);
+        border-radius:20px;
+        padding:16px;
+        margin-bottom:16px;
+        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.1);
+        backdrop-filter:blur(8px);
+      ">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          
+          <!-- Игрок 1 -->
           <div style="text-align:center;flex:1;">
             ${p1Photo ? `
-          <div style="width:60px;height:60px;border-radius:50%;border:2px solid #00ffaa;margin:0 auto 6px;overflow:hidden;background:rgba(0,255,170,0.2);">
-          <img src="${p1Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-          <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-         </div>
-        ` : `
-           <div style="width:60px;height:60px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-           `}
+              <div style="width:75px;height:75px;border-radius:50%;border:2px solid #00ffaa;margin:0 auto 6px;overflow:hidden;background:rgba(0,255,170,0.2);">
+                <img src="${p1Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:2rem;">👤</div>
+              </div>
+            ` : `
+              <div style="width:75px;height:75px;border-radius:50%;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:2rem;"></div>
+            `}
             <div style="font-size:0.8rem;font-weight:700;color:#00ffaa;">${escapeHtml(p1Name)}</div>
             <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore1">${duelScores.score1}</div>
           </div>
           
+          <!-- VS -->
           <div style="text-align:center;padding:0 12px;">
             <div style="font-size:1.2rem;font-weight:900;color:#ffcc44;">VS</div>
-            <div style="font-size:0.7rem;color:#7799bb;margin-top:4px;">${t.roundLabel} <span id="duelRoundNum">${duelCurrentRound}</span>/${duelTotalRounds}</div>
+            <div style="font-size:0.7rem;color:#d4d4d8;margin-top:4px;">${t.roundLabel} <span id="duelRoundNum">${duelCurrentRound}</span>/${duelTotalRounds}</div>
           </div>
           
+          <!-- Игрок 2 -->
           <div style="text-align:center;flex:1;">
             ${p2Photo ? `
-           <div style="width:60px;height:60px;border-radius:50%;border:2px solid #ff6464;margin:0 auto 6px;overflow:hidden;background:rgba(255,100,100,0.2);">
-          <img src="${p2Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-           <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-           </div>
-          ` : `
-          <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-           `}
+              <div style="width:75px;height:75px;border-radius:50%;border:2px solid #ff6464;margin:0 auto 6px;overflow:hidden;background:rgba(255,100,100,0.2);">
+                <img src="${p2Photo}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:2rem;">👤</div>
+              </div>
+            ` : `
+              <div style="width:75px;height:75px;border-radius:50%;background:rgba(255,100,100,0.2);border:2px solid #ff6464;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:2rem;">👤</div>
+            `}
             <div style="font-size:0.8rem;font-weight:700;color:#ff6464;">${escapeHtml(p2Name)}</div>
             <div style="font-size:1.4rem;font-weight:900;color:#fff;margin-top:4px;" id="duelScore2">${duelScores.score2}</div>
           </div>
         </div>
         
+        <!-- ТАЙМЕР (с пульсацией) -->
         <div style="text-align:center;padding:10px;background:rgba(0,0,0,0.4);border-radius:12px;">
-          <div style="font-size:0.75rem;color:#7799bb;margin-bottom:4px;">${t.timeToAnswer}</div>
-          <div id="duelTimer" style="font-size:2rem;font-weight:900;color:#ffcc44;">15</div>
+          <div style="font-size:0.75rem;color:#d4d4d8;margin-bottom:4px;">${t.timeToAnswer}</div>
+          <div id="duelTimer" style="font-size:2rem;font-weight:900;color:#ffcc44;animation:timerPulse 1s ease-in-out infinite;">15</div>
         </div>
       </div>
       
-      <div id="duelQuestionBlock" style="background:rgba(10,20,38,0.7);border:2px solid rgba(255,204,68,0.3);border-radius:16px;padding:16px;margin-bottom:16px;min-height:100px;display:flex;align-items:center;justify-content:center;">
+      <!-- ВОПРОС (платиновая рамка) -->
+      <div id="duelQuestionBlock" style="
+        background:rgba(10,15,30,0.35);
+        border:1.5px solid rgba(220,220,225,0.5);
+        border-radius:16px;
+        padding:16px;
+        margin-bottom:16px;
+        min-height:100px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.1);
+        backdrop-filter:blur(8px);
+      ">
         <div style="font-size:1.1rem;font-weight:600;color:#fff;text-align:center;">${t.waitingOpponent}</div>
       </div>
       
+      <!-- ВАРИАНТЫ ОТВЕТОВ (платиновые кнопки) -->
       <div id="duelAnswersBlock" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
       </div>
       
+      <!-- РЕЗУЛЬТАТ РАУНДА -->
       <div id="duelRoundResult" style="display:none;text-align:center;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.3);border-radius:12px;margin-bottom:16px;">
         <div style="font-size:1.1rem;font-weight:700;color:#00ffaa;"></div>
       </div>
@@ -596,6 +626,19 @@ function duelRenderBattleScreen() {
   `;
   
   document.body.appendChild(battleContainer);
+  
+  // Добавляем анимацию таймера
+  if (!document.getElementById('duelBattleAnimations')) {
+    const style = document.createElement('style');
+    style.id = 'duelBattleAnimations';
+    style.textContent = `
+      @keyframes timerPulse {
+        0%, 100% { text-shadow: 0 0 10px rgba(255,204,68,0.5); }
+        50% { text-shadow: 0 0 20px rgba(255,204,68,0.8), 0 0 30px rgba(255,204,68,0.4); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
   
   duelLoadQuestion();
 }
