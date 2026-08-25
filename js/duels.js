@@ -204,79 +204,79 @@ function loadDuelPanel() {
       ">
         <!-- 100 -->
         <button onclick="duelCreate(100)" style="
-          padding:18px 6px;
-          background:linear-gradient(160deg, rgba(15,25,45,0.9), rgba(10,18,35,0.95));
-          border:1.5px solid rgba(255,204,68,0.3);
-          border-radius:16px;
-          color:#ffcc44;
-          font-size:0.9rem;
-          font-weight:800;
+          position:relative;
+          width:100%;
+          height:90px;
+          padding:0;
+          background:none;
+          border:none;
           cursor:pointer;
           transition:all 0.2s;
-          box-shadow:0 4px 15px rgba(0,0,0,0.25);
-          position:relative;
           overflow:hidden;
-        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 25px rgba(255,204,68,0.3)';this.style.borderColor='rgba(255,204,68,0.5)'" 
-           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 15px rgba(0,0,0,0.25)';this.style.borderColor='rgba(255,204,68,0.3)'">
-          <div style="font-size:0.7rem;opacity:0.7;margin-bottom:4px;font-weight:600;">СТАВКА</div>
-          <div style="font-size:1.1rem;font-weight:900;">100</div>
-          <div style="font-size:0.72rem;margin-top:2px;opacity:0.85;">COGNIQ</div>
+        " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.15)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+            <span style="font-size:0.6rem;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:1px;margin-bottom:2px;">СТАВКА</span>
+            <span style="font-size:1.3rem;color:#ffffff;font-weight:900;line-height:1;text-shadow:0 0 8px rgba(255,220,150,0.5);">100</span>
+            <span style="font-size:0.65rem;color:rgba(255,255,255,0.8);font-weight:600;letter-spacing:0.5px;margin-top:3px;">COGNIQ</span>
+          </div>
         </button>
 
-        <!-- 500 (рекомендуемая) -->
+        <!-- 500 (HOT) -->
         <button onclick="duelCreate(500)" style="
-          padding:18px 6px;
-          background:linear-gradient(160deg, rgba(25,35,20,0.95), rgba(15,28,18,0.98));
-          border:2px solid rgba(0,255,170,0.55);
-          border-radius:16px;
-          color:#00ffaa;
-          font-size:0.9rem;
-          font-weight:800;
+          position:relative;
+          width:100%;
+          height:90px;
+          padding:0;
+          background:none;
+          border:none;
           cursor:pointer;
           transition:all 0.2s;
-          box-shadow:0 0 20px rgba(0,255,170,0.18), 0 4px 15px rgba(0,0,0,0.3);
-          position:relative;
           overflow:hidden;
           animation:hotPulse 2s ease-in-out infinite;
-        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 0 30px rgba(0,255,170,0.4), 0 8px 25px rgba(0,0,0,0.4)'" 
-           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 20px rgba(0,255,170,0.18), 0 4px 15px rgba(0,0,0,0.3)'">
+        " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.2)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
           <div style="
             position:absolute;
-            top:6px;
+            top:4px;
             right:6px;
-            background:rgba(0,255,170,0.2);
+            background:rgba(0,255,170,0.25);
             color:#00ffaa;
-            font-size:0.58rem;
+            font-size:0.5rem;
             font-weight:800;
-            padding:2px 6px;
-            border-radius:8px;
+            padding:2px 5px;
+            border-radius:6px;
             letter-spacing:0.5px;
             animation:badgePulse 1.5s ease-in-out infinite;
           ">HOT</div>
-          <div style="font-size:0.7rem;opacity:0.8;margin-bottom:4px;font-weight:600;">СТАВКА</div>
-          <div style="font-size:1.1rem;font-weight:900;">500</div>
-          <div style="font-size:0.72rem;margin-top:2px;opacity:0.9;">COGNIQ</div>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+            <span style="font-size:0.6rem;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:1px;margin-bottom:2px;">СТАВКА</span>
+            <span style="font-size:1.3rem;color:#ffffff;font-weight:900;line-height:1;text-shadow:0 0 8px rgba(255,220,150,0.5);">500</span>
+            <span style="font-size:0.65rem;color:rgba(255,255,255,0.8);font-weight:600;letter-spacing:0.5px;margin-top:3px;">COGNIQ</span>
+          </div>
         </button>
 
         <!-- 1000 -->
         <button onclick="duelCreate(1000)" style="
-          padding:18px 6px;
-          background:linear-gradient(160deg, rgba(35,22,12,0.95), rgba(28,16,8,0.98));
-          border:1.5px solid rgba(255,160,50,0.5);
-          border-radius:16px;
-          color:#ffaa44;
-          font-size:0.9rem;
-          font-weight:800;
+          position:relative;
+          width:100%;
+          height:90px;
+          padding:0;
+          background:none;
+          border:none;
           cursor:pointer;
           transition:all 0.2s;
-          box-shadow:0 0 18px rgba(255,150,50,0.15), 0 4px 15px rgba(0,0,0,0.3);
-          position:relative;
           overflow:hidden;
-        " onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 0 28px rgba(255,150,50,0.35), 0 8px 25px rgba(0,0,0,0.4)';this.style.borderColor='rgba(255,160,50,0.7)'" 
-           onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 0 18px rgba(255,150,50,0.15), 0 4px 15px rgba(0,0,0,0.3)';this.style.borderColor='rgba(255,160,50,0.5)'">
-          <div style="font-size:0.7rem;opacity:0.75;margin-bottom:4px;font-weight:600;">СТАВКА</div>
-          <div style="font-size:1.1rem;font-weight:900;">1000</div>
-          <div style="font-size:0.72rem;margin-top:2px;opacity:0.85;">COGNIQ</div>
+        " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.15)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+            <span style="font-size:0.6rem;color:rgba(255,255,255,0.7);font-weight:600;letter-spacing:1px;margin-bottom:2px;">СТАВКА</span>
+            <span style="font-size:1.3rem;color:#ffffff;font-weight:900;line-height:1;text-shadow:0 0 8px rgba(255,220,150,0.5);">1000</span>
+            <span style="font-size:0.65rem;color:rgba(255,255,255,0.8);font-weight:600;letter-spacing:0.5px;margin-top:3px;">COGNIQ</span>
+          </div>
         </button>
       </div>
 
