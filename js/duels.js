@@ -142,23 +142,144 @@ function loadDuelPanel() {
   
   duelContainer.innerHTML = `
     <div class="duel-panel" style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
-      <button onclick="duelBackToMenu()" style="background:none;border:none;color:#ffcc44;font-size:0.9rem;font-weight:700;padding:6px 0;margin-bottom:12px;cursor:pointer;">${t.backBtn}</button>
+      
+      <!-- Назад -->
+      <button onclick="duelBackToMenu()" style="
+        background:rgba(255,204,68,0.08);
+        border:1px solid rgba(255,204,68,0.25);
+        border-radius:12px;
+        color:#ffcc44;
+        font-size:0.85rem;
+        font-weight:700;
+        padding:8px 14px;
+        margin-bottom:20px;
+        cursor:pointer;
+        transition:all 0.2s;
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+      ">${t.backBtn}</button>
 
-      <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(90deg,#ffcc44,#e8d9a0,#ffcc44);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">⚔️ ${t.title}</div>
-        <div style="font-size:0.78rem;color:#7799bb;margin-top:4px;">${t.subtitle}</div>
+      <!-- Заголовок -->
+      <div style="text-align:center;margin-bottom:28px;">
+        <div style="
+          font-size:2.1rem;
+          font-weight:900;
+          background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 45%,#ffcc44 100%);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          background-clip:text;
+          letter-spacing:4px;
+          text-shadow:0 0 30px rgba(255,204,68,0.3);
+          margin-bottom:6px;
+        ">⚔️ ${t.title}</div>
+        <div style="
+          font-size:0.82rem;
+          color:#8ba3c1;
+          letter-spacing:0.5px;
+          font-weight:500;
+        ">${t.subtitle}</div>
       </div>
 
-      <div style="background:rgba(10,20,38,0.6);border:1px solid rgba(255,204,68,0.25);border-radius:18px;padding:16px;margin-bottom:20px;">
-        <p style="font-size:0.85rem;color:#c8c8dc;line-height:1.5;">${t.desc}</p>
+      <!-- Описание -->
+      <div style="
+        background:linear-gradient(145deg, rgba(12,22,42,0.85), rgba(8,16,32,0.9));
+        border:1px solid rgba(255,204,68,0.22);
+        border-radius:20px;
+        padding:18px 16px;
+        margin-bottom:24px;
+        box-shadow:0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,204,68,0.08);
+      ">
+        <p style="
+          font-size:0.87rem;
+          color:#c8d0e0;
+          line-height:1.55;
+          margin:0;
+          text-align:center;
+        ">${t.desc}</p>
       </div>
 
-      <div style="display:flex;gap:8px;margin-bottom:16px;">
-        <button onclick="duelCreate(100)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.35);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;">100 COGNIQ</button>
-        <button onclick="duelCreate(500)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,204,68,0.55);border-radius:14px;color:#ffcc44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,204,68,0.2);">500 COGNIQ</button>
-        <button onclick="duelCreate(1000)" style="flex:1;padding:14px 8px;background:rgba(10,20,38,0.7);border:1.5px solid rgba(255,150,50,0.55);border-radius:14px;color:#ffaa44;font-size:0.85rem;font-weight:800;cursor:pointer;box-shadow:0 0 12px rgba(255,150,50,0.25);">1000 COGNIQ</button>
+      <!-- Ставки -->
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr 1fr;
+        gap:10px;
+        margin-bottom:20px;
+      ">
+        <!-- 100 -->
+        <button onclick="duelCreate(100)" style="
+          padding:18px 6px;
+          background:linear-gradient(160deg, rgba(15,25,45,0.9), rgba(10,18,35,0.95));
+          border:1.5px solid rgba(255,204,68,0.3);
+          border-radius:16px;
+          color:#ffcc44;
+          font-size:0.9rem;
+          font-weight:800;
+          cursor:pointer;
+          transition:all 0.2s;
+          box-shadow:0 4px 15px rgba(0,0,0,0.25);
+          position:relative;
+          overflow:hidden;
+        ">
+          <div style="font-size:0.7rem;opacity:0.7;margin-bottom:4px;font-weight:600;">СТАВКА</div>
+          <div>100</div>
+          <div style="font-size:0.72rem;margin-top:2px;opacity:0.85;">COGNIQ</div>
+        </button>
+
+        <!-- 500 (рекомендуемая) -->
+        <button onclick="duelCreate(500)" style="
+          padding:18px 6px;
+          background:linear-gradient(160deg, rgba(25,35,20,0.95), rgba(15,28,18,0.98));
+          border:2px solid rgba(0,255,170,0.55);
+          border-radius:16px;
+          color:#00ffaa;
+          font-size:0.9rem;
+          font-weight:800;
+          cursor:pointer;
+          transition:all 0.2s;
+          box-shadow:0 0 20px rgba(0,255,170,0.18), 0 4px 15px rgba(0,0,0,0.3);
+          position:relative;
+          overflow:hidden;
+        ">
+          <div style="
+            position:absolute;
+            top:6px;
+            right:6px;
+            background:rgba(0,255,170,0.2);
+            color:#00ffaa;
+            font-size:0.58rem;
+            font-weight:800;
+            padding:2px 6px;
+            border-radius:8px;
+            letter-spacing:0.5px;
+          ">HOT</div>
+          <div style="font-size:0.7rem;opacity:0.8;margin-bottom:4px;font-weight:600;">СТАВКА</div>
+          <div style="font-size:1.05rem;">500</div>
+          <div style="font-size:0.72rem;margin-top:2px;opacity:0.9;">COGNIQ</div>
+        </button>
+
+        <!-- 1000 -->
+        <button onclick="duelCreate(1000)" style="
+          padding:18px 6px;
+          background:linear-gradient(160deg, rgba(35,22,12,0.95), rgba(28,16,8,0.98));
+          border:1.5px solid rgba(255,160,50,0.5);
+          border-radius:16px;
+          color:#ffaa44;
+          font-size:0.9rem;
+          font-weight:800;
+          cursor:pointer;
+          transition:all 0.2s;
+          box-shadow:0 0 18px rgba(255,150,50,0.15), 0 4px 15px rgba(0,0,0,0.3);
+          position:relative;
+          overflow:hidden;
+        ">
+          <div style="font-size:0.7rem;opacity:0.75;margin-bottom:4px;font-weight:600;">СТАВКА</div>
+          <div>1000</div>
+          <div style="font-size:0.72rem;margin-top:2px;opacity:0.85;">COGNIQ</div>
+        </button>
       </div>
 
+      <!-- Блок ожидания (скрыт по умолчанию) -->
       <div id="duelWaitingBlock" style="display:none;"></div>
     </div>
   `;
