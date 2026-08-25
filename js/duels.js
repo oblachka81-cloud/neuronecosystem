@@ -938,20 +938,68 @@ function loadDuelJoinPanel(duelIdParam) {
   joinContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;background:transparent;';
   
   joinContainer.innerHTML = `
-    <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;text-align:center;">
-      <div style="font-size:3rem;margin-bottom:16px;">⚔️</div>
-      <div style="font-size:1.5rem;font-weight:900;color:#ffcc44;margin-bottom:8px;">${t.title}</div>
-      <div style="color:#7799bb;margin-bottom:24px;">ID: ${duelIdParam}</div>
+    <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
       
-      <div id="duelJoinLoader" style="padding:20px;color:#ffcc44;">⏳ Проверяем дуэль...</div>
+      <!-- Логотип дуэли -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <img src="/main/duel_logo_${currentLang}.webp" 
+             alt="Duel" 
+             style="width:260px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 25px rgba(255,204,68,0.35));">
+      </div>
       
+      <!-- Информация о дуэли (платиновая рамка) -->
+      <div style="
+        background:rgba(10,15,30,0.35);
+        border:1.5px solid rgba(220,220,225,0.5);
+        border-radius:20px;
+        padding:20px 16px;
+        margin-bottom:20px;
+        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.1);
+        backdrop-filter:blur(8px);
+        text-align:center;
+      ">
+        <div style="font-size:0.82rem;color:#8ba3c1;letter-spacing:0.5px;margin-bottom:8px;">1 на 1 • 10 вопросов • ставка</div>
+        <div style="font-size:1.5rem;font-weight:900;background:linear-gradient(90deg,#d4d4d8 0%,#ffffff 50%,#d4d4d8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${duelIdParam}</div>
+      </div>
+      
+      <!-- Загрузка (платиновая рамка) -->
+      <div id="duelJoinLoader" style="
+        background:rgba(10,15,30,0.35);
+        border:1.5px solid rgba(220,220,225,0.5);
+        border-radius:18px;
+        padding:24px;
+        text-align:center;
+        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+        backdrop-filter:blur(8px);
+        font-size:0.95rem;color:#d4d4d8;
+        margin-bottom:16px;
+      ">⏳ Проверяем дуэль...</div>
+      
+      <!-- Кнопки действий (скрыты по умолчанию) -->
       <div id="duelJoinActions" style="display:none;flex-direction:column;gap:12px;">
-        <div style="background:rgba(10,20,38,0.7);border:1px solid rgba(255,204,68,0.3);border-radius:12px;padding:16px;margin-bottom:16px;">
-          <div style="color:#7799bb;font-size:0.8rem;">${t.subtitle}</div>
-          <div style="color:#fff;font-size:1.5rem;font-weight:800;" id="joinStakeAmount">0 COGNIQ</div>
-        </div>
-        <button onclick="duelAcceptInvite(${duelIdParam})" style="width:100%;padding:16px;background:rgba(0,255,170,0.2);border:2px solid #00ffaa;border-radius:14px;color:#00ffaa;font-size:1rem;font-weight:700;cursor:pointer;">⚔️ ${t.title}</button>
-        <button onclick="duelBackToMenu()" style="width:100%;padding:14px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:14px;color:#ff6464;font-size:0.9rem;font-weight:600;cursor:pointer;">${t.backBtn}</button>
+        
+        <!-- Принять вызов (универсальная кнопка с зелёным текстом) -->
+        <button onclick="duelAcceptInvite(${duelIdParam})" style="
+          position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; border-radius:12px;
+        " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.9rem;font-weight:800;color:#00ffaa;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,255,170,0.5);">
+            ⚔️ Принять вызов
+          </div>
+        </button>
+
+        <!-- Назад (универсальная кнопка с красным текстом) -->
+        <button onclick="duelBackToMenu()" style="
+          position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; border-radius:12px;
+        " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.9rem;font-weight:800;color:#ff6464;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(255,100,100,0.4);">
+            ← ${t.backBtn.replace('← ','')}
+          </div>
+        </button>
+
       </div>
     </div>
   `;
