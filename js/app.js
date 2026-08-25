@@ -172,11 +172,6 @@ function startApp(attempt) {
     localStorage.setItem('neuron_uname', userName);
   }
   loadWelcome();
-  setTimeout(() => {
-    alert('КОД РАБОТАЕТ!');
-    vibrate('heavy');
-    showToast('📳 Тест вибрации при старте', 2000);
-  }, 1500);
 }
 
 function loadWelcome(retryCount = 0) {
