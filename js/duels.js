@@ -709,8 +709,21 @@ function duelRenderQuestion(question) {
     const letters = ['A', 'B', 'C', 'D'];
     question.options.forEach((opt, idx) => {
       const btn = document.createElement('button');
-      btn.style.cssText = 'padding:14px;background:rgba(0,0,0,0.5);border:2px solid rgba(255,204,68,0.3);border-radius:12px;color:#fff;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;';
-      btn.innerHTML = `<div style="color:#ffcc44;font-size:0.75rem;margin-bottom:4px;">${letters[idx]}</div><div>${escapeHtml(opt)}</div>`;
+      btn.style.cssText = `
+        padding:14px;
+        background:rgba(10,15,30,0.35);
+        border:1.5px solid rgba(220,220,225,0.5);
+        border-radius:12px;
+        color:#fff;
+        font-size:0.9rem;
+        font-weight:600;
+        cursor:pointer;
+        transition:all 0.2s;
+        backdrop-filter:blur(8px);
+      `;
+      btn.innerHTML = `<div style="color:#ffcc44;font-size:0.75rem;margin-bottom:4px;font-weight:700;">${letters[idx]}</div><div>${escapeHtml(opt)}</div>`;
+      btn.onmouseover = function() { this.style.transform='translateY(-2px)'; this.style.borderColor='rgba(220,220,225,0.8)'; this.style.boxShadow='0 4px 15px rgba(220,220,225,0.2)'; };
+      btn.onmouseout = function() { this.style.transform='translateY(0)'; this.style.borderColor='rgba(220,220,225,0.5)'; this.style.boxShadow='none'; };
       btn.onclick = () => duelHandleAnswer(idx);
       answersEl.appendChild(btn);
     });
