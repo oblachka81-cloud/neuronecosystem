@@ -58,11 +58,11 @@ router.post('/api/duel/create', requireInitDataStrict, authRateLimit, async (req
     // Списываем ставку
     await client.query('UPDATE users SET balance = balance - $1 WHERE telegram_id = $2', [stake, userId]);
 
-    // Создаём дуэль
+    // Создаём дуэль с фиксацией времени создания
     const questionIds = await getDuelQuestions();
     const duelRes = await client.query(
-      `INSERT INTO duels (player1_id, stake, question_ids, status)
-       VALUES ($1, $2, $3, 'waiting')
+      `INSERT INTO duels (player1_id, stake, question_ids, status, created_at)
+       VALUES ($1, $2, $3, 'waiting', NOW())
        RETURNING id`,
       [userId, stake, JSON.stringify(questionIds)]
     );
