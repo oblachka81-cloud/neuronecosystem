@@ -349,12 +349,51 @@ async function duelCreate(stake) {
     duelId = data.duelId;
     
     document.getElementById('duelWaitingBlock').innerHTML = `
-      <div style="background:rgba(10,20,38,0.8);border:2px solid rgba(0,255,170,0.4);border-radius:18px;padding:20px;text-align:center;box-shadow:0 0 20px rgba(0,255,170,0.15);">
-        <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:12px;">⏳ ${t.waiting}</div>
-        <div style="font-size:0.75rem;color:#7799bb;margin-bottom:14px;">ID: ${data.duelId}</div>
-        <button onclick="duelShareInvite('${data.inviteLink}', ${stake})" style="width:100%;padding:12px;background:rgba(0,255,170,0.1);border:1px solid rgba(0,255,170,0.4);border-radius:12px;color:#00ffaa;font-weight:700;font-size:0.88rem;cursor:pointer;margin-bottom:8px;">📤 ${t.shareInvite}</button>
-        <button onclick="duelCopyLink('${data.inviteLink}', this)" style="width:100%;padding:12px;background:rgba(255,204,68,0.1);border:1px solid rgba(255,204,68,0.4);border-radius:12px;color:#ffcc44;font-weight:700;font-size:0.88rem;cursor:pointer;margin-bottom:8px;">🔗 ${t.copyLink}</button>
-        <button onclick="duelCancel(${data.duelId})" style="width:100%;padding:12px;background:rgba(255,100,100,0.1);border:1px solid rgba(255,100,100,0.3);border-radius:12px;color:#ff6464;font-weight:700;font-size:0.88rem;cursor:pointer;">❌ ${t.cancelDuel}</button>
+      <div style="
+        background:rgba(10,15,30,0.35);
+        border:1.5px solid rgba(220,220,225,0.5);
+        border-radius:18px;
+        padding:20px;
+        text-align:center;
+        box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+        backdrop-filter:blur(8px);
+      ">
+        <div style="font-size:0.95rem;font-weight:700;color:#00ffaa;margin-bottom:12px;text-shadow:0 0 8px rgba(0,255,170,0.3);"> ${t.waiting}</div>
+        <div style="font-size:0.75rem;color:#d4d4d8;margin-bottom:14px;letter-spacing:0.5px;">ID: ${data.duelId}</div>
+        
+        <!-- Отправить приглашение (Зелёный) -->
+        <button onclick="duelShareInvite('${data.inviteLink}', ${stake})" style="
+          position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; margin-bottom:10px; border-radius:12px;
+        " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#00ffaa;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(0,255,170,0.4);">
+             ${t.shareInvite}
+          </div>
+        </button>
+
+        <!-- Скопировать ссылку (Золотой) -->
+        <button onclick="duelCopyLink('${data.inviteLink}', this)" style="
+          position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; margin-bottom:10px; border-radius:12px;
+        " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#ffcc44;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,204,68,0.4);">
+             ${t.copyLink}
+          </div>
+        </button>
+
+        <!-- Отменить дуэль (Красный) -->
+        <button onclick="duelCancel(${data.duelId})" style="
+          position:relative; width:100%; height:54px; padding:0; background:none; border:none; cursor:pointer; transition:all 0.2s; overflow:hidden; border-radius:12px;
+        " onmouseover="this.style.transform='translateY(-2px)';this.style.filter='brightness(1.15)'" 
+           onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
+          <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;">
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#ff6464;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,100,100,0.4);">
+             ${t.cancelDuel}
+          </div>
+        </button>
+
       </div>
     `;
     document.getElementById('duelWaitingBlock').style.display = 'block';
