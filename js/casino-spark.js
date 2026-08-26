@@ -89,9 +89,19 @@ function initCasinoSpark() {
       await Promise.all(promises);
 
       if (data.new_balance !== undefined) { setBalance(data.new_balance); }
-      const balance = getBalance();
-      const balEl = document.getElementById('casinoBalanceAmount');
-      if (balEl) balEl.textContent = balance.toLocaleString();
+
+// Перезапрашиваем баланс с сервера
+try {
+  const balRes = await authFetch(`${BASE_URL}/api/impulse/balance`);
+  const balData = await balRes.json();
+  if (balData.balance !== undefined) {
+    setBalance(balData.balance);
+  }
+} catch(e) {}
+
+const balance = getBalance();
+const balEl = document.getElementById('casinoBalanceAmount');
+if (balEl) balEl.textContent = balance.toLocaleString();
 
       const netChange = balance - oldBalance;
       const isWin = netChange > 0;
