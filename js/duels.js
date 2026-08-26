@@ -1002,7 +1002,7 @@ function duelFinishBattle() {
           resultText = t.youLose;
           resultColor = '#ff6464';
           resultEmoji = '😢';
-          if (navigator.vibrate) navigator.vibrate(150);
+          if (navigator.vibrate) navigator.vibrate(300);
           if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
         }
       } else {
