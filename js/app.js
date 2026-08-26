@@ -59,6 +59,7 @@ function switchTab(tab) {
   currentTab = tab;
 
   if (window.vibrate) window.vibrate('light');
+  else if (navigator.vibrate) navigator.vibrate(30);
   
   const header = document.querySelector('.header');
   const footer = document.querySelector('footer');
