@@ -58,8 +58,10 @@ function escapeHtml(str) {
 function switchTab(tab) {
   currentTab = tab;
 
-  if (navigator.vibrate) navigator.vibrate(30);
+  setTimeout(() => {
+  if (navigator.vibrate) navigator.vibrate(50);
   if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+}, 50);
   
   const header = document.querySelector('.header');
   const footer = document.querySelector('footer');
