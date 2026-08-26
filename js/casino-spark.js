@@ -106,8 +106,13 @@ if (balEl) balEl.textContent = balance.toLocaleString();
       const netChange = balance - oldBalance;
       const isWin = netChange > 0;
 
-      if (isWin && navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
-      if (!isWin && navigator.vibrate) navigator.vibrate(150);
+      if (isWin) {
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+      if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+    } else {
+      if (navigator.vibrate) navigator.vibrate(80);
+      if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+    }
 
       const combo = data.reels.map(s => `<img src="${s}" style="width:36px;height:36px;object-fit:contain;vertical-align:middle;">`).join('');
       document.getElementById('casinoSlotResultCombo').innerHTML = combo;
