@@ -52,7 +52,37 @@ function vibrate(type = 'light') {
       return true;
     }
 
-    if (logEl) logEl.textContent = `❌ Нет поддержки вибрации на этом устройстве`;
+      if (logEl) logEl.textContent = `❌ Нет поддержки вибрации на этом устройстве`;
+
+    // 3. Звуковой фоллбэк для Android
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      if (type === 'success') {
+        osc.frequency.value = 880;
+        gain.gain.value = 0.15;
+        osc.start();
+        setTimeout(() => { osc.frequency.value = 1320; }, 60);
+        setTimeout(() => osc.stop(), 140);
+      } else if (type === 'error') {
+        osc.frequency.value = 220;
+        gain.gain.value = 0.12;
+        osc.start();
+        setTimeout(() => osc.stop(), 150);
+      } else {
+        osc.frequency.value = 660;
+        gain.gain.value = 0.08;
+        osc.start();
+        setTimeout(() => osc.stop(), 30);
+      }
+      if (logEl) logEl.textContent = `🔊 Звуковой фоллбэк (${type})`;
+    } catch(e) {
+      if (logEl) logEl.textContent = `❌ Звук тоже не работает: ${e.message}`;
+    }
   } catch (e) {
     if (logEl) logEl.textContent = `❌ Ошибка: ${e.message}`;
   }
