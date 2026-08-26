@@ -93,8 +93,20 @@ window.vibrate = vibrate;
 
 // Авто-вибрация на все кликабельные элементы
 document.addEventListener('click', function (e) {
-  const el = e.target.closest('button, [role="button"], .btn, .answer-btn, .stake-btn, a, .tab-btn');
+  const el = e.target.closest('button, [role="button"], .btn, .answer-btn, .stake-btn, a, .tab-btn, .hint-btn, .replay-btn, .casino-tab, .wheel-bet-btn');
+  
+  // НЕ вибрируем на табах — там своя вибрация в switchTab
+  if (el && el.classList.contains('tab-btn')) return;
+  
+  // НЕ вибрируем на ответах викторины и слотах — там своя логика
+  if (el && el.classList.contains('answer-btn')) return;
+  if (el && el.id === 'casinoSlotSpinBtn') return;
+  if (el && el.classList.contains('wheel-bet-btn')) return;
+  
   if (el && !el.disabled && !el.classList.contains('no-haptic')) {
-    vibrate('light');
+    setTimeout(() => {
+      if (navigator.vibrate) navigator.vibrate(60);
+      if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+    }, 50);
   }
 }, true);
