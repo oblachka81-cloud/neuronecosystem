@@ -144,7 +144,8 @@ function initCasinoKrash() {
           toast(`+${state.my_bet.win_amount} IMPULSE (x${state.my_bet.cashed_out_at.toFixed(2)})`, 4000);
         } else if (state.my_bet.status === 'lost') {
           toast(`-${state.my_bet.amount} IMPULSE — не успели!`, 3000);
-          if (navigator.vibrate) navigator.vibrate(80);
+          if (navigator.vibrate) navigator.vibrate(150);
+          if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
         }
       }
 
