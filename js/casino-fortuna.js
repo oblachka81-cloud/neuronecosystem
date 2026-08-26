@@ -73,8 +73,6 @@ function initCasinoFortuna() {
       const data = await r.json();
       if(data.error) { toast(data.error); wSpinning = false; document.getElementById('casinoSpinBtn').disabled = false; return; }
 
-      if (data.win > 0 && window.vibrate) window.vibrate('success');
-      if (data.win === 0 && window.vibrate) window.vibrate('error');
 
       spinWheelTo(data.result, () => {
         const balEl = document.getElementById('casinoBalanceAmount');
@@ -86,6 +84,9 @@ function initCasinoFortuna() {
         document.getElementById('casinoRouletteResultMsg').textContent = data.win > 0 ? `+${data.win} IMPULSE` : 'Проигрыш';
         document.getElementById('casinoRouletteResultMsg').style.color = data.win > 0 ? '#00ffaa' : '#ff4455';
         wSpinning = false; document.getElementById('casinoSpinBtn').disabled = false;
+
+        if (data.win > 0 && navigator.vibrate) navigator.vibrate(100);
+        if (data.win === 0 && navigator.vibrate) navigator.vibrate(120);
 
         const list = document.getElementById('casinoRouletteHistory');
         const item = document.createElement('div'); item.className = 'history-item';
