@@ -862,11 +862,15 @@ async function duelHandleAnswer(answerIdx) {
     }
     
     const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
+
+    if (data.isCorrect && window.vibrate) window.vibrate('success');
+    if (!data.isCorrect && window.vibrate) window.vibrate('error');
+
     const resultText = data.isCorrect 
-      ? `✅ Правильно! +${data.points} очков` 
-      : answerIdx === -1 
-        ? '⏱️ Время вышло!' 
-        : '❌ Неправильно';
+    ? `✅ Правильно! +${data.points} очков` 
+    : answerIdx === -1 
+    ? '⏱️ Время вышло!' 
+    : '❌ Неправильно';
     
     if (resultEl) {
       resultEl.style.display = 'block';
@@ -983,6 +987,7 @@ function duelFinishBattle() {
           resultText = t.youWin;
           resultColor = '#00ffaa';
           resultEmoji = '🏆';
+          if (window.vibrate) window.vibrate('success');
           // Запускаем конфетти при победе!
           setTimeout(() => {
             if (typeof launchConfettiTop === 'function') launchConfettiTop();
@@ -991,6 +996,7 @@ function duelFinishBattle() {
           resultText = t.youLose;
           resultColor = '#ff6464';
           resultEmoji = '😢';
+          if (window.vibrate) window.vibrate('error');
         }
       } else {
         resultText = t.duelFinished;
