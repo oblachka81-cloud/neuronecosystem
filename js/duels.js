@@ -864,10 +864,10 @@ async function duelHandleAnswer(answerIdx) {
     const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
 
     if (data.isCorrect) {
-    if (navigator.vibrate) navigator.vibrate([150, 50, 150]);
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
     if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
   } else {
-    if (navigator.vibrate) navigator.vibrate(150);
+    if (navigator.vibrate) navigator.vibrate(250);
     if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
   }
 
