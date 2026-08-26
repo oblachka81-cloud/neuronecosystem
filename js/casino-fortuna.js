@@ -85,8 +85,8 @@ function initCasinoFortuna() {
         document.getElementById('casinoRouletteResultMsg').style.color = data.win > 0 ? '#00ffaa' : '#ff4455';
         wSpinning = false; document.getElementById('casinoSpinBtn').disabled = false;
 
-        if (data.win > 0 && navigator.vibrate) navigator.vibrate(100);
-        if (data.win === 0 && navigator.vibrate) navigator.vibrate(120);
+        if (data.win > 0 && navigator.vibrate) navigator.vibrate([80, 40, 80]);
+        if (data.win === 0 && navigator.vibrate) navigator.vibrate(150);
 
         const list = document.getElementById('casinoRouletteHistory');
         const item = document.createElement('div'); item.className = 'history-item';
