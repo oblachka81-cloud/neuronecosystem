@@ -176,6 +176,7 @@ function initCasinoMines() {
       list.insertBefore(item, list.firstChild); if (list.children.length > 15) list.removeChild(list.lastChild);
 
       toast(`+${data.payout} IMPULSE — x${data.multiplier.toFixed(2)}!`, 4000);
+      if (window.vibrate) window.vibrate('success');
     } catch (e) {
       toast('Ошибка сервера');
       document.getElementById('casinoMinesCashoutBtn').disabled = false;
