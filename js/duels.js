@@ -863,8 +863,13 @@ async function duelHandleAnswer(answerIdx) {
     
     const t = DUEL_LANG[currentLang] || DUEL_LANG.en;
 
-    if (data.isCorrect && window.vibrate) window.vibrate('success');
-    if (!data.isCorrect && window.vibrate) window.vibrate('error');
+    if (data.isCorrect) {
+    if (navigator.vibrate) navigator.vibrate([150, 50, 150]);
+    if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+  } else {
+    if (navigator.vibrate) navigator.vibrate(150);
+    if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+  }
 
     const resultText = data.isCorrect 
     ? `✅ Правильно! +${data.points} очков` 
@@ -987,7 +992,8 @@ function duelFinishBattle() {
           resultText = t.youWin;
           resultColor = '#00ffaa';
           resultEmoji = '🏆';
-          if (window.vibrate) window.vibrate('success');
+          if (navigator.vibrate) navigator.vibrate([150, 50, 150, 50, 150]);
+          if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
           // Запускаем конфетти при победе!
           setTimeout(() => {
             if (typeof launchConfettiTop === 'function') launchConfettiTop();
@@ -996,7 +1002,8 @@ function duelFinishBattle() {
           resultText = t.youLose;
           resultColor = '#ff6464';
           resultEmoji = '😢';
-          if (window.vibrate) window.vibrate('error');
+          if (navigator.vibrate) navigator.vibrate(150);
+          if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
         }
       } else {
         resultText = t.duelFinished;
