@@ -104,7 +104,6 @@ document.addEventListener('click', function (e) {
   if (el && el.classList.contains('wheel-bet-btn')) return;
   
   if (el && !el.disabled && !el.classList.contains('no-haptic')) {
-    setTimeout(() => {
       if (navigator.vibrate) navigator.vibrate(110);
       if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
     }, 50);
