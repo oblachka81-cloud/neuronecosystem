@@ -85,8 +85,13 @@ function initCasinoFortuna() {
         document.getElementById('casinoRouletteResultMsg').style.color = data.win > 0 ? '#00ffaa' : '#ff4455';
         wSpinning = false; document.getElementById('casinoSpinBtn').disabled = false;
 
-        if (data.win > 0 && navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
-        if (data.win === 0 && navigator.vibrate) navigator.vibrate(150);
+        if (data.win > 0) {
+        if (navigator.vibrate) navigator.vibrate([150, 50, 150, 50, 150]);
+        if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+      } else {
+        if (navigator.vibrate) navigator.vibrate(150);
+        if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+      }
 
         const list = document.getElementById('casinoRouletteHistory');
         const item = document.createElement('div'); item.className = 'history-item';
