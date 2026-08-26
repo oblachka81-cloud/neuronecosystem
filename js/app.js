@@ -59,8 +59,8 @@ function switchTab(tab) {
   currentTab = tab;
 
   setTimeout(() => {
-  if (navigator.vibrate) navigator.vibrate(50);
-  if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+  if (navigator.vibrate) navigator.vibrate(80);
+  if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
 }, 50);
   
   const header = document.querySelector('.header');
