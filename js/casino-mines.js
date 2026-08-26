@@ -95,7 +95,7 @@ function initCasinoMines() {
         }
 
         toast(`-${mBet} IMPULSE — Взрыв!`, 3000);
-        if (window.vibrate) window.vibrate('error');
+        if (navigator.vibrate) navigator.vibrate(150);
 
         const list = document.getElementById('casinoMinesHistory');
         const item = document.createElement('div'); item.className = 'history-item';
