@@ -1105,4 +1105,55 @@ body { width:600px; height:600px; font-family:'Segoe UI',Arial,sans-serif; overf
   }
 }
 
-module.exports = { generateStreakWarningCard, generateStreakMilestoneCard, generateQuestionOfDayCard, generateWelcomeCard, generateWeeklyTopCard, generateReferralReferrerCard, generateReferralNewUserCard, generateWeeklyHeroesCard, generateStreakBattleCard, generateFactOfDayCard, generateRankRatingCard, generateAchievementCard, generatePurchaseCard, generateExchangeCard, generateTransferReceivedCard, postBurnCard, postBetaCard };
+// ==================== DUEL INVITE CARD ====================
+async function generateDuelInviteCard(creatorName, stake, lang = 'en') {
+  const i18n = {
+    ru: { title: 'ВЫЗОВ НА ДУЭЛЬ!', challenger: 'бросает тебе вызов', stakeLabel: 'СТАВКА', questionsLabel: '10 ВОПРОСОВ' },
+    en: { title: 'DUEL CHALLENGE!', challenger: 'challenges you', stakeLabel: 'STAKE', questionsLabel: '10 QUESTIONS' },
+    fr: { title: 'DÉFI EN DUEL !', challenger: 'te défie', stakeLabel: 'MISE', questionsLabel: '10 QUESTIONS' },
+    es: { title: '¡DESAFÍO DE DUELO!', challenger: 'te reta', stakeLabel: 'APUESTA', questionsLabel: '10 PREGUNTAS' }
+  };
+  const t = i18n[lang] || i18n['en'];
+
+  let bgStyle = 'background: #0a0a0f;';
+  try {
+    const imgPath = path.join(__dirname, 'public', 'images', 'cogniq', 'cogniq_welcome.webp');
+    const imgData = fs.readFileSync(imgPath);
+    const base64 = imgData.toString('base64');
+    bgStyle = `background: url('data:image/png;base64,${base64}') center center/cover no-repeat; background-color: #0a0a0f;`;
+  } catch(e) {}
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 600px; height: 600px; font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; overflow: hidden; position: relative; ${bgStyle} }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,204,68,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,204,68,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+.swords { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); font-size: 72px; filter: drop-shadow(0 0 30px rgba(255,204,68,0.7)); }
+.content { position: absolute; bottom: 40px; left: 0; right: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; padding: 0 40px; text-align: center; }
+.title { font-size: 32px; font-weight: 900; margin-bottom: 8px; background: linear-gradient(90deg, #ffcc44, #fff3c4 40%, #ffcc44 60%, #e8d9a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 2px 14px rgba(0,0,0,1)) drop-shadow(0 0 20px rgba(255,204,68,0.5)); letter-spacing: 3px; }
+.challenger-name { font-size: 26px; font-weight: 800; color: #e8eeff; margin-bottom: 6px; text-shadow: 0 2px 10px rgba(0,0,0,1); }
+.challenger-text { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 20px; text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+.stake-block { display: flex; align-items: center; gap: 14px; padding: 14px 28px; border: 1px solid rgba(255,204,68,0.4); border-radius: 18px; background: rgba(12,12,28,0.6); margin-bottom: 14px; box-shadow: 0 0 20px rgba(255,204,68,0.15); }
+.stake-label { font-size: 11px; color: rgba(255,204,68,0.6); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
+.stake-value { font-size: 24px; font-weight: 900; background: linear-gradient(90deg, #ffcc44, #ffaa00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.9)); }
+.questions-text { font-size: 13px; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
+.bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #ffcc44, #ff6600, #a855f7, transparent); }
+</style></head><body>
+<div class="grid"></div>
+<div class="swords">⚔️</div>
+<div class="content">
+  <div class="title">${t.title}</div>
+  <div class="challenger-name">${escapeHtml(creatorName)}</div>
+  <div class="challenger-text">${t.challenger}</div>
+  <div class="stake-block">
+    <div class="stake-label">${t.stakeLabel}</div>
+    <div class="stake-value">${stake} COGNIQ</div>
+  </div>
+  <div class="questions-text">${t.questionsLabel}</div>
+</div>
+<div class="bottom-bar"></div>
+</body></html>`;
+
+  return queuedHtmlToImage(html, 600, 600);
+}
+
+module.exports = { generateStreakWarningCard, generateStreakMilestoneCard, generateQuestionOfDayCard, generateWelcomeCard, generateWeeklyTopCard, generateReferralReferrerCard, generateReferralNewUserCard, generateWeeklyHeroesCard, generateStreakBattleCard, generateFactOfDayCard, generateRankRatingCard, generateAchievementCard, generatePurchaseCard, generateExchangeCard, generateTransferReceivedCard, postBurnCard, postBetaCard, generateDuelInviteCard };
