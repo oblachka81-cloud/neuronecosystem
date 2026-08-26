@@ -130,6 +130,7 @@ function initCasinoMines() {
         document.getElementById('casinoMinesCount').disabled = false;
         document.getElementById('casinoMinesRange').disabled = false;
         toast(`+${data.payout} IMPULSE — Все открыто!`, 4000);
+        if (window.vibrate) window.vibrate('success');
 
         const list = document.getElementById('casinoMinesHistory');
         const item = document.createElement('div'); item.className = 'history-item';
