@@ -312,12 +312,12 @@ function initCasinoXxi() {
       const pScore = r0.score;
 
       let resultText = '', rType = 'lose';
-      if (r0.result === 'blackjack') { resultText = '🎉 XXI! +' + Math.floor(r0.bet * 1.5) + ' IMPULSE'; rType = 'win'; }
-      else if (r0.result === 'win') { resultText = '✅ ВЫИГРЫШ! +' + r0.bet + ' IMPULSE'; rType = 'win'; }
+      if (r0.result === 'blackjack') { resultText = '🎉 XXI! +' + Math.floor(r0.bet * 1.5) + ' IMPULSE'; rType = 'win'; if (window.vibrate) window.vibrate('success'); }
+      else if (r0.result === 'win') { resultText = '✅ ВЫИГРЫШ! +' + r0.bet + ' IMPULSE'; rType = 'win'; if (window.vibrate) window.vibrate('success'); }
       else if (r0.result === 'push') { resultText = '🤝 НИЧЬЯ'; rType = 'push'; }
-      else if (r0.result === 'dealer_bust') { resultText = '💥 Перебор у дилера! +' + r0.bet + ' IMPULSE'; rType = 'win'; }
-      else if (reason === 'bust' || pScore > 21) { resultText = '💥 ПЕРЕБОР! -' + r0.bet + ' IMPULSE'; rType = 'lose'; }
-      else { resultText = '❌ ПРОИГРЫШ -' + r0.bet + ' IMPULSE'; rType = 'lose'; }
+      else if (r0.result === 'dealer_bust') { resultText = '💥 Перебор у дилера! +' + r0.bet + ' IMPULSE'; rType = 'win'; if (window.vibrate) window.vibrate('success'); }
+      else if (reason === 'bust' || pScore > 21) { resultText = '💥 ПЕРЕБОР! -' + r0.bet + ' IMPULSE'; rType = 'lose'; if (window.vibrate) window.vibrate('error'); }
+      else { resultText = '❌ ПРОИГРЫШ -' + r0.bet + ' IMPULSE'; rType = 'lose'; if (window.vibrate) window.vibrate('error'); }
 
       bjShowResult(resultText, rType);
       bjAddHistory(resultText, r0.bet, pScore, dScore);
