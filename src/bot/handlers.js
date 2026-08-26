@@ -2,7 +2,7 @@ const pool = require('../db/pool');
 const { getOrCreateUser } = require('../services/users');
 const { withRetry, logTx } = require('../services/burn');
 const { todayStr } = require('../services/users');
-const { generateWelcomeCard, generateReferralNewUserCard, generateReferralReferrerCard, generatePurchaseCard } = require('../../channel');
+const { generateWelcomeCard, generateReferralNewUserCard, generateReferralReferrerCard, generatePurchaseCard, generateDuelInviteCard } = require('../../channel');
 const { postBetaCard } = require('../../channel');
 const { REFERRAL_BONUS, REFERRAL_BONUS_NEW_USER, WEBAPP_URL } = require('../config');
 
