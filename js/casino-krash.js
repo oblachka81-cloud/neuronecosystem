@@ -144,6 +144,7 @@ function initCasinoKrash() {
           toast(`+${state.my_bet.win_amount} IMPULSE (x${state.my_bet.cashed_out_at.toFixed(2)})`, 4000);
         } else if (state.my_bet.status === 'lost') {
           toast(`-${state.my_bet.amount} IMPULSE — не успели!`, 3000);
+           if (window.vibrate) window.vibrate('error');
         }
       }
 
@@ -294,6 +295,7 @@ function initCasinoKrash() {
       if (balEl) balEl.textContent = data.new_balance.toLocaleString();
 
       toast(`+${data.won_amount} IMPULSE на x${data.multiplier.toFixed(2)}!`, 4000);
+      if (window.vibrate) window.vibrate('success');
       updateCrashMainButton('watching');
     } catch (e) {
       toast('Ошибка соединения');
