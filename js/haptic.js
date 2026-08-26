@@ -106,6 +106,5 @@ document.addEventListener('click', function (e) {
   if (el && !el.disabled && !el.classList.contains('no-haptic')) {
       if (navigator.vibrate) navigator.vibrate(110);
       if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-    }, 50);
   }
 }, true);
