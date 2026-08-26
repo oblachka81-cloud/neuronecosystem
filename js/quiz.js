@@ -312,12 +312,14 @@ function sendAnswer(selectedIndex) {
       if (!data.correct && btns[data.correctIndex]) btns[data.correctIndex].classList.add('correct');
     } else if (btns[data.correctIndex]) { btns[data.correctIndex].classList.add('correct'); }
     if (data.correct) { 
-    triggerCorrectEffect(); 
-    if (window.vibrate) window.vibrate('success');
-  } else { 
-    triggerWrongEffect(); 
-    if (window.vibrate) window.vibrate('error');
-  }
+  triggerCorrectEffect(); 
+    if (navigator.vibrate) navigator.vibrate([150, 50, 150, 50, 150]);
+    if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+    } else { 
+  triggerWrongEffect(); 
+    if (navigator.vibrate) navigator.vibrate([60, 40, 60]);
+    if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
+   }
     if (data.freeGamesLeft !== undefined) { currentState.freeGamesLeft = data.freeGamesLeft; if (data.finished) updateGamesLeftUI(data.freeGamesLeft); }
     if (data.totalScore !== undefined) { currentState.totalScore = data.totalScore; updateScoresUI(data.totalScore); }
     if (data.score !== undefined) { currentState.gameScore = data.score; if (!data.finished) gamesLeftSpan.innerText = currentState.currentIsSuper ? `🔥 ${data.score}` : t.scoreBadge(data.score); }
