@@ -96,6 +96,7 @@ function initCasinoMines() {
 
         toast(`-${mBet} IMPULSE — Взрыв!`, 3000);
         if (navigator.vibrate) navigator.vibrate(150);
+        if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('error');
 
         const list = document.getElementById('casinoMinesHistory');
         const item = document.createElement('div'); item.className = 'history-item';
@@ -131,7 +132,8 @@ function initCasinoMines() {
         document.getElementById('casinoMinesRange').disabled = false;
         
         toast(`+${data.payout} IMPULSE — Все открыто!`, 4000);
-        if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+        if (navigator.vibrate) navigator.vibrate([150, 50, 150, 50, 150]);
+        if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
 
         const list = document.getElementById('casinoMinesHistory');
         const item = document.createElement('div'); item.className = 'history-item';
@@ -177,7 +179,8 @@ function initCasinoMines() {
       list.insertBefore(item, list.firstChild); if (list.children.length > 15) list.removeChild(list.lastChild);
 
       toast(`+${data.payout} IMPULSE — x${data.multiplier.toFixed(2)}!`, 4000);
-      if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+      if (navigator.vibrate) navigator.vibrate([150, 50, 150, 50, 150]);
+      if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
     } catch (e) {
       toast('Ошибка сервера');
       document.getElementById('casinoMinesCashoutBtn').disabled = false;
