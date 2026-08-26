@@ -27,6 +27,14 @@ async function getTgPhotoUrl(bot, userId) {
       }
     }
 
+    // Проверяем, существует ли пользователь
+    try {
+      await bot.telegram.getChat(userId);
+    } catch (e) {
+      // Пользователь не найден — тихо возвращаем null
+      return null;
+    }
+
     const photos = await bot.telegram.getUserProfilePhotos(userId, { limit: 1 });
     const newFileId = photos?.photos?.[0]?.[0]?.file_id || null;
 
@@ -38,7 +46,7 @@ async function getTgPhotoUrl(bot, userId) {
 
     return null;
   } catch (e) {
-    console.error('[TgPhoto] error:', e.message);
+    // Тихо игнорируем ошибку
     return null;
   }
 }
