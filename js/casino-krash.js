@@ -295,7 +295,8 @@ function initCasinoKrash() {
       if (balEl) balEl.textContent = data.new_balance.toLocaleString();
 
       toast(`+${data.won_amount} IMPULSE на x${data.multiplier.toFixed(2)}!`, 4000);
-      if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+      if (navigator.vibrate) navigator.vibrate([150, 50, 150, 50, 150]);
+      if (window.Telegram?.WebApp?.HapticFeedback) window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
       updateCrashMainButton('watching');
     } catch (e) {
       toast('Ошибка соединения');
