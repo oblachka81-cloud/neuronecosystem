@@ -311,7 +311,13 @@ function sendAnswer(selectedIndex) {
       selectedBtn.classList.add(data.correct ? 'correct' : 'wrong');
       if (!data.correct && btns[data.correctIndex]) btns[data.correctIndex].classList.add('correct');
     } else if (btns[data.correctIndex]) { btns[data.correctIndex].classList.add('correct'); }
-    if (data.correct) { triggerCorrectEffect(); } else { triggerWrongEffect(); }
+    if (data.correct) { 
+    triggerCorrectEffect(); 
+    if (window.vibrate) window.vibrate('success');
+  } else { 
+    triggerWrongEffect(); 
+    if (window.vibrate) window.vibrate('error');
+  }
     if (data.freeGamesLeft !== undefined) { currentState.freeGamesLeft = data.freeGamesLeft; if (data.finished) updateGamesLeftUI(data.freeGamesLeft); }
     if (data.totalScore !== undefined) { currentState.totalScore = data.totalScore; updateScoresUI(data.totalScore); }
     if (data.score !== undefined) { currentState.gameScore = data.score; if (!data.finished) gamesLeftSpan.innerText = currentState.currentIsSuper ? `🔥 ${data.score}` : t.scoreBadge(data.score); }
