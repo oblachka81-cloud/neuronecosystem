@@ -1,10 +1,33 @@
 // ==================== ВИБРООТКЛИК (HAPTIC FEEDBACK) ====================
 
+// 1. Диагностический оверлей (исчезнет через 5 секунд)
+(function() {
+  const isTg = !!window.Telegram?.WebApp;
+  const hasHaptic = !!(window.Telegram?.WebApp?.HapticFeedback);
+  const hasVibrate = !!(navigator.vibrate);
+  const platform = window.Telegram?.WebApp?.platform || (navigator.userAgent.match(/Android/i) ? 'Android' : 'iOS');
+
+  const debugDiv = document.createElement('div');
+  debugDiv.style.cssText = 'position:fixed;top:10px;left:10px;right:10px;background:rgba(0,0,0,0.9);color:#00ffaa;padding:12px;border-radius:12px;font-size:13px;font-family:monospace;z-index:99999;border:1px solid #00ffaa;';
+  debugDiv.innerHTML = `
+    <div>Платформа: <b>${platform}</b></div>
+    <div>Telegram WebApp: <b>${isTg ? 'ДА' : 'НЕТ'}</b></div>
+    <div>HapticFeedback API: <b>${hasHaptic ? 'ДА' : 'НЕТ'}</b></div>
+    <div>navigator.vibrate: <b>${hasVibrate ? 'ДА' : 'НЕТ'}</b></div>
+    <div id="haptic-log" style="color:#ffcc44;margin-top:6px;">Ожидание клика...</div>
+  `;
+  document.body.appendChild(debugDiv);
+  setTimeout(() => debugDiv.remove(), 5000);
+})();
+
 function vibrate(type = 'light') {
+  const logEl = document.getElementById('haptic-log');
+  if (logEl) logEl.textContent = `Вызов vibrate('${type}')...`;
+
   try {
     const tgApp = window.Telegram?.WebApp;
 
-    // Telegram Haptic (только мобильный клиент)
+    // 1. Telegram Haptic
     if (tgApp && tgApp.HapticFeedback) {
       if (type === 'success' || type === 'error' || type === 'warning') {
         tgApp.HapticFeedback.notificationOccurred(type);
@@ -14,34 +37,33 @@ function vibrate(type = 'light') {
         const allowed = ['light', 'medium', 'heavy', 'rigid', 'soft'];
         tgApp.HapticFeedback.impactOccurred(allowed.includes(type) ? type : 'light');
       }
+      if (logEl) logEl.textContent = `✅ Сработал Telegram Haptic (${type})`;
       return true;
     }
 
-    // Фоллбэк Android-браузер
+    // 2. Фоллбэк для браузера
     if (navigator.vibrate) {
       const patterns = {
-        light: 15,
-        medium: 25,
-        heavy: 45,
-        success: [35, 50, 35],
-        error: [50, 40, 50],
-        warning: [30, 30, 30],
-        selection: 12
+        light: 15, medium: 25, heavy: 45,
+        success: [35, 50, 35], error: [50, 40, 50], warning: [30, 30, 30], selection: 12
       };
       navigator.vibrate(patterns[type] || 20);
+      if (logEl) logEl.textContent = `✅ Сработал navigator.vibrate (${type})`;
       return true;
     }
+
+    if (logEl) logEl.textContent = `❌ Нет поддержки вибрации на этом устройстве`;
   } catch (e) {
-    console.warn('vibrate error:', e);
+    if (logEl) logEl.textContent = `❌ Ошибка: ${e.message}`;
   }
   return false;
 }
 
 window.vibrate = vibrate;
 
-// Авто-вибрация на все кнопки
+// Авто-вибрация на все кликабельные элементы
 document.addEventListener('click', function (e) {
-  const el = e.target.closest('button, [role="button"], .btn, .answer-btn, .stake-btn, a.button');
+  const el = e.target.closest('button, [role="button"], .btn, .answer-btn, .stake-btn, a, .tab-btn');
   if (el && !el.disabled && !el.classList.contains('no-haptic')) {
     vibrate('light');
   }
