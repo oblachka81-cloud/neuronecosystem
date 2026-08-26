@@ -77,11 +77,20 @@ if (payload && payload.startsWith('duel_')) {
         ]]
       };
       
-      await ctx.reply(duelInviteMsgs[lang] || duelInviteMsgs['en'], {
-        reply_markup: duelKeyboard,
-        parse_mode: 'Markdown'
-      });
-      return;
+      try {
+  const card = await generateDuelInviteCard(creatorName, duel.stake, lang);
+  await ctx.replyWithPhoto({ source: card }, {
+    caption: `⚔️ ${creatorName} вызывает тебя на дуэль!\nСтавка: ${duel.stake} COGNIQ`,
+    reply_markup: duelKeyboard
+  });
+} catch(e) {
+  console.error('[DUEL CARD] error:', e.message);
+  await ctx.reply(duelInviteMsgs[lang] || duelInviteMsgs['en'], {
+    reply_markup: duelKeyboard,
+    parse_mode: 'Markdown'
+  });
+}
+return;
       
     } catch (e) {
       console.error('[BOT /start duel] error:', e.message);
