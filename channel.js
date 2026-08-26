@@ -1139,7 +1139,6 @@ body { width: 600px; height: 600px; font-family: -apple-system, 'Segoe UI', Robo
 .bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #ffcc44, #ff6600, #a855f7, transparent); }
 </style></head><body>
 <div class="grid"></div>
-<div class="swords">⚔️</div>
 <div class="content">
   <div class="title">${t.title}</div>
   <div class="challenger-name">${escapeHtml(creatorName)}</div>
