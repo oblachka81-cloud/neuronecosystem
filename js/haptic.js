@@ -44,9 +44,9 @@ function vibrate(type = 'light') {
     // 2. Фоллбэк для браузера
     if (navigator.vibrate) {
       const patterns = {
-        light: 15, medium: 25, heavy: 45,
-        success: [35, 50, 35], error: [50, 40, 50], warning: [30, 30, 30], selection: 12
-      };
+  light: [30], medium: [60], heavy: [100],
+  success: [100, 60, 100], error: [120, 50, 120], warning: [80, 40, 80], selection: [25]
+};
       navigator.vibrate(patterns[type] || 20);
       if (logEl) logEl.textContent = `✅ Сработал navigator.vibrate (${type})`;
       return true;
