@@ -383,6 +383,13 @@ window.addEventListener('error', function(e){
     }
   });
 
+  // Вибрация на все табы
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.tab-btn')) {
+    if (window.vibrate) window.vibrate('light');
+  }
+}, true);
+
   setTimeout(() => {
   startApp(1);
   if (duelIdFromUrl) {
