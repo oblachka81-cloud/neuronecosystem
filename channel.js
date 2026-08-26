@@ -1117,7 +1117,7 @@ async function generateDuelInviteCard(creatorName, stake, lang = 'en') {
 
   let bgStyle = 'background: #0a0a0f;';
   try {
-    const imgPath = path.join(__dirname, 'public', 'images', 'cogniq', 'cogniq_welcome.webp');
+    const imgPath = path.join(__dirname, 'public', 'images', 'cogniq', 'cogniq_duel.webp');
     const imgData = fs.readFileSync(imgPath);
     const base64 = imgData.toString('base64');
     bgStyle = `background: url('data:image/png;base64,${base64}') center center/cover no-repeat; background-color: #0a0a0f;`;
