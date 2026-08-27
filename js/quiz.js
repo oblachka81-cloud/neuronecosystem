@@ -618,11 +618,18 @@ async function loadReferralStats() {
     // 👇 ВОТ ЗДЕСЬ ИСПРАВЛЕНИЕ (используем надежный t.me/share/url)
     if (refShareBtn && data.referralLink) {
   refShareBtn.onclick = () => {
-    const shareText = encodeURIComponent(t.referralShareText || 'Играй в NEURON и зарабатывай COGNIQ! 🧠💎');
+    const shareTexts = {
+      ru: '🧠 NEURON — блокчейн-экосистема: викторина, биржа, банк, xStocks. Зарабатывай COGNIQ, торгуй без комиссий, участвуй в дуэлях. Присоединяйся!',
+      en: ' NEURON — blockchain ecosystem: quiz, exchange, bank, xStocks. Earn COGNIQ, trade fee-free, join duels. Join now!',
+      fr: '🧠 NEURON — écosystème blockchain : quiz, bourse, banque, xStocks. Gagnez des COGNIQ, tradez sans frais, participez aux duels. Rejoignez-nous !',
+      es: '🧠 NEURON — ecosistema blockchain: quiz, exchange, banco, xStocks. Gana COGNIQ, opera sin comisiones, participa en duelos. ¡Únete!'
+    };
+    
+    // 👇 Дефолтный язык теперь английский (en)
+    const shareText = shareTexts[currentLang] || shareTexts.en;
     const shareLink = encodeURIComponent(data.referralLink);
     
-    // Используем ПРОВЕРЕННЫЙ метод — работает везде!
-    const url = `https://t.me/share/url?url=${shareLink}&text=${shareText}`;
+    const url = `https://t.me/share/url?url=${shareLink}&text=${encodeURIComponent(shareText)}`;
     
     if (window.Telegram?.WebApp?.openLink) {
       window.Telegram.WebApp.openLink(url);
