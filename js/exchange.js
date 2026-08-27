@@ -803,6 +803,10 @@ function loadExchangePanel() {
               <option value="TSLAx">TSLAx</option>
               <option value="AMZNx">AMZNx</option>
               <option value="SPYx">SPYx</option>
+              <option value="COINx">COINx</option>
+              <option value="HOODx">HOODx</option>
+              <option value="MSTRx">MSTRx</option>
+              <option value="QQQx">QQQx</option>
             </select>
           </div>
         </div>
@@ -827,6 +831,10 @@ function loadExchangePanel() {
               <option value="TSLAx">TSLAx</option>
               <option value="AMZNx">AMZNx</option>
               <option value="SPYx">SPYx</option>
+              <option value="COINx">COINx</option>
+              <option value="HOODx">HOODx</option>
+              <option value="MSTRx">MSTRx</option>
+              <option value="QQQx">QQQx</option>
             </select>
           </div>
         </div>
