@@ -1,6 +1,6 @@
 // ==================== ПОРТФЕЛЬ ====================
 async function loadPortfolioPanel() {
-  root.innerHTML = `<div class="loader"> ...</div>`;
+  root.innerHTML = `<div class="loader">📊 Загрузка портфеля...</div>`;
 
   try {
     let walletAddress = '';
@@ -17,9 +17,14 @@ async function loadPortfolioPanel() {
       return;
     }
 
-    const t = data.texts || { title: 'TOTAL VALUE', assets: 'ASSETS', back: '← Back', empty: 'Empty', emptyDesc: '', playBtn: ' Play', exchangeBtn: '💱 Exchange', units: 'units' };
+    const t = data.texts || { title: 'TOTAL VALUE', assets: 'ASSETS', back: '← Back', empty: 'Empty', emptyDesc: '', playBtn: ' Play', exchangeBtn: '💱 Exchange', units: 'units', listingTitle: 'Listing Soon', listingDesc: 'Coming soon', yourBalance: 'Balance' };
+    
     const totalUsd = data.total_usd.toFixed(2);
     const hasAssets = data.assets.some(a => a.value > 0.01);
+    
+    // 👇 ИСПРАВЛЕНИЕ: получаем баланс COGNIQ из ответа сервера
+    const cogniqAsset = data.assets.find(a => a.symbol === 'COGNIQ');
+    const cogniqBalance = cogniqAsset ? cogniqAsset.amount : 0;
 
     let assetsHtml = '';
     if (hasAssets) {
