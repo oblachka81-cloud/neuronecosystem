@@ -221,7 +221,7 @@ function loadWelcome(retryCount = 0) {
   });
 }
 function preloadTabImages() {
-  const L = currentLang || 'ru';
+  const L = currentLang || 'en';
   const imgs = [
     // ===== КОШЕЛЁК =====
     '/wallet/wallet_balance_frame.webp',
