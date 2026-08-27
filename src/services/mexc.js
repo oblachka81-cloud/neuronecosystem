@@ -6,7 +6,7 @@ const MEXC_BASE = 'https://api.mexc.com';
 
 // наш символ -> кандидаты пар (первая живая = рабочая)
 const CANDIDATES = {
-  TON:   ['GRAMUSDT', 'TONUSDT'],   // TON на MEXC = GRAM
+  TON:   ['GRAMUSDT', 'TONUSDT'],
   BTC:   ['BTCUSDT'],
   XAUt0: ['GOLD(XAUT)USDT', 'XAUTUSDT', 'GOLDUSDT', 'PAXGUSDT'],
   AAPLx: ['AAPLXUSDT', 'AAPLUSDT'],
@@ -14,11 +14,15 @@ const CANDIDATES = {
   TSLAx: ['TSLAXUSDT', 'TSLAUSDT'],
   AMZNx: ['AMZNXUSDT', 'AMZNUSDT'],
   SPYx:  ['SPYXUSDT', 'SP500USDT'],
+  COINx: ['COINXUSDT', 'COINUSDT'],
+  HOODx: ['HOODXUSDT', 'HOODUSDT'],
+  MSTRx: ['MSTRXUSDT', 'MSTRUSDT'],
+  QQQx:  ['QQQXUSDT', 'QQQUSDT'],
 };
 
 const CATEGORIES = {
   crypto:  ['TON', 'BTC', 'XAUt0'],
-  xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx'],
+  xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx', 'COINx', 'HOODx', 'MSTRx', 'QQQx'],
 };
 
 const cache = { data: {}, ts: 0 };
