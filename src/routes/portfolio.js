@@ -34,14 +34,16 @@ const T = {
     back: '← Назад к кошельку', 
     empty: 'Ваш портфель пока пуст', 
     emptyDesc: 'Начните собирать капитал, играя в викторину или торгуя на бирже!', 
-    playBtn: '🧠 Играть в викторину', 
-    exchangeBtn: '💱 Перейти на биржу', 
+    playBtn: 'Играть в викторину', 
+    exchangeBtn: 'Перейти на биржу', 
     units: 'шт.', 
-    loading: '📊 Загрузка портфеля...', 
+    loading: 'Загрузка портфеля...', 
     error: 'Ошибка загрузки',
-    listingTitle: 'Листинг COGNIQ скоро!',
-    listingDesc: 'COGNIQ будет листиться на ведущих DEX (STON.fi, DeDust) в Q1-Q2 2027 и на CEX в Q3-Q4 2027 году. Держи токен — его ценность будет расти!',
-    yourBalance: 'Твой баланс'
+    listingTitle: 'Листинг COGNIQ',
+    listingDesc: 'COGNIQ будет листиться на ведущих DEX (STON.fi, DeDust) в Q1-Q2 2027 и на CEX в Q3-Q4 2027 года.',
+    yourBalance: 'Твой баланс',
+    dexListing: 'DEX Listing',
+    cexListing: 'CEX Listing'
   },
   en: { 
     title: 'TOTAL VALUE', 
@@ -49,50 +51,56 @@ const T = {
     back: '← Back to wallet', 
     empty: 'Your portfolio is empty', 
     emptyDesc: 'Start building wealth by playing the quiz or trading on the exchange!', 
-    playBtn: ' Play the quiz', 
-    exchangeBtn: '💱 Go to exchange', 
+    playBtn: 'Play Quiz', 
+    exchangeBtn: 'Go to Exchange', 
     units: 'units', 
-    loading: '📊 Loading portfolio...', 
+    loading: 'Loading portfolio...', 
     error: 'Load error',
-    listingTitle: 'COGNIQ Listing Coming Soon!',
-    listingDesc: 'COGNIQ will be listed on leading DEXs (STON.fi, DeDust) in Q1-Q2 2027 and on CEXs in Q3-Q4 2027. Hold the token — its value will grow!',
-    yourBalance: 'Your balance'
+    listingTitle: 'COGNIQ Listing',
+    listingDesc: 'COGNIQ will be listed on leading DEXs (STON.fi, DeDust) in Q1-Q2 2027 and on CEXs in Q3-Q4 2027.',
+    yourBalance: 'Your Balance',
+    dexListing: 'DEX Listing',
+    cexListing: 'CEX Listing'
   },
   fr: { 
     title: 'VALEUR TOTALE', 
     assets: 'ACTIFS', 
-    back: '← Retour au portefeuille', 
-    empty: 'Votre portefeuille est vide', 
-    emptyDesc: 'Commencez à construire votre capital en jouant au quiz ou en tradant !', 
-    playBtn: ' Jouer au quiz', 
-    exchangeBtn: '💱 Aller à la bourse', 
+    back: '← Retour', 
+    empty: 'Portefeuille vide', 
+    emptyDesc: 'Commencez à jouer ou trader !', 
+    playBtn: 'Jouer', 
+    exchangeBtn: 'Bourse', 
     units: 'unités', 
-    loading: ' Chargement...', 
-    error: 'Erreur de chargement',
-    listingTitle: 'Listing COGNIQ bientôt !',
-    listingDesc: 'COGNIQ sera listé sur les principaux DEX (STON.fi, DeDust) au T1-T2 2027 et sur les CEX en T3-T4 2027. Gardez le token — sa valeur augmentera !',
-    yourBalance: 'Votre solde'
+    loading: 'Chargement...', 
+    error: 'Erreur',
+    listingTitle: 'Listing COGNIQ',
+    listingDesc: 'COGNIQ sera listé sur DEX (Q1-Q2 2027) et CEX (Q3-Q4 2027).',
+    yourBalance: 'Solde',
+    dexListing: 'DEX',
+    cexListing: 'CEX'
   },
   es: { 
     title: 'VALOR TOTAL', 
     assets: 'ACTIVOS', 
-    back: '← Volver a la cartera', 
-    empty: 'Tu portafolio está vacío', 
-    emptyDesc: '¡Empieza a construir capital jugando al quiz o tradeando!', 
-    playBtn: '🧠 Jugar al quiz', 
-    exchangeBtn: '💱 Ir al exchange', 
+    back: '← Volver', 
+    empty: 'Portafolio vacío', 
+    emptyDesc: '¡Empieza a jugar o tradear!', 
+    playBtn: 'Jugar', 
+    exchangeBtn: 'Exchange', 
     units: 'uds.', 
-    loading: '📊 Cargando...', 
-    error: 'Error de carga',
-    listingTitle: '¡Listado COGNIQ próximamente!',
-    listingDesc: 'COGNIQ se listará en los principales DEX (STON.fi, DeDust) en T1-T2 2027 y en CEX en T3-T4 2028. ¡Mantén el token — su valor crecerá!',
-    yourBalance: 'Tu balance'
+    loading: 'Cargando...', 
+    error: 'Error',
+    listingTitle: 'Listado COGNIQ',
+    listingDesc: 'COGNIQ se listará en DEX (Q1-Q2 2027) y CEX (Q3-Q4 2027).',
+    yourBalance: 'Balance',
+    dexListing: 'DEX',
+    cexListing: 'CEX'
   }
 };
 
-// Получение цен с STON.fi (как в бирже)
+// Получение цен с STON.fi
 async function getPricesFromStonFi() {
-  const prices = { 'COGNIQ': 0.05 }; // Заглушка, пока нет листинга
+  const prices = {};
   try {
     const res = await fetch('https://api.ston.fi/v1/assets');
     if (res.ok) {
@@ -127,8 +135,8 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
     const assets = [];
     let totalUsd = 0;
 
-    // COGNIQ (пока заглушка $0.05)
-    const cogniqPrice = prices['COGNIQ'] || 0.05;
+    // COGNIQ (реальная цена если есть, иначе 0)
+    const cogniqPrice = prices['cogniq'] || 0;
     const cogniqValue = cogniqBalance * cogniqPrice;
     totalUsd += cogniqValue;
     assets.push({
@@ -147,7 +155,6 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
           const tonData = await tonRes.json();
           const tonBalanceNano = parseInt(tonData?.balance || '0', 10);
           const tonBalance = tonBalanceNano / 1e9;
-          // Адрес нативного TON
           const tonAddr = 'eqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam9c';
           const tonPrice = prices[tonAddr] || 1.58;
           const tonValue = tonBalance * tonPrice;
@@ -204,7 +211,7 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
       success: true, 
       total_usd: totalUsd, 
       assets: assets,
-      texts: t // Отдаём переводы на фронт
+      texts: t
     });
 
   } catch (err) {
