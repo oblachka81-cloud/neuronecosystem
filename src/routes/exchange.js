@@ -96,8 +96,11 @@ router.get('/api/exchange/rates', async (req, res) => {
           let price = parseFloat(a.dex_usd_price ?? '0');
           if (!price || price === 0) price = parseFloat(a.third_party_usd_price ?? '0');
           if (!price || price === 0) continue;
-          if (addr === TOKEN_MAP.USDT) priceBySymbol.USDT = price;
+          if (addr === TOKEN_MAP.USDT.toLowerCase()) priceBySymbol.USDT = price;
           else if (a.kind === 'Ton') priceBySymbol.TON = price;
+          else if (addr === TOKEN_MAP.NOT.toLowerCase()) priceBySymbol.NOT = price;
+          else if (addr === TOKEN_MAP.DOGS.toLowerCase()) priceBySymbol.DOGS = price;
+          else if (addr === TOKEN_MAP.MAJOR.toLowerCase()) priceBySymbol.MAJOR = price;
         }
       }
     } catch (e) { console.error('STON.fi list error:', e.message); }
