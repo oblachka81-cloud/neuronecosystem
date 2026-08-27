@@ -137,6 +137,9 @@ router.get('/api/exchange/rates', async (req, res) => {
     if (priceBySymbol.NOT > 0) { rates['NOT/USDT'] = priceBySymbol.NOT; rates['USDT/NOT'] = 1 / priceBySymbol.NOT; }
     if (priceBySymbol.DOGS > 0) { rates['DOGS/USDT'] = priceBySymbol.DOGS; rates['USDT/DOGS'] = 1 / priceBySymbol.DOGS; }
     if (priceBySymbol.MAJOR > 0) { rates['MAJOR/USDT'] = priceBySymbol.MAJOR; rates['USDT/MAJOR'] = 1 / priceBySymbol.MAJOR; }
+    if (priceBySymbol.STON > 0) { rates['STON/USDT'] = priceBySymbol.STON; rates['USDT/STON'] = 1 / priceBySymbol.STON; }
+    if (priceBySymbol.REDO > 0) { rates['REDO/USDT'] = priceBySymbol.REDO; rates['USDT/REDO'] = 1 / priceBySymbol.REDO; }
+    if (priceBySymbol.STORM > 0) { rates['STORM/USDT'] = priceBySymbol.STORM; rates['USDT/STORM'] = 1 / priceBySymbol.STORM; }
     return rates;
   }
 
