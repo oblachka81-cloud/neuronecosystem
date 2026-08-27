@@ -41,6 +41,7 @@ const casinoRoutes = require('./src/routes/casino');
 const exchangeRoutes = require('./src/routes/exchange');
 const adminRoutes = require('./src/routes/admin');
 const miscRoutes = require('./src/routes/misc');
+const portfolioRoutes = require('./src/routes/portfolio'); 
 const { setupBotHandlers } = require('./src/bot/handlers');
 const { checkTonUsdtPayments } = require('./src/services/tonPayments');
 
@@ -86,6 +87,7 @@ app.use(casinoRoutes);
 app.use(exchangeRoutes);
 app.use(adminRoutes);
 app.use(miscRoutes);
+app.use(portfolioRoutes);
 app.use(require('./src/routes/duels'));
 
 if (!BESTCHANGE_API_KEY) {
