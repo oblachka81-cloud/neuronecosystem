@@ -79,6 +79,7 @@ async function getTickers(symbols) {
   
   const mexcPairs = [];
   const gatePairs = [];
+  const coingeckoIds = []; // Для CoinGecko
   const backMap = {};
   
   for (const s of symbols) {
@@ -97,14 +98,21 @@ async function getTickers(symbols) {
     if (gatePair) {
       gatePairs.push(gatePair);
       backMap[gatePair] = { symbol: s, exchange: 'gate' };
+      continue;
+    }
+    
+    // CoinGecko для STON
+    if (s === 'STON') {
+      coingeckoIds.push('ston-fi'); // CoinGecko ID
+      backMap['ston-fi'] = { symbol: s, exchange: 'coingecko' };
     }
   }
   
-  if (!mexcPairs.length && !gatePairs.length) return {};
+  if (!mexcPairs.length && !gatePairs.length && !coingeckoIds.length) return {};
 
   const out = {};
   
-  // 1. MEXC тикеры
+  // 1. MEXC тикеры (без изменений)
   if (mexcPairs.length) {
     const mexcKey = 'mexc_' + mexcPairs.join(',');
     const now = Date.now();
@@ -129,14 +137,13 @@ async function getTickers(symbols) {
     }
   }
   
-  // 2. Gate.io тикеры
+  // 2. Gate.io тикеры (без изменений)
   if (gatePairs.length) {
     const gateKey = 'gate_' + gatePairs.join(',');
     const now = Date.now();
     if (cache.data[gateKey] && now - cache.ts < CACHE_TTL) {
       Object.assign(out, cache.data[gateKey]);
     } else {
-      // Gate.io API: GET /spot/tickers?currency_pair=XXX_USDT
       const gateOut = {};
       for (const gatePair of gatePairs) {
         try {
@@ -145,11 +152,10 @@ async function getTickers(symbols) {
           if (Array.isArray(list) && list.length) {
             const item = list[0];
             const info = backMap[gatePair];
-            // В функции getTickers, где Gate.io тикеры:
             gateOut[info.symbol] = {
-            price: parseFloat(item.last),
-            change24h: parseFloat(item.change_percentage.replace('%', '')) / 100, // 👈 Разделили на 100!
-           };
+              price: parseFloat(item.last),
+              change24h: parseFloat(item.change_percentage.replace('%', '')) / 100,
+            };
           }
         } catch (e) {
           console.error(`[GATE] ${gatePair} error:`, e.message);
@@ -158,6 +164,36 @@ async function getTickers(symbols) {
       Object.assign(out, gateOut);
       cache.data[gateKey] = gateOut;
       cache.ts = now;
+    }
+  }
+  
+  // 3. CoinGecko тикеры (НОВОЕ!)
+  if (coingeckoIds.length) {
+    const cgKey = 'coingecko_' + coingeckoIds.join(',');
+    const now = Date.now();
+    if (cache.data[cgKey] && now - cache.ts < CACHE_TTL) {
+      Object.assign(out, cache.data[cgKey]);
+    } else {
+      try {
+        // CoinGecko API: бесплатное, без ключа
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoIds.join(',')}&vs_currencies=usd&include_24hr_change=true`;
+        const data = await fetchJson(url);
+        const cgOut = {};
+        for (const cgId of coingeckoIds) {
+          if (data[cgId]) {
+            const info = backMap[cgId];
+            cgOut[info.symbol] = {
+              price: data[cgId].usd,
+              change24h: (data[cgId].usd_24h_change || 0) / 100, // CoinGecko отдает в %, делим
+            };
+          }
+        }
+        Object.assign(out, cgOut);
+        cache.data[cgKey] = cgOut;
+        cache.ts = now;
+      } catch (e) {
+        console.error('[COINGECKO] error:', e.message);
+      }
     }
   }
   
