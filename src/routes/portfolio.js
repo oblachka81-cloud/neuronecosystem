@@ -2,161 +2,149 @@ const express = require('express');
 const router = express.Router();
 const { requireInitData } = require('../middleware/auth');
 const pool = require('../db/pool');
-const { TonClient, Address } = require('@ton/ton');
+const { Address } = require('@ton/ton');
 
-// Обратный маппинг: адрес контракта -> символ
-const JETTON_TO_SYMBOL = {
-  'eqcxe6mutqjkfngfarotkot1lzbdiix1kcixrv7nw2id_sds': 'USDT',
-  'eqdhyPzbijjt_wny3ggprjsyuk9figmjwmezxO8mziudfb_b': 'BTC', // Приведен к нижнему регистру для сравнения
-  'eqa1r_luqclhlmgoo1s4g7y7w1cd0frakba10zq7rddkxi9k': 'XAUt0',
-  'eqdsjawfko-6fvzv2eyt-1cazty_zl-pfksid6jeqchnwmdo': 'AAPLx',
-  'eqcva-of7acqdu_piadldcbzsf ta-xjwzoctz8zoxbdboab8': 'NVDAx',
-  'eqb4iwqwzpuczdntdry8vsn2tsjkt-9f7iib7gefreeyob563': 'TSLAx',
-  'eqctd2-7qxhhqonhxri2jszh-dlmwqkycdtlezqri3-56gd9': 'AMZNx',
-  'eqb1fybaa9qqdp6legaF3cbu-xbr-p6esbzgnqlhkhihajzv': 'SPYx',
-  'eqcvk4oq2l5yts_s7q4j08fb9ftzx3iy-7ui1aqssykgdt_i': 'COINx',
-  'eqahz1jk27no5idhrht8146-efz9p4kszzx2h1xxunqoyp_r': 'HOODx',
-  'eqbbslyh5sd74gyo4dooj0qshanl81nld13adhkmd0up-46h': 'MSTRx',
-  'eqce6utwqromrO_couuvvnykvyecujfugtugvhuwlyvsem7x': 'QQQx',
-  'eqavlwfdxgf2lxm67y4yzc17wykd9a0guwpkms1gosm__not': 'NOT',
-  'eqcvxjy4eg8hyhbfsz7eepxrrsuqsfe_jpptraybmcg_dogs': 'DOGS',
-  'eqcupm01hldiduq55xabf_1kaw_wauy5dhey8suqzu_major': 'MAJOR',
-  'eqbz_cafpydr5kuts0anxh0ztdhkpezonmlja2sngllm4cko': 'REDO',
-  'eqbsosmczrd6fhija7qwglw5wo_ah8un435hi935jj_storm': 'STORM',
-  'eqd-cvr0nz6xayrbvbhz-abtrrc6si5tvhvvpeqraV9uaad7': 'CATI',
-  'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum': 'BLUM'
+// Маппинг адресов контрактов -> символы (в нижнем регистре)
+const JETTON_SYMBOLS = {
+  'eqcxe6mutqjkfngfarotkot1lzbdiix1kcixrv7nw2id_sds': { symbol: 'USDT', name: 'Tether USD', decimals: 6, icon: '💵' },
+  'eqdhyPzbijjt_wny3ggprjsyuk9figmjwmezxO8mziudfb_b': { symbol: 'BTC', name: 'Bitcoin', decimals: 8, icon: '₿' },
+  'eqa1r_luqclhlmgoo1s4g7y7w1cd0frakba10zq7rddkxi9k': { symbol: 'XAUt0', name: 'Tether Gold', decimals: 6, icon: '🥇' },
+  'eqdsjawfko-6fvzv2eyt-1cazty_zl-pfksid6jeqchnwmdo': { symbol: 'AAPLx', name: 'Apple', decimals: 6, icon: '🍎' },
+  'eqcva-of7acqdu_piadldcbzsfta-xjwzoctz8zoxbdboab8': { symbol: 'NVDAx', name: 'NVIDIA', decimals: 6, icon: '' },
+  'eqb4iwqwzpuczdntdry8vsn2tsjkt-9f7iib7gefreeyob563': { symbol: 'TSLAx', name: 'Tesla', decimals: 6, icon: '' },
+  'eqctd2-7qxhhqonhxri2jszh-dlmwqkycdtlezqri3-56gd9': { symbol: 'AMZNx', name: 'Amazon', decimals: 6, icon: '📦' },
+  'eqb1fybaa9qqdp6legaF3cbu-xbr-p6esbzgnqlhkhihajzv': { symbol: 'SPYx', name: 'S&P 500', decimals: 6, icon: '📈' },
+  'eqcvk4oq2l5yts_s7q4j08fb9ftzx3iy-7ui1aqssykgdt_i': { symbol: 'COINx', name: 'Coinbase', decimals: 8, icon: '🪙' },
+  'eqahz1jk27no5idhrht8146-efz9p4kszzx2h1xxunqoyp_r': { symbol: 'HOODx', name: 'Robinhood', decimals: 8, icon: '🐕' },
+  'eqbbslyh5sd74gyo4dooj0qshanl81nld13adhkmd0up-46h': { symbol: 'MSTRx', name: 'MicroStrategy', decimals: 8, icon: '🚀' },
+  'eqce6utwqromrO_couuvvnykvyecujfugtugvhuwlyvsem7x': { symbol: 'QQQx', name: 'Nasdaq-100', decimals: 8, icon: '📊' },
+  'eqavlwfdxgf2lxm67y4yzc17wykd9a0guwpkms1gosm__not': { symbol: 'NOT', name: 'Notcoin', decimals: 9, icon: '🪙' },
+  'eqcvxjy4eg8hyhbfsz7eepxrrsuqsfe_jpptraybmcg_dogs': { symbol: 'DOGS', name: 'Dogs', decimals: 9, icon: '' },
+  'eqcupm01hldiduq55xabf_1kaw_wauy5dhey8suqzu_major': { symbol: 'MAJOR', name: 'Major', decimals: 9, icon: '👑' },
+  'eqbz_cafpydr5kuts0anxh0ztdhkpezonmlja2sngllm4cko': { symbol: 'REDO', name: 'Resistance Dog', decimals: 9, icon: '🐕' },
+  'eqbsosmczrd6fhija7qwglw5wo_ah8un435hi935jj_storm': { symbol: 'STORM', name: 'Storm Trade', decimals: 9, icon: '🌪️' },
+  'eqd-cvr0nz6xayrbvbhz-abtrrc6si5tvhvvpeqraV9uaad7': { symbol: 'CATI', name: 'Catizen', decimals: 9, icon: '🐱' },
+  'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum': { symbol: 'BLUM', name: 'Blum', decimals: 9, icon: '🌸' }
 };
 
-// Исправленные адреса в нижнем регистре для надежного сравнения
-const CORRECT_ADDRS = {
-  'usdt': 'eqcxe6mutqjkfngfarotkot1lzbdiix1kcixrv7nw2id_sds',
-  'btc': 'eqdhyPzbijjt_wny3ggprjsyuk9figmjwmezxO8mziudfb_b',
-  'xaut0': 'eqa1r_luqclhlmgoo1s4g7y7w1cd0frakba10zq7rddkxi9k',
-  'aaplx': 'eqdsjawfko-6fvzv2eyt-1cazty_zl-pfksid6jeqchnwmdo',
-  'nvdax': 'eqcva-of7acqdu_piadldcbzsf ta-xjwzoctz8zoxbdboab8',
-  'tslax': 'eqb4iwqwzpuczdntdry8vsn2tsjkt-9f7iib7gefreeyob563',
-  'amznx': 'eqctd2-7qxhhqonhxri2jszh-dlmwqkycdtlezqri3-56gd9',
-  'spyx': 'eqb1fybaa9qqdp6legaF3cbu-xbr-p6esbzgnqlhkhihajzv',
-  'coinx': 'eqcvk4oq2l5yts_s7q4j08fb9ftzx3iy-7ui1aqssykgdt_i',
-  'hoodx': 'eqahz1jk27no5idhrht8146-efz9p4kszzx2h1xxunqoyp_r',
-  'mstrx': 'eqbbslyh5sd74gyo4dooj0qshanl81nld13adhkmd0up-46h',
-  'qqqx': 'eqce6utwqromrO_couuvvnykvyecujfugtugvhuwlyvsem7x',
-  'not': 'eqavlwfdxgf2lxm67y4yzc17wykd9a0guwpkms1gosm__not',
-  'dogs': 'eqcvxjy4eg8hyhbfsz7eepxrrsuqsfe_jpptraybmcg_dogs',
-  'major': 'eqcupm01hldiduq55xabf_1kaw_wauy5dhey8suqzu_major',
-  'redo': 'eqbz_cafpydr5kuts0anxh0ztdhkpezonmlja2sngllm4cko',
-  'storm': 'eqbsosmczrd6fhija7qwglw5wo_ah8un435hi935jj_storm',
-  'cati': 'eqd-cvr0nz6xayrbvbhz-abtrrc6si5tvhvvpeqraV9uaad7',
-  'blum': 'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum'
+// Цены-заглушки (пока нет реального листинга COGNIQ)
+const FALLBACK_PRICES = {
+  'COGNIQ': 0.05,
+  'TON': 1.58,
+  'USDT': 1.0,
+  'BTC': 60906,
+  'XAUt0': 2400,
+  'NOT': 0.00043,
+  'DOGS': 0.000004,
+  'MAJOR': 0.041,
+  'REDO': 0.083,
+  'STORM': 0.0044,
+  'CATI': 0.054,
+  'BLUM': 0.00157,
+  'AAPLx': 225,
+  'NVDAx': 125,
+  'TSLAx': 250,
+  'AMZNx': 185,
+  'SPYx': 560,
+  'COINx': 240,
+  'HOODx': 35,
+  'MSTRx': 1800,
+  'QQQx': 480
 };
-
-const DECIMALS = {
-  'USDT': 6, 'BTC': 8, 'XAUt0': 6,
-  'AAPLx': 6, 'NVDAx': 6, 'TSLAx': 6, 'AMZNx': 6, 'SPYx': 6,
-  'COINx': 8, 'HOODx': 8, 'MSTRx': 8, 'QQQx': 8,
-  'NOT': 9, 'DOGS': 9, 'MAJOR': 9, 'REDO': 9, 'STORM': 9, 'CATI': 9, 'BLUM': 9
-};
-
-const ICONS = {
-  'COGNIQ': '🧠', 'TON': '💎', 'USDT': '💵', 'BTC': '₿', 'XAUt0': '🥇',
-  'AAPLx': '🍎', 'NVDAx': '🟩', 'TSLAx': '🚗', 'AMZNx': '📦', 'SPYx': '📈',
-  'COINx': '🪙', 'HOODx': '🐕', 'MSTRx': '🚀', 'QQQx': '📊',
-  'NOT': '🪙', 'DOGS': '🐶', 'MAJOR': '👑', 'REDO': '🐕', 'STORM': '🌪️', 'CATI': '🐱', 'BLUM': '🌸'
-};
-
-const client = new TonClient({
-  endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-  apiKey: process.env.TON_CENTER_API_KEY || ''
-});
 
 router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
   try {
     const userId = req.tgUser.id;
-    
-    // 1. Данные пользователя из БД
-    const userRes = await pool.query('SELECT balance, wallet_address FROM users WHERE telegram_id = $1', [userId]);
+    const walletAddress = req.query.wallet_address;
+
+    // 1. Баланс COGNIQ из БД
+    const userRes = await pool.query('SELECT balance FROM users WHERE telegram_id = $1', [userId]);
     if (!userRes.rows.length) return res.status(404).json({ error: 'User not found' });
-    
     const cogniqBalance = parseFloat(userRes.rows[0].balance || 0);
-    const walletAddress = userRes.rows[0].wallet_address;
 
-    // 2. Получаем цены с STON.fi (быстро и бесплатно)
-    let prices = {};
-    try {
-      const stonRes = await fetch('https://api.ston.fi/v1/assets');
-      if (stonRes.ok) {
-        const stonData = await stonRes.json();
-        for (const asset of stonData.asset_list) {
-          const addr = asset.contract_address.toLowerCase();
-          const price = parseFloat(asset.dex_usd_price || asset.third_party_usd_price || 0);
-          if (price > 0) prices[addr] = price;
-        }
-      }
-    } catch (e) { console.error('[PORTFOLIO] Ston.fi fetch error:', e.message); }
+    const assets = [];
+    let totalUsd = 0;
 
-    // Цена COGNIQ (заглушка, можно заменить на реальную с биржи, когда будет листинг)
-    const cogniqPrice = 0.05; 
-    let totalUsd = cogniqBalance * cogniqPrice;
+    // Добавляем COGNIQ
+    const cogniqPrice = FALLBACK_PRICES['COGNIQ'];
+    const cogniqValue = cogniqBalance * cogniqPrice;
+    totalUsd += cogniqValue;
+    assets.push({
+      symbol: 'COGNIQ', name: 'Cogniq', amount: cogniqBalance,
+      price: cogniqPrice, value: cogniqValue, icon: '🧠'
+    });
 
-    const assets = [{
-      symbol: 'COGNIQ', name: 'Cogniq', amount: cogniqBalance, 
-      price: cogniqPrice, value: cogniqBalance * cogniqPrice, icon: ICONS['COGNIQ']
-    }];
-
-    // 3. Если есть кошелек, читаем балансы
+    // 2. Если есть адрес кошелька — читаем балансы
     if (walletAddress) {
       try {
-        const addr = Address.parse(walletAddress);
-        
-        // Баланс TON
-        const tonBalanceNano = await client.getBalance(addr);
-        const tonBalance = parseFloat(tonBalanceNano) / 1e9;
-        // Адрес нативного TON для сравнения цен (если есть в ston.fi)
-        const tonPrice = prices['eqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam9c'] || 1.58; 
-        totalUsd += tonBalance * tonPrice;
-        
-        assets.push({
-          symbol: 'TON', name: 'Toncoin', amount: tonBalance, 
-          price: tonPrice, value: tonBalance * tonPrice, icon: ICONS['TON']
+        // Баланс TON через toncenter v3
+        const tonRes = await fetch(`https://toncenter.com/api/v3/addressInformation?address=${encodeURIComponent(walletAddress)}`, {
+          headers: { 'X-API-Key': process.env.TON_CENTER_API_KEY || '' }
         });
+        if (tonRes.ok) {
+          const tonData = await tonRes.json();
+          const tonBalanceNano = parseInt(tonData?.balance || '0', 10);
+          const tonBalance = tonBalanceNano / 1e9;
+          const tonPrice = FALLBACK_PRICES['TON'];
+          const tonValue = tonBalance * tonPrice;
+          totalUsd += tonValue;
+          assets.push({
+            symbol: 'TON', name: 'Toncoin', amount: tonBalance,
+            price: tonPrice, value: tonValue, icon: '💎'
+          });
+        }
 
-        // Балансы всех Jetton'ов одним запросом v3 API
+        // Все Jetton балансы одним запросом
         const jettonRes = await fetch(`https://toncenter.com/api/v3/jetton/wallets?owner_address=${encodeURIComponent(walletAddress)}&limit=100`, {
           headers: { 'X-API-Key': process.env.TON_CENTER_API_KEY || '' }
         });
-        
         if (jettonRes.ok) {
           const jettonData = await jettonRes.json();
           const jettons = jettonData.jetton_wallets || [];
-          
+
           for (const jw of jettons) {
-            const masterAddr = jw.jetton.address.toLowerCase();
-            // Ищем символ по адресу (нормализуем для надежности)
-            const symbol = Object.keys(CORRECT_ADDRS).find(key => CORRECT_ADDRS[key] === masterAddr);
-            
-            if (symbol && DECIMALS[symbol]) {
+            const masterAddr = jw.jetton?.address?.toLowerCase();
+            if (!masterAddr) continue;
+
+            const tokenInfo = Object.values(JETTON_SYMBOLS).find(t => {
+              // Ищем по адресу (нужно нормализовать)
+              const keys = Object.keys(JETTON_SYMBOLS);
+              return keys.find(k => JETTON_SYMBOLS[k] === t) === masterAddr;
+            });
+
+            // Прямой поиск по адресу
+            let symbol = null;
+            for (const [addr, info] of Object.entries(JETTON_SYMBOLS)) {
+              if (addr === masterAddr) {
+                symbol = info.symbol;
+                break;
+              }
+            }
+
+            if (symbol) {
+              const info = JETTON_SYMBOLS[Object.keys(JETTON_SYMBOLS).find(k => JETTON_SYMBOLS[k].symbol === symbol)];
               const balanceNano = parseInt(jw.balance || '0', 10);
-              const amount = balanceNano / Math.pow(10, DECIMALS[symbol]);
-              
-              if (amount > 0.0001) { // Фильтруем пыль
-                const price = prices[masterAddr] || 0;
+              const amount = balanceNano / Math.pow(10, info.decimals);
+
+              if (amount > 0.0001) {
+                const price = FALLBACK_PRICES[symbol] || 0;
                 const value = amount * price;
                 totalUsd += value;
-                
+
                 assets.push({
-                  symbol: symbol.toUpperCase(),
-                  name: symbol.toUpperCase(),
+                  symbol: info.symbol,
+                  name: info.name,
                   amount: amount,
                   price: price,
                   value: value,
-                  icon: ICONS[symbol.toUpperCase()] || '🪙'
+                  icon: info.icon
                 });
               }
             }
           }
         }
       } catch (e) {
-        console.error('[PORTFOLIO] Wallet balance fetch error:', e.message);
+        console.error('[PORTFOLIO] Wallet fetch error:', e.message);
       }
     }
 
