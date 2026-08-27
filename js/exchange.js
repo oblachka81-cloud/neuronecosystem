@@ -442,7 +442,14 @@ const EXCHANGE_CRYPTO_PAIRS = [
   { name: 'BTC/USDT', from: 'BTC', to: 'USDT' },
   { name: 'USDT/BTC', from: 'USDT', to: 'BTC' },
   { name: 'XAUt0/USDT', from: 'XAUt0', to: 'USDT' },
-  { name: 'USDT/XAUt0', from: 'USDT', to: 'XAUt0' }
+  { name: 'USDT/XAUt0', from: 'USDT', to: 'XAUt0' },
+  //  ДОБАВЬ ЭТИ 6 ПАР:
+  { name: 'NOT/USDT', from: 'NOT', to: 'USDT' },
+  { name: 'USDT/NOT', from: 'USDT', to: 'NOT' },
+  { name: 'DOGS/USDT', from: 'DOGS', to: 'USDT' },
+  { name: 'USDT/DOGS', from: 'USDT', to: 'DOGS' },
+  { name: 'MAJOR/USDT', from: 'MAJOR', to: 'USDT' },
+  { name: 'USDT/MAJOR', from: 'USDT', to: 'MAJOR' }
 ];
 
 const EXCHANGE_XSTOCKS_PAIRS = [
@@ -498,7 +505,9 @@ function exchangeRenderPairGrid(id, pairsList) {
 // ==================== NEURON LIVE ЛЕНТА ====================
 let tapeCategory = 'crypto';
 const TAPE_ICONS = { 
-  TON: '💎', BTC: '₿', XAUt0: '🥇', 
+  TON: '💎', BTC: '₿', XAUt0: '🥇', NOT: '🪙', 
+  DOGS: '🐶', 
+  MAJOR: '👑',
   AAPLx: '🍎', NVDAx: '🟩', TSLAx: '🚗', AMZNx: '📦', SPYx: '📈',
   COINx: '🪙', HOODx: '🐕', MSTRx: '🚀', QQQx: '📊' 
 };
@@ -567,7 +576,7 @@ let liveChartCategory = 'crypto';
 let liveInterval = '1m';
 const liveChartCache = {};
 const LIVE_ASSETS = { 
-  crypto: ['TON', 'BTC', 'XAUt0'], 
+  crypto: ['TON', 'BTC', 'XAUt0', 'NOT', 'DOGS', 'MAJOR'],
   xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx', 'COINx', 'HOODx', 'MSTRx', 'QQQx'] 
 };
 const LIVE_INTERVALS = [['1m', '1m'], ['5m', '5m'], ['60m', '1H'], ['1d', '1D']];
@@ -807,6 +816,9 @@ function loadExchangePanel() {
               <option value="HOODx">HOODx</option>
               <option value="MSTRx">MSTRx</option>
               <option value="QQQx">QQQx</option>
+              <option value="NOT">NOT</option>
+              <option value="DOGS">DOGS</option>
+              <option value="MAJOR">MAJOR</option>
             </select>
           </div>
         </div>
@@ -835,6 +847,9 @@ function loadExchangePanel() {
               <option value="HOODx">HOODx</option>
               <option value="MSTRx">MSTRx</option>
               <option value="QQQx">QQQx</option>
+              <option value="NOT">NOT</option>
+              <option value="DOGS">DOGS</option>
+              <option value="MAJOR">MAJOR</option>
             </select>
           </div>
         </div>
