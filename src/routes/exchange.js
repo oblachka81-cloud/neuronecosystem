@@ -74,17 +74,6 @@ router.get('/api/bestchange/partner-id', publicRateLimit, (req, res) => {
 
 // ==================== БИРЖА ====================
 router.get('/api/exchange/rates', async (req, res) => {
-  const TOKEN_MAP = {
-    'TON':   'eqbnGWMcf3-fzzq1w4iwcwigac3phuz0_h-7sad2oy00o83s',
-    'USDT':  'eqcxe6mutqjkfngfarotkot1lzbdiix1kcixrv7nw2id_sds',
-    'BTC':   'EQDhyPzbIjJT_WnY3gGprjSYUK9fiGMjWMezxO8MZiUdfb_B',
-    'XAUt0': 'EQA1R_LuQCLHlMgOo1S4G7Y7W1cd0FrAkbA10Zq7rddKxi9k',
-    'AAPLx': 'EQDsjAwfKo-6FVZv2EYt-1CaZTY_ZL-pfkSId6jeQchNwmdo',
-    'NVDAx': 'EQCva-Of7acQdU_piADdlcbzsFtA-xJwZoctz8ZOXBdBoaB8',
-    'TSLAx': 'EQB4IwqWZPUczntdry8vSN2tsJKt-9F7iIb7gEFREYYOB563',
-    'AMZNx': 'EQCtD2-7qxHhQoNhxri2JSzH-dlmWqKYCDtlEZqRi3-56gd9',
-    'SPYx':  'EQB1fyBAA9qQDP6LEGaF3cbU-Xbr-p6ESBZGnqlHkHIHAJZv'
-  };
 
   const FALLBACK_PRICES = { TON: 1.58, BTC: 60906, XAUt0: 2400, USDT: 1 };
 
