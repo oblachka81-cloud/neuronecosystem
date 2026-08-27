@@ -21,13 +21,14 @@ const CANDIDATES = {
   NOT:   ['NOTUSDT'],
   DOGS:  ['DOGSUSDT'],
   MAJOR: ['MAJORUSDT'],
-  STON:  ['STONUSDT'],
+  CATI:  ['CATIUSDT'],
+  BLUM:  ['BLUMUSDT'],
   REDO:  ['REDOUSDT'],
   STORM: ['STORMUSDT']
 };
 
 const CATEGORIES = {
-  crypto:  ['TON', 'BTC', 'XAUt0', 'NOT', 'DOGS', 'MAJOR', 'STON', 'REDO', 'STORM'],
+  crypto:  ['TON', 'BTC', 'XAUt0', 'NOT', 'DOGS', 'MAJOR', 'REDO', 'STORM', 'CATI', 'BLUM'],
   xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx', 'COINx', 'HOODx', 'MSTRx', 'QQQx'],
 };
 
