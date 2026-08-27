@@ -152,7 +152,7 @@ const EXCHANGE_INFO_TEXTS = {
     
     <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">3. xStocks — Acciones Tokenizadas</p>
     <p style="margin-bottom:8px;">xStocks son acciones tokenizadas de empresas globales en la blockchain TON. Cada token está respaldado 1:1 por una acción real.</p>
-    <p style="margin-bottom:8px;"><strong>Activos disponibles:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p style="margin-bottom:8px;"><strong>Activos disponibles:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF), COINx (Coinbase), HOODx (Robinhood), MSTRx (MicroStrategy), QQQx (Nasdaq-100).</p>
     <p style="margin-bottom:4px;">🏦 <strong>Respaldo 1:1.</strong> Por cada token, se compra una acción real en NYSE/NASDAQ.</p>
     <p style="margin-bottom:4px;">🏛️ <strong>Custodia.</strong> Los valores se guardan en bancos custodios regulados suizos y europeos.</p>
     <p style="margin-bottom:4px;">🛡️ <strong>Protección de quiebra (SPV).</strong> Las acciones están aisladas de los riesgos financieros del emisor.</p>
