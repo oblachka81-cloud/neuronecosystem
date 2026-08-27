@@ -26,9 +26,16 @@ async function loadPortfolioPanel() {
     const cogniqAsset = data.assets.find(a => a.symbol === 'COGNIQ');
     const cogniqBalance = cogniqAsset ? cogniqAsset.amount : 0;
 
-    let assetsHtml = '';
-    if (hasAssets) {
-      assetsHtml = data.assets.map(a => {
+    // СОРТИРОВКА: COGNIQ первый, остальные по убыванию value
+const sortedAssets = [...data.assets].sort((a, b) => {
+  if (a.symbol === 'COGNIQ') return -1;
+  if (b.symbol === 'COGNIQ') return 1;
+  return b.value - a.value;
+});
+
+  let assetsHtml = '';
+  if (hasAssets) {
+  assetsHtml = sortedAssets.map(a => {
         if (a.value < 0.01 && a.symbol !== 'COGNIQ') return '';
         const amountStr = a.amount < 0.01 ? a.amount.toExponential(2) : a.amount.toLocaleString('en-US', { maximumFractionDigits: 4 });
         const valueStr = a.value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
