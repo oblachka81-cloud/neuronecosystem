@@ -12,12 +12,20 @@ const TOKEN_MAP = {
   'NVDAx': 'EQCva-Of7acQdU_piADdlcbzsFtA-xJwZoctz8ZOXBdBoaB8',
   'TSLAx': 'EQB4IwqWZPUczntdry8vSN2tsJKt-9F7iIb7gEFREYYOB563',
   'AMZNx': 'EQCtD2-7qxHhQoNhxri2JSzH-dlmWqKYCDtlEZqRi3-56gd9',
-  'SPYx': 'EQB1fyBAA9qQDP6LEGaF3cbU-Xbr-p6ESBZGnqlHkHIHAJZv'
+  'SPYx':  'EQB1fyBAA9qQDP6LEGaF3cbU-Xbr-p6ESBZGnqlHkHIHAJZv',
+  'COINx': 'EQCvk4Oq2l5Yts_S7Q4j08fB9Ftzx3IY-7UI1AqssyKGDt_I',
+  'HOODx': 'EQAHz1jK27NO5IdHrht8146-EFz9p4kSZZx2H1xXuNQOYp_r',
+  'MSTRx': 'EQBbsLYH5sD74gYO4DOoj0QsHaNL81NLD13AdhkmD0Up-46H',
+  'QQQx':  'EQCe6utwqROmrO_cOUUvVNYkvyecUjfugtugvhUwlVYSEm7x'
 };
 
 const DECIMALS = {
   'TON': 9, 'GRAM': 9, 'USDT': 6, 'BTC': 8, 'XAUt0': 6,
   'AAPLx': 6, 'NVDAx': 6, 'TSLAx': 6, 'AMZNx': 6, 'SPYx': 6,
+  'COINx': 8,
+  'HOODx': 8,
+  'MSTRx': 8,
+  'QQQx':  8
 };
 
 const OPERATIONAL_WALLET = 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv';
