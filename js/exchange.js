@@ -449,7 +449,13 @@ const EXCHANGE_CRYPTO_PAIRS = [
   { name: 'DOGS/USDT', from: 'DOGS', to: 'USDT' },
   { name: 'USDT/DOGS', from: 'USDT', to: 'DOGS' },
   { name: 'MAJOR/USDT', from: 'MAJOR', to: 'USDT' },
-  { name: 'USDT/MAJOR', from: 'USDT', to: 'MAJOR' }
+  { name: 'USDT/MAJOR', from: 'USDT', to: 'MAJOR' },
+  { name: 'STON/USDT', from: 'STON', to: 'USDT' },
+  { name: 'USDT/STON', from: 'USDT', to: 'STON' },
+  { name: 'REDO/USDT', from: 'REDO', to: 'USDT' },
+  { name: 'USDT/REDO', from: 'USDT', to: 'REDO' },
+  { name: 'STORM/USDT', from: 'STORM', to: 'USDT' },
+  { name: 'USDT/STORM', from: 'USDT', to: 'STORM' }
 ];
 
 const EXCHANGE_XSTOCKS_PAIRS = [
@@ -505,11 +511,24 @@ function exchangeRenderPairGrid(id, pairsList) {
 // ==================== NEURON LIVE ЛЕНТА ====================
 let tapeCategory = 'crypto';
 const TAPE_ICONS = { 
-  TON: '💎', BTC: '₿', XAUt0: '🥇', NOT: '🪙', 
+  TON: '💎', 
+  BTC: '₿', 
+  XAUt0: '🥇', 
+  NOT: '🪙', 
   DOGS: '🐶', 
-  MAJOR: '👑',
-  AAPLx: '🍎', NVDAx: '🟩', TSLAx: '🚗', AMZNx: '📦', SPYx: '📈',
-  COINx: '🪙', HOODx: '🐕', MSTRx: '🚀', QQQx: '📊' 
+  MAJOR: '👑', 
+  STON: '💎', 
+  REDO: '🐕', 
+  STORM: '🌪️',
+  AAPLx: '🍎', 
+  NVDAx: '🟩', 
+  TSLAx: '🚗', 
+  AMZNx: '📦', 
+  SPYx: '📈',
+  COINx: '🪙', 
+  HOODx: '🐕', 
+  MSTRx: '🚀', 
+  QQQx: '📊' 
 };
 
 function tapeFmt(p) {
@@ -576,7 +595,7 @@ let liveChartCategory = 'crypto';
 let liveInterval = '1m';
 const liveChartCache = {};
 const LIVE_ASSETS = { 
-  crypto: ['TON', 'BTC', 'XAUt0', 'NOT', 'DOGS', 'MAJOR'],
+  crypto: ['TON', 'BTC', 'XAUt0', 'NOT', 'DOGS', 'MAJOR', 'STON', 'REDO', 'STORM'],
   xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx', 'COINx', 'HOODx', 'MSTRx', 'QQQx'] 
 };
 const LIVE_INTERVALS = [['1m', '1m'], ['5m', '5m'], ['60m', '1H'], ['1d', '1D']];
@@ -819,6 +838,9 @@ function loadExchangePanel() {
               <option value="NOT">NOT</option>
               <option value="DOGS">DOGS</option>
               <option value="MAJOR">MAJOR</option>
+              <option value="STON">STON</option>
+              <option value="REDO">REDO</option>
+              <option value="STORM">STORM</option>
             </select>
           </div>
         </div>
@@ -850,6 +872,9 @@ function loadExchangePanel() {
               <option value="NOT">NOT</option>
               <option value="DOGS">DOGS</option>
               <option value="MAJOR">MAJOR</option>
+              <option value="STON">STON</option>
+              <option value="REDO">REDO</option>
+              <option value="STORM">STORM</option>
             </select>
           </div>
         </div>
