@@ -20,7 +20,8 @@ const TOKEN_MAP = {
   'NOT':   'EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT',
   'DOGS':  'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS',
   'MAJOR': 'EQCuPm01HldiduQ55xaBF_1kaW_WAUy5DHey8suqzU_MAJOR',
-  'STON':  'EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO',
+  'CATI':  'EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7',
+  'BLUM':  'EQCAj5oiRRrXokYsg_B-e0KG9xMwh5upr5I8HQzErm0_BLUM'
   'REDO':  'EQBZ_cafPyDr5KUTs0aNxh0ZTDhkpEZONmLJA2SNGlLm4Cko',
   'STORM': 'EQBsosmcZrD6FHijA7qWGLw5wo_aH8UN435hi935jJ_STORM'
 };
@@ -35,7 +36,8 @@ const DECIMALS = {
   'NOT':   9,
   'DOGS':  9,
   'MAJOR': 9,
-  'STON': 9,
+  'CATI':  9,
+  'BLUM':  9,
   'REDO': 9,
   'STORM': 9
 };
