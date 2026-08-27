@@ -120,7 +120,7 @@ async function getPricesFromStonFi() {
 router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
   try {
     const userId = req.tgUser.id;
-    const lang = req.tgUser?.language_code || 'en';
+    const lang = req.query.lang || req.tgUser?.language_code || 'en';
     const t = T[lang] || T.en;
     const walletAddress = req.query.wallet_address;
 
