@@ -101,7 +101,8 @@ router.get('/api/exchange/rates', async (req, res) => {
           else if (addr === TOKEN_MAP.NOT.toLowerCase()) priceBySymbol.NOT = price;
           else if (addr === TOKEN_MAP.DOGS.toLowerCase()) priceBySymbol.DOGS = price;
           else if (addr === TOKEN_MAP.MAJOR.toLowerCase()) priceBySymbol.MAJOR = price;
-          else if (addr === TOKEN_MAP.STON.toLowerCase()) priceBySymbol.STON = price;
+          else if (addr === TOKEN_MAP.CATI.toLowerCase()) priceBySymbol.CATI = price;
+          else if (addr === TOKEN_MAP.BLUM.toLowerCase()) priceBySymbol.BLUM = price;
           else if (addr === TOKEN_MAP.REDO.toLowerCase()) priceBySymbol.REDO = price;
           else if (addr === TOKEN_MAP.STORM.toLowerCase()) priceBySymbol.STORM = price;
         }
@@ -137,7 +138,8 @@ router.get('/api/exchange/rates', async (req, res) => {
     if (priceBySymbol.NOT > 0) { rates['NOT/USDT'] = priceBySymbol.NOT; rates['USDT/NOT'] = 1 / priceBySymbol.NOT; }
     if (priceBySymbol.DOGS > 0) { rates['DOGS/USDT'] = priceBySymbol.DOGS; rates['USDT/DOGS'] = 1 / priceBySymbol.DOGS; }
     if (priceBySymbol.MAJOR > 0) { rates['MAJOR/USDT'] = priceBySymbol.MAJOR; rates['USDT/MAJOR'] = 1 / priceBySymbol.MAJOR; }
-    if (priceBySymbol.STON > 0) { rates['STON/USDT'] = priceBySymbol.STON; rates['USDT/STON'] = 1 / priceBySymbol.STON; }
+    if (priceBySymbol.CATI > 0) { rates['CATI/USDT'] = priceBySymbol.CATI; rates['USDT/CATI'] = 1 / priceBySymbol.CATI; }
+    if (priceBySymbol.BLUM > 0) { rates['BLUM/USDT'] = priceBySymbol.BLUM; rates['USDT/BLUM'] = 1 / priceBySymbol.BLUM; }
     if (priceBySymbol.REDO > 0) { rates['REDO/USDT'] = priceBySymbol.REDO; rates['USDT/REDO'] = 1 / priceBySymbol.REDO; }
     if (priceBySymbol.STORM > 0) { rates['STORM/USDT'] = priceBySymbol.STORM; rates['USDT/STORM'] = 1 / priceBySymbol.STORM; }
     return rates;
