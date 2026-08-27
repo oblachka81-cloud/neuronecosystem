@@ -139,10 +139,11 @@ async function getTickers(symbols) {
           if (Array.isArray(list) && list.length) {
             const item = list[0];
             const info = backMap[gatePair];
+            // В функции getTickers, где Gate.io тикеры:
             gateOut[info.symbol] = {
-              price: parseFloat(item.last),
-              change24h: parseFloat(item.change_percentage.replace('%', '')),
-            };
+            price: parseFloat(item.last),
+            change24h: parseFloat(item.change_percentage.replace('%', '')) / 100, // 👈 Разделили на 100!
+           };
           }
         } catch (e) {
           console.error(`[GATE] ${gatePair} error:`, e.message);
