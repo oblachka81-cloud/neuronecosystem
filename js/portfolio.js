@@ -68,14 +68,16 @@ const sortedAssets = [...data.assets].sort((a, b) => {
 
     // Кнопки CTA — всегда внизу
     const ctaHtml = `
-      <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;">
-        <button onclick="switchTab('game')" style="background:linear-gradient(135deg,#00ccff,#7a2eff);border:none;border-radius:40px;padding:14px 24px;font-size:0.95rem;font-weight:700;color:white;cursor:pointer;width:100%;box-shadow:0 4px 16px rgba(0,204,255,0.3);">
-          ${t.playBtn}
-        </button>
-        <button onclick="switchTab('exchange')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:40px;padding:14px 24px;font-size:0.95rem;font-weight:700;color:#00ffaa;cursor:pointer;width:100%;">
-          ${t.exchangeBtn}
-        </button>
-      </div>`;
+  <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px;">
+    <button onclick="switchTab('game')" style="position:relative;width:100%;height:80px;padding:0;background:none;border:none;cursor:pointer;border-radius:12px;overflow:hidden;">
+      <img src="/main/btn_portfolio_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
+      <span style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.95rem;font-weight:700;background:linear-gradient(90deg,#ffffff 0%,#00ccff 50%,#ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${t.playBtn}</span>
+    </button>
+    <button onclick="switchTab('exchange')" style="position:relative;width:100%;height:80px;padding:0;background:none;border:none;cursor:pointer;border-radius:12px;overflow:hidden;">
+      <img src="/main/btn_portfolio_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
+      <span style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.95rem;font-weight:700;background:linear-gradient(90deg,#ffffff 0%,#00ffaa 50%,#ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${t.exchangeBtn}</span>
+    </button>
+  </div>`;
 
     // Карточка листинга COGNIQ
     const listingCardHtml = `
