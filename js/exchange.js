@@ -21,7 +21,7 @@ const EXCHANGE_INFO_TEXTS = {
     
     <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">3. xStocks — токенизированные акции</p>
     <p style="margin-bottom:8px;">xStocks — токенизированные акции мировых компаний на блокчейне TON. Каждый токен обеспечен реальной акцией 1:1.</p>
-    <p style="margin-bottom:8px;"><strong>Доступные активы:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p style="margin-bottom:8px;"><strong>Доступные активы:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF), COINx (Coinbase), HOODx (Robinhood), MSTRx (MicroStrategy), QQQx (Nasdaq-100).</p>
     <p style="margin-bottom:8px;"><strong>Как работает обеспечение:</strong></p>
     <p style="margin-bottom:4px;">🏦 <strong>Обеспечение 1:1.</strong> На каждый токен приобретается реальная акция на NYSE/NASDAQ.</p>
     <p style="margin-bottom:4px;">🏛️ <strong>Кастодиальное хранение.</strong> Ценные бумаги хранятся в регулируемых швейцарских и европейских банках-кастодианах.</p>
