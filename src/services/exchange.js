@@ -21,7 +21,7 @@ const TOKEN_MAP = {
   'DOGS':  'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS',
   'MAJOR': 'EQCuPm01HldiduQ55xaBF_1kaW_WAUy5DHey8suqzU_MAJOR',
   'CATI':  'EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7',
-  'BLUM':  'EQCAj5oiRRrXokYsg_B-e0KG9xMwh5upr5I8HQzErm0_BLUM'
+  'BLUM':  'EQCAj5oiRRrXokYsg_B-e0KG9xMwh5upr5I8HQzErm0_BLUM',
   'REDO':  'EQBZ_cafPyDr5KUTs0aNxh0ZTDhkpEZONmLJA2SNGlLm4Cko',
   'STORM': 'EQBsosmcZrD6FHijA7qWGLw5wo_aH8UN435hi935jJ_STORM'
 };
