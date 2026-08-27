@@ -131,6 +131,9 @@ router.get('/api/exchange/rates', async (req, res) => {
     if (priceBySymbol.BTC > 0) { rates['BTC/USDT'] = priceBySymbol.BTC; rates['USDT/BTC'] = 1 / priceBySymbol.BTC; }
     if (rates['BTC/USDT'] && rates['TON/USDT']) { rates['BTC/TON'] = rates['BTC/USDT'] / rates['TON/USDT']; rates['TON/BTC'] = 1 / rates['BTC/TON']; }
     if (priceBySymbol.XAUt0 > 0) { rates['XAUt0/USDT'] = priceBySymbol.XAUt0; rates['USDT/XAUt0'] = 1 / priceBySymbol.XAUt0; }
+    if (priceBySymbol.NOT > 0) { rates['NOT/USDT'] = priceBySymbol.NOT; rates['USDT/NOT'] = 1 / priceBySymbol.NOT; }
+    if (priceBySymbol.DOGS > 0) { rates['DOGS/USDT'] = priceBySymbol.DOGS; rates['USDT/DOGS'] = 1 / priceBySymbol.DOGS; }
+    if (priceBySymbol.MAJOR > 0) { rates['MAJOR/USDT'] = priceBySymbol.MAJOR; rates['USDT/MAJOR'] = 1 / priceBySymbol.MAJOR; }
     return rates;
   }
 
