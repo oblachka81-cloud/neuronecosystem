@@ -100,10 +100,10 @@ async function loadPortfolioPanel() {
         ${t.back}
       </button>
 
-      <div style="background:linear-gradient(135deg, rgba(255,204,68,0.1), rgba(138,116,74,0.1));border:1px solid rgba(255,204,68,0.3);border-radius:20px;padding:24px 20px;text-align:center;margin-bottom:20px;box-shadow:0 0 24px rgba(255,204,68,0.15);">
-        <div style="font-size:0.85rem;color:#e8d9a0;font-weight:600;margin-bottom:8px;letter-spacing:1px;">${t.title}</div>
-        <div style="font-size:2.4rem;font-weight:900;color:#ffcc44;text-shadow:0 0 20px rgba(255,204,68,0.4);">$${totalUsd}</div>
-      </div>
+      <div style="background:transparent;border:1.5px solid rgba(220,220,225,0.4);border-radius:20px;padding:24px 20px;text-align:center;margin-bottom:20px;box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.08);backdrop-filter:blur(8px);">
+      <div style="font-size:0.85rem;background:linear-gradient(90deg,#d4d4d8 0%,#ffffff 50%,#d4d4d8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600;margin-bottom:8px;letter-spacing:1px;">${t.title}</div>
+      <div style="font-size:2.4rem;font-weight:900;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 50%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(255,204,68,0.4));">$${totalUsd}</div>
+   </div>
 
       ${listingCardHtml}
 
