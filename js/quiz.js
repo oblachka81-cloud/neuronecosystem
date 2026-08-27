@@ -618,26 +618,12 @@ async function loadReferralStats() {
     // 👇 ВОТ ЗДЕСЬ ИСПРАВЛЕНИЕ (используем надежный t.me/share/url)
     if (refShareBtn && data.referralLink) {
   refShareBtn.onclick = () => {
-    const shareText = t.referralShareText || 'Играй в NEURON и зарабатывай COGNIQ! 🧠💎';
-    const shareLink = data.referralLink;
-    const fullText = `${shareText}\n${shareLink}`;
+    const shareText = encodeURIComponent(t.referralShareText || 'Играй в NEURON и зарабатывай COGNIQ! 🧠💎');
+    const shareLink = encodeURIComponent(data.referralLink);
     
-    // Пробуем разные методы по порядку (от лучшего к худшему)
+    // Используем ПРОВЕРЕННЫЙ метод — работает везде!
+    const url = `https://t.me/share/url?url=${shareLink}&text=${shareText}`;
     
-    // 1. Нативный метод Telegram WebApp (работает везде!)
-    if (window.Telegram?.WebApp?.shareMessage) {
-      window.Telegram.WebApp.shareMessage(fullText);
-      return;
-    }
-    
-    // 2. Метод через switchInlineQuery (для инлайн-шеринга)
-    if (window.Telegram?.WebApp?.switchInlineQuery) {
-      window.Telegram.WebApp.switchInlineQuery(fullText, ['users', 'groups', 'channels']);
-      return;
-    }
-    
-    // 3. Фолбэк на t.me/share (для старых версий)
-    const url = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
     if (window.Telegram?.WebApp?.openLink) {
       window.Telegram.WebApp.openLink(url);
     } else {
