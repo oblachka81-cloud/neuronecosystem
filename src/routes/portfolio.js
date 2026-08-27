@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { requireInitData } = require('../middleware/auth');
 const pool = require('../db/pool');
-const { Address } = require('@ton/ton');
 
 // Маппинг адресов контрактов -> символы (в нижнем регистре)
 const JETTON_SYMBOLS = {
@@ -10,51 +9,55 @@ const JETTON_SYMBOLS = {
   'eqdhyPzbijjt_wny3ggprjsyuk9figmjwmezxO8mziudfb_b': { symbol: 'BTC', name: 'Bitcoin', decimals: 8, icon: '₿' },
   'eqa1r_luqclhlmgoo1s4g7y7w1cd0frakba10zq7rddkxi9k': { symbol: 'XAUt0', name: 'Tether Gold', decimals: 6, icon: '🥇' },
   'eqdsjawfko-6fvzv2eyt-1cazty_zl-pfksid6jeqchnwmdo': { symbol: 'AAPLx', name: 'Apple', decimals: 6, icon: '🍎' },
-  'eqcva-of7acqdu_piadldcbzsfta-xjwzoctz8zoxbdboab8': { symbol: 'NVDAx', name: 'NVIDIA', decimals: 6, icon: '' },
-  'eqb4iwqwzpuczdntdry8vsn2tsjkt-9f7iib7gefreeyob563': { symbol: 'TSLAx', name: 'Tesla', decimals: 6, icon: '' },
+  'eqcva-of7acqdu_piadldcbzsfta-xjwzoctz8zoxbdboab8': { symbol: 'NVDAx', name: 'NVIDIA', decimals: 6, icon: '🟩' },
+  'eqb4iwqwzpuczdntdry8vsn2tsjkt-9f7iib7gefreeyob563': { symbol: 'TSLAx', name: 'Tesla', decimals: 6, icon: '🚗' },
   'eqctd2-7qxhhqonhxri2jszh-dlmwqkycdtlezqri3-56gd9': { symbol: 'AMZNx', name: 'Amazon', decimals: 6, icon: '📦' },
   'eqb1fybaa9qqdp6legaF3cbu-xbr-p6esbzgnqlhkhihajzv': { symbol: 'SPYx', name: 'S&P 500', decimals: 6, icon: '📈' },
   'eqcvk4oq2l5yts_s7q4j08fb9ftzx3iy-7ui1aqssykgdt_i': { symbol: 'COINx', name: 'Coinbase', decimals: 8, icon: '🪙' },
-  'eqahz1jk27no5idhrht8146-efz9p4kszzx2h1xxunqoyp_r': { symbol: 'HOODx', name: 'Robinhood', decimals: 8, icon: '🐕' },
+  'eqahz1jk27no5idhrht8146-efz9p4kszzx2h1xxunqoyp_r': { symbol: 'HOODx', name: 'Robinhood', decimals: 8, icon: '' },
   'eqbbslyh5sd74gyo4dooj0qshanl81nld13adhkmd0up-46h': { symbol: 'MSTRx', name: 'MicroStrategy', decimals: 8, icon: '🚀' },
   'eqce6utwqromrO_couuvvnykvyecujfugtugvhuwlyvsem7x': { symbol: 'QQQx', name: 'Nasdaq-100', decimals: 8, icon: '📊' },
   'eqavlwfdxgf2lxm67y4yzc17wykd9a0guwpkms1gosm__not': { symbol: 'NOT', name: 'Notcoin', decimals: 9, icon: '🪙' },
-  'eqcvxjy4eg8hyhbfsz7eepxrrsuqsfe_jpptraybmcg_dogs': { symbol: 'DOGS', name: 'Dogs', decimals: 9, icon: '' },
+  'eqcvxjy4eg8hyhbfsz7eepxrrsuqsfe_jpptraybmcg_dogs': { symbol: 'DOGS', name: 'Dogs', decimals: 9, icon: '🐶' },
   'eqcupm01hldiduq55xabf_1kaw_wauy5dhey8suqzu_major': { symbol: 'MAJOR', name: 'Major', decimals: 9, icon: '👑' },
   'eqbz_cafpydr5kuts0anxh0ztdhkpezonmlja2sngllm4cko': { symbol: 'REDO', name: 'Resistance Dog', decimals: 9, icon: '🐕' },
-  'eqbsosmczrd6fhija7qwglw5wo_ah8un435hi935jj_storm': { symbol: 'STORM', name: 'Storm Trade', decimals: 9, icon: '🌪️' },
-  'eqd-cvr0nz6xayrbvbhz-abtrrc6si5tvhvvpeqraV9uaad7': { symbol: 'CATI', name: 'Catizen', decimals: 9, icon: '🐱' },
-  'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum': { symbol: 'BLUM', name: 'Blum', decimals: 9, icon: '🌸' }
+  'eqbsosmczrd6fhija7qwglw5wo_ah8un435hi935jj_storm': { symbol: 'STORM', name: 'Storm Trade', decimals: 9, icon: '️' },
+  'eqd-cvr0nz6xayrbvbhz-abtrrc6si5tvhvvpeqraV9uaad7': { symbol: 'CATI', name: 'Catizen', decimals: 9, icon: '' },
+  'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum': { symbol: 'BLUM', name: 'Blum', decimals: 9, icon: '' }
 };
 
-// Цены-заглушки (пока нет реального листинга COGNIQ)
-const FALLBACK_PRICES = {
-  'COGNIQ': 0.05,
-  'TON': 1.58,
-  'USDT': 1.0,
-  'BTC': 60906,
-  'XAUt0': 2400,
-  'NOT': 0.00043,
-  'DOGS': 0.000004,
-  'MAJOR': 0.041,
-  'REDO': 0.083,
-  'STORM': 0.0044,
-  'CATI': 0.054,
-  'BLUM': 0.00157,
-  'AAPLx': 225,
-  'NVDAx': 125,
-  'TSLAx': 250,
-  'AMZNx': 185,
-  'SPYx': 560,
-  'COINx': 240,
-  'HOODx': 35,
-  'MSTRx': 1800,
-  'QQQx': 480
+// Переводы
+const T = {
+  ru: { title: 'ОБЩАЯ ОЦЕНКА', assets: 'АКТИВЫ', back: '← Назад к кошельку', empty: 'Ваш портфель пока пуст', emptyDesc: 'Начните собирать капитал, играя в викторину или торгуя на бирже!', playBtn: '🧠 Играть в викторину', exchangeBtn: ' Перейти на биржу', units: 'шт.', loading: '📊 Загрузка портфеля...', error: 'Ошибка загрузки' },
+  en: { title: 'TOTAL VALUE', assets: 'ASSETS', back: '← Back to wallet', empty: 'Your portfolio is empty', emptyDesc: 'Start building wealth by playing the quiz or trading on the exchange!', playBtn: '🧠 Play the quiz', exchangeBtn: '💱 Go to exchange', units: 'units', loading: '📊 Loading portfolio...', error: 'Load error' },
+  fr: { title: 'VALEUR TOTALE', assets: 'ACTIFS', back: '← Retour au portefeuille', empty: 'Votre portefeuille est vide', emptyDesc: 'Commencez à construire votre capital en jouant au quiz ou en tradant !', playBtn: '🧠 Jouer au quiz', exchangeBtn: '💱 Aller à la bourse', units: 'unités', loading: '📊 Chargement...', error: 'Erreur de chargement' },
+  es: { title: 'VALOR TOTAL', assets: 'ACTIVOS', back: '← Volver a la cartera', empty: 'Tu portafolio está vacío', emptyDesc: '¡Empieza a construir capital jugando al quiz o tradeando!', playBtn: '🧠 Jugar al quiz', exchangeBtn: '💱 Ir al exchange', units: 'uds.', loading: '📊 Cargando...', error: 'Error de carga' }
 };
+
+// Получение цен с STON.fi (как в бирже)
+async function getPricesFromStonFi() {
+  const prices = { 'COGNIQ': 0.05 }; // Заглушка, пока нет листинга
+  try {
+    const res = await fetch('https://api.ston.fi/v1/assets');
+    if (res.ok) {
+      const data = await res.json();
+      for (const asset of data.asset_list || []) {
+        const addr = (asset.contract_address || '').toLowerCase();
+        const price = parseFloat(asset.dex_usd_price || asset.third_party_usd_price || '0');
+        if (price > 0) prices[addr] = price;
+      }
+    }
+  } catch (e) {
+    console.error('[PORTFOLIO] STON.fi prices error:', e.message);
+  }
+  return prices;
+}
 
 router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
   try {
     const userId = req.tgUser.id;
+    const lang = req.tgUser?.language_code || 'en';
+    const t = T[lang] || T.en;
     const walletAddress = req.query.wallet_address;
 
     // 1. Баланс COGNIQ из БД
@@ -62,11 +65,14 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
     if (!userRes.rows.length) return res.status(404).json({ error: 'User not found' });
     const cogniqBalance = parseFloat(userRes.rows[0].balance || 0);
 
+    // 2. Получаем реальные цены
+    const prices = await getPricesFromStonFi();
+
     const assets = [];
     let totalUsd = 0;
 
-    // Добавляем COGNIQ
-    const cogniqPrice = FALLBACK_PRICES['COGNIQ'];
+    // COGNIQ (пока заглушка $0.05)
+    const cogniqPrice = prices['COGNIQ'] || 0.05;
     const cogniqValue = cogniqBalance * cogniqPrice;
     totalUsd += cogniqValue;
     assets.push({
@@ -74,10 +80,10 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
       price: cogniqPrice, value: cogniqValue, icon: '🧠'
     });
 
-    // 2. Если есть адрес кошелька — читаем балансы
+    // 3. Если есть адрес кошелька — читаем балансы
     if (walletAddress) {
       try {
-        // Баланс TON через toncenter v3
+        // Баланс TON
         const tonRes = await fetch(`https://toncenter.com/api/v3/addressInformation?address=${encodeURIComponent(walletAddress)}`, {
           headers: { 'X-API-Key': process.env.TON_CENTER_API_KEY || '' }
         });
@@ -85,7 +91,9 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
           const tonData = await tonRes.json();
           const tonBalanceNano = parseInt(tonData?.balance || '0', 10);
           const tonBalance = tonBalanceNano / 1e9;
-          const tonPrice = FALLBACK_PRICES['TON'];
+          // Адрес нативного TON
+          const tonAddr = 'eqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam9c';
+          const tonPrice = prices[tonAddr] || 1.58;
           const tonValue = tonBalance * tonPrice;
           totalUsd += tonValue;
           assets.push({
@@ -94,7 +102,7 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
           });
         }
 
-        // Все Jetton балансы одним запросом
+        // Все Jetton балансы
         const jettonRes = await fetch(`https://toncenter.com/api/v3/jetton/wallets?owner_address=${encodeURIComponent(walletAddress)}&limit=100`, {
           headers: { 'X-API-Key': process.env.TON_CENTER_API_KEY || '' }
         });
@@ -106,40 +114,25 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
             const masterAddr = jw.jetton?.address?.toLowerCase();
             if (!masterAddr) continue;
 
-            const tokenInfo = Object.values(JETTON_SYMBOLS).find(t => {
-              // Ищем по адресу (нужно нормализовать)
-              const keys = Object.keys(JETTON_SYMBOLS);
-              return keys.find(k => JETTON_SYMBOLS[k] === t) === masterAddr;
-            });
+            const info = JETTON_SYMBOLS[masterAddr];
+            if (!info) continue;
 
-            // Прямой поиск по адресу
-            let symbol = null;
-            for (const [addr, info] of Object.entries(JETTON_SYMBOLS)) {
-              if (addr === masterAddr) {
-                symbol = info.symbol;
-                break;
-              }
-            }
+            const balanceNano = parseInt(jw.balance || '0', 10);
+            const amount = balanceNano / Math.pow(10, info.decimals);
 
-            if (symbol) {
-              const info = JETTON_SYMBOLS[Object.keys(JETTON_SYMBOLS).find(k => JETTON_SYMBOLS[k].symbol === symbol)];
-              const balanceNano = parseInt(jw.balance || '0', 10);
-              const amount = balanceNano / Math.pow(10, info.decimals);
+            if (amount > 0.0001) {
+              const price = prices[masterAddr] || 0;
+              const value = amount * price;
+              totalUsd += value;
 
-              if (amount > 0.0001) {
-                const price = FALLBACK_PRICES[symbol] || 0;
-                const value = amount * price;
-                totalUsd += value;
-
-                assets.push({
-                  symbol: info.symbol,
-                  name: info.name,
-                  amount: amount,
-                  price: price,
-                  value: value,
-                  icon: info.icon
-                });
-              }
+              assets.push({
+                symbol: info.symbol,
+                name: info.name,
+                amount: amount,
+                price: price,
+                value: value,
+                icon: info.icon
+              });
             }
           }
         }
@@ -148,10 +141,15 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
       }
     }
 
-    // Сортируем по стоимости (самые дорогие сверху)
+    // Сортируем по стоимости
     assets.sort((a, b) => b.value - a.value);
 
-    res.json({ success: true, total_usd: totalUsd, assets: assets });
+    res.json({ 
+      success: true, 
+      total_usd: totalUsd, 
+      assets: assets,
+      texts: t // Отдаём переводы на фронт
+    });
 
   } catch (err) {
     console.error('[PORTFOLIO] Error:', err.message);
