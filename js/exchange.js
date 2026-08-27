@@ -455,7 +455,15 @@ const EXCHANGE_XSTOCKS_PAIRS = [
   { name: 'AMZNx/USDT', from: 'AMZNx', to: 'USDT' },
   { name: 'USDT/AMZNx', from: 'USDT', to: 'AMZNx' },
   { name: 'SPYx/USDT', from: 'SPYx', to: 'USDT' },
-  { name: 'USDT/SPYx', from: 'USDT', to: 'SPYx' }
+  { name: 'USDT/SPYx', from: 'USDT', to: 'SPYx' },
+  { name: 'COINx/USDT', from: 'COINx', to: 'USDT' },
+  { name: 'USDT/COINx', from: 'USDT', to: 'COINx' },
+  { name: 'HOODx/USDT', from: 'HOODx', to: 'USDT' },
+  { name: 'USDT/HOODx', from: 'USDT', to: 'HOODx' },
+  { name: 'MSTRx/USDT', from: 'MSTRx', to: 'USDT' },
+  { name: 'USDT/MSTRx', from: 'USDT', to: 'MSTRx' },
+  { name: 'QQQx/USDT', from: 'QQQx', to: 'USDT' },
+  { name: 'USDT/QQQx', from: 'USDT', to: 'QQQx' }
 ];
 
 function exchangeRenderPairs() {
