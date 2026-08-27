@@ -28,10 +28,66 @@ const JETTON_SYMBOLS = {
 
 // Переводы
 const T = {
-  ru: { title: 'ОБЩАЯ ОЦЕНКА', assets: 'АКТИВЫ', back: '← Назад к кошельку', empty: 'Ваш портфель пока пуст', emptyDesc: 'Начните собирать капитал, играя в викторину или торгуя на бирже!', playBtn: '🧠 Играть в викторину', exchangeBtn: ' Перейти на биржу', units: 'шт.', loading: '📊 Загрузка портфеля...', error: 'Ошибка загрузки' },
-  en: { title: 'TOTAL VALUE', assets: 'ASSETS', back: '← Back to wallet', empty: 'Your portfolio is empty', emptyDesc: 'Start building wealth by playing the quiz or trading on the exchange!', playBtn: '🧠 Play the quiz', exchangeBtn: '💱 Go to exchange', units: 'units', loading: '📊 Loading portfolio...', error: 'Load error' },
-  fr: { title: 'VALEUR TOTALE', assets: 'ACTIFS', back: '← Retour au portefeuille', empty: 'Votre portefeuille est vide', emptyDesc: 'Commencez à construire votre capital en jouant au quiz ou en tradant !', playBtn: '🧠 Jouer au quiz', exchangeBtn: '💱 Aller à la bourse', units: 'unités', loading: '📊 Chargement...', error: 'Erreur de chargement' },
-  es: { title: 'VALOR TOTAL', assets: 'ACTIVOS', back: '← Volver a la cartera', empty: 'Tu portafolio está vacío', emptyDesc: '¡Empieza a construir capital jugando al quiz o tradeando!', playBtn: '🧠 Jugar al quiz', exchangeBtn: '💱 Ir al exchange', units: 'uds.', loading: '📊 Cargando...', error: 'Error de carga' }
+  ru: { 
+    title: 'ОБЩАЯ ОЦЕНКА', 
+    assets: 'АКТИВЫ', 
+    back: '← Назад к кошельку', 
+    empty: 'Ваш портфель пока пуст', 
+    emptyDesc: 'Начните собирать капитал, играя в викторину или торгуя на бирже!', 
+    playBtn: '🧠 Играть в викторину', 
+    exchangeBtn: '💱 Перейти на биржу', 
+    units: 'шт.', 
+    loading: '📊 Загрузка портфеля...', 
+    error: 'Ошибка загрузки',
+    listingTitle: 'Листинг COGNIQ скоро!',
+    listingDesc: 'COGNIQ будет листиться на ведущих DEX (STON.fi, DeDust) в Q1-Q2 2027 и на CEX в Q3-Q4 2027 году. Держи токен — его ценность будет расти!',
+    yourBalance: 'Твой баланс'
+  },
+  en: { 
+    title: 'TOTAL VALUE', 
+    assets: 'ASSETS', 
+    back: '← Back to wallet', 
+    empty: 'Your portfolio is empty', 
+    emptyDesc: 'Start building wealth by playing the quiz or trading on the exchange!', 
+    playBtn: ' Play the quiz', 
+    exchangeBtn: '💱 Go to exchange', 
+    units: 'units', 
+    loading: '📊 Loading portfolio...', 
+    error: 'Load error',
+    listingTitle: 'COGNIQ Listing Coming Soon!',
+    listingDesc: 'COGNIQ will be listed on leading DEXs (STON.fi, DeDust) in Q1-Q2 2027 and on CEXs in Q3-Q4 2027. Hold the token — its value will grow!',
+    yourBalance: 'Your balance'
+  },
+  fr: { 
+    title: 'VALEUR TOTALE', 
+    assets: 'ACTIFS', 
+    back: '← Retour au portefeuille', 
+    empty: 'Votre portefeuille est vide', 
+    emptyDesc: 'Commencez à construire votre capital en jouant au quiz ou en tradant !', 
+    playBtn: ' Jouer au quiz', 
+    exchangeBtn: '💱 Aller à la bourse', 
+    units: 'unités', 
+    loading: ' Chargement...', 
+    error: 'Erreur de chargement',
+    listingTitle: 'Listing COGNIQ bientôt !',
+    listingDesc: 'COGNIQ sera listé sur les principaux DEX (STON.fi, DeDust) au T1-T2 2027 et sur les CEX en T3-T4 2027. Gardez le token — sa valeur augmentera !',
+    yourBalance: 'Votre solde'
+  },
+  es: { 
+    title: 'VALOR TOTAL', 
+    assets: 'ACTIVOS', 
+    back: '← Volver a la cartera', 
+    empty: 'Tu portafolio está vacío', 
+    emptyDesc: '¡Empieza a construir capital jugando al quiz o tradeando!', 
+    playBtn: '🧠 Jugar al quiz', 
+    exchangeBtn: '💱 Ir al exchange', 
+    units: 'uds.', 
+    loading: '📊 Cargando...', 
+    error: 'Error de carga',
+    listingTitle: '¡Listado COGNIQ próximamente!',
+    listingDesc: 'COGNIQ se listará en los principales DEX (STON.fi, DeDust) en T1-T2 2027 y en CEX en T3-T4 2028. ¡Mantén el token — su valor crecerá!',
+    yourBalance: 'Tu balance'
+  }
 };
 
 // Получение цен с STON.fi (как в бирже)
