@@ -16,7 +16,10 @@ const TOKEN_MAP = {
   'COINx': 'EQCvk4Oq2l5Yts_S7Q4j08fB9Ftzx3IY-7UI1AqssyKGDt_I',
   'HOODx': 'EQAHz1jK27NO5IdHrht8146-EFz9p4kSZZx2H1xXuNQOYp_r',
   'MSTRx': 'EQBbsLYH5sD74gYO4DOoj0QsHaNL81NLD13AdhkmD0Up-46H',
-  'QQQx':  'EQCe6utwqROmrO_cOUUvVNYkvyecUjfugtugvhUwlVYSEm7x'
+  'QQQx':  'EQCe6utwqROmrO_cOUUvVNYkvyecUjfugtugvhUwlVYSEm7x',
+  'NOT':   'EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT',
+  'DOGS':  'EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS',
+  'MAJOR': 'EQCuPm01HldiduQ55xaBF_1kaW_WAUy5DHey8suqzU_MAJOR'
 };
 
 const DECIMALS = {
@@ -25,7 +28,10 @@ const DECIMALS = {
   'COINx': 8,
   'HOODx': 8,
   'MSTRx': 8,
-  'QQQx':  8
+  'QQQx':  8,
+  'NOT':   9,
+  'DOGS':  9,
+  'MAJOR': 9
 };
 
 const OPERATIONAL_WALLET = 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv';
