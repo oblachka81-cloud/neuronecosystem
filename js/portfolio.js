@@ -100,10 +100,10 @@ async function loadPortfolioPanel() {
         ${t.back}
       </button>
 
-      <div style="background:transparent;border:1.5px solid rgba(220,220,225,0.4);border-radius:20px;padding:24px 20px;text-align:center;margin-bottom:20px;box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.08);backdrop-filter:blur(8px);">
-      <div style="font-size:0.85rem;background:linear-gradient(90deg,#d4d4d8 0%,#ffffff 50%,#d4d4d8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:600;margin-bottom:8px;letter-spacing:1px;">${t.title}</div>
+      <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(255,204,68,0.15);padding:20px;text-align:center;">
+      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#ffcc44,#e8d9a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${t.title}</div>
       <div style="font-size:2.4rem;font-weight:900;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 50%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(255,204,68,0.4));">$${totalUsd}</div>
-   </div>
+  </div>
 
       ${listingCardHtml}
 
