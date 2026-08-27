@@ -8,7 +8,7 @@ async function loadPortfolioPanel() {
       walletAddress = tonConnectUI.wallet.account.address;
     }
 
-    const url = `${BASE_URL}/api/wallet/portfolio${walletAddress ? '?wallet_address=' + encodeURIComponent(walletAddress) : ''}`;
+    const url = `${BASE_URL}/api/wallet/portfolio?lang=${currentLang}${walletAddress ? '&wallet_address=' + encodeURIComponent(walletAddress) : ''}`;
     const res = await authFetch(url);
     const data = await res.json();
 
@@ -72,31 +72,27 @@ async function loadPortfolioPanel() {
 
     // Карточка листинга COGNIQ
     const listingCardHtml = `
-      <div style="background:linear-gradient(135deg, rgba(0,204,255,0.1), rgba(122,46,255,0.1));border:1px solid rgba(0,204,255,0.3);border-radius:20px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden;">
-        <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle, rgba(0,204,255,0.2) 0%, transparent 70%);border-radius:50%;"></div>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="font-size:2rem;">🚀</div>
-          <div>
-            <div style="font-size:0.75rem;color:#00ccff;font-weight:700;letter-spacing:1px;text-transform:uppercase;">COGNIQ LISTING</div>
-            <div style="font-size:1.1rem;font-weight:800;color:#f0f0ff;">${t.listingTitle}</div>
-          </div>
-        </div>
-        <div style="font-size:0.85rem;color:#8899aa;margin-bottom:14px;line-height:1.5;">${t.listingDesc}</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:120px;background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;text-align:center;">
-            <div style="font-size:0.7rem;color:#8899aa;margin-bottom:4px;">Q3-Q4 2027</div>
-            <div style="font-size:0.85rem;font-weight:700;color:#00ffaa;">DEX Listing</div>
-          </div>
-          <div style="flex:1;min-width:120px;background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;text-align:center;">
-            <div style="font-size:0.7rem;color:#8899aa;margin-bottom:4px;">CEX</div>
-            <div style="font-size:0.85rem;font-weight:700;color:#ffcc44;">2028</div>
-          </div>
-          <div style="flex:1;min-width:120px;background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;text-align:center;">
-            <div style="font-size:0.7rem;color:#8899aa;margin-bottom:4px;">${t.yourBalance}</div>
-            <div style="font-size:0.85rem;font-weight:700;color:#00ccff;">${cogniqBalance.toLocaleString()} 🧠</div>
-          </div>
-        </div>
-      </div>`;
+  <div style="background:linear-gradient(135deg, rgba(0,204,255,0.08), rgba(122,46,255,0.08));border:1px solid rgba(0,204,255,0.25);border-radius:16px;padding:20px;margin-bottom:20px;">
+    <div style="margin-bottom:16px;text-align:center;">
+      <div style="font-size:0.7rem;color:#00ccff;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">COGNIQ LISTING</div>
+      <div style="font-size:1.05rem;font-weight:800;color:#f0f0ff;">${t.listingTitle}</div>
+    </div>
+    <div style="font-size:0.82rem;color:#8899aa;margin-bottom:16px;line-height:1.5;text-align:center;">${t.listingDesc}</div>
+    <div style="display:flex;gap:10px;">
+      <div style="flex:1;background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-size:0.65rem;color:#8899aa;margin-bottom:4px;letter-spacing:1px;">Q1-Q2 2027</div>
+        <div style="font-size:0.8rem;font-weight:700;color:#00ffaa;">${t.dexListing}</div>
+      </div>
+      <div style="flex:1;background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-size:0.65rem;color:#8899aa;margin-bottom:4px;letter-spacing:1px;">Q3-Q4 2027</div>
+        <div style="font-size:0.8rem;font-weight:700;color:#ffcc44;">${t.cexListing}</div>
+      </div>
+      <div style="flex:1;background:rgba(0,0,0,0.4);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-size:0.65rem;color:#8899aa;margin-bottom:4px;letter-spacing:1px;">${t.yourBalance}</div>
+        <div style="font-size:0.8rem;font-weight:700;color:#00ccff;">${cogniqBalance.toLocaleString()}</div>
+      </div>
+    </div>
+  </div>`;
 
     root.innerHTML = `
     <div class="portfolio-panel" style="padding:16px;">
