@@ -42,7 +42,7 @@ const sortedAssets = [...data.assets].sort((a, b) => {
         const priceStr = a.price > 0 ? `$${a.price.toLocaleString('en-US', { maximumFractionDigits: 6 })}` : '—';
 
         return `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(255,255,255,0.04);border-radius:14px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:transparent;border-radius:14px;margin-bottom:8px;border:1px solid rgba(233,238,247,0.3);">
           <div style="display:flex;align-items:center;gap:12px;">
             <div style="font-size:1.4rem;">${a.icon}</div>
             <div>
