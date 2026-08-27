@@ -497,7 +497,11 @@ function exchangeRenderPairGrid(id, pairsList) {
 
 // ==================== NEURON LIVE ЛЕНТА ====================
 let tapeCategory = 'crypto';
-const TAPE_ICONS = { TON: '💎', BTC: '₿', XAUt0: '🥇', AAPLx: '', NVDAx: '🟩', TSLAx: '🚗', AMZNx: '📦', SPYx: '📈' };
+const TAPE_ICONS = { 
+  TON: '💎', BTC: '₿', XAUt0: '🥇', 
+  AAPLx: '🍎', NVDAx: '🟩', TSLAx: '🚗', AMZNx: '📦', SPYx: '📈',
+  COINx: '🪙', HOODx: '🐕', MSTRx: '🚀', QQQx: '📊' 
+};
 
 function tapeFmt(p) {
   if (!isFinite(p)) return '—';
