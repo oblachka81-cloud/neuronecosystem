@@ -18,10 +18,13 @@ const CANDIDATES = {
   HOODx: ['HOODXUSDT', 'HOODUSDT'],
   MSTRx: ['MSTRX_USDT'], // Gate.io формат
   QQQx:  ['QQQX_USDT'],  // Gate.io формат
+  NOT:   ['NOTUSDT'],
+  DOGS:  ['DOGSUSDT'],
+  MAJOR: ['MAJORUSDT']
 };
 
 const CATEGORIES = {
-  crypto:  ['TON', 'BTC', 'XAUt0'],
+  crypto:  ['TON', 'BTC', 'XAUt0', 'NOT', 'DOGS', 'MAJOR'],
   xstocks: ['AAPLx', 'NVDAx', 'TSLAx', 'AMZNx', 'SPYx', 'COINx', 'HOODx', 'MSTRx', 'QQQx'],
 };
 
