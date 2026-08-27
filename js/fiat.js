@@ -58,7 +58,7 @@ function isLikelyFiat(currency) {
 }
 
 function loadFiatPanel() {
-  const ft = FIAT_LANG[currentLang] || FIAT_LANG['ru'];
+  const ft = FIAT_LANG[currentLang] || FIAT_LANG['en'];
 
   // Очищаем биржу
   root.innerHTML = '';
@@ -355,7 +355,7 @@ function formatFiatNumber(n) {
 function fiatRenderExchangers() {
   const list = document.getElementById('fiatExchangersList');
   const countEl = document.getElementById('fiatExchangersCount');
-  const ft = FIAT_LANG[currentLang] || FIAT_LANG['ru'];
+  const ft = FIAT_LANG[currentLang] || FIAT_LANG['en'];
   
   if (!fiatCurrentRates.length) {
     list.innerHTML = `<div style="text-align:center;padding:20px;color:#5577aa;">${ft.noExchangers}</div>`;
@@ -432,7 +432,7 @@ let fiatModalType = 'from';
 
 function fiatOpenModal(type) {
   fiatModalType = type;
-  const ft = FIAT_LANG[currentLang] || FIAT_LANG['ru'];
+  const ft = FIAT_LANG[currentLang] || FIAT_LANG['en'];
   document.getElementById('fiatCurrencyModal').style.display = 'flex';
   document.getElementById('fiatModalTitle').textContent = type === 'from' ? ft.modalTitleFrom : ft.modalTitleTo;
   document.getElementById('fiatModalSearch').value = '';
