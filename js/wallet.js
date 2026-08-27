@@ -301,10 +301,10 @@ function showWalletPanel() {
     
     <!-- 📊 КНОПКА ПОРТФЕЛЯ (НАД ВСЕМИ БАЛАНСАМИ) -->
     <button onclick="loadPortfolioPanel()" 
-      style="width:100%; background:linear-gradient(135deg, rgba(255,204,68,0.12), rgba(138,116,74,0.12)); border:1px solid rgba(255,204,68,0.35); border-radius:16px; padding:14px; margin-bottom:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;">
-      <span style="font-size:1.5rem;">📊</span>
-      <span style="font-weight:800; font-size:1.05rem; color:#ffcc44; letter-spacing:0.5px; text-transform:uppercase;">Мой портфель</span>
-    </button>
+     style="position:relative;width:100%;height:80px;padding:0;background:none;border:none;cursor:pointer;border-radius:12px;overflow:hidden;margin-bottom:12px;">
+     <img src="/main/btn_portfolio_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
+     <span style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:1rem;font-weight:700;background:linear-gradient(90deg,#e9eef7 0%,#ffffff 50%,#e9eef7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1.5px;text-transform:uppercase;">${t.walletPortfolioBtn || 'Мой портфель'}</span>
+  </button>
     <div style="position:relative;height:84px;margin-bottom:8px;">
       <img src="/wallet/wallet_balance_frame.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;border-radius:16px;">
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;">
