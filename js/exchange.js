@@ -65,7 +65,7 @@ const EXCHANGE_INFO_TEXTS = {
     
     <p style="font-size:1.1rem;font-weight:800;color:#fbbf24;margin-bottom:12px;">3. xStocks — Tokenized Stocks</p>
     <p style="margin-bottom:8px;">xStocks are tokenized shares of global companies on the TON blockchain. Each token is backed 1:1 by a real share.</p>
-    <p style="margin-bottom:8px;"><strong>Available assets:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF).</p>
+    <p style="margin-bottom:8px;"><strong>Available assets:</strong> AAPLx (Apple), NVDAx (NVIDIA), TSLAx (Tesla), AMZNx (Amazon), SPYx (S&P 500 ETF), COINx (Coinbase), HOODx (Robinhood), MSTRx (MicroStrategy), QQQx (Nasdaq-100).</p>
     <p style="margin-bottom:8px;"><strong>How backing works:</strong></p>
     <p style="margin-bottom:4px;">🏦 <strong>1:1 Backing.</strong> For every token, a real share is purchased on NYSE/NASDAQ.</p>
     <p style="margin-bottom:4px;">🏛️ <strong>Custodial Storage.</strong> Securities are held in regulated Swiss and European custodian banks.</p>
