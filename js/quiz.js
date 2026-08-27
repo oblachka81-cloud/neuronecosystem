@@ -604,27 +604,33 @@ async function loadReferralStats() {
     const refCountEl = document.getElementById('refCount');
     const refCopyBtn = document.getElementById('refCopyBtn');
     const refShareBtn = document.getElementById('refShareBtn');
+    
     if (refCountEl) refCountEl.textContent = t.referralCount(data.referralCount || 0);
+    
     if (refCopyBtn && data.referralLink) {
       refCopyBtn.onclick = () => {
         navigator.clipboard.writeText(data.referralLink)
-          .then(() => showToast(t.referralCopied, 2000))
-          .catch(() => showToast(t.referralCopied, 2000));
+          .then(() => showToast(t.referralCopied || 'Скопировано!', 2000))
+          .catch(() => showToast(t.referralCopied || 'Скопировано!', 2000));
       };
     }
+    
+    // 👇 ВОТ ЗДЕСЬ ИСПРАВЛЕНИЕ (используем надежный t.me/share/url)
     if (refShareBtn && data.referralLink) {
       refShareBtn.onclick = () => {
-        const shareText = encodeURIComponent(t.referralShareText || 'Play NEURON and earn COGNIQ!');
-        const shareUrl = `tg://msg?text=${shareText}%20${encodeURIComponent(data.referralLink)}`;
-        if (window.Telegram?.WebApp?.openTelegramLink) {
-          window.Telegram.WebApp.openTelegramLink(shareUrl);
-        } else if (window.Telegram?.WebApp?.openLink) {
-          window.Telegram.WebApp.openLink(shareUrl);
+        const shareText = encodeURIComponent(t.referralShareText || 'Играй в NEURON и зарабатывай COGNIQ! 🧠💎');
+        const shareLink = encodeURIComponent(data.referralLink);
+        const finalUrl = `https://t.me/share/url?url=${shareLink}&text=${shareText}`;
+        
+        if (window.Telegram?.WebApp?.openLink) {
+          window.Telegram.WebApp.openLink(finalUrl);
         } else {
-          window.location.href = shareUrl;
+          window.open(finalUrl, '_blank');
         }
       };
     }
-  } catch(e) { console.error('loadReferralStats:', e.message); }
+  } catch(e) { 
+    console.error('loadReferralStats:', e.message); 
+  }
 }
 
