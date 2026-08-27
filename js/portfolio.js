@@ -17,7 +17,7 @@ async function loadPortfolioPanel() {
       return;
     }
 
-    const t = data.texts || { title: 'TOTAL VALUE', assets: 'ASSETS', back: '← Back', empty: 'Empty', emptyDesc: '', playBtn: ' Play', exchangeBtn: '💱 Exchange', units: 'units', listingTitle: 'Listing Soon', listingDesc: 'Coming soon', yourBalance: 'Balance' };
+    const t = data.texts || {};
     
     const totalUsd = data.total_usd.toFixed(2);
     const hasAssets = data.assets.some(a => a.value > 0.01);
