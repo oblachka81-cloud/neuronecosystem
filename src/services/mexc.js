@@ -22,7 +22,7 @@ const CANDIDATES = {
   DOGS:  ['DOGSUSDT'],
   MAJOR: ['MAJORUSDT'],
   CATI:  ['CATIUSDT'],
-  BLUM:  ['BLUMUSDT'],
+  BLUM:  ['BLUM_USDT', 'BLUMUSDT'],
   REDO:  ['REDOUSDT'],
   STORM: ['STORMUSDT']
 };
