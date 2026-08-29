@@ -36,8 +36,8 @@ const sortedAssets = [...data.assets].sort((a, b) => {
   let assetsHtml = '';
   if (hasAssets) {
   assetsHtml = sortedAssets.map(a => {
-        if (a.value < 0.01 && a.symbol !== 'COGNIQ') return '';
-        const amountStr = a.amount < 0.01 ? a.amount.toExponential(2) : a.amount.toLocaleString('en-US', { maximumFractionDigits: 4 });
+        if (a.amount <= 0) return '';
+        const amountStr = a.amount < 0.0001 ? a.amount.toExponential(2) : a.amount.toLocaleString('en-US', { maximumFractionDigits: 6 });
         const valueStr = a.value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
         const priceStr = a.price > 0 ? `$${a.price.toLocaleString('en-US', { maximumFractionDigits: 6 })}` : '—';
 
