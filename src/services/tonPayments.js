@@ -46,7 +46,7 @@ async function checkTonUsdtPayments(bot) {
           if (!userId || userId <= 0) continue;
 
           const insertResult = await pool.query(
-            `INSERT INTO processed_ton_payments (tx_hash, user_id, amount, processed_at) VALUES ($1, $2, $3, NOW()) ON CONFLICT DO NOTHING RETURNING id`,
+            `INSERT INTO processed_ton_payments (tx_hash, user_id, amount, processed_at, item) VALUES ($1, $2, $3, NOW(), 'super_game') ON CONFLICT DO NOTHING RETURNING id`,
             [txHash, userId, amount]
           );
           if (insertResult.rows.length === 0) continue;
