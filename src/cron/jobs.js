@@ -2,9 +2,12 @@ const cron = require('node-cron');
 const pool = require('../db/pool');
 const { postDailyQuestion, postWeeklyTop, sendStreakWarnings, postWeeklyAchievements, postStreakBattle, postDailyFact, postRankLeaderboard, postDailyPoll } = require('../services/channel');
 const { checkTonUsdtPayments } = require('../services/tonPayments');
+const { splitSuperGameRevenue } = require('../services/revenueSplit');
 
 function setupCron(bot, botUsername) {
   cron.schedule('*/30 * * * * *', () => checkTonUsdtPayments(bot));
+
+  cron.schedule('0 */6 * * *', () => splitSuperGameRevenue(bot));
   
   // ==================== АВТООЧИСТКА ДУЭЛЕЙ ====================
   // Каждые 15 минут удаляем "waiting" дуэли старше 30 минут
