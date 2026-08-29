@@ -3,7 +3,6 @@ const router = express.Router();
 const { requireInitData } = require('../middleware/auth');
 const pool = require('../db/pool');
 
-// Маппинг адресов контрактов -> символы (в нижнем регистре)
 const JETTON_SYMBOLS = {
   'eqcxe6mutqjkfngfarotkot1lzbdiix1kcixrv7nw2id_sds': { symbol: 'USDT', name: 'Tether USD', decimals: 6, icon: '💵' },
   'eqdhyPzbijjt_wny3ggprjsyuk9figmjwmezxO8mziudfb_b': { symbol: 'BTC', name: 'Bitcoin', decimals: 8, icon: '₿' },
@@ -21,9 +20,9 @@ const JETTON_SYMBOLS = {
   'eqcvxjy4eg8hyhbfsz7eepxrrsuqsfe_jpptraybmcg_dogs': { symbol: 'DOGS', name: 'Dogs', decimals: 9, icon: '🐶' },
   'eqcupm01hldiduq55xabf_1kaw_wauy5dhey8suqzu_major': { symbol: 'MAJOR', name: 'Major', decimals: 9, icon: '👑' },
   'eqbz_cafpydr5kuts0anxh0ztdhkpezonmlja2sngllm4cko': { symbol: 'REDO', name: 'Resistance Dog', decimals: 9, icon: '🐕' },
-  'eqbsosmczrd6fhija7qwglw5wo_ah8un435hi935jj_storm': { symbol: 'STORM', name: 'Storm Trade', decimals: 9, icon: '️' },
-  'eqd-cvr0nz6xayrbvbhz-abtrrc6si5tvhvvpeqraV9uaad7': { symbol: 'CATI', name: 'Catizen', decimals: 9, icon: '' },
-  'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum': { symbol: 'BLUM', name: 'Blum', decimals: 9, icon: '' }
+  'eqbsosmczrd6fhija7qwglw5wo_ah8un435hi935jj_storm': { symbol: 'STORM', name: 'Storm Trade', decimals: 9, icon: '🌪️' },
+  'eqd-cvr0nz6xayrbvbhz-abtrrc6si5tvhvvpeqraV9uaad7': { symbol: 'CATI', name: 'Catizen', decimals: 9, icon: '🐱' },
+  'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum': { symbol: 'BLUM', name: 'Blum', decimals: 9, icon: '🌸' }
 };
 
 function toRaw(addr) {
@@ -41,79 +40,13 @@ const JETTON_MAP = {};
 for (const [k, v] of Object.entries(JETTON_SYMBOLS)) JETTON_MAP[toRaw(k)] = v;
 const TON_RAW = toRaw('EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c');
 
-// Переводы
 const T = {
-  ru: { 
-    title: 'ОБЩАЯ ОЦЕНКА', 
-    assets: 'АКТИВЫ', 
-    back: '← Назад к кошельку', 
-    empty: 'Ваш портфель пока пуст', 
-    emptyDesc: 'Начните собирать капитал, играя в викторину или торгуя на бирже!', 
-    playBtn: 'Играть в викторину', 
-    exchangeBtn: 'Перейти на биржу', 
-    units: 'шт.', 
-    loading: 'Загрузка портфеля...', 
-    error: 'Ошибка загрузки',
-    listingTitle: 'Листинг COGNIQ',
-    listingDesc: 'COGNIQ будет листиться на ведущих DEX (STON.fi, DeDust) в Q1-Q2 2027 и на CEX в Q3-Q4 2027 года.',
-    yourBalance: 'Твой баланс',
-    dexListing: 'DEX Listing',
-    cexListing: 'CEX Listing'
-  },
-  en: { 
-    title: 'TOTAL VALUE', 
-    assets: 'ASSETS', 
-    back: '← Back to wallet', 
-    empty: 'Your portfolio is empty', 
-    emptyDesc: 'Start building wealth by playing the quiz or trading on the exchange!', 
-    playBtn: 'Play Quiz', 
-    exchangeBtn: 'Go to Exchange', 
-    units: 'units', 
-    loading: 'Loading portfolio...', 
-    error: 'Load error',
-    listingTitle: 'COGNIQ Listing',
-    listingDesc: 'COGNIQ will be listed on leading DEXs (STON.fi, DeDust) in Q1-Q2 2027 and on CEXs in Q3-Q4 2027.',
-    yourBalance: 'Your Balance',
-    dexListing: 'DEX Listing',
-    cexListing: 'CEX Listing'
-  },
-  fr: { 
-    title: 'VALEUR TOTALE', 
-    assets: 'ACTIFS', 
-    back: '← Retour', 
-    empty: 'Portefeuille vide', 
-    emptyDesc: 'Commencez à jouer ou trader !', 
-    playBtn: 'Jouer', 
-    exchangeBtn: 'Bourse', 
-    units: 'unités', 
-    loading: 'Chargement...', 
-    error: 'Erreur',
-    listingTitle: 'Listing COGNIQ',
-    listingDesc: 'COGNIQ sera listé sur DEX (Q1-Q2 2027) et CEX (Q3-Q4 2027).',
-    yourBalance: 'Solde',
-    dexListing: 'DEX',
-    cexListing: 'CEX'
-  },
-  es: { 
-    title: 'VALOR TOTAL', 
-    assets: 'ACTIVOS', 
-    back: '← Volver', 
-    empty: 'Portafolio vacío', 
-    emptyDesc: '¡Empieza a jugar o tradear!', 
-    playBtn: 'Jugar', 
-    exchangeBtn: 'Exchange', 
-    units: 'uds.', 
-    loading: 'Cargando...', 
-    error: 'Error',
-    listingTitle: 'Listado COGNIQ',
-    listingDesc: 'COGNIQ se listará en DEX (Q1-Q2 2027) y CEX (Q3-Q4 2027).',
-    yourBalance: 'Balance',
-    dexListing: 'DEX',
-    cexListing: 'CEX'
-  }
+  ru: { title: 'ОБЩАЯ ОЦЕНКА', assets: 'АКТИВЫ', back: '← Назад к кошельку', empty: 'Ваш портфель пока пуст', emptyDesc: 'Начните собирать капитал, играя в викторину или торгуя на бирже!', playBtn: 'Играть в викторину', exchangeBtn: 'Перейти на биржу', units: 'шт.', loading: 'Загрузка портфеля...', error: 'Ошибка загрузки', listingTitle: 'Листинг COGNIQ', listingDesc: 'COGNIQ будет листиться на ведущих DEX (STON.fi, DeDust) в Q1-Q2 2027 и на CEX в Q3-Q4 2027 года.', yourBalance: 'Твой баланс', dexListing: 'DEX Listing', cexListing: 'CEX Listing' },
+  en: { title: 'TOTAL VALUE', assets: 'ASSETS', back: '← Back to wallet', empty: 'Your portfolio is empty', emptyDesc: 'Start building wealth by playing the quiz or trading on the exchange!', playBtn: 'Play Quiz', exchangeBtn: 'Go to Exchange', units: 'units', loading: 'Loading portfolio...', error: 'Load error', listingTitle: 'COGNIQ Listing', listingDesc: 'COGNIQ will be listed on leading DEXs (STON.fi, DeDust) in Q1-Q2 2027 and on CEXs in Q3-Q4 2027.', yourBalance: 'Your Balance', dexListing: 'DEX Listing', cexListing: 'CEX Listing' },
+  fr: { title: 'VALEUR TOTALE', assets: 'ACTIFS', back: '← Retour', empty: 'Portefeuille vide', emptyDesc: 'Commencez à jouer ou trader !', playBtn: 'Jouer', exchangeBtn: 'Bourse', units: 'unités', loading: 'Chargement...', error: 'Erreur', listingTitle: 'Listing COGNIQ', listingDesc: 'COGNIQ sera listé sur DEX (Q1-Q2 2027) et CEX (Q3-Q4 2027).', yourBalance: 'Solde', dexListing: 'DEX', cexListing: 'CEX' },
+  es: { title: 'VALOR TOTAL', assets: 'ACTIVOS', back: '← Volver', empty: 'Tu portafolio está vacío', emptyDesc: '¡Empieza a jugar o tradear!', playBtn: 'Jugar', exchangeBtn: 'Exchange', units: 'uds.', loading: 'Cargando...', error: 'Error', listingTitle: 'Listado COGNIQ', listingDesc: 'COGNIQ se listará en DEX (Q1-Q2 2027) y CEX (Q3-Q4 2027).', yourBalance: 'Balance', dexListing: 'DEX', cexListing: 'CEX' }
 };
 
-// Получение цен с STON.fi
 async function getPricesFromStonFi() {
   const prices = {};
   try {
@@ -139,18 +72,14 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
     const t = T[lang] || T.en;
     const walletAddress = req.query.wallet_address;
 
-    // 1. Баланс COGNIQ из БД
     const userRes = await pool.query('SELECT balance FROM users WHERE telegram_id = $1', [userId]);
     if (!userRes.rows.length) return res.status(404).json({ error: 'User not found' });
     const cogniqBalance = parseFloat(userRes.rows[0].balance || 0);
 
-    // 2. Получаем реальные цены
     const prices = await getPricesFromStonFi();
-
     const assets = [];
     let totalUsd = 0;
 
-    // COGNIQ (реальная цена если есть, иначе 0)
     const cogniqPrice = prices['cogniq'] || 0;
     const cogniqValue = cogniqBalance * cogniqPrice;
     totalUsd += cogniqValue;
@@ -159,10 +88,8 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
       price: cogniqPrice, value: cogniqValue, icon: '🧠'
     });
 
-    // 3. Если есть адрес кошелька — читаем балансы
     if (walletAddress) {
       try {
-        // Баланс TON
         const tonRes = await fetch(`https://toncenter.com/api/v3/addressInformation?address=${encodeURIComponent(walletAddress)}`, {
           headers: { 'X-API-Key': process.env.TON_CENTER_API_KEY || '' }
         });
@@ -170,7 +97,6 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
           const tonData = await tonRes.json();
           const tonBalanceNano = parseInt(tonData?.balance || '0', 10);
           const tonBalance = tonBalanceNano / 1e9;
-          const tonAddr = 'eqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam9c';
           const tonPrice = prices[TON_RAW] || 1.58;
           const tonValue = tonBalance * tonPrice;
           totalUsd += tonValue;
@@ -180,16 +106,12 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
           });
         }
 
-        // Все Jetton балансы
-        // Все Jetton балансы
         const jettonRes = await fetch(`https://toncenter.com/api/v3/jetton/wallets?owner_address=${encodeURIComponent(walletAddress)}&limit=100`, {
           headers: { 'X-API-Key': process.env.TON_CENTER_API_KEY || '' }
         });
         if (jettonRes.ok) {
           const jettonData = await jettonRes.json();
           const jettons = jettonData.jetton_wallets || [];
-          
-          // 👇 ВАЖНЫЕ ДВЕ СТРОКИ - показывают сколько жетонов видит API
           console.log(`[PORTFOLIO] Найдено ${jettons.length} жетонов`);
           console.log(`[PORTFOLIO] JETTON_MAP содержит ${Object.keys(JETTON_MAP).length} адресов`);
 
@@ -208,14 +130,12 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
 
             const balanceNano = parseInt(jw.balance || '0', 10);
             const amount = balanceNano / Math.pow(10, info.decimals);
-            
             console.log(`[PORTFOLIO] ${info.symbol}: баланс=${jw.balance}, decimals=${info.decimals}, amount=${amount}`);
 
             if (amount > 0) {
               const price = prices[masterRaw] || 0;
               const value = amount * price;
               totalUsd += value;
-
               console.log(`[PORTFOLIO] Добавлен ${info.symbol}: amount=${amount}, price=${price}, value=${value}`);
 
               assets.push({
@@ -227,17 +147,19 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
         } else {
           console.error(`[PORTFOLIO] Ошибка API: ${jettonRes.status}`);
         }
+      } catch (e) {
+        console.error('[PORTFOLIO] Wallet fetch error:', e.message);
+      }
+    }
 
-    // Сортируем по стоимости
     assets.sort((a, b) => b.value - a.value);
 
-    res.json({ 
-      success: true, 
-      total_usd: totalUsd, 
+    res.json({
+      success: true,
+      total_usd: totalUsd,
       assets: assets,
       texts: t
     });
-
   } catch (err) {
     console.error('[PORTFOLIO] Error:', err.message);
     res.status(500).json({ error: 'Server error' });
