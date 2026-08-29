@@ -1,6 +1,5 @@
 // ==================== TON CONNECT ====================
 let tonConnectUI = null;
-let tonPaymentContext = 'super_game';
 
 function initTonConnect() {
   if (tonConnectUI) return;
