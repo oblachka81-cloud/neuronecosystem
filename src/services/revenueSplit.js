@@ -5,7 +5,7 @@ const USDT_MASTER = 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs';
 
 async function splitSuperGameRevenue(bot) {
   try {
-    const key = process.env.OPERATIONAL_WALLET_KEY;
+    const key = process.env.TON_OPERATION_WALLET_PRIVATE_KEY;
     const liqWallet = process.env.LIQUIDITY_WALLET;
     if (!key || !liqWallet) {
       console.log('[SPLIT] пропущен: нет ключа или LIQUIDITY_WALLET');
