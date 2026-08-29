@@ -121,7 +121,7 @@ async function getPricesFromStonFi() {
     if (res.ok) {
       const data = await res.json();
       for (const asset of data.asset_list || []) {
-        const addr = (asset.contract_address || '').toLowerCase();
+        const addr = toRaw(asset.contract_address || '');
         const price = parseFloat(asset.dex_usd_price || asset.third_party_usd_price || '0');
         if (price > 0) prices[addr] = price;
       }
