@@ -446,6 +446,26 @@ await pool.query(`CREATE INDEX IF NOT EXISTS idx_crash_bets_multi_user ON crash_
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS duels_played INTEGER DEFAULT 0`);
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS duels_won INTEGER DEFAULT 0`);
 
+    // ===== АВТО-ДЕЛЕНИЕ ВЫРУЧКИ (75/25) =====
+await pool.query(`
+  ALTER TABLE processed_ton_payments ADD COLUMN IF NOT EXISTS item text
+`);
+await pool.query(`
+  ALTER TABLE processed_ton_payments ADD COLUMN IF NOT EXISTS split_done boolean NOT NULL DEFAULT false
+`);
+await pool.query(`
+  CREATE TABLE IF NOT EXISTS revenue_splits (
+    id serial PRIMARY KEY,
+    games int,
+    total_usdt numeric,
+    liquidity_usdt numeric,
+    dev_usdt numeric,
+    liq_tx text,
+    dev_tx text,
+    created_at timestamp DEFAULT now()
+  )
+`);
+console.log('[DB] revenue_splits + split columns OK');
 
   await loadQuestionsFromDB();
   console.log('БД инициализирована');
