@@ -171,7 +171,7 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
           const tonBalanceNano = parseInt(tonData?.balance || '0', 10);
           const tonBalance = tonBalanceNano / 1e9;
           const tonAddr = 'eqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam9c';
-          const tonPrice = prices[tonAddr] || 1.58;
+          const tonPrice = prices[TON_RAW] || 1.58;
           const tonValue = tonBalance * tonPrice;
           totalUsd += tonValue;
           assets.push({
