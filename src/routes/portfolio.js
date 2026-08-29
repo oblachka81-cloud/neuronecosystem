@@ -26,6 +26,21 @@ const JETTON_SYMBOLS = {
   'eqcaj5oirrrxokysg_b-e0kg9xmwH5upr5i8hqzerm0_blum': { symbol: 'BLUM', name: 'Blum', decimals: 9, icon: '' }
 };
 
+function toRaw(addr) {
+  try {
+    if (!addr) return '';
+    if (addr.startsWith('0:') || addr.startsWith('-1:')) return addr.toLowerCase();
+    const b64 = addr.replace(/-/g, '+').replace(/_/g, '/');
+    const buf = Buffer.from(b64, 'base64');
+    if (buf.length !== 36) return String(addr).toLowerCase();
+    return `${buf.readInt8(1)}:${buf.slice(2, 34).toString('hex')}`;
+  } catch (e) { return String(addr).toLowerCase(); }
+}
+
+const JETTON_MAP = {};
+for (const [k, v] of Object.entries(JETTON_SYMBOLS)) JETTON_MAP[toRaw(k)] = v;
+const TON_RAW = toRaw('EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c');
+
 // Переводы
 const T = {
   ru: { 
