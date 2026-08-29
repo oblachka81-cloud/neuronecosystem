@@ -477,47 +477,56 @@ router.get('/api/admin/exchange-orders', adminRateLimit, requireAdmin, async (re
 });
 
 router.post('/api/admin/withdrawals/update', adminRateLimit, requireAdmin, async (req, res) => {
+  const client = await pool.connect();
   try {
     const { id, status } = req.body;
     if (!['approved', 'rejected'].includes(status)) {
       return res.status(400).json({ error: 'Неверный статус' });
     }
-    
+
+    await client.query('BEGIN');
+
+    // ✅ FOR UPDATE — блокируем строку от гонок
+    const withdrawal = await client.query(
+      'SELECT * FROM withdrawals WHERE id = $1 FOR UPDATE',
+      [id]
+    );
+
+    if (!withdrawal.rows.length) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Заявка не найдена' });
+    }
+
+    const w = withdrawal.rows[0];
+
+    // ✅ Защита от двойной обработки
+    if (w.status !== 'pending') {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: `Заявка уже обработана (статус: ${w.status})` });
+    }
+
+    // ===== APPROVE =====
     if (status === 'approved') {
-      const withdrawal = await pool.query(
-        'SELECT * FROM withdrawals WHERE id = $1 AND status = $2',
-        [id, 'pending']
-      );
-      
-      if (!withdrawal.rows.length) {
-        return res.status(404).json({ error: 'Заявка не найдена или уже обработана' });
-      }
-      
-      const w = withdrawal.rows[0];
-      
       const privateKey = process.env.TON_OPERATION_WALLET_PRIVATE_KEY;
       if (!privateKey) {
-        return res.status(500).json({ 
-          error: 'Приватный ключ операционного кошелька не настроен. Добавь TON_OPERATION_WALLET_PRIVATE_KEY в переменные окружения.' 
+        await client.query('ROLLBACK');
+        return res.status(500).json({
+          error: 'Приватный ключ не настроен. Добавь TON_OPERATION_WALLET_PRIVATE_KEY.'
         });
       }
-      
+
       try {
-        const txHash = await sendCogniqJetton(
-          w.wallet,
-          w.amount,
-          privateKey
-        );
-        
-        await pool.query(
-          `UPDATE withdrawals 
-           SET status = 'completed', 
-               processed_at = NOW(),
-               tx_hash = $1 
+        const txHash = await sendCogniqJetton(w.wallet, w.amount, privateKey);
+
+        // Статус 'completed', tx_hash записан
+        await client.query(
+          `UPDATE withdrawals
+           SET status = 'completed', processed_at = NOW(), tx_hash = $1
            WHERE id = $2`,
           [txHash, id]
         );
-        
+        await client.query('COMMIT');
+
         const bot = req.app.get('bot');
         try {
           await bot.telegram.sendMessage(
@@ -525,47 +534,49 @@ router.post('/api/admin/withdrawals/update', adminRateLimit, requireAdmin, async
             `✅ Вывод ${w.amount.toLocaleString()} COGNIQ выполнен!\n\n🔗 TX: https://tonviewer.com/transaction/${txHash}`
           );
         } catch(e) {
-          console.error('[WITHDRAW] Notification error:', e.message);
+          console.error('[WITHDRAW] notify error:', e.message);
         }
-        
+
         console.log(`[WITHDRAW] Completed id=${id}, TX: ${txHash}`);
         return res.json({ ok: true, txHash });
-        
+
       } catch(e) {
         console.error('[WITHDRAW] On-chain error:', e.message);
-        await pool.query(
-          'UPDATE users SET balance = balance + $1 WHERE telegram_id = $2',
-          [w.amount, w.telegram_id]
+
+        // ✅ Возвращаем И БАЛАНС И ТИКЕТЫ
+        await client.query(
+          'UPDATE users SET balance = balance + $1, withdraw_tickets = withdraw_tickets + $2 WHERE telegram_id = $3',
+          [w.amount, Math.floor(w.amount / 1000), w.telegram_id]
         );
-        await pool.query(
-          "UPDATE withdrawals SET status = 'failed' WHERE id = $1",
+        await client.query(
+          "UPDATE withdrawals SET status = 'failed', processed_at = NOW() WHERE id = $1",
           [id]
         );
+        await client.query('COMMIT');
+
         return res.status(500).json({ error: 'Ошибка ончейн-вывода: ' + e.message });
       }
     }
-    
-    const { rowCount } = await pool.query(
-      `UPDATE withdrawals SET status = $1, processed_at = NOW() WHERE id = $2`,
-      [status, id]
+
+    // ===== REJECT =====
+    // ✅ Возвращаем И БАЛАНС И ТИКЕТЫ
+    await client.query(
+      'UPDATE users SET balance = balance + $1, withdraw_tickets = withdraw_tickets + $2 WHERE telegram_id = $3',
+      [w.amount, Math.floor(w.amount / 1000), w.telegram_id]
     );
-    
-    if (rowCount === 0) return res.status(404).json({ error: 'Заявка не найдена' });
-    
-    if (status === 'rejected') {
-      const w = await pool.query('SELECT * FROM withdrawals WHERE id = $1', [id]);
-      if (w.rows.length) {
-        await pool.query(
-          'UPDATE users SET balance = balance + $1 WHERE telegram_id = $2',
-          [w.rows[0].amount, w.rows[0].telegram_id]
-        );
-      }
-    }
-    
+    await client.query(
+      `UPDATE withdrawals SET status = 'rejected', processed_at = NOW() WHERE id = $1`,
+      [id]
+    );
+    await client.query('COMMIT');
+
     res.json({ ok: true });
   } catch (e) {
-    console.error(e);
+    try { await client.query('ROLLBACK'); } catch (_) {}
+    console.error('[WITHDRAW] update error:', e);
     res.status(500).json({ error: 'Server error' });
+  } finally {
+    client.release();
   }
 });
 
