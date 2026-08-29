@@ -1,5 +1,6 @@
 // ==================== TON CONNECT ====================
 let tonConnectUI = null;
+let tonPaymentContext = 'super_game';
 
 function initTonConnect() {
   if (tonConnectUI) return;
@@ -16,11 +17,41 @@ function initTonConnect() {
 // ==================== МОДАЛКА TON PAY ====================
 function openTonModal(context = 'super_game') {
   tonPaymentContext = context;
+
+  if (!tonConnectUI) {
+    initTonConnect();
+  }
+
+  const modal = document.getElementById('tonPayModal');
   const check = document.getElementById('tonModalCheck');
   const confirmBtn = document.getElementById('tonModalConfirmBtn');
-  if (check) check.checked = false;
-  if (confirmBtn) confirmBtn.disabled = true;
-  document.getElementById('tonPayModal').classList.add('open');
+
+  if (!modal) {
+    showToast('Ошибка: модалка оплаты не найдена', 3000);
+    return;
+  }
+
+  if (check) {
+    check.checked = false;
+  }
+
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+
+    // ВАЖНО: заново вешаем обработчик каждый раз при открытии модалки
+    confirmBtn.onclick = () => {
+      if (confirmBtn.disabled) return;
+      proceedTonPayment(tonPaymentContext);
+    };
+  }
+
+  if (check && confirmBtn) {
+    check.onchange = () => {
+      confirmBtn.disabled = !check.checked;
+    };
+  }
+
+  modal.classList.add('open');
 }
 
 function closeTonModal() { document.getElementById('tonPayModal').classList.remove('open'); }
