@@ -181,39 +181,52 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
         }
 
         // Все Jetton балансы
+        // Все Jetton балансы
         const jettonRes = await fetch(`https://toncenter.com/api/v3/jetton/wallets?owner_address=${encodeURIComponent(walletAddress)}&limit=100`, {
           headers: { 'X-API-Key': process.env.TON_CENTER_API_KEY || '' }
         });
         if (jettonRes.ok) {
           const jettonData = await jettonRes.json();
           const jettons = jettonData.jetton_wallets || [];
+          
+          // 👇 ВАЖНЫЕ ДВЕ СТРОКИ - показывают сколько жетонов видит API
+          console.log(`[PORTFOLIO] Найдено ${jettons.length} жетонов`);
+          console.log(`[PORTFOLIO] JETTON_MAP содержит ${Object.keys(JETTON_MAP).length} адресов`);
 
           for (const jw of jettons) {
-           const masterRaw = toRaw(typeof jw.jetton === 'string' ? jw.jetton : (jw.jetton?.address || ''));
-           if (!masterRaw) continue;
+            const masterRaw = toRaw(typeof jw.jetton === 'string' ? jw.jetton : (jw.jetton?.address || ''));
+            if (!masterRaw) {
+              console.log('[PORTFOLIO] Пропущен жетон без адреса:', jw);
+              continue;
+            }
 
-           const info = JETTON_MAP[masterRaw];
-           if (!info) continue;
+            const info = JETTON_MAP[masterRaw];
+            if (!info) {
+              console.log(`[PORTFOLIO] Неизвестный жетон: ${masterRaw}, баланс: ${jw.balance}`);
+              continue;
+            }
 
-           const balanceNano = parseInt(jw.balance || '0', 10);
-           const amount = balanceNano / Math.pow(10, info.decimals);
+            const balanceNano = parseInt(jw.balance || '0', 10);
+            const amount = balanceNano / Math.pow(10, info.decimals);
+            
+            console.log(`[PORTFOLIO] ${info.symbol}: баланс=${jw.balance}, decimals=${info.decimals}, amount=${amount}`);
 
-           if (amount > 0) {
-           const price = prices[masterRaw] || 0;
-           const value = amount * price;
-           totalUsd += value;
+            if (amount > 0) {
+              const price = prices[masterRaw] || 0;
+              const value = amount * price;
+              totalUsd += value;
 
-           assets.push({
-           symbol: info.symbol, name: info.name, amount,
-           price, value, icon: info.icon
-         });
-       }
-     }
+              console.log(`[PORTFOLIO] Добавлен ${info.symbol}: amount=${amount}, price=${price}, value=${value}`);
+
+              assets.push({
+                symbol: info.symbol, name: info.name, amount,
+                price, value, icon: info.icon
+              });
+            }
+          }
+        } else {
+          console.error(`[PORTFOLIO] Ошибка API: ${jettonRes.status}`);
         }
-      } catch (e) {
-        console.error('[PORTFOLIO] Wallet fetch error:', e.message);
-      }
-    }
 
     // Сортируем по стоимости
     assets.sort((a, b) => b.value - a.value);
