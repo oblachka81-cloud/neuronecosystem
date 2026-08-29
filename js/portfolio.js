@@ -20,7 +20,7 @@ async function loadPortfolioPanel() {
     const t = data.texts || {};
     
     const totalUsd = data.total_usd.toFixed(2);
-    const hasAssets = data.assets.some(a => a.value > 0.01);
+    const hasAssets = data.assets.some(a => a.amount > 0 && a.symbol !== 'COGNIQ');
     
     // 👇 ИСПРАВЛЕНИЕ: получаем баланс COGNIQ из ответа сервера
     const cogniqAsset = data.assets.find(a => a.symbol === 'COGNIQ');
