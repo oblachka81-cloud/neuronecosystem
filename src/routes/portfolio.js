@@ -189,30 +189,26 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
           const jettons = jettonData.jetton_wallets || [];
 
           for (const jw of jettons) {
-            const masterAddr = jw.jetton?.address?.toLowerCase();
-            if (!masterAddr) continue;
+           const masterRaw = toRaw(typeof jw.jetton === 'string' ? jw.jetton : (jw.jetton?.address || ''));
+           if (!masterRaw) continue;
 
-            const info = JETTON_SYMBOLS[masterAddr];
-            if (!info) continue;
+           const info = JETTON_MAP[masterRaw];
+           if (!info) continue;
 
-            const balanceNano = parseInt(jw.balance || '0', 10);
-            const amount = balanceNano / Math.pow(10, info.decimals);
+           const balanceNano = parseInt(jw.balance || '0', 10);
+           const amount = balanceNano / Math.pow(10, info.decimals);
 
-            if (amount > 0) {
-              const price = prices[masterAddr] || 0;
-              const value = amount * price;
-              totalUsd += value;
+           if (amount > 0) {
+           const price = prices[masterRaw] || 0;
+           const value = amount * price;
+           totalUsd += value;
 
-              assets.push({
-                symbol: info.symbol,
-                name: info.name,
-                amount: amount,
-                price: price,
-                value: value,
-                icon: info.icon
-              });
-            }
-          }
+           assets.push({
+           symbol: info.symbol, name: info.name, amount,
+           price, value, icon: info.icon
+         });
+       }
+     }
         }
       } catch (e) {
         console.error('[PORTFOLIO] Wallet fetch error:', e.message);
