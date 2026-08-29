@@ -183,7 +183,7 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
             const balanceNano = parseInt(jw.balance || '0', 10);
             const amount = balanceNano / Math.pow(10, info.decimals);
 
-            if (amount > 0.0001) {
+            if (amount > 0) {
               const price = prices[masterAddr] || 0;
               const value = amount * price;
               totalUsd += value;
