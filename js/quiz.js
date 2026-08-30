@@ -206,6 +206,8 @@ root.innerHTML = `
 
   const duelsBtn = document.getElementById('duelsBtn');
   if (duelsBtn) duelsBtn.addEventListener('click', () => switchTab('duels'));
+  const chessBtn = document.getElementById('chessBtn');
+  if (chessBtn) chessBtn.addEventListener('click', () => loadChessPanel());
   const startBtn = document.getElementById('startNewBtn');
   if (startBtn && !startBtn.disabled) {
     startBtn.addEventListener('click', () => {
