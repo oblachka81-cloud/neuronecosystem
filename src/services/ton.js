@@ -33,8 +33,18 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
   }
 
   const walletAddress = Address.parse(OPERATIONAL_WALLET);
-  const jettonWalletAddress = await getJettonWalletAddress(client, walletAddress, Address.parse(jettonMaster));
+  console.log('[JETTON] walletAddress OK, парсим jettonMaster:', jettonMaster);
+  console.log('[JETTON] toAddress:', toAddress);
+  console.log('[JETTON] amount:', amount, typeof amount);
+  
+  const jettonMasterAddr = Address.parse(jettonMaster);
+  console.log('[JETTON] jettonMasterAddr OK');
+  
+  const jettonWalletAddress = await getJettonWalletAddress(client, walletAddress, jettonMasterAddr);
+  console.log('[JETTON] jettonWalletAddress:', jettonWalletAddress?.toString() || 'UNDEFINED');
+  
   const toAddr = Address.parse(toAddress);
+  console.log('[JETTON] toAddr OK');
 
   // === ОТЛАДКА: логируем что получили ===
   console.log('[JETTON] from:', walletAddress.toString());
