@@ -47,14 +47,72 @@ async function splitSuperGameRevenue(bot) {
 
     if (bot) {
       try {
-        await bot.telegram.sendMessage(process.env.CHANNEL_ID,
-          `💧 Авто-деление выручки супер-игр\nИгр: ${cnt} | Сумма: ${(total/1e6).toFixed(2)} USDT\n75% → ликвидность: ${(liqAmount/1e6).toFixed(2)} USDT\n25% → развитие (операционный): ${(devAmount/1e6).toFixed(2)} USDT\nTX: ${tx1}`);
+        const liqDisplay = (liqAmount / 1e6).toFixed(2);
+        
+        const messages = {
+          ru: `💧 Авто-пополнение пула ликвидности COGNIQ/USDT
+
+🎮 Супер-игр сыграно: ${cnt}
+💰 Добавлено в пул: ${liqDisplay} USDT
+
+🔗 TX: ${tx1}
+
+🔥 Следующая супер-игра уже доступна!
+
+С уважением, NEURON`,
+
+          en: `💧 Auto-liquidity pool replenishment COGNIQ/USDT
+
+🎮 Super games played: ${cnt}
+💰 Added to pool: ${liqDisplay} USDT
+
+🔗 TX: ${tx1}
+
+🔥 Next super game is available!
+
+Best regards, NEURON`,
+
+          fr: `💧 Réapprovisionnement automatique du pool de liquidité COGNIQ/USDT
+
+🎮 Super parties jouées: ${cnt}
+💰 Ajouté au pool: ${liqDisplay} USDT
+
+🔗 TX: ${tx1}
+
+🔥 La prochaine super partie est disponible!
+
+Cordialement, NEURON`,
+
+          es: `💧 Reposición automática del pool de liquidez COGNIQ/USDT
+
+🎮 Super partidas jugadas: ${cnt}
+💰 Añadido al pool: ${liqDisplay} USDT
+
+🔗 TX: ${tx1}
+
+🔥 ¡La próxima super partida ya está disponible!
+
+Saludos cordiales, NEURON`
+        };
+
+        // Собираем мультиязычный пост
+        const fullMessage = `
+${messages.ru}
+
+---
+
+${messages.en}
+
+---
+
+${messages.fr}
+
+---
+
+${messages.es}`;
+
+        await bot.telegram.sendMessage(process.env.CHANNEL_ID, fullMessage);
       } catch (e) {}
     }
-    console.log(`[SPLIT] готово: ${cnt} игр, ${(total/1e6).toFixed(2)} USDT → 75% в ликвидность`);
-  } catch (e) {
-    console.error('[SPLIT] error:', e.message);
-  }
-}
 
 module.exports = { splitSuperGameRevenue };
