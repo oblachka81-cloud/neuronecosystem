@@ -21,20 +21,12 @@ async function splitSuperGameRevenue(bot) {
     const cnt = parseInt(res.rows[0].cnt, 10);
     if (cnt === 0 || total < 1000000) return;
 
-    // BigInt для отправки, number для отображения
     const liqAmountBig = BigInt(Math.floor(total * 0.75));
-    const liqAmount = Math.floor(total * 0.75);  // обычный number
+    const liqAmount = Math.floor(total * 0.75);
     const devAmount = total - liqAmount;
 
-    // Логи для диагностики
-    console.log('[SPLIT] total nano:', total, 'type:', typeof total);
-    console.log('[SPLIT] liqAmount nano:', liqAmount, 'type:', typeof liqAmount);
-    console.log('[SPLIT] liqAmountBig:', liqAmountBig.toString(), 'type:', typeof liqAmountBig);
-    console.log('[SPLIT] LIQUIDITY_WALLET:', liqWallet);
+    console.log(`[SPLIT] найдено ${cnt} супер-игр, всего ${(total/1e6).toFixed(2)} USDT, шлём ${(liqAmount/1e6).toFixed(2)} в ликвидность`);
 
-    console.log(`[SPLIT] найдено ${cnt} супер-игр, всего ${total/1e6} USDT, шлём ${liqAmount/1e6} в ликвидность`);
-
-    // Отправляем BigInt
     const tx1 = await sendJetton(USDT_MASTER, liqWallet, liqAmountBig, key);
 
     await pool.query(`UPDATE processed_ton_payments SET split_done = true
@@ -95,9 +87,7 @@ Cordialement, NEURON`,
 Saludos cordiales, NEURON`
         };
 
-        // Собираем мультиязычный пост
-        const fullMessage = `
-${messages.ru}
+        const fullMessage = `${messages.ru}
 
 ---
 
@@ -112,7 +102,15 @@ ${messages.fr}
 ${messages.es}`;
 
         await bot.telegram.sendMessage(process.env.CHANNEL_ID, fullMessage);
-      } catch (e) {}
+      } catch (e) {
+        console.error('[SPLIT] channel post error:', e.message);
+      }
     }
+
+    console.log(`[SPLIT] готово: ${cnt} игр, ${(total/1e6).toFixed(2)} USDT → 75% в ликвидность`);
+  } catch (e) {
+    console.error('[SPLIT] error:', e.message);
+  }
+}
 
 module.exports = { splitSuperGameRevenue };
