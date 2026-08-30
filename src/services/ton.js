@@ -55,7 +55,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
     .storeAddress(toAddr)
     .storeAddress(walletAddress)
     .storeBit(0)
-    .storeCoins(toNano('0.1'))
+    .storeCoins(1n)
     .storeBit(0)
     .endCell();
 
@@ -67,7 +67,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
     messages: [
       internal({
         to: jettonWalletAddress,
-        value: toNano('0.2'),
+        value: toNano('0.05')
         body: jettonTransferBody
       })
     ]
