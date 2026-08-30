@@ -105,6 +105,78 @@ return;
     }
   }
 }
+
+    // ==================== ОБРАБОТКА ШАХМАТ ====================
+if (payload && payload.startsWith('chess_')) {
+  const gameId = parseInt(payload.replace('chess_', ''));
+  
+  if (gameId && !isNaN(gameId)) {
+    try {
+      const gameRes = await pool.query('SELECT * FROM chess_games WHERE id = $1', [gameId]);
+      
+      if (!gameRes.rows.length) {
+        const msgs = {
+          ru: '❌ Партия не найдена.',
+          en: '❌ Game not found.',
+          fr: '❌ Partie introuvable.',
+          es: '❌ Partida no encontrada.'
+        };
+        await ctx.reply(msgs[lang] || msgs['en']);
+        return;
+      }
+      
+      const game = gameRes.rows[0];
+      
+      if (game.status !== 'waiting') {
+        const msgs = {
+          ru: '❌ Партия уже началась или завершена.',
+          en: '❌ Game already started or finished.',
+          fr: '❌ Partie déjà commencée ou terminée.',
+          es: '❌ Partida ya comenzada o terminada.'
+        };
+        await ctx.reply(msgs[lang] || msgs['en']);
+        return;
+      }
+      
+      if (String(game.player1_id) === String(tgId)) {
+        const msgs = {
+          ru: '⚠️ Вы не можете принять собственную партию.',
+          en: '⚠️ You cannot accept your own game.',
+          fr: '⚠️ Vous ne pouvez pas accepter votre propre partie.',
+          es: '⚠️ No puedes aceptar tu propia partida.'
+        };
+        await ctx.reply(msgs[lang] || msgs['en']);
+        return;
+      }
+      
+      await getOrCreateUser({ id: tgId, username: ctx.from.username, first_name: tgName, language_code: lang });
+      
+      const webAppUrl = `${WEBAPP_URL}?chess=${gameId}`;
+      
+      const chessKeyboard = {
+        inline_keyboard: [[
+          { text: '♟️ Принять партию', web_app: { url: webAppUrl } }
+        ]]
+      };
+      
+      const chessInviteMsgs = {
+        ru: `♟️ **Вызов на шахматную партию!**\n\nСтавка: ${game.stake} COGNIQ\n\nПобедитель забирает банк! 5% сжигается.`,
+        en: `♟️ **Chess challenge!**\n\nStake: ${game.stake} COGNIQ\n\nWinner takes the pot! 5% burned.`,
+        fr: `♟️ **Défi d'échecs !**\n\nMise : ${game.stake} COGNIQ\n\nLe gagnant prend le pot ! 5% brûlés.`,
+        es: `♟️ **¡Desafío de ajedrez!**\n\nApuesta: ${game.stake} COGNIQ\n\n¡El ganador se lleva el bote! 5% quemado.`
+      };
+      
+      await ctx.reply(chessInviteMsgs[lang] || chessInviteMsgs['en'], {
+        reply_markup: chessKeyboard,
+        parse_mode: 'Markdown'
+      });
+      return;
+      
+    } catch (e) {
+      console.error('[BOT /start chess] error:', e.message);
+    }
+  }
+}
     
     if (payload === 'beta') {
       try {
