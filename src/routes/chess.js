@@ -1,15 +1,17 @@
 const express = require('express');
+const BASE_URL = process.env.WEBAPP_URL || 'https://neuron.bothost.tech';
 const router = express.Router();
 const pool = require('../db/pool');
 const { Chess } = require('chess.js');
 const { requireInitData, requireInitDataStrict } = require('../middleware/auth');
 const { authRateLimit } = require('../middleware/rateLimit');
 
-// Создать партию
+// POST /api/chess/create
 router.post('/api/chess/create', requireInitDataStrict, authRateLimit, async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+    
     const userId = req.tgUser.id;
     const stake = parseInt(req.body.stake) || 100;
     
@@ -18,18 +20,17 @@ router.post('/api/chess/create', requireInitDataStrict, authRateLimit, async (re
       return res.json({ success: false, message: 'Недопустимая ставка' });
     }
 
-    // Проверяем баланс
     const userRes = await client.query('SELECT balance FROM users WHERE telegram_id = $1 FOR UPDATE', [userId]);
     if (!userRes.rows.length || userRes.rows[0].balance < stake) {
       await client.query('ROLLBACK');
       return res.json({ success: false, message: 'Недостаточно COGNIQ' });
     }
 
-    // Проверяем активные партии
     const existing = await client.query(
       `SELECT id FROM chess_games 
        WHERE (player1_id = $1 OR player2_id = $1) 
-       AND status IN ('waiting', 'active') LIMIT 1`,
+       AND status IN ('waiting', 'active')
+       LIMIT 1`,
       [userId]
     );
     if (existing.rows.length > 0) {
@@ -37,13 +38,12 @@ router.post('/api/chess/create', requireInitDataStrict, authRateLimit, async (re
       return res.json({ success: false, message: 'У вас уже есть активная партия' });
     }
 
-    // Списываем ставку
     await client.query('UPDATE users SET balance = balance - $1 WHERE telegram_id = $2', [stake, userId]);
 
-    // Создаём партию
     const gameRes = await client.query(
-      `INSERT INTO chess_games (player1_id, stake, status)
-       VALUES ($1, $2, 'waiting') RETURNING id`,
+      `INSERT INTO chess_games (player1_id, stake, status, created_at)
+       VALUES ($1, $2, 'waiting', NOW())
+       RETURNING id`,
       [userId, stake]
     );
 
@@ -63,11 +63,12 @@ router.post('/api/chess/create', requireInitDataStrict, authRateLimit, async (re
   }
 });
 
-// Принять партию
+// POST /api/chess/join
 router.post('/api/chess/join', requireInitDataStrict, authRateLimit, async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
+    
     const userId = req.tgUser.id;
     const gameId = parseInt(req.body.game_id);
 
@@ -80,14 +81,26 @@ router.post('/api/chess/join', requireInitDataStrict, authRateLimit, async (req,
     const game = gameRes.rows[0];
     if (game.status !== 'waiting') {
       await client.query('ROLLBACK');
-      return res.json({ success: false, message: 'Партия уже началась' });
+      return res.json({ success: false, message: 'Партия уже началась или завершена' });
     }
+
     if (String(game.player1_id) === String(userId)) {
       await client.query('ROLLBACK');
       return res.json({ success: false, message: 'Нельзя играть с самим собой' });
     }
 
-    // Проверяем баланс
+    const existing = await client.query(
+      `SELECT id FROM chess_games 
+       WHERE (player1_id = $1 OR player2_id = $1) 
+       AND status IN ('waiting', 'active')
+       LIMIT 1`,
+      [userId]
+    );
+    if (existing.rows.length > 0) {
+      await client.query('ROLLBACK');
+      return res.json({ success: false, message: 'У вас уже есть активная партия' });
+    }
+
     const userRes = await client.query('SELECT balance FROM users WHERE telegram_id = $1 FOR UPDATE', [userId]);
     if (!userRes.rows.length || userRes.rows[0].balance < game.stake) {
       await client.query('ROLLBACK');
@@ -95,7 +108,10 @@ router.post('/api/chess/join', requireInitDataStrict, authRateLimit, async (req,
     }
 
     await client.query('UPDATE users SET balance = balance - $1 WHERE telegram_id = $2', [game.stake, userId]);
-    await client.query('UPDATE chess_games SET player2_id = $1, status = $2 WHERE id = $3', [userId, 'active', gameId]);
+    await client.query(
+      'UPDATE chess_games SET player2_id = $1, status = $2::VARCHAR(20) WHERE id = $3',
+      [userId, 'active', gameId]
+    );
 
     await client.query('COMMIT');
     res.json({ success: true, gameId });
@@ -108,7 +124,98 @@ router.post('/api/chess/join', requireInitDataStrict, authRateLimit, async (req,
   }
 });
 
-// Сделать ход
+// GET /api/chess/state
+router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) => {
+  try {
+    const userId = req.tgUser.id;
+    const gameId = parseInt(req.query.game_id);
+
+    const gameRes = await pool.query(
+      `SELECT g.*, 
+              u1.nickname as p1_nick, u1.tg_photo_file_id as p1_photo,
+              u1.first_name as p1_first_name,
+              u2.nickname as p2_nick, u2.tg_photo_file_id as p2_photo,
+              u2.first_name as p2_first_name
+       FROM chess_games g
+       LEFT JOIN users u1 ON g.player1_id = u1.telegram_id
+       LEFT JOIN users u2 ON g.player2_id = u2.telegram_id
+       WHERE g.id = $1`,
+      [gameId]
+    );
+
+    if (!gameRes.rows.length) {
+      return res.json({ success: false, message: 'Партия не найдена' });
+    }
+
+    const game = gameRes.rows[0];
+
+    // АВТООТМЕНА ПО ТАЙМАУТУ (2 минуты)
+    if (game.status === 'waiting') {
+      const createdAt = new Date(game.created_at);
+      const now = new Date();
+      const secondsPassed = Math.floor((now - createdAt) / 1000);
+      const timeLimit = 120;
+
+      if (secondsPassed >= timeLimit) {
+        await pool.query(
+          `UPDATE chess_games SET status = 'cancelled', finished_at = NOW() WHERE id = $1`,
+          [gameId]
+        );
+        await pool.query(
+          `UPDATE users SET balance = balance + $1 WHERE telegram_id = $2`,
+          [game.stake, game.player1_id]
+        );
+        
+        return res.json({ 
+          success: true, 
+          timeExpired: true,
+          game: { ...game, status: 'cancelled' }
+        });
+      }
+      
+      const secondsLeft = Math.max(0, timeLimit - secondsPassed);
+      return res.json({ 
+        success: true, 
+        isParticipant: String(game.player1_id) === String(userId),
+        game: { ...game, secondsLeft }
+      });
+    }
+
+    const chess = new Chess(game.fen);
+
+    const isParticipant = String(game.player1_id) === String(userId) || 
+                          (game.player2_id && String(game.player2_id) === String(userId));
+
+    res.json({
+      success: true,
+      isParticipant,
+      game: {
+        id: game.id,
+        status: game.status,
+        stake: game.stake,
+        fen: game.fen,
+        pgn: game.pgn,
+        turn: chess.turn(),
+        winnerId: game.winner_id,
+        player1: { 
+          id: game.player1_id, 
+          nick: game.p1_nick || game.p1_first_name || 'Игрок 1', 
+          photo: game.p1_photo ? `${BASE_URL}/api/tg-photo/${game.player1_id}` : null 
+        },
+        player2: game.player2_id ? { 
+          id: game.player2_id, 
+          nick: game.p2_nick || game.p2_first_name || 'Игрок 2', 
+          photo: game.p2_photo ? `${BASE_URL}/api/tg-photo/${game.player2_id}` : null 
+        } : null
+      }
+    });
+  } catch (e) {
+    console.error('[CHESS] state error:', e);
+    res.json({ success: false, message: 'Ошибка получения состояния' });
+  }
+});
+
+// POST /api/chess/move
 router.post('/api/chess/move', requireInitDataStrict, authRateLimit, async (req, res) => {
   const client = await pool.connect();
   try {
@@ -129,7 +236,6 @@ router.post('/api/chess/move', requireInitDataStrict, authRateLimit, async (req,
       return res.json({ success: false, message: 'Партия не активна' });
     }
 
-    // Проверяем, чей ход
     const chess = new Chess(game.fen);
     const isWhiteTurn = chess.turn() === 'w';
     const isPlayer1 = String(game.player1_id) === String(userId);
@@ -139,7 +245,6 @@ router.post('/api/chess/move', requireInitDataStrict, authRateLimit, async (req,
       return res.json({ success: false, message: 'Сейчас не ваш ход' });
     }
 
-    // Делаем ход
     let move;
     try {
       move = chess.move({ from, to, promotion: promotion || 'q' });
@@ -171,7 +276,13 @@ router.post('/api/chess/move', requireInitDataStrict, authRateLimit, async (req,
     );
 
     await client.query(
-      `UPDATE chess_games SET fen = $1, pgn = $2, status = $3, winner_id = $4, finished_at = CASE WHEN $3 = 'finished' THEN NOW() ELSE NULL END WHERE id = $5`,
+      `UPDATE chess_games SET 
+        fen = $1, 
+        pgn = $2, 
+        status = $3::VARCHAR(20), 
+        winner_id = $4, 
+        finished_at = CASE WHEN $3 = 'finished' THEN NOW() ELSE NULL END 
+      WHERE id = $5`,
       [newFen, newPgn, status, winnerId, gameId]
     );
 
@@ -184,7 +295,6 @@ router.post('/api/chess/move', requireInitDataStrict, authRateLimit, async (req,
         await client.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [winAmount, winnerId]);
         await client.query('INSERT INTO burn_pool (source, amount, telegram_id) VALUES ($1, $2, $3)', ['chess_burn', burnAmount, winnerId]);
       } else {
-        // Ничья — возврат ставок
         await client.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [game.stake, game.player1_id]);
         await client.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [game.stake, game.player2_id]);
       }
@@ -213,51 +323,7 @@ router.post('/api/chess/move', requireInitDataStrict, authRateLimit, async (req,
   }
 });
 
-// Получить состояние партии
-router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) => {
-  try {
-    const userId = req.tgUser.id;
-    const gameId = parseInt(req.query.game_id);
-
-    const gameRes = await pool.query(
-      `SELECT g.*, 
-              u1.nickname as p1_nick, u1.first_name as p1_name,
-              u2.nickname as p2_nick, u2.first_name as p2_name
-       FROM chess_games g
-       LEFT JOIN users u1 ON g.player1_id = u1.telegram_id
-       LEFT JOIN users u2 ON g.player2_id = u2.telegram_id
-       WHERE g.id = $1`,
-      [gameId]
-    );
-
-    if (!gameRes.rows.length) {
-      return res.json({ success: false, message: 'Партия не найдена' });
-    }
-
-    const game = gameRes.rows[0];
-    const chess = new Chess(game.fen);
-
-    res.json({
-      success: true,
-      game: {
-        id: game.id,
-        status: game.status,
-        stake: game.stake,
-        fen: game.fen,
-        pgn: game.pgn,
-        turn: chess.turn(),
-        winnerId: game.winner_id,
-        player1: { id: game.player1_id, nick: game.p1_nick || game.p1_name || 'Игрок 1' },
-        player2: game.player2_id ? { id: game.player2_id, nick: game.p2_nick || game.p2_name || 'Игрок 2' } : null
-      }
-    });
-  } catch (e) {
-    console.error('[CHESS] state error:', e);
-    res.json({ success: false, message: 'Ошибка получения состояния' });
-  }
-});
-
-// Сдаться
+// POST /api/chess/resign
 router.post('/api/chess/resign', requireInitDataStrict, authRateLimit, async (req, res) => {
   const client = await pool.connect();
   try {
@@ -290,7 +356,7 @@ router.post('/api/chess/resign', requireInitDataStrict, authRateLimit, async (re
     const winAmount = totalPot - burnAmount;
 
     await client.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [winAmount, winnerId]);
-    await client.query('UPDATE chess_games SET status = $1, winner_id = $2, finished_at = NOW() WHERE id = $3', ['finished', winnerId, gameId]);
+    await client.query("UPDATE chess_games SET status = 'finished'::VARCHAR(20), winner_id = $1, finished_at = NOW() WHERE id = $2", [winnerId, gameId]);
     await client.query('INSERT INTO burn_pool (source, amount, telegram_id) VALUES ($1, $2, $3)', ['chess_burn', burnAmount, winnerId]);
 
     await client.query('COMMIT');
@@ -299,6 +365,45 @@ router.post('/api/chess/resign', requireInitDataStrict, authRateLimit, async (re
     await client.query('ROLLBACK');
     console.error('[CHESS] resign error:', e);
     res.json({ success: false, message: 'Ошибка' });
+  } finally {
+    client.release();
+  }
+});
+
+// POST /api/chess/cancel
+router.post('/api/chess/cancel', requireInitDataStrict, authRateLimit, async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    
+    const userId = req.tgUser.id;
+    const gameId = parseInt(req.body.game_id);
+
+    const gameRes = await client.query('SELECT * FROM chess_games WHERE id = $1 FOR UPDATE', [gameId]);
+    if (!gameRes.rows.length) {
+      await client.query('ROLLBACK');
+      return res.json({ success: false, message: 'Партия не найдена' });
+    }
+
+    const game = gameRes.rows[0];
+    if (game.status !== 'waiting') {
+      await client.query('ROLLBACK');
+      return res.json({ success: false, message: 'Партия уже началась' });
+    }
+    if (String(game.player1_id) !== String(userId)) {
+      await client.query('ROLLBACK');
+      return res.json({ success: false, message: 'Только создатель может отменить партию' });
+    }
+
+    await client.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [game.stake, game.player1_id]);
+    await client.query("UPDATE chess_games SET status = 'cancelled'::VARCHAR(20) WHERE id = $1", [gameId]);
+
+    await client.query('COMMIT');
+    res.json({ success: true, message: 'Партия отменена, ставка возвращена' });
+  } catch (e) {
+    await client.query('ROLLBACK');
+    console.error('[CHESS] cancel error:', e);
+    res.json({ success: false, message: 'Ошибка отмены' });
   } finally {
     client.release();
   }
