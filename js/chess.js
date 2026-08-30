@@ -641,15 +641,14 @@ function chessShowResult(gameData) {
 
 function loadChessJoinPanel(gameIdParam) {
   const t = CHESS_LANG[currentLang] || CHESS_LANG.en;
-  const root = document.getElementById('dynamicContent') || document.body;
-  root.innerHTML = '';
   
+  // 🔧 НЕ очищаем root, а просто создаём контейнер поверх
   const appRoot = document.getElementById('appRoot');
   if (appRoot) appRoot.style.display = 'none';
   
   const joinContainer = document.createElement('div');
   joinContainer.id = 'chessJoinContainer';
-  joinContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;background:transparent;';
+  joinContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;background:#0a0f1e;';
   
   joinContainer.innerHTML = `
     <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
@@ -662,7 +661,7 @@ function loadChessJoinPanel(gameIdParam) {
       <div id="chessJoinActions" style="display:none;flex-direction:column;gap:12px;">
         <button onclick="chessAcceptInvite(${gameIdParam})" style="position:relative;width:100%;height:54px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;border-radius:12px;">
           <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;" onerror="this.style.background='#00ffaa'">
-          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.9rem;font-weight:800;color:#00ffaa;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,255,170,0.5);">Принять вызов</div>
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.9rem;font-weight:800;color:#00ffaa;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(0,255,170,0.5);">⚔️ Принять вызов</div>
         </button>
         <button onclick="chessBackToMenu()" style="position:relative;width:100%;height:54px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;border-radius:12px;">
           <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;border-radius:12px;display:block;" onerror="this.style.background='#ff6464'">
