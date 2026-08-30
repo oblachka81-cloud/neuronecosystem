@@ -398,6 +398,9 @@ document.addEventListener('click', function(e) {
   if (duelIdFromUrl) {
     setTimeout(() => loadDuelJoinPanel(duelIdFromUrl), 2500);
   }
+  if (chessIdFromUrl) {
+    setTimeout(() => loadChessJoinPanel(chessIdFromUrl), 2500);
+  }
 }, 300);
 
 setTimeout(preloadTabImages, 2000);
