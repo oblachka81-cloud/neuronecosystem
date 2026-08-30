@@ -322,9 +322,9 @@ router.post('/api/impulse/buy-stars', requireInitData, async (req, res) => {
     const bot = req.app.get('bot');
     
     const packs = {
-      small:  { stars: 50,  impulse: 500  },
-      medium: { stars: 100, impulse: 1000 },
-      big:    { stars: 500, impulse: 5000 },
+      small:  { stars: 25,  impulse: 500  },
+      medium: { stars: 50,  impulse: 1000 },
+      big:    { stars: 250, impulse: 5000 },
     };
     
     const selected = packs[pack] || packs.small;
