@@ -81,17 +81,30 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
 
   const seqno = await contract.getSeqno();
 
-  await contract.sendTransfer({
-    seqno,
-    secretKey: keyPair.secretKey,
-    messages: [
-      internal({
-        to: jettonWalletAddress,
-        value: '200000000',
-        body: jettonTransferBody
-      })
-    ]
-  });
+  try {
+    await contract.sendTransfer({
+      seqno,
+      secretKey: keyPair.secretKey,
+      messages: [
+        internal({
+          to: jettonWalletAddress,
+          value: '200000000',
+          body: jettonTransferBody
+        })
+      ]
+    });
+  } catch (sendErr) {
+    console.error('[JETTON] sendTransfer ошибка:');
+    console.error('[JETTON] message:', sendErr.message);
+    if (sendErr.response) {
+      console.error('[JETTON] status:', sendErr.response.status);
+      console.error('[JETTON] data:', JSON.stringify(sendErr.response.data));
+    }
+    if (sendErr.cause) {
+      console.error('[JETTON] cause:', sendErr.cause);
+    }
+    throw sendErr;
+  }
 
   await new Promise(resolve => setTimeout(resolve, 5000));
 
