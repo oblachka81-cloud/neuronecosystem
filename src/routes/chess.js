@@ -126,11 +126,15 @@ router.post('/api/chess/join', requireInitDataStrict, authRateLimit, async (req,
 
 // GET /api/chess/state
 router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) => {
+  const client = await pool.connect(); // 🔧 Используем клиент для транзакции
   try {
+    await client.query('BEGIN');
+    
     const userId = req.tgUser.id;
     const gameId = parseInt(req.query.game_id);
 
-    const gameRes = await pool.query(
+    // 🔧 FOR UPDATE блокирует строку от параллельных чтений
+    const gameRes = await client.query(
       `SELECT g.*, 
               u1.nickname as p1_nick, u1.tg_photo_file_id as p1_photo,
               u1.first_name as p1_first_name,
@@ -139,11 +143,12 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
        FROM chess_games g
        LEFT JOIN users u1 ON g.player1_id = u1.telegram_id
        LEFT JOIN users u2 ON g.player2_id = u2.telegram_id
-       WHERE g.id = $1`,
+       WHERE g.id = $1 FOR UPDATE`,
       [gameId]
     );
 
     if (!gameRes.rows.length) {
+      await client.query('ROLLBACK');
       return res.json({ success: false, message: 'Партия не найдена' });
     }
 
@@ -157,15 +162,16 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
       const timeLimit = 120;
 
       if (secondsPassed >= timeLimit) {
-        await pool.query(
+        await client.query(
           `UPDATE chess_games SET status = 'cancelled', finished_at = NOW() WHERE id = $1`,
           [gameId]
         );
-        await pool.query(
+        await client.query(
           `UPDATE users SET balance = balance + $1 WHERE telegram_id = $2`,
           [game.stake, game.player1_id]
         );
         
+        await client.query('COMMIT'); // 🔧 Фиксируем возврат денег
         return res.json({ 
           success: true, 
           timeExpired: true,
@@ -174,12 +180,15 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
       }
       
       const secondsLeft = Math.max(0, timeLimit - secondsPassed);
+      await client.query('COMMIT');
       return res.json({ 
         success: true, 
         isParticipant: String(game.player1_id) === String(userId),
         game: { ...game, secondsLeft }
       });
     }
+
+    await client.query('COMMIT'); // Для active/finished просто отпускаем блокировку
 
     const chess = new Chess(game.fen);
 
@@ -210,8 +219,11 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
       }
     });
   } catch (e) {
+    await client.query('ROLLBACK');
     console.error('[CHESS] state error:', e);
     res.json({ success: false, message: 'Ошибка получения состояния' });
+  } finally {
+    client.release();
   }
 });
 
