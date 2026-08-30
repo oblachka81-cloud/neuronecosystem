@@ -7,7 +7,7 @@ const { splitSuperGameRevenue } = require('../services/revenueSplit');
 function setupCron(bot, botUsername) {
   cron.schedule('*/30 * * * * *', () => checkTonUsdtPayments(bot));
 
-  cron.schedule('0 */6 * * *', () => splitSuperGameRevenue(bot));
+  cron.schedule('*/10 * * * *', () => splitSuperGameRevenue(bot));
   
   // ==================== АВТООЧИСТКА ДУЭЛЕЙ ====================
   // Каждые 15 минут удаляем "waiting" дуэли старше 30 минут
