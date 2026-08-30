@@ -131,14 +131,16 @@ router.post('/api/chess/join', requireInitDataStrict, authRateLimit, async (req,
 
 // GET /api/chess/state
 router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) => {
-  const client = await pool.connect(); // 🔧 Используем клиент для транзакции
+  const client = await pool.connect();
   try {
     await client.query('BEGIN');
     
     const userId = req.tgUser.id;
     const gameId = parseInt(req.query.game_id);
 
-    // 🔧 FOR UPDATE блокирует строку от параллельных чтений
+    // 🔧 ИСПРАВЛЕНИЕ: Добавлено "OF g" после FOR UPDATE. 
+    // Это говорит PostgreSQL блокировать только таблицу chess_games (g), 
+    // игнорируя NULL-значения из LEFT JOIN (когда player2 еще не зашел).
     const gameRes = await client.query(
       `SELECT g.*, 
               u1.nickname as p1_nick, u1.tg_photo_file_id as p1_photo,
@@ -148,7 +150,7 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
        FROM chess_games g
        LEFT JOIN users u1 ON g.player1_id = u1.telegram_id
        LEFT JOIN users u2 ON g.player2_id = u2.telegram_id
-       WHERE g.id = $1 FOR UPDATE`,
+       WHERE g.id = $1 FOR UPDATE OF g`, // <--- ВОТ ЭТО КЛЮЧЕВОЕ ИЗМЕНЕНИЕ
       [gameId]
     );
 
@@ -176,7 +178,7 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
           [game.stake, game.player1_id]
         );
         
-        await client.query('COMMIT'); // 🔧 Фиксируем возврат денег
+        await client.query('COMMIT');
         return res.json({ 
           success: true, 
           timeExpired: true,
@@ -193,9 +195,9 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
       });
     }
 
-    await client.query('COMMIT'); // Для active/finished просто отпускаем блокировку
+    await client.query('COMMIT');
 
-    const chess = new Chess(game.fen);
+    const chess = new (require('chess.js').Chess)(game.fen);
 
     const isParticipant = String(game.player1_id) === String(userId) || 
                           (game.player2_id && String(game.player2_id) === String(userId));
@@ -214,12 +216,12 @@ router.get('/api/chess/state', requireInitData, authRateLimit, async (req, res) 
         player1: { 
           id: game.player1_id, 
           nick: game.p1_nick || game.p1_first_name || 'Игрок 1', 
-          photo: game.p1_photo ? `${BASE_URL}/api/tg-photo/${game.player1_id}` : null 
+          photo: game.p1_photo ? `${process.env.WEBAPP_URL || 'https://neuron.bothost.tech'}/api/tg-photo/${game.player1_id}` : null 
         },
         player2: game.player2_id ? { 
           id: game.player2_id, 
           nick: game.p2_nick || game.p2_first_name || 'Игрок 2', 
-          photo: game.p2_photo ? `${BASE_URL}/api/tg-photo/${game.player2_id}` : null 
+          photo: game.p2_photo ? `${process.env.WEBAPP_URL || 'https://neuron.bothost.tech'}/api/tg-photo/${game.player2_id}` : null 
         } : null
       }
     });
