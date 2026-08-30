@@ -1,4 +1,4 @@
-const { TonClient, WalletContractV4, internal, Address } = require('@ton/ton');
+const { TonClient, WalletContractV4, WalletContractV5R1, internal, Address } = require('@ton/ton');
 const { mnemonicToPrivateKey } = require('@ton/crypto');
 const { beginCell } = require('@ton/core');
 const OPERATIONAL_WALLET = 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv';
