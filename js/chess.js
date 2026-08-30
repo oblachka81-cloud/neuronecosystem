@@ -232,7 +232,11 @@ function loadChessJoinPanel(gameIdParam) {
     </div>`;
 
   authFetch(`${BASE_URL}/api/chess/state?game_id=${gameIdParam}`)
-    .then(r => r.json())
+    .then(r => r.text().then(txt => {
+      // 🔧 Если сервер вернул не JSON — показываем, ЧТО именно он вернул
+      try { return JSON.parse(txt); }
+      catch (e) { throw new Error('HTTP ' + r.status + ' → ' + txt.slice(0, 100)); }
+    }))
     .then(data => {
       const loader = document.getElementById('chzJoinLoader');
       if (!loader) return;
@@ -240,12 +244,16 @@ function loadChessJoinPanel(gameIdParam) {
         loader.innerHTML = '⚔️ <b style="color:#ffcc44">' + escapeHtml(data.game.player1.nick) + '</b><br><span style="font-size:.8rem;color:#8ba3c1;">' + data.game.stake + ' COGNIQ</span>';
         document.getElementById('chzJoinActions').style.display = 'flex';
       } else {
-        loader.innerHTML = '<span style="color:#ff6464;">' + t.opponentNotFound + '</span>';
+        loader.innerHTML = '<span style="color:#ff6464;">' + (data.message || t.opponentNotFound) + '</span>';
       }
     })
-    .catch(() => {
+    .catch(err => {
       const loader = document.getElementById('chzJoinLoader');
-      if (loader) loader.innerHTML = '<span style="color:#ff6464;">' + t.errConnect + '</span>';
+      if (!loader) return;
+      loader.innerHTML =
+        '<span style="color:#ff6464;">' + t.errConnect + '</span>' +
+        '<div style="font-size:.62rem;color:#8ba3c1;margin-top:8px;word-break:break-all;">' + escapeHtml(String((err && err.message) || err)) + '</div>' +
+        '<button class="chz-btn gold" style="margin-top:12px;" onclick="loadChessJoinPanel(' + gameIdParam + ')">🔄 Повторить</button>';
     });
 }
 
