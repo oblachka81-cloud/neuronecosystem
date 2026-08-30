@@ -553,6 +553,11 @@ function chessCellClick(square, gameData) {
 }
 
 async function chessMakeMove(from, to) {
+  if (!chessGameId) {
+    showToast('Ошибка: партия не найдена', 3000);
+    return;
+  }
+  
   try {
     const res = await authFetch(`${BASE_URL}/api/chess/move`, {
       method: 'POST',
@@ -761,6 +766,8 @@ async function chessAcceptInvite(gameIdParam) {
     const data = await res.json();
     
     if (data.success) {
+      chessGameId = gameIdParam;
+      
       const joinContainer = document.getElementById('chessJoinContainer');
       if (joinContainer) joinContainer.remove();
       
