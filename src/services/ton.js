@@ -67,7 +67,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
     messages: [
       internal({
         to: jettonWalletAddress,
-        value: toNano('0.05')
+        value: toNano('0.05'),
         body: jettonTransferBody
       })
     ]
