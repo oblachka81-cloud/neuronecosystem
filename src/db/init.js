@@ -467,6 +467,32 @@ await pool.query(`
 `);
 console.log('[DB] revenue_splits + split columns OK');
 
+    await pool.query(`
+  CREATE TABLE IF NOT EXISTS chess_games (
+    id SERIAL PRIMARY KEY,
+    player1_id BIGINT NOT NULL,
+    player2_id BIGINT,
+    stake INTEGER NOT NULL DEFAULT 0,
+    fen TEXT DEFAULT 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    pgn TEXT DEFAULT '',
+    status VARCHAR(20) DEFAULT 'waiting',
+    winner_id BIGINT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    finished_at TIMESTAMP
+  )
+`);
+
+await pool.query(`
+  CREATE TABLE IF NOT EXISTS chess_moves (
+    id SERIAL PRIMARY KEY,
+    game_id INTEGER REFERENCES chess_games(id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL,
+    move_notation TEXT NOT NULL,
+    fen_after TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+  )
+`);
+
   await loadQuestionsFromDB();
   console.log('БД инициализирована');
 };
