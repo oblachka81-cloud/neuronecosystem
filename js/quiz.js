@@ -58,6 +58,7 @@ root.innerHTML = `
     <img src="${phraseImg}" alt="NEURON" style="width:100%;max-width:400px;height:auto;display:block;margin:0 auto 12px;opacity:0.9;">
       ${superGameCard}
       ${duelsBtnHtml}
+      ${chessBtnHtml}
       ${startBtnHtml}
       ${replayBtnHtml}
       <div id="dailyQuestionCard" style="display:none; background: linear-gradient(135deg, rgba(0,200,255,0.1), rgba(122,46,255,0.1)); border: 1px solid rgba(0,255,255,0.3); border-radius: 24px; padding: 20px; margin-bottom: 16px; text-align: left;">
