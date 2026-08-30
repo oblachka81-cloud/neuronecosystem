@@ -386,17 +386,41 @@ function renderBoard() {
       const sq = String.fromCharCode(97 + col) + (8 - row);
       const piece = chessBoard[row][col];
       const isLight = (row + col) % 2 === 0;
-      let cls = 'chz-cell ' + (isLight ? 'chz-light' : 'chz-dark');
-      if (chessLastMove && (chessLastMove.from === sq || chessLastMove.to === sq)) cls += ' chz-last';
-      if (chessSelected === sq) cls += ' chz-sel';
-      if (chkSq === sq) cls += ' chz-check';
-      if (chessSelected && chessLegalMap[sq] !== undefined) cls += chessLegalMap[sq] ? ' chz-cap' : ' chz-dot';
+
+      // КЛЕТКА: div принудительно квадратный (aspect-ratio:1),
+      // webp через center/cover — неквадратность актива обрезается ровно
+      const cellBg = isLight
+        ? "url('/main/chess/cell_light.webp?v=1') center/cover no-repeat, linear-gradient(145deg,#1798a6,#0b3f4a)"
+        : "url('/main/chess/cell_dark.webp?v=1') center/cover no-repeat, linear-gradient(145deg,#b01a45,#3f081c)";
+
+      const shadows = [ isLight
+        ? 'inset 0 1px 0 rgba(255,255,255,.25), inset 0 0 10px rgba(0,255,220,.18)'
+        : 'inset 0 1px 0 rgba(255,255,255,.15), inset 0 0 10px rgba(255,80,110,.22)' ];
+      if (chessLastMove && (chessLastMove.from === sq || chessLastMove.to === sq)) shadows.push('inset 0 0 0 100px rgba(255,230,0,.35)');
+      if (chessSelected === sq) shadows.push('inset 0 0 0 100px rgba(255,230,0,.5)');
+      if (chkSq === sq) shadows.push('inset 0 0 14px 5px rgba(255,60,60,.8)');
 
       let inner = '';
-      if (j === 0) inner += '<span class="chz-coord chz-crank">' + (8 - row) + '</span>';
-      if (i === 7) inner += '<span class="chz-coord chz-cfile">' + String.fromCharCode(97 + col) + '</span>';
-      if (piece) inner += '<span class="chz-piece ' + (piece[0] === 'w' ? 'chz-w' : 'chz-b') + '">' + GLYPH[piece[1]] + '</span>';
-      html += '<div class="' + cls + '" data-square="' + sq + '">' + inner + '</div>';
+      const coordColor = isLight ? '#bffcf2' : '#ffd3dd';
+      if (j === 0) inner += `<span style="position:absolute;top:2px;left:3px;font-size:9px;font-weight:800;pointer-events:none;color:${coordColor};text-shadow:0 1px 2px rgba(0,0,0,.7);">${8 - row}</span>`;
+      if (i === 7) inner += `<span style="position:absolute;bottom:1px;right:3px;font-size:9px;font-weight:800;pointer-events:none;color:${coordColor};text-shadow:0 1px 2px rgba(0,0,0,.7);">${String.fromCharCode(97 + col)}</span>`;
+
+      if (chessSelected && chessLegalMap[sq] !== undefined) {
+        inner += chessLegalMap[sq]
+          ? `<div style="position:absolute;inset:6%;border-radius:50%;border:3px solid rgba(255,255,255,.55);pointer-events:none;"></div>`
+          : `<div style="position:absolute;width:26%;height:26%;border-radius:50%;background:rgba(255,255,255,.45);pointer-events:none;"></div>`;
+      }
+
+      // ФИГУРА: webp из /main/chess/, если файла нет — глиф-фоллбэк
+      if (piece) {
+        const code = piece[0] + piece[1];
+        const pStyle = piece[0] === 'w'
+          ? 'color:#f8f8f8;text-shadow:0 0 3px #000,0 2px 3px rgba(0,0,0,.7);'
+          : 'color:#141414;text-shadow:0 0 3px rgba(255,255,255,.45),0 2px 3px rgba(0,0,0,.5);';
+        inner += `<img src="/main/chess/${code}.webp?v=1" alt="" style="position:relative;z-index:2;width:86%;height:86%;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.55));" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span style="display:none;position:relative;z-index:2;line-height:1;font-size:calc(min(100vw - 40px, 442px)/10);${pStyle}">${GLYPH[piece[1]]}</span>`;
+      }
+
+      html += `<div data-square="${sq}" style="position:relative;aspect-ratio:1;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;touch-action:manipulation;background:${cellBg};box-shadow:${shadows.join(',')};">${inner}</div>`;
     }
   }
   const boardEl = document.getElementById('chzBoard');
@@ -406,7 +430,9 @@ function renderBoard() {
   const turnEl = document.getElementById('chzTurn');
   if (turnEl) {
     turnEl.textContent = myTurn ? t.yourTurn : t.opponentTurn;
-    turnEl.className = 'chz-turn ' + (myTurn ? 'my' : 'op');
+    turnEl.style.cssText = 'font-size:.72rem;font-weight:800;padding:6px 10px;border-radius:10px;' + (myTurn
+      ? 'color:#00ffaa;background:rgba(0,255,170,.12);border:1px solid rgba(0,255,170,.4);'
+      : 'color:#8ba3c1;background:rgba(139,163,193,.1);border:1px solid rgba(139,163,193,.3);');
   }
 }
 
