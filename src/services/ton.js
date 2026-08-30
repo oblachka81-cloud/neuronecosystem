@@ -1,6 +1,6 @@
 const { TonClient, WalletContractV4, WalletContractV5R1, internal, Address } = require('@ton/ton');
 const { mnemonicToPrivateKey } = require('@ton/crypto');
-const { beginCell } = require('@ton/core');
+const { beginCell, toNano } = require('@ton/core');
 const OPERATIONAL_WALLET = 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv';
 
 async function getJettonWalletAddress(client, ownerAddress, jettonMasterAddress) {
@@ -75,7 +75,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
     .storeAddress(toAddr)
     .storeAddress(walletAddress)
     .storeBit(0)
-    .storeCoins(100000000)
+    .storeCoins(toNano('0.1'))
     .storeBit(0)
     .endCell();
 
@@ -88,7 +88,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
       messages: [
         internal({
           to: jettonWalletAddress,
-          value: '200000000',
+          value: toNano('0.2'),
           body: jettonTransferBody
         })
       ]
