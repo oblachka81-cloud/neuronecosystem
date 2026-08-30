@@ -407,8 +407,8 @@ function renderBoard() {
 
       if (chessSelected && chessLegalMap[sq] !== undefined) {
         inner += chessLegalMap[sq]
-          ? `<div style="position:absolute;inset:6%;border-radius:50%;border:3px solid rgba(255,255,255,.55);pointer-events:none;"></div>`
-          : `<div style="position:absolute;width:26%;height:26%;border-radius:50%;background:rgba(255,255,255,.45);pointer-events:none;"></div>`;
+          ? `<div style="position:absolute;inset:4%;border-radius:50%;border:4px solid rgba(255,230,0,.95);box-shadow:0 0 12px rgba(255,230,0,.8), inset 0 0 10px rgba(255,230,0,.5);pointer-events:none;"></div>`
+          : `<div style="position:absolute;width:30%;height:30%;border-radius:50%;background:rgba(255,230,0,.9);box-shadow:0 0 10px rgba(255,230,0,.9), 0 0 22px rgba(255,230,0,.55);pointer-events:none;"></div>`;
       }
 
       // ФИГУРА: webp из /main/chess/, если файла нет — глиф-фоллбэк
