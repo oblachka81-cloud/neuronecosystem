@@ -43,6 +43,7 @@ function showWelcome(totalScore, gamesPlayed) {
   let startBtnText = currentState.superGamePending ? t.startSuperBtn : (freeGamesLeft > 0 ? t.startBtn(freeGamesLeft) : t.limitBtn);
   let startBtnDisabled = (!currentState.superGamePending && freeGamesLeft <= 0) ? 'disabled' : '';
   const duelsBtnHtml = webpBtn('duelsBtn', 'main/btn_duel.webp', window.DUEL_LANG?.[currentLang]?.title || 'Duels');
+  const chessBtnHtml = webpBtn('chessBtn', 'main/btn_duel.webp', '♟️ ' + (window.CHESS_LANG?.[currentLang]?.title || 'Chess'));
   const startBtnHtml = webpBtn('startNewBtn', 'main/btn_frame_start.webp', startBtnText, startBtnDisabled, startBtnDisabled ? 'opacity:0.5;pointer-events:none;' : '');
 
   const replayBtnHtml = currentState.lastGameWasSuper && !currentState.superGameReplayUsed
