@@ -213,6 +213,10 @@ function chessBackToMenu() {
   const joinContainer = document.getElementById('chessJoinContainer');
   if (joinContainer) joinContainer.remove();
   
+  // 🔧 ДОБАВЛЕНО: очистка контейнера игры
+  const gameContainer = document.getElementById('chessGameContainer');
+  if (gameContainer) gameContainer.remove();
+  
   const appRoot = document.getElementById('appRoot');
   if (appRoot) appRoot.style.display = '';
   
@@ -706,16 +710,29 @@ async function chessAcceptInvite(gameIdParam) {
     const res = await authFetch(`${BASE_URL}/api/chess/join`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ game_id: gameIdParam }) // 🔧 Убрали user_id
+      body: JSON.stringify({ game_id: gameIdParam })
     });
     const data = await res.json();
     
     if (data.success) {
       chessGameId = gameIdParam;
       
+      // 1. Убираем экран присоединения
       const joinContainer = document.getElementById('chessJoinContainer');
       if (joinContainer) joinContainer.remove();
       
+      // 2. Создаём контейнер для игры (если его вдруг нет в DOM)
+      let gameContainer = document.getElementById('chessGameContainer');
+      if (!gameContainer) {
+        gameContainer = document.createElement('div');
+        gameContainer.id = 'chessGameContainer';
+        gameContainer.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;overflow-y:auto;padding:20px 12px 40px;background:#0a0f1e;';
+        // Важно: добавляем обёртку max-width, чтобы доска была по центру, как в оригинале
+        gameContainer.innerHTML = '<div style="max-width:480px;width:100%;margin:0 auto;padding:16px;"><div id="chessGameBlock" style="display:none;"></div></div>';
+        document.body.appendChild(gameContainer);
+      }
+
+      // 3. Запрашиваем состояние и запускаем отрисовку
       const stateRes = await authFetch(`${BASE_URL}/api/chess/state?game_id=${gameIdParam}`);
       const stateData = await stateRes.json();
       
