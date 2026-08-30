@@ -55,7 +55,6 @@ router.post('/api/create-stars-invoice', requireInitData, publicRateLimit, async
       });
     }
 
-
     const bot = req.app.get('bot');
     let link;
     try {
@@ -65,7 +64,7 @@ router.post('/api/create-stars-invoice', requireInitData, publicRateLimit, async
         payload: `super_game_${userId}`,
         provider_token: '',
         currency: 'XTR',
-        prices: [{ label: 'Супер игра', amount: 100 }],
+        prices: [{ label: 'Супер игра', amount: 50 }],
       });
     } catch (e) {
       await client.query('ROLLBACK');
@@ -93,7 +92,7 @@ router.post('/api/create-stars-invoice-pack', requireInitData, publicRateLimit, 
       payload: `pack_20_${userId}`,
       provider_token: '',
       currency: 'XTR',
-      prices: [{ label: 'Пакет +10 игр', amount: 100 }],
+      prices: [{ label: 'Пакет +10 игр', amount: 50 }],
     });
     res.json({ ok: true, link });
   } catch (e) {
@@ -112,7 +111,7 @@ router.post('/api/create-stars-invoice-vip', requireInitData, publicRateLimit, a
       payload: `sub_vip_${userId}`,
       provider_token: '',
       currency: 'XTR',
-      prices: [{ label: 'VIP 7 дней', amount: 300 }],
+      prices: [{ label: 'VIP 7 дней', amount: 150 }],
     });
     res.json({ ok: true, link });
   } catch (e) {
@@ -131,7 +130,7 @@ router.post('/api/create-stars-invoice-premium', requireInitData, publicRateLimi
       payload: `sub_premium_${userId}`,
       provider_token: '',
       currency: 'XTR',
-      prices: [{ label: 'Premium 30 дней', amount: 800 }],
+      prices: [{ label: 'Premium 30 дней', amount: 400 }],
     });
     res.json({ ok: true, link });
   } catch (e) {
@@ -240,7 +239,7 @@ router.post('/api/shop/subscribe', requireInitData, heavyRateLimit, async (req, 
     if (!rows.length) return res.status(404).json({ error: 'User not found' });
 
     const durationDays = type === 'vip' ? VIP_DURATION_DAYS : PREMIUM_DURATION_DAYS;
-    const priceStars = type === 'vip' ? VIP_PRICE_STARS : PREMIUM_PRICE_STARS;
+    const priceStars = type === 'vip' ? 150 : 400;
 
     return res.json({
       ok: true,
