@@ -4,10 +4,29 @@ const { beginCell } = require('@ton/core');
 const OPERATIONAL_WALLET = 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv';
 
 async function getJettonWalletAddress(client, ownerAddress, jettonMasterAddress) {
-  const jettonWalletCode = await client.runMethod(jettonMasterAddress, 'get_wallet_address', [
-    { type: 'slice', value: beginCell().storeAddress(ownerAddress).endCell().asSlice() }
-  ]);
-  return jettonWalletCode.stack.readAddress();
+  try {
+    console.log('[JW] ownerAddress:', ownerAddress?.toString());
+    console.log('[JW] jettonMasterAddress:', jettonMasterAddress?.toString());
+
+    const cell = beginCell().storeAddress(ownerAddress).endCell();
+    console.log('[JW] cell создан');
+
+    const slice = cell.asSlice();
+    console.log('[JW] slice создан, тип:', typeof slice);
+
+    const jettonWalletCode = await client.runMethod(jettonMasterAddress, 'get_wallet_address', [
+      { type: 'slice', value: slice }
+    ]);
+    console.log('[JW] runMethod OK');
+
+    const result = jettonWalletCode.stack.readAddress();
+    console.log('[JW] result:', result?.toString());
+    return result;
+  } catch(e) {
+    console.error('[JW] ОШИБКА:', e.message);
+    console.error('[JW] Stack:', e.stack);
+    throw e;
+  }
 }
 
 async function sendCogniqJetton(toAddress, amount, privateKeyHex) {
