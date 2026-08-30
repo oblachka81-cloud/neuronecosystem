@@ -108,7 +108,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
 
   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  const transactions = await contract.getTransactions(1);
+  const transactions = await client.getTransactions(walletAddress, { limit: 1 });
   return transactions[0].hash().toString('hex');
 }
 
