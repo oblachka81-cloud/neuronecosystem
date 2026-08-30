@@ -71,7 +71,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
   const jettonTransferBody = beginCell()
     .storeUint(0xf8a7ea5, 32)
     .storeUint(0, 64)
-    .storeCoins(amount)
+    .storeCoins(BigInt(amount.toString()))
     .storeAddress(toAddr)
     .storeAddress(walletAddress)
     .storeBit(0)
