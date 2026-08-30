@@ -302,7 +302,7 @@ function chessRenderGameScreen() {
   document.body.appendChild(gameContainer);
 
   document.getElementById('chzBoard').addEventListener('click', e => {
-    const cell = e.target.closest('.chz-cell');
+    const cell = e.target.closest('[data-square]');
     if (cell) chessCellClick(cell.dataset.square);
   });
 
