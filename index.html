@@ -326,6 +326,7 @@ window.addEventListener('error', function(e){
   const BASE_URL = window.location.origin;
   const urlParams = new URLSearchParams(window.location.search); 
   const duelIdFromUrl = urlParams.get('duel');
+  const chessIdFromUrl = urlParams.get('chess');
   const tg = window.Telegram?.WebApp ?? {
     expand:()=>{}, MainButton:{hide:()=>{}}, initDataUnsafe:{}, initData:'',
     showAlert:(msg)=>alert(msg), openInvoice:(url,cb)=>{window.open(url);cb&&cb('cancelled')},
