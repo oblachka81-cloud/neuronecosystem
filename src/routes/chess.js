@@ -48,11 +48,16 @@ router.post('/api/chess/create', requireInitDataStrict, authRateLimit, async (re
     );
 
     await client.query('COMMIT');
+    
+    // 🔧 Сначала объявляем переменную
+    const botUsername = req.app.get('botUsername') || 'NeuronEcosystemBot';
+    
+    // 🔧 А потом используем её в ответе
     res.json({
       success: true,
       gameId: gameRes.rows[0].id,
       stake,
-      inviteLink: `https://t.me/NeuronEcosystemBot?start=chess_${gameRes.rows[0].id}`
+      inviteLink: `https://t.me/${botUsername}?start=chess_${gameRes.rows[0].id}`
     });
   } catch (e) {
     await client.query('ROLLBACK');
