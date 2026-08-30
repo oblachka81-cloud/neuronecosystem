@@ -36,6 +36,17 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
   const jettonWalletAddress = await getJettonWalletAddress(client, walletAddress, Address.parse(jettonMaster));
   const toAddr = Address.parse(toAddress);
 
+  // === ОТЛАДКА: логируем что получили ===
+  console.log('[JETTON] from:', walletAddress.toString());
+  console.log('[JETTON] jettonMaster:', jettonMaster);
+  console.log('[JETTON] jettonWallet:', jettonWalletAddress?.toString() || 'UNDEFINED');
+  console.log('[JETTON] toAddr:', toAddr?.toString() || 'UNDEFINED');
+  console.log('[JETTON] amount:', amount, 'type:', typeof amount);
+
+  if (!jettonWalletAddress) throw new Error('jettonWalletAddress is undefined');
+  if (!toAddr) throw new Error('toAddr is undefined');
+  // === КОНЕЦ ОТЛАДКИ ===
+
   const wallet = WalletContractV4.create({
     address: walletAddress,
     workchain: 0,
