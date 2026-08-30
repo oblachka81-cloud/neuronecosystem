@@ -60,7 +60,7 @@ async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
   if (!toAddr) throw new Error('toAddr is undefined');
   // === КОНЕЦ ОТЛАДКИ ===
 
-  const wallet = WalletContractV4.create({
+  const wallet = WalletContractV5R1.create({
     address: walletAddress,
     workchain: 0,
     publicKey: keyPair.publicKey
