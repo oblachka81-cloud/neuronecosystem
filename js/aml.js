@@ -74,8 +74,10 @@ function openAmlModal() {
       <div style="font-size:0.85rem;color:#8899aa;margin-bottom:20px;line-height:1.5;">${t.desc}</div>
       
       <input id="amlAddress" placeholder="${t.placeholder}" style="width:100%;padding:12px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(0,204,255,0.3);border-radius:12px;color:#fff;font-size:0.85rem;outline:none;margin-bottom:16px;text-align:center;">
-      
-      <button onclick="openAmlCheck()" style="width:100%;padding:14px;background:linear-gradient(135deg,#00ccff,#7a2eff);border:none;border-radius:40px;font-size:0.9rem;font-weight:700;color:white;cursor:pointer;margin-bottom:10px;">
+
+<div id="amlResultStatus" style="font-size:0.9rem;margin-bottom:16px;min-height:20px;display:none;padding:10px;border-radius:8px;"></div>
+
+<button id="amlSubmitBtn" onclick="openAmlCheck()" style="width:100%;padding:14px;background:linear-gradient(135deg,#00ccff,#7a2eff);border:none;border-radius:40px;font-size:0.9rem;font-weight:700;color:white;cursor:pointer;margin-bottom:10px;">
         🛡️ ${t.btn}
       </button>
       
@@ -98,8 +100,16 @@ function openAmlModal() {
   }, 100);
 }
 
-function openAmlCheck() {
+const AML_RESULTS = {
+  ru: { loading: 'Проверка кошелька...', clean: '✅ Кошелек чист. Опасных меток не найдено.', scam: '⚠️ Внимание! Кошелек помечен как СКАМ / ФИШИНГ!', error: 'Ошибка сети. Попробуйте позже.' },
+  en: { loading: 'Checking wallet...', clean: '✅ Wallet is clean. No high-risk tags found.', scam: '⚠️ Warning! This wallet is flagged as SCAM / PHISHING!', error: 'Network error. Try again later.' },
+  fr: { loading: 'Vérification...', clean: '✅ Portefeuille propre. Aucune marque à risque.', scam: '⚠️ Attention ! Portefeuille marqué SCAM / PHISHING !', error: 'Erreur réseau.' },
+  es: { loading: 'Verificando...', clean: '✅ Billetera limpia. Sin marcas de riesgo.', scam: '⚠️ ¡Atención! Billetera marcada como SCAM / PHISHING.', error: 'Error de red.' }
+};
+
+async function openAmlCheck() {
   const t = amlT();
+  const resLang = AML_RESULTS[currentLang] || AML_RESULTS.en;
   const addr = document.getElementById('amlAddress').value.trim();
   
   if (!addr) {
@@ -107,24 +117,50 @@ function openAmlCheck() {
     return;
   }
   
-  if (!addr.startsWith('EQ') && !addr.startsWith('UQ') && !addr.startsWith('0:')) {
+  if ((!addr.startsWith('EQ') && !addr.startsWith('UQ') && !addr.startsWith('0:')) || addr.length < 40) {
     showToast(t.errorFormat, 3000);
     return;
   }
   
-  // Копируем адрес
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(addr).catch(() => {});
+  const resultDiv = document.getElementById('amlResultStatus');
+  const submitBtn = document.getElementById('amlSubmitBtn');
+  
+  resultDiv.style.display = 'block';
+  resultDiv.style.background = 'rgba(255,255,255,0.05)';
+  resultDiv.style.color = '#00ccff';
+  resultDiv.style.border = 'none';
+  resultDiv.innerText = resLang.loading;
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = '0.5';
+  
+  try {
+    const response = await fetch(`https://tonapi.io/v2/address/${addr}/status`);
+    
+    if (!response.ok) throw new Error('API error');
+    
+    const data = await response.json();
+    
+    if (data.status === 'scam' || data.is_scam === true) {
+      resultDiv.style.background = 'rgba(255, 0, 50, 0.15)';
+      resultDiv.style.border = '1px solid #ff3366';
+      resultDiv.style.color = '#ff3366';
+      resultDiv.innerText = resLang.scam;
+    } else {
+      resultDiv.style.background = 'rgba(0, 255, 150, 0.1)';
+      resultDiv.style.border = '1px solid #00ff99';
+      resultDiv.style.color = '#00ff99';
+      resultDiv.innerText = resLang.clean;
+    }
+  } catch (error) {
+    console.error(error);
+    resultDiv.style.background = 'rgba(255,255,255,0.05)';
+    resultDiv.style.color = '#ff3366';
+    resultDiv.style.border = 'none';
+    resultDiv.innerText = resLang.error;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
   }
-  
-  // Открываем AMLSec
-  window.open('https://amlsec.services/', '_blank');
-  
-  showToast('Адрес скопирован → вставьте на сайте AMLSec', 3500);
-  
-  // Закрываем модалку
-  const modal = document.getElementById('amlModal');
-  if (modal) modal.remove();
 }
 
 // Глобальные функции
