@@ -71,9 +71,8 @@ function loadChessPanel() {
       </button>
 
       <div style="text-align:center;margin-bottom:24px;">
-        <div style="font-size:2.2rem;font-weight:900;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 45%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">♟️ ${t.title}</div>
-        <div style="font-size:0.82rem;color:#8ba3c1;letter-spacing:0.5px;font-weight:500;margin-top:4px;">${t.subtitle}</div>
-      </div>
+      <img src="/main/chess_logo_${currentLang}.webp" alt="${t.title}" style="width:260px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 25px rgba(255,204,68,0.35));">
+    </div>
 
       <div style="background:rgba(10,15,30,0.35);border:1.5px solid rgba(220,220,225,0.5);border-radius:20px;padding:18px 16px;margin-bottom:24px;box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.1);backdrop-filter:blur(8px);">
         <p style="font-size:0.87rem;background:linear-gradient(90deg,#d4d4d8 0%,#ffffff 50%,#d4d4d8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.55;margin:0;text-align:center;font-weight:500;">${t.desc}</p>
