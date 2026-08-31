@@ -112,7 +112,15 @@ function openAmlCheck() {
     return;
   }
   
-  window.open(`https://misttrack.app/ru/address/${addr}`, '_blank');
+  // Копируем адрес в буфер
+if (navigator.clipboard) {
+  navigator.clipboard.writeText(addr);
+}
+
+// Открываем MistTrack
+window.open('https://misttrack.app/ru', '_blank');
+
+showToast('Адрес скопирован. Вставьте его на MistTrack', 3000);
 }
 
 // Глобальные функции
