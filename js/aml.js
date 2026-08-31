@@ -8,7 +8,8 @@ const AML_LANG = {
     placeholder: 'Введите TON-адрес (EQ... или UQ...)',
     cancel: 'Отмена',
     errorEmpty: 'Введите TON-адрес',
-    errorFormat: 'Неверный формат адреса. Должен начинаться с EQ или UQ'
+    errorFormat: 'Неверный формат адреса. Должен начинаться с EQ или UQ',
+    extendedBtn: 'Расширенная проверка'
   },
   en: {
     title: 'AML Security',
@@ -17,7 +18,8 @@ const AML_LANG = {
     placeholder: 'Enter TON address (EQ... or UQ...)',
     cancel: 'Cancel',
     errorEmpty: 'Enter TON address',
-    errorFormat: 'Invalid address format. Must start with EQ or UQ'
+    errorFormat: 'Invalid address format. Must start with EQ or UQ',
+    extendedBtn: 'Extended Check'
   },
   fr: {
     title: 'AML Security',
@@ -26,7 +28,8 @@ const AML_LANG = {
     placeholder: 'Entrez l\'adresse TON (EQ... ou UQ...)',
     cancel: 'Annuler',
     errorEmpty: 'Entrez l\'adresse TON',
-    errorFormat: 'Format d\'adresse invalide. Doit commencer par EQ ou UQ'
+    errorFormat: 'Format d\'adresse invalide. Doit commencer par EQ ou UQ',
+    extendedBtn: 'Vérification avancée'
   },
   es: {
     title: 'AML Security',
@@ -35,7 +38,8 @@ const AML_LANG = {
     placeholder: 'Ingrese la dirección TON (EQ... o UQ...)',
     cancel: 'Cancelar',
     errorEmpty: 'Ingrese la dirección TON',
-    errorFormat: 'Formato de dirección inválido. Debe comenzar con EQ o UQ'
+    errorFormat: 'Formato de dirección inválido. Debe comenzar con EQ o UQ',
+    extendedBtn: 'Verificación avanzada'
   }
 };
 
@@ -50,11 +54,15 @@ function renderAmlCard() {
     <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(0,204,255,0.15);padding:20px;text-align:center;">
       <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#00ccff,#7a2eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">🛡️ ${t.title}</div>
       <div style="font-size:0.85rem;background:linear-gradient(90deg,#c8d0e0 0%,#ffffff 50%,#c8d0e0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;line-height:1.5;">${t.desc}</div>
-      <button onclick="openAmlModal()" style="position:relative;width:100%;height:80px;padding:0;background:none;border:none;cursor:pointer;border-radius:12px;overflow:hidden;">
-        <img src="/main/btn_portfolio_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;">
-        <span style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.95rem;font-weight:700;background:linear-gradient(90deg,#00ccff 0%,#ffffff 50%,#00ccff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;">🛡️ ${t.btn}</span>
-      </button>
-    </div>`;
+        <button onclick="openAmlModal()" style="position:relative;width:100%;height:80px;padding:0;background:none;border:none;cursor:pointer;border-radius:12px;overflow:hidden;margin-bottom:10px;">
+    <img src="/main/btn_portfolio_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;">
+    <span style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.95rem;font-weight:700;background:linear-gradient(90deg,#00ccff 0%,#ffffff 50%,#00ccff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;">🛡️ ${t.btn}</span>
+  </button>
+  <button onclick="window.open('https://amlsecurity.finance','_blank')" style="position:relative;width:100%;height:54px;padding:0;background:none;border:none;cursor:pointer;border-radius:12px;overflow:hidden;">
+    <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;opacity:0.65;">
+    <span style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;background:linear-gradient(90deg,#ffcc44 0%,#ffffff 50%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;">🔍 ${t.extendedBtn}</span>
+  </button>
+</div>`;
 }
 
 function openAmlModal() {
