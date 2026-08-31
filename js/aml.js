@@ -134,7 +134,7 @@ async function openAmlCheck() {
   submitBtn.style.opacity = '0.5';
   
   try {
-    const response = await fetch(`https://tonapi.io/v2/address/${addr}/status`);
+    const response = await authFetch(`${BASE_URL}/api/aml/check?address=${encodeURIComponent(addr)}`);
     
     if (!response.ok) throw new Error('API error');
     
