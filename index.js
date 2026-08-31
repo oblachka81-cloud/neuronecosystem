@@ -8,7 +8,7 @@ const { toNano } = require('@ton/core');
 const { TonClient, WalletContractV4, internal, Address } = require('@ton/ton');
 const { mnemonicToPrivateKey } = require('@ton/crypto');
 const { beginCell } = require('@ton/core');
-const { generateStreakWarningCard, generateStreakMilestoneCard, generateQuestionOfDayCard, generateWelcomeCard, generateWeeklyTopCard, generateReferralReferrerCard, generateReferralNewUserCard, generateWeeklyHeroesCard, generateStreakBattleCard, generateFactOfDayCard, generateRankRatingCard, generateAchievementCard, generatePurchaseCard, generateExchangeCard, generateTransferReceivedCard, postBurnCard, postBetaCard } = require('./channel.js');
+const { generateStreakWarningCard, generateStreakMilestoneCard, generateQuestionOfDayCard, generateWelcomeCard, generateWeeklyTopCard, generateReferralReferrerCard, generateReferralNewUserCard, generateWeeklyHeroesCard, generateStreakBattleCard, generateFactOfDayCard, generateRankRatingCard, generateAchievementCard, generatePurchaseCard, generateExchangeCard, generateTransferReceivedCard, postBurnCard, postBetaCard, generateDuelInviteCard } = require('./channel.js');
 
 // ==================== CONFIG + DB ====================
 const config = require('./src/config');
