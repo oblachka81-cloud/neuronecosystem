@@ -575,8 +575,8 @@ function loadChessJoinPanel(gameIdParam) {
   joinContainer.innerHTML = `
     <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
       <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:2.2rem;font-weight:900;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 45%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;">♟️ ${t.title}</div>
-      </div>
+      <img src="/main/chess_logo_${currentLang}.webp" alt="${t.title}" style="width:260px;height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 25px rgba(255,204,68,0.35));">
+    </div>
 
       <div style="background:rgba(10,15,30,0.35);border:1.5px solid rgba(220,220,225,0.5);border-radius:20px;padding:20px 16px;margin-bottom:20px;box-shadow:0 0 20px rgba(220,220,225,0.08), inset 0 1px 0 rgba(255,255,255,0.1);backdrop-filter:blur(8px);text-align:center;">
         <div style="font-size:0.82rem;color:#8ba3c1;letter-spacing:0.5px;margin-bottom:8px;">${t.subtitle}</div>
