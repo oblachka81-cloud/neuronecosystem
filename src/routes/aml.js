@@ -11,7 +11,7 @@ router.get('/api/aml/check', requireInitData, publicRateLimit, async (req, res) 
       return res.status(400).json({ error: 'Address required' });
     }
     
-    const response = await fetch(`https://tonapi.io/v2/address/${addr}/status`);
+    const response = await fetch(`https://tonapi.io/v2/accounts/${addr}`);
     
     if (!response.ok) {
       return res.status(response.status).json({ error: 'TonAPI error' });
