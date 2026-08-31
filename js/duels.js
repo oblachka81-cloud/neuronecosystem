@@ -157,7 +157,7 @@ function loadDuelPanel() {
         margin-bottom:20px;
       " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.15)'" 
          onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
-        <img src="/main/btn_duel_back.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+        <img src="/main/btn_duel_back.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
       </button>
 
      <!-- Логотип дуэли -->
@@ -211,7 +211,7 @@ function loadDuelPanel() {
           overflow:hidden;
         " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.15)'" 
            onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
-          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
             <span style="font-size:0.6rem;color:#ffcc44;font-weight:700;letter-spacing:1px;margin-bottom:2px;text-shadow:0 0 4px rgba(0,0,0,0.8);">СТАВКА</span>
             <span style="font-size:1.3rem;color:#ffcc44;font-weight:900;line-height:1;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(255,204,68,0.4);">100</span>
@@ -233,7 +233,7 @@ function loadDuelPanel() {
           animation:hotPulse 2s ease-in-out infinite;
         " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.2)'" 
            onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
-          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
           <div style="
             position:absolute;
             top:4px;
@@ -267,7 +267,7 @@ function loadDuelPanel() {
           overflow:hidden;
         " onmouseover="this.style.transform='translateY(-3px)';this.style.filter='brightness(1.15)'" 
            onmouseout="this.style.transform='translateY(0)';this.style.filter='brightness(1)'">
-          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
             <span style="font-size:0.6rem;color:#ffcc44;font-weight:700;letter-spacing:1px;margin-bottom:2px;text-shadow:0 0 4px rgba(0,0,0,0.8);">СТАВКА</span>
             <span style="font-size:1.3rem;color:#ffcc44;font-weight:900;line-height:1;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(255,204,68,0.4);">1000</span>
