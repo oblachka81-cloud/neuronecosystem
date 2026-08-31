@@ -121,6 +121,7 @@ const sortedAssets = [...data.assets].sort((a, b) => {
   </div>
 
       ${listingCardHtml}
+      ${renderAmlCard()}
 
       ${hasAssets ? `<div style="font-size:0.85rem;font-weight:700;color:#8899aa;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">${t.assets}</div>` : ''}
       ${emptyHtml}
