@@ -112,15 +112,19 @@ function openAmlCheck() {
     return;
   }
   
-  // Копируем адрес в буфер
-if (navigator.clipboard) {
-  navigator.clipboard.writeText(addr);
-}
-
-// Открываем MistTrack
-window.open('https://misttrack.app/ru', '_blank');
-
-showToast('Адрес скопирован. Вставьте его на MistTrack', 3000);
+  // Копируем адрес
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(addr).catch(() => {});
+  }
+  
+  // Открываем AMLSec
+  window.open('https://amlsec.services/', '_blank');
+  
+  showToast('Адрес скопирован → вставьте на сайте AMLSec', 3500);
+  
+  // Закрываем модалку
+  const modal = document.getElementById('amlModal');
+  if (modal) modal.remove();
 }
 
 // Глобальные функции
