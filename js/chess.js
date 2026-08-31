@@ -67,7 +67,7 @@ function loadChessPanel() {
   chessContainer.innerHTML = `
     <div style="max-width:480px;width:100%;margin:0 auto;padding:16px;">
       <button onclick="chessBackToMenu()" style="position:relative;width:100px;height:50px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;margin-bottom:20px;">
-        <img src="/main/btn_duel_back.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+        <img src="/main/btn_duel_back.webp" style="width:100%;height:100%;object-fit:fill;display:block">
       </button>
 
       <div style="text-align:center;margin-bottom:24px;">
@@ -81,7 +81,7 @@ function loadChessPanel() {
 
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
         <button onclick="chessCreate(100)" style="position:relative;width:100%;height:90px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;">
-          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;display:block">
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
             <span style="font-size:0.6rem;color:#ffcc44;font-weight:700;letter-spacing:1px;margin-bottom:2px;text-shadow:0 0 4px rgba(0,0,0,0.8);">${t.stakeLabel}</span>
             <span style="font-size:1.3rem;color:#ffcc44;font-weight:900;line-height:1;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(255,204,68,0.4);">100</span>
@@ -89,7 +89,7 @@ function loadChessPanel() {
           </div>
         </button>
         <button onclick="chessCreate(500)" style="position:relative;width:100%;height:90px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;animation:chzHotPulse 2s ease-in-out infinite;">
-          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;display:block">
           <div style="position:absolute;top:4px;right:6px;background:rgba(0,255,170,0.25);color:#00ffaa;font-size:0.5rem;font-weight:800;padding:2px 5px;border-radius:6px;letter-spacing:0.5px;animation:chzBadgePulse 1.5s ease-in-out infinite;">HOT</div>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
             <span style="font-size:0.6rem;color:#ffcc44;font-weight:700;letter-spacing:1px;margin-bottom:2px;text-shadow:0 0 4px rgba(0,0,0,0.8);">${t.stakeLabel}</span>
@@ -98,7 +98,7 @@ function loadChessPanel() {
           </div>
         </button>
         <button onclick="chessCreate(1000)" style="position:relative;width:100%;height:90px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;">
-          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;border-radius:16px;display:block;">
+          <img src="/main/btn_duel_stake.webp" style="width:100%;height:100%;object-fit:fill;display:block">
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
             <span style="font-size:0.6rem;color:#ffcc44;font-weight:700;letter-spacing:1px;margin-bottom:2px;text-shadow:0 0 4px rgba(0,0,0,0.8);">${t.stakeLabel}</span>
             <span style="font-size:1.3rem;color:#ffcc44;font-weight:900;line-height:1;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 12px rgba(255,204,68,0.4);">1000</span>
