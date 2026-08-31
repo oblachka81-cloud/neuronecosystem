@@ -155,15 +155,15 @@ async function chessCreate(stake) {
         </div>
         <button onclick="chessShareInvite('${data.inviteLink}', ${stake})" style="position:relative;width:100%;height:54px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;margin-bottom:10px;border-radius:12px;">
           <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
-          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#00ffaa;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(0,255,170,0.4);">📤 ${t.shareInvite}</div>
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#00ffaa;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(0,255,170,0.4);"> ${t.shareInvite}</div>
         </button>
         <button onclick="chessCopyLink('${data.inviteLink}', this)" style="position:relative;width:100%;height:54px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;margin-bottom:10px;border-radius:12px;">
           <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
-          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#ffcc44;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,204,68,0.4);">🔗 ${t.copyLink}</div>
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#ffcc44;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,204,68,0.4);"> ${t.copyLink}</div>
         </button>
         <button onclick="chessCancel(${data.gameId})" style="position:relative;width:100%;height:54px;padding:0;background:none;border:none;cursor:pointer;transition:all 0.2s;overflow:hidden;border-radius:12px;">
           <img src="/main/btn_duel_action.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
-          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#ff6464;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,100,100,0.4);">❌ ${t.cancelDuel}</div>
+          <div style="position:absolute;inset:0;display:flex;justify-content:center;align-items:center;font-size:0.85rem;font-weight:700;color:#ff6464;letter-spacing:0.5px;text-shadow:0 0 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,100,100,0.4);"> ${t.cancelDuel}</div>
         </button>
       </div>
     `;
