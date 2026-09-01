@@ -476,10 +476,10 @@ body { width: 600px; height: 600px; font-family: -apple-system, 'Segoe UI', Robo
 
 async function generateReferralNewUserCard(inviterName, lang = 'en') {
   const i18n = {
-    ru: { invitedBy: `Тебя пригласил: ${inviterName}`, cta: 'ПРИГЛАСИ ДРУГА — ПОЛУЧИ 50 COGNIQ' },
-    en: { invitedBy: `Invited by: ${inviterName}`, cta: 'INVITE A FRIEND — GET 50 COGNIQ' },
-    fr: { invitedBy: `Invité par : ${inviterName}`, cta: 'INVITE UN AMI — REÇOIS 50 COGNIQ' },
-    es: { invitedBy: `Te invitó: ${inviterName}`, cta: 'INVITA A UN AMIGO — OBTÉN 50 COGNIQ' },
+    ru: { invitedBy: `Тебя пригласил: ${inviterName}`, cta: 'ПРИГЛАСИ ДРУГА — ПОЛУЧИ 200 COGNIQ' },
+    en: { invitedBy: `Invited by: ${inviterName}`, cta: 'INVITE A FRIEND — GET 200 COGNIQ' },
+    fr: { invitedBy: `Invité par : ${inviterName}`, cta: 'INVITE UN AMI — REÇOIS 200 COGNIQ' },
+    es: { invitedBy: `Te invitó: ${inviterName}`, cta: 'INVITA A UN AMIGO — OBTÉN 200 COGNIQ' },
   };
   const l = i18n[lang] || i18n['en'];
 
