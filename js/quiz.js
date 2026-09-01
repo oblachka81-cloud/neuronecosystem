@@ -74,7 +74,7 @@ root.innerHTML = `
         <button id="dailyQAnswerBtn" style="display:none; background: linear-gradient(90deg, #00aa88, #00ddaa); border: none; border-radius: 40px; padding: 12px 20px; font-size: 0.9rem; font-weight: 700; color: white; cursor: pointer; width: 100%;">${t.dailyQAnswerBtn}</button>
       </div>
       ${webpBtn('miniRefBtn', '/main/btn_frame_invite.webp', t.referralMiniBtn)}
-      ${localStorage.getItem('channelBonusClaimed') === '1' ? '' : `
+      ${(localStorage.getItem('channelBonusClaimed')==='1' || currentState.channelBonusClaimed) ? '' : `
         ${webpBtn('','/main/btn_frame_channel.webp',`📢 ${t.channelBonusBtn}`,`onclick="window.open('https://t.me/neuron_game_club','_blank')"`)}
         ${webpBtn('channelBonusBtn', '/main/btn_frame_channel.webp', t.channelClaimBtn || '🎁 Забрать бонус')}
       `}
