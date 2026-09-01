@@ -306,6 +306,7 @@ function chessRenderGameScreen() {
   });
 
   renderBoard();
+  chessStartGamePolling();
 }
 
 // ---------- ДОСКА (плотная, с подсветкой) ----------
