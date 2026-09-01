@@ -449,7 +449,7 @@ router.get('/api/admin/withdrawals', adminRateLimit, requireAdmin, async (req, r
     const dataParams = [...params, limit, offset];
     const limitIdx = params.length + 1;
     const offsetIdx = params.length + 2;
-    const { rows } = await pool.query(`SELECT w.id, w.telegram_id, w.amount, w.wallet, w.status, w.created_at, w.processed_at, u.first_name FROM withdrawals w LEFT JOIN users u ON u.telegram_id = w.telegram_id ${whereClause} ORDER BY w.created_at DESC LIMIT $${limitIdx} OFFSET $${offsetIdx}`, dataParams);
+    const { rows } = await pool.query(`SELECT w.id, w.telegram_id, w.amount, w.wallet, w.status, w.aml_status, w.created_at, w.processed_at, u.first_name FROM withdrawals w LEFT JOIN users u ON u.telegram_id = w.telegram_id ${whereClause} ORDER BY w.created_at DESC LIMIT $${limitIdx} OFFSET $${offsetIdx}`, dataParams);
 
     res.json({ withdrawals: rows, stats, total, page, limit, pages: Math.ceil(total / limit) });
   } catch (e) {
