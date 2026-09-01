@@ -31,6 +31,10 @@
     .badge-pending { background: rgba(255,200,0,0.15); color: #ffcc00; border: 1px solid rgba(255,200,0,0.3); }
     .badge-approved { background: rgba(0,255,150,0.15); color: #00ffaa; border: 1px solid rgba(0,255,150,0.3); }
     .badge-rejected { background: rgba(255,60,60,0.15); color: #ff8888; border: 1px solid rgba(255,60,60,0.3); }
+    .badge-aml-clean { background: rgba(0,255,150,0.15); color: #00ffaa; border: 1px solid rgba(0,255,150,0.3); margin-left: 4px; }
+    .badge-aml-scam { background: rgba(255,60,60,0.25); color: #ff4444; border: 1px solid rgba(255,60,60,0.6); margin-left: 4px; animation: pulse-scam 1.5s infinite; }
+    .badge-aml-unknown { background: rgba(136,153,170,0.15); color: #8899aa; border: 1px solid rgba(136,153,170,0.3); margin-left: 4px; }
+     @keyframes pulse-scam { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 8px; }
     .stat-box { background: rgba(0,0,0,0.3); border: 1px solid rgba(0,255,255,0.1); border-radius: 14px; padding: 14px 16px; }
     .stat-label { font-size: 0.75rem; color: #5599bb; margin-bottom: 4px; }
