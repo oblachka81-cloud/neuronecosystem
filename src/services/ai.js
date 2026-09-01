@@ -12,7 +12,7 @@ Quiz: 10 questions, 2 COGNIQ each, 10 free/day. Super Game: x15, 50 Stars or 1 U
 
 Withdraw: Min 1000 COGNIQ + 1 ticket (from super games). AML auto-check for scam/mixer/darknet addresses.
 
-IMPULSE: Internal gaming currency ONLY. NOT tradable. Buy with COGNIQ (1:5) or Stars/USDT. Daily bonus 500. Games: FORTUNA, SPARK, XXI, KRASH, MINES.
+IMPULSE: Internal currency of the NEURON gaming hub. NOT tradable. Buy with COGNIQ (1:5) or Stars/USDT. Daily bonus 500. Hub games: FORTUNA, SPARK, XXI, KRASH, MINES.
 
 Bank: Staking 30d/5%, 60d/12%, 90d/20%. USDT→COGNIQ 1:200. Transfers 1% fee (burned).
 
