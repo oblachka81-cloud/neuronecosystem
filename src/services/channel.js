@@ -3,6 +3,16 @@ const { ACHIEVEMENTS, ACHIEVEMENT_TITLES } = require('../constants/achievements'
 const { RANKS } = require('../constants/ranks');
 const { STREAK_TRANSLATIONS } = require('../constants/streakTranslations');
 const { withRetry } = require('./burn');
+const { 
+  generateStreakWarningCard, 
+  generateStreakMilestoneCard, 
+  generateQuestionOfDayCard, 
+  generateWeeklyTopCard, 
+  generateWeeklyHeroesCard, 
+  generateStreakBattleCard, 
+  generateFactOfDayCard, 
+  generateRankRatingCard 
+} = require('../../channel.js');
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
