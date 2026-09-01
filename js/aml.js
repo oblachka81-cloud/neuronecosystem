@@ -148,7 +148,7 @@ async function openAmlCheck() {
     
     const data = await response.json();
     
-    if (data.status === 'scam' || data.is_scam === true) {
+    if (data.status === 'scam' || data.is_scam === true || data.risk_level === 'high') {
       resultDiv.style.background = 'rgba(255, 0, 50, 0.15)';
       resultDiv.style.border = '1px solid #ff3366';
       resultDiv.style.color = '#ff3366';
