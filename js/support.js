@@ -15,7 +15,9 @@ const SUPPORT_FAQ = {
     { q: '⚔️ Как создавать дуэли?', a: 'Нажмите "Дуэли" в меню. Установите ставку COGNIQ, получите ссылку. Отправьте другу — он принимает вызов и начинается битва!' },
     { q: '🔥 Что такое сжигание?', a: 'Часть COGNIQ сжигается навсегда: комиссии переводов, подсказки, повторы супер-игр, часть от ставок. Это дефляционная механика.' },
     { q: '🏦 Что такое Банк?', a: 'Стейкинг COGNIQ: 30 дней 5%, 60 дней 12%, 90 дней 20%. Обмен USDT→COGNIQ по курсу 1:200. Переводы между игроками (комиссия 1%).' },
-    { q: '📊 Где статистика?', a: 'Вкладка "Профиль": ваш баланс, сыграно игр, стрик, достижения, история транзакций. Таблица лидеров показывает топ игроков.' }
+    { q: '📊 Где статистика?', a: 'Вкладка "Профиль": ваш баланс, сыграно игр, стрик, достижения, история транзакций. Таблица лидеров показывает топ игроков.' },
+    { q: '💱 Как работает биржа NEURON?', a: 'Некастодиально: активы остаются в твоём кошельке. Свап по лучшему DEX-курсу (STON.fi, DeDust, Megaton). Пары: TON, BTC, золото XAUt0, xStocks (акции Apple, Tesla, NVIDIA). Комиссия — только газ 5 COGNIQ.' },
+    { q: '💳 Как купить крипто с карты?', a: 'Раздел Фиат: агрегаторы BestChange, Exchanger, MonitorEC — 500+ обменников, 43 000+ пар. Карты, банки, USD/EUR/AED. Лучший курс подбирается автоматически, 0% скрытых комиссий.' }
   ],
   en: [
     { q: '🎮 How to start?', a: 'Tap "Play" in the main menu. Answer 10 quiz questions and earn COGNIQ for correct answers! 10 free games per day.' },
@@ -32,7 +34,9 @@ const SUPPORT_FAQ = {
     { q: '⚔️ How to create duels?', a: 'Tap "Duels" in menu. Set COGNIQ stake, get link. Send to friend — they accept and battle starts!' },
     { q: '🔥 What is burning?', a: 'Part of COGNIQ burned forever: transfer fees, hints, super game retries, part of stakes. Deflationary mechanic.' },
     { q: '🏦 What is Bank?', a: 'COGNIQ staking: 30 days 5%, 60 days 12%, 90 days 20%. USDT→COGNIQ exchange at 1:200. Transfers between players (1% fee).' },
-    { q: '📊 Where is stats?', a: '"Profile" tab: your balance, games played, streak, achievements, transaction history. Leaderboard shows top players.' }
+    { q: '📊 Where is stats?', a: '"Profile" tab: your balance, games played, streak, achievements, transaction history. Leaderboard shows top players.' },
+    { q: '💱 How does NEURON Exchange work?', a: 'Non-custodial: assets stay in your wallet. Swaps at best DEX rate (STON.fi, DeDust, Megaton). Pairs: TON, BTC, gold XAUt0, xStocks (Apple, Tesla, NVIDIA shares). Fee — only 5 COGNIQ gas.' },
+    { q: '💳 How to buy crypto with card?', a: 'Fiat section: BestChange, Exchanger, MonitorEC aggregators — 500+ exchangers, 43,000+ pairs. Cards, banks, USD/EUR/AED. Best rate auto-selected, 0% hidden fees.' }
   ],
   fr: [
     { q: '🎮 Comment jouer?', a: 'Appuie sur "Jouer" dans le menu. Réponds à 10 questions et gagne des COGNIQ! 10 parties gratuites par jour.' },
@@ -49,7 +53,9 @@ const SUPPORT_FAQ = {
     { q: '⚔️ Comment créer duels?', a: 'Appuie "Duels" dans menu. Fixe mise COGNIQ, obtiens lien. Envoie à ami — il accepte et bataille commence!' },
     { q: '🔥 Qu\'est-ce que brûlage?', a: 'Partie de COGNIQ brûlée pour toujours: frais transferts, indices, retries super jeu, partie des mises. Mécanique déflationniste.' },
     { q: '🏦 Qu\'est-ce que Banque?', a: 'Staking COGNIQ: 30j 5%, 60j 12%, 90j 20%. Échange USDT→COGNIQ à 1:200. Transferts entre joueurs (1% frais).' },
-    { q: '📊 Où sont stats?', a: 'Onglet "Profil": ton solde, parties jouées, série, achievements, historique transactions. Classement montre meilleurs joueurs.' }
+    { q: '📊 Où sont stats?', a: 'Onglet "Profil": ton solde, parties jouées, série, achievements, historique transactions. Classement montre meilleurs joueurs.' },
+    { q: '💱 Comment marche NEURON Exchange?', a: 'Non-custodial: tes actifs restent dans ton portefeuille. Swap au meilleur taux DEX (STON.fi, DeDust, Megaton). Paires: TON, BTC, or XAUt0, xStocks (actions Apple, Tesla, NVIDIA). Frais — seulement 5 COGNIQ de gaz.' },
+    { q: '💳 Acheter crypto avec carte?', a: 'Section Fiat: agrégateurs BestChange, Exchanger, MonitorEC — 500+ échangeurs, 43 000+ paires. Cartes, banques, USD/EUR/AED. Meilleur taux auto-sélectionné, 0% frais cachés.' }
   ],
   es: [
     { q: '🎮 ¿Cómo jugar?', a: 'Pulsa "Jugar" en el menú. Responde 10 preguntas y gana COGNIQ! 10 partidas gratis al día.' },
@@ -66,7 +72,9 @@ const SUPPORT_FAQ = {
     { q: '⚔️ ¿Cómo crear duelos?', a: 'Pulsa "Duelos" en menú. Fija apuesta COGNIQ, obtén enlace. Envía a amigo — él acepta y batalla comienza!' },
     { q: '🔥 ¿Qué es quema?', a: 'Parte de COGNIQ quemada para siempre: comisiones transferencias, pistas, reintentos super juego, parte de apuestas. Mecánica deflacionaria.' },
     { q: '🏦 ¿Qué es Banco?', a: 'Staking COGNIQ: 30d 5%, 60d 12%, 90d 20%. Intercambio USDT→COGNIQ a 1:200. Transferencias entre jugadores (1% comisión).' },
-    { q: '📊 ¿Dónde están stats?', a: 'Pestaña "Perfil": tu saldo, partidas jugadas, racha, logros, historial transacciones. Tabla clasificación muestra mejores jugadores.' }
+    { q: '📊 ¿Dónde están stats?', a: 'Pestaña "Perfil": tu saldo, partidas jugadas, racha, logros, historial transacciones. Tabla clasificación muestra mejores jugadores.' },
+    { q: '💱 ¿Cómo funciona NEURON Exchange?', a: 'No custodial: tus activos quedan en tu billetera. Swap al mejor precio DEX (STON.fi, DeDust, Megaton). Pares: TON, BTC, oro XAUt0, xStocks (acciones Apple, Tesla, NVIDIA). Comisión — solo 5 COGNIQ de gas.' },
+    { q: '💳 ¿Comprar crypto con tarjeta?', a: 'Sección Fiat: agregadores BestChange, Exchanger, MonitorEC — 500+ cambiadores, 43,000+ pares. Tarjetas, bancos, USD/EUR/AED. Mejor tasa automática, 0% comisiones ocultas.' }
   ]
 };
 
