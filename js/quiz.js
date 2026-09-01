@@ -75,7 +75,7 @@ root.innerHTML = `
       </div>
       ${webpBtn('miniRefBtn', '/main/btn_frame_invite.webp', t.referralMiniBtn)}
       ${localStorage.getItem('channelBonusClaimed') === '1' ? '' : `
-        ${webpBtn('', '/main/btn_frame_channel.webp', `📢 ${t.channelBonusBtn}`, `onclick="window.open('https://t.me/NeuronGame_bot?start=channel','_blank')"`)}
+        ${webpBtn('','/main/btn_frame_channel.webp',`📢 ${t.channelBonusBtn}`,`onclick="window.open('https://t.me/neuron_game_club','_blank')"`)}
         ${webpBtn('channelBonusBtn', '/main/btn_frame_channel.webp', t.channelClaimBtn || '🎁 Забрать бонус')}
       `}
       ${webpBtn('whitepaperBtn', '/main/btn_frame_whitepaper.webp', 'Whitepaper')}
