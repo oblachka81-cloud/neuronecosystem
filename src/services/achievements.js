@@ -1,6 +1,7 @@
 const pool = require('../db/pool');
 const { ACHIEVEMENTS, ACHIEVEMENT_TITLES, ACHIEVEMENT_UNLOCK_PREFIX } = require('../constants/achievements');
 const { logTx, withRetry } = require('./burn');
+const { generateAchievementCard } = require('../../channel');
 
 async function checkAndUnlockAchievements(userId, bot) {
   try {
