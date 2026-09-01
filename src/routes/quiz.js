@@ -57,6 +57,8 @@ router.get('/api/question', requireInitData, publicRateLimit, async (req, res) =
           superGamesTotal: user.super_games_total || 0,
           currentIsSuper: user.current_is_super || false,
           streakCount: user.streak_count || 0,
+          channelBonusClaimed: !!user.channel_bonus_claimed,
+          withdrawTickets: user.withdraw_tickets || 0,
           text: tq.text,
           options: tq.options,
           index: currentIndex,
@@ -78,6 +80,8 @@ router.get('/api/question', requireInitData, publicRateLimit, async (req, res) =
         superGamePending: user.super_game_pending || false,
         superGamesTotal: user.super_games_total || 0,
         streakCount: user.streak_count || 0,
+        channelBonusClaimed: !!user.channel_bonus_claimed,
+        withdrawTickets: user.withdraw_tickets || 0,
         finished: true,
       });
     }
@@ -95,6 +99,8 @@ router.get('/api/question', requireInitData, publicRateLimit, async (req, res) =
         gamesPlayed: user.games_today,
         freeGamesLeft: 0,
         superGamePending: false,
+        channelBonusClaimed: !!user.channel_bonus_claimed,
+        withdrawTickets: user.withdraw_tickets || 0,
       });
     }
 
@@ -129,6 +135,8 @@ router.get('/api/question', requireInitData, publicRateLimit, async (req, res) =
       currentIsSuper: isSuperGame,
       superGamesTotal: user.super_games_total || 0,
       streakCount: user.streak_count || 0,
+      channelBonusClaimed: !!user.channel_bonus_claimed,
+      withdrawTickets: user.withdraw_tickets || 0,
       text: tq.text,
       options: tq.options,
       index: 0,
