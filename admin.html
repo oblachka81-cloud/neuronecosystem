@@ -623,7 +623,10 @@ async function loadWithdrawals(page = 1) {
         <td>${w.id}</td>
         <td>${w.first_name || w.telegram_id}</td>
         <td>${w.amount} COGNIQ</td>
-        <td>${w.wallet}</td>
+        <td>
+       <div class="wallet-addr">${w.wallet}</div>
+       ${w.aml_status === 'scam' ? '<span class="badge badge-aml-scam">🔴 SCAM</span>' : w.aml_status === 'clean' ? '<span class="badge badge-aml-clean">🟢 CLEAN</span>' : '<span class="badge badge-aml-unknown">⚪ N/A</span>'}
+      </td>
         <td><span class="badge-${w.status}">${w.status}</span></td>
         <td>${new Date(w.created_at).toLocaleDateString()}</td>
         <td>
