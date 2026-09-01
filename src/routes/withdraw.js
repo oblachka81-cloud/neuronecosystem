@@ -10,6 +10,18 @@ function isValidTonAddress(address) {
   return /^[EUk][Qq0-9A-Za-z_-]{47}$/.test(address);
 }
 
+async function checkAml(wallet) {
+  try {
+    const amlRes = await fetch(`https://tonapi.io/v2/accounts/${encodeURIComponent(wallet)}`);
+    if (!amlRes.ok) return 'unknown';
+    const amlData = await amlRes.json();
+    return amlData.is_scam ? 'scam' : 'clean';
+  } catch (e) {
+    console.error('[AML] auto-check error:', e.message);
+    return 'unknown';
+  }
+}
+
 router.post('/api/withdraw', requireInitDataStrict, heavyRateLimit, async (req, res) => {
   const client = await pool.connect();
   try {
@@ -59,10 +71,13 @@ router.post('/api/withdraw', requireInitDataStrict, heavyRateLimit, async (req, 
     const newBalance = user.balance - (ticketsToSpend * MIN_WITHDRAW);
     const newTickets = withdrawTickets - ticketsToSpend;
 
+    const amlStatus = await checkAml(wallet);
+    console.log(`[AML] withdraw request from ${userId}: ${wallet.slice(0, 10)}... → ${amlStatus}`);
+
     await client.query(
-      `INSERT INTO withdrawals (telegram_id, amount, wallet, status, created_at)
-       VALUES ($1, $2, $3, 'pending', NOW())`,
-      [userId, ticketsToSpend * MIN_WITHDRAW, wallet]
+      `INSERT INTO withdrawals (telegram_id, amount, wallet, status, created_at, aml_status)
+       VALUES ($1, $2, $3, 'pending', NOW(), $4)`,
+      [userId, ticketsToSpend * MIN_WITHDRAW, wallet, amlStatus]
     );
     await client.query(
       `UPDATE users SET balance = $1, withdraw_tickets = $2 WHERE telegram_id = $3`,
