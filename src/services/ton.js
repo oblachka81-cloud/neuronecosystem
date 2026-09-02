@@ -13,9 +13,11 @@ async function getJettonWalletAddress(client, ownerAddress, jettonMasterAddress)
   return jettonWalletCode.stack.readAddress();
 }
 
-async function sendCogniqJetton(toAddress, amount, privateKeyHex) {
+async function sendCogniqJetton(toAddress, amountWhole, privateKeyHex) {
   const COGNIQ_JETTON_MASTER = 'EQDOjRZ5rbSnBBvhsv4g0JNN67p89617_2pNc_AO1dTEkaNg';
-  return await sendJetton(COGNIQ_JETTON_MASTER, toAddress, amount, privateKeyHex);
+  // COGNIQ имеет 9 декаймалов: конвертируем целые монеты в нано
+  const nano = BigInt(amountWhole.toString()) * 1000000000n;
+  return await sendJetton(COGNIQ_JETTON_MASTER, toAddress, nano, privateKeyHex);
 }
 
 async function sendJetton(jettonMaster, toAddress, amount, privateKeyHex) {
