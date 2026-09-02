@@ -90,6 +90,9 @@ root.innerHTML = `
       ${startBtnHtml}
       ${duelsBtnHtml}
       ${chessBtnHtml}
+    <button id="installAppBtn" onclick="addToHomeScreen()" style="display:none;position:relative;width:100%;height:80px;padding:0;background:none;border:none;cursor:pointer;border-radius:12px;overflow:hidden;margin-top:10px;">
+    <img src="/main/btn_install.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
+   </button>
       ${replayBtnHtml}
       <div id="dailyQuestionCard" style="display:none; background: linear-gradient(135deg, rgba(0,200,255,0.1), rgba(122,46,255,0.1)); border: 1px solid rgba(0,255,255,0.3); border-radius: 24px; padding: 20px; margin-bottom: 16px; text-align: left;">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
