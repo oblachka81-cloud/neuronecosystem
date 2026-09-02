@@ -99,6 +99,7 @@ module.exports = async function initDB(pool, loadQuestionsFromDB) {
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS is_beta_tester BOOLEAN DEFAULT FALSE`,
     `ALTER TABLE users ADD COLUMN IF NOT EXISTS beta_registered_at TIMESTAMP`,
     `ALTER TABLE withdrawals ADD COLUMN IF NOT EXISTS tx_hash VARCHAR(200)`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS granted_super_games INTEGER DEFAULT 0`,
 
     `CREATE TABLE IF NOT EXISTS blackjack_sessions (
       telegram_id BIGINT PRIMARY KEY,
