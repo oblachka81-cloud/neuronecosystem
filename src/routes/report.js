@@ -86,14 +86,15 @@ router.get('/api/weekly-report', requireInitData, publicRateLimit, async (req, r
     
     // ==================== COGNIQ ====================
     const cogniqRes = await pool.query(
-      `SELECT 
-        COALESCE(SUM(CASE WHEN direction = 'in' THEN amount ELSE 0 END), 0) as earned,
-        COALESCE(SUM(CASE WHEN direction = 'out' THEN amount ELSE 0 END), 0) as spent
-       FROM transactions 
-       WHERE user_id = $1 
-       AND created_at > NOW() - INTERVAL '7 days'`,
-      [userId]
-    );
+  `SELECT 
+    COALESCE(SUM(CASE WHEN direction = 'in' THEN amount ELSE 0 END), 0) as earned,
+    COALESCE(SUM(CASE WHEN direction = 'out' THEN amount ELSE 0 END), 0) as spent
+   FROM transactions 
+   WHERE user_id = $1 
+   AND type NOT LIKE 'impulse_%'
+   AND created_at > NOW() - INTERVAL '7 days'`,
+  [userId]
+);
     
     const burnedRes = await pool.query(
       `SELECT COALESCE(SUM(amount), 0) as burned
