@@ -201,6 +201,54 @@ root.innerHTML = `
     });
   }
 
+  const giftSuperBtn = document.getElementById('activateGiftSuperBtn');
+if (giftSuperBtn) {
+    let giftLoading = false;
+
+    giftSuperBtn.addEventListener('click', async () => {
+        if (giftLoading) return;
+        giftLoading = true;
+        giftSuperBtn.disabled = true;
+        giftSuperBtn.style.opacity = '0.6';
+
+        try {
+            const res = await authFetch(`${BASE_URL}/api/activate-gift-super`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const data = await res.json();
+
+            if (data.ok) {
+                currentState.superGamePending = true;
+                currentState.grantedSuperGames = data.grantedSuperGames || 0;
+                currentState.lastGameWasSuper = false;
+                currentState.superGameReplayUsed = false;
+
+                const okText = {
+                    ru: '🎁 Супер-игра x15 активирована!',
+                    en: '🎁 Super Game x15 activated!',
+                    fr: '🎁 Super Jeu x15 activé !',
+                    es: '🎁 ¡Súper Juego x15 activado!'
+                }[currentLang] || '🎁 Super Game x15 activated!';
+
+                showToast(okText, 3000);
+                setTimeout(() => loadWelcome(), 400);
+            } else {
+                showToast(data.error || 'Error', 3000);
+                giftLoading = false;
+                giftSuperBtn.disabled = false;
+                giftSuperBtn.style.opacity = '1';
+            }
+        } catch (e) {
+            showToast('Ошибка соединения', 3000);
+            giftLoading = false;
+            giftSuperBtn.disabled = false;
+            giftSuperBtn.style.opacity = '1';
+        }
+    });
+}
+
   loadDailyQuestion();
 
   const channelBtn = document.getElementById('channelBonusBtn');
