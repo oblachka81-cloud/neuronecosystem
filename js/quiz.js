@@ -74,7 +74,7 @@ const superGameCard=`
   let startBtnDisabled = (!currentState.superGamePending && freeGamesLeft <= 0) ? 'disabled' : '';
   const duelsBtnHtml = webpBtn('duelsBtn', 'main/btn_duel.webp', window.DUEL_LANG?.[currentLang]?.title || 'Duels');
   const chessBtnHtml = webpBtn('chessBtn', 'main/btn_chess.webp', window.CHESS_LANG?.[currentLang]?.title || 'Chess');
-  const installBtnHtml = webpBtn('installAppBtn', 'main/btn_install.webp', t.installApp || 'INSTALL NEURON', 'onclick="addToHomeScreen()" style="display:none;"');
+  const installBtnHtml = webpBtn('installAppBtn', 'main/btn_install.webp', t.installApp || 'INSTALL NEURON', 'onclick="addToHomeScreen()"', 'display:none;');
   const startBtnHtml = webpBtn('startNewBtn', 'main/btn_frame_start.webp', startBtnText, startBtnDisabled, startBtnDisabled ? 'opacity:0.5;pointer-events:none;' : '');
 
   const replayBtnHtml = currentState.lastGameWasSuper && !currentState.superGameReplayUsed
