@@ -153,7 +153,7 @@ async function checkTonUsdtPayments(bot) {
           try { await withRetry(() => bot.telegram.sendMessage(userId, '💎 PREMIUM подписка активирована на 30 дней! Открой приложение.')); } catch (e) {}
           console.log(`[TON] Premium sub activated for user ${userId}, tx: ${txHash}`);
         }
-        elseif(comment.startsWith('exchange_')){
+        else if(comment.startsWith('exchange_')){
 constrawId=comment.replace('exchange_','');
 if(!/^d+$/.test(rawId))continue;
 constuserId=parseInt(rawId,10);
