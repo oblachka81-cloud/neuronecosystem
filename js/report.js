@@ -108,7 +108,7 @@ async function openWeeklyReport() {
   
   const modal = document.createElement('div');
   modal.id = 'weeklyReportModal';
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
   
   modal.innerHTML = `
     <div style="background:rgba(10,15,30,0.98);border:1.5px solid rgba(220,220,225,0.5);border-radius:20px;padding:24px 20px;max-width:400px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 0 30px rgba(220,220,225,0.1);">
