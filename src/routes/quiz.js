@@ -101,6 +101,7 @@ router.get('/api/question', requireInitData, publicRateLimit, async (req, res) =
         gamesPlayed: user.games_today,
         freeGamesLeft: 0,
         superGamePending: false,
+        grantedSuperGames: user.granted_super_games || 0,
         channelBonusClaimed: !!user.channel_bonus_claimed,
         withdrawTickets: user.withdraw_tickets || 0,
       });
