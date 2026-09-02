@@ -617,8 +617,8 @@ router.post('/api/admin/burn/execute', requireAdmin, async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
-    const { rows } = await client.query('SELECT COALESCE(SUM(amount), 0) AS total FROM burn_pool');
-    const total = parseInt(rows[0].total);
+    const { rows } = await client.query(`SELECT COALESCE(SUM(CASE WHEN source LIKE 'impulse_%' THEN amount / 5.0 ELSE amount END), 0) AS total FROM burn_pool`);
+    const total = Math.floor(parseFloat(rows[0].total));
     if (total <= 0) { await client.query('ROLLBACK'); return res.status(400).json({ error: 'Пул пуст, нечего сжигать' }); }
     await client.query('INSERT INTO burn_history (amount, tx_hash) VALUES ($1, $2)', [total, txHash]);
     await client.query('DELETE FROM burn_pool');
