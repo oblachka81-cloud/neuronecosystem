@@ -15,7 +15,7 @@ async function splitSuperGameRevenue(bot) {
     const res = await pool.query(
       `SELECT COUNT(*) AS cnt, COALESCE(SUM(amount),0) AS total
        FROM processed_ton_payments
-       WHERE item = 'super_game' AND NOT split_done`
+       WHERE item IN ('super_game', 'bank_exchange') AND NOT split_done`
     );
     const total = parseInt(res.rows[0].total, 10);
     const cnt = parseInt(res.rows[0].cnt, 10);
@@ -25,12 +25,12 @@ async function splitSuperGameRevenue(bot) {
     const liqAmount = Math.floor(total * 0.75);
     const devAmount = total - liqAmount;
 
-    console.log(`[SPLIT] найдено ${cnt} супер-игр, всего ${(total/1e6).toFixed(2)} USDT, шлём ${(liqAmount/1e6).toFixed(2)} в ликвидность`);
+    console.log(`[SPLIT] найдено ${cnt} платежей (супер-игры + банк), всего ${(total/1e6).toFixed(2)} USDT, шлём ${(liqAmount/1e6).toFixed(2)} в ликвидность`);
 
     const tx1 = await sendJetton(USDT_MASTER, liqWallet, liqAmountBig, key);
 
     await pool.query(`UPDATE processed_ton_payments SET split_done = true
-                      WHERE item = 'super_game' AND NOT split_done`);
+                      WHERE item IN ('super_game', 'bank_exchange') AND NOT split_done`);
     await pool.query(
       `INSERT INTO revenue_splits (games, total_usdt, liquidity_usdt, dev_usdt, liq_tx, dev_tx)
        VALUES ($1,$2,$3,$4,$5,$6)`,
@@ -40,11 +40,11 @@ async function splitSuperGameRevenue(bot) {
     if (bot) {
       try {
         const liqDisplay = (liqAmount / 1e6).toFixed(2);
-        
+
         const messages = {
           ru: `💧 Авто-пополнение пула ликвидности COGNIQ/USDT
 
-🎮 Супер-игр сыграно: ${cnt}
+🎮 Супер-игр + покупок в банке: ${cnt}
 💰 Добавлено в пул: ${liqDisplay} USDT
 
 🔗 TX: ${tx1}
@@ -55,7 +55,7 @@ async function splitSuperGameRevenue(bot) {
 
           en: `💧 Auto-liquidity pool replenishment COGNIQ/USDT
 
-🎮 Super games played: ${cnt}
+🎮 Super games + bank purchases: ${cnt}
 💰 Added to pool: ${liqDisplay} USDT
 
 🔗 TX: ${tx1}
@@ -66,7 +66,7 @@ Best regards, NEURON`,
 
           fr: `💧 Réapprovisionnement automatique du pool de liquidité COGNIQ/USDT
 
-🎮 Super parties jouées: ${cnt}
+🎮 Super parties + achats en banque: ${cnt}
 💰 Ajouté au pool: ${liqDisplay} USDT
 
 🔗 TX: ${tx1}
@@ -77,7 +77,7 @@ Cordialement, NEURON`,
 
           es: `💧 Reposición automática del pool de liquidez COGNIQ/USDT
 
-🎮 Super partidas jugadas: ${cnt}
+🎮 Super partidas + compras en banco: ${cnt}
 💰 Añadido al pool: ${liqDisplay} USDT
 
 🔗 TX: ${tx1}
@@ -107,7 +107,7 @@ ${messages.es}`;
       }
     }
 
-    console.log(`[SPLIT] готово: ${cnt} игр, ${(total/1e6).toFixed(2)} USDT → 75% в ликвидность`);
+    console.log(`[SPLIT] готово: ${cnt} платежей, ${(total/1e6).toFixed(2)} USDT → 75% в ликвидность`);
   } catch (e) {
     console.error('[SPLIT] error:', e.message);
   }
