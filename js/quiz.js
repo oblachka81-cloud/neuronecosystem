@@ -28,16 +28,46 @@ function showWelcome(totalScore, gamesPlayed) {
       <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:600;font-size:0.88rem;color:#00ffaa;white-space:nowrap;">${label}</span>
     </button>`;
 
-  const superTitle = { ru: 'СУПЕР ИГРА X-15', en: 'SUPER GAME X-15', fr: 'SUPER JEU X-15', es: 'SUPER JUEGO X-15' }[currentLang] || 'SUPER GAME X-15';
+  const superTitle = {
+    ru: 'СУПЕР ИГРА X-15',
+    en: 'SUPER GAME X-15',
+    fr: 'SUPER JEU X-15',
+    es: 'SUPER JUEGO X-15'
+}[currentLang] || 'SUPER GAME X-15';
 
-  const superGameCard = `
+const giftSuperCount = currentState.grantedSuperGames || 0;
+
+const giftSuperText = {
+    ru: n => `🎁 Активировать подарок x15 · осталось ${n}`,
+    en: n => `🎁 Activate gift x15 · left ${n}`,
+    fr: n => `🎁 Activer le cadeau x15 · reste ${n}`,
+    es: n => `🎁 Activar regalo x15 · quedan ${n}`
+}[currentLang] || (n => `🎁 Activate gift x15 · left ${n}`);
+
+const giftSuperActiveText = {
+    ru: n => `🎁 Подарков x15 в запасе: ${n}`,
+    en: n => `🎁 Gift x15 games left: ${n}`,
+    fr: n => `🎁 Cadeaux x15 restants : ${n}`,
+    es: n => `🎁 Regalos x15 restantes: ${n}`
+}[currentLang] || (n => `🎁 Gift x15 games left: ${n}`);
+
+const giftSuperHtml = giftSuperCount > 0
+    ? (
+        currentState.superGamePending
+            ? `<div style="margin-top:10px;font-size:0.78rem;color:#ffcc44;">${giftSuperActiveText(giftSuperCount)}</div>`
+            : `<button id="activateGiftSuperBtn" style="margin-top:10px;width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,204,68,0.45);background:linear-gradient(135deg,rgba(255,204,68,0.14),rgba(255,136,0,0.08));color:#ffcc44;font-size:0.82rem;font-weight:800;cursor:pointer;">${giftSuperText(giftSuperCount)}</button>`
+      )
+    : '';
+
+const superGameCard=`
     <div style="position:relative;margin:14px 0 14px;border-radius:18px;box-shadow:0 0 14px rgba(175,200,245,0.35);padding:32px 16px 16px;text-align:center;">
-      <div style="position:absolute;inset:0;border:2px solid transparent;background:linear-gradient(120deg,#f8fbff,#9fb4d8 30%,#e6ecf7 50%,#7d92b8 70%,#f8fbff) border-box;border-radius:18px;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;"></div>
-      <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#8a744a,#e8d9a0,#8a744a);color:#1a1408;font-weight:800;font-size:0.95rem;letter-spacing:2px;padding:6px 22px;border-radius:10px;white-space:nowrap;">${superTitle}</div>
-      <div style="position:relative;display:flex;gap:8px;justify-content:center;align-items:center;">
-        <img src="main/btn_super_stars.webp" id="buyStarsBtn" style="cursor:pointer;height:44px;width:auto;display:block;">
-        <img src="main/btn_super_usdt.webp" id="buyUsdtBtn" style="cursor:pointer;height:44px;width:auto;display:block;" onclick="openTonModal()">
-      </div>
+        <div style="position:absolute;inset:0;border:2px solid transparent;background:linear-gradient(120deg,#f8fbff,#9fb4d8 30%,#e6ecf7 50%,#7d92b8 70%,#f8fbff) border-box;border-radius:18px;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;"></div>
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#8a744a,#e8d9a0,#8a744a);color:#1a1408;font-weight:800;font-size:0.95rem;letter-spacing:2px;padding:6px 22px;border-radius:10px;white-space:nowrap;">${superTitle}</div>
+        <div style="position:relative;display:flex;gap:8px;justify-content:center;align-items:center;">
+            <img src="main/btn_super_stars.webp" id="buyStarsBtn" style="cursor:pointer;height:44px;width:auto;display:block;">
+            <img src="main/btn_super_usdt.webp" id="buyUsdtBtn" style="cursor:pointer;height:44px;width:auto;display:block;" onclick="openTonModal()">
+        </div>
+        ${giftSuperHtml}
     </div>`;
 
   let startBtnText = currentState.superGamePending ? t.startSuperBtn : (freeGamesLeft > 0 ? t.startBtn(freeGamesLeft) : t.limitBtn);
