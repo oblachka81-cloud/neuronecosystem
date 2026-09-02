@@ -150,6 +150,7 @@ const TRANSLATIONS = {
     framePremiumPrice: 'Выдаётся с PREMIUM подпиской',
     framePremiumBadge: 'Автоматически при активации PREMIUM',
     channelClaimBtn: '🎁 Забрать бонус',
+    installApp: 'УСТАНОВИТЬ NEURON',
   },
   en: {
     flag:'🇬🇧', name:'English',
@@ -302,6 +303,7 @@ const TRANSLATIONS = {
     framePremiumPrice: 'Comes with PREMIUM subscription',
     framePremiumBadge: 'Automatically activated with PREMIUM',
     channelClaimBtn: '🎁 Claim bonus',
+    installApp: 'INSTALL NEURON',
    },
   fr: {
     flag:'🇫🇷', name:'Français',
@@ -454,6 +456,7 @@ const TRANSLATIONS = {
     framePremiumPrice: 'Inclus avec l\'abonnement PREMIUM',
     framePremiumBadge: 'Activé automatiquement avec PREMIUM',
     channelClaimBtn: '🎁 Récupérer le bonus',
+    installApp: 'INSTALLER NEURON',
    },
   es: {
     flag:'🇪🇸', name:'Español',
@@ -606,6 +609,7 @@ const TRANSLATIONS = {
     framePremiumPrice: 'Incluido con la suscripción PREMIUM',
     framePremiumBadge: 'Activado automáticamente con PREMIUM',
     channelClaimBtn: '🎁 Reclamar bono',
+    installApp: 'INSTALAR NEURON',
    },
  };
 
