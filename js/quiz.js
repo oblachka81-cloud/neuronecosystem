@@ -285,6 +285,12 @@ if (giftSuperBtn) {
     });
   }
 
+  setTimeout(() => {
+    if (typeof checkHomeScreenStatus === 'function') {
+      checkHomeScreenStatus();
+    }
+  }, 500);
+
   const duelsBtn = document.getElementById('duelsBtn');
   if (duelsBtn) duelsBtn.addEventListener('click', () => switchTab('duels'));
   const chessBtn = document.getElementById('chessBtn');
