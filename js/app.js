@@ -5,7 +5,7 @@ let currentState = {
   streakCount: 0,
   currentQuestion: null, selectedAnswer: null, answered: false, totalScore: 0,
   gameScore: 0, timer: null, timeLeft: 15, currentOptions: null, hintsUsed: [],
-  gamesPlayed: 0, freeGamesLeft: 10, superGamePending: false, superGamesTotal: 0,
+  gamesPlayed: 0, freeGamesLeft: 10, superGamePending: false, grantedSuperGames: 0, superGamesTotal: 0,
   myRank: '—', withdrawTickets: 0,
   superGameReplayUsed: false,
   lastGameWasSuper: false,
@@ -192,6 +192,7 @@ function loadWelcome(retryCount = 0) {
         currentState.freeGamesLeft = data.freeGamesLeft !== undefined ? data.freeGamesLeft : 10;
         currentState.gamesPlayed = data.gamesPlayed || 0;
         currentState.superGamePending = data.superGamePending || false;
+        currentState.grantedSuperGames = data.grantedSuperGames || 0;
         currentState.superGamesTotal = data.superGamesTotal || 0;
         currentState.withdrawTickets = data.withdrawTickets || 0;
         currentState.lastGameWasSuper = savedLastSuper;
