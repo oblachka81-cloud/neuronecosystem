@@ -1,3 +1,18 @@
+const express = require('express');
+const router = express.Router();
+const pool = require('../db/pool');
+const { requireInitData } = require('../middleware/auth');
+const { publicRateLimit } = require('../middleware/rateLimit');
+const { getUserRank } = require('../constants/ranks');
+
+function getRank(balance, lang) {
+  try {
+    return getUserRank(balance, lang);
+  } catch (e) {
+    return { emoji: '🎖', title: 'Player' };
+  }
+}
+
 router.get('/api/weekly-report', requireInitData, publicRateLimit, async (req, res) => {
   try {
     const userId = req.tgUser.id;
@@ -133,3 +148,5 @@ router.get('/api/weekly-report', requireInitData, publicRateLimit, async (req, r
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+module.exports = router;
