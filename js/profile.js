@@ -194,6 +194,15 @@ function renderProfilePanel(data) {
 
   loadAchievements();
 
+const reportBtn = document.getElementById('weeklyReportBtn');
+if (reportBtn) {
+  reportBtn.addEventListener('click', () => {
+    if (typeof openWeeklyReport === 'function') {
+      openWeeklyReport();
+    }
+  });
+}
+
   document.getElementById('profileSaveBtn').addEventListener('click', async () => {
     const nickname = document.getElementById('nicknameVal').textContent.trim();
     const btn = document.getElementById('profileSaveBtn');
