@@ -398,6 +398,36 @@ document.addEventListener('click', function(e) {
   }
 }, true);
 
+  function checkHomeScreenStatus() {
+  if (tg && typeof tg.checkHomeScreenStatus === 'function') {
+    tg.checkHomeScreenStatus((status) => {
+      const btn = document.getElementById('installAppBtn');
+      if (btn) {
+        if (status === 'missed') {
+          btn.style.display = 'block';
+        } else {
+          btn.style.display = 'none';
+        }
+      }
+    });
+  }
+}
+
+function addToHomeScreen() {
+  if (tg && typeof tg.addToHomeScreen === 'function') {
+    tg.addToHomeScreen(() => {
+      const btn = document.getElementById('installAppBtn');
+      if (btn) btn.style.display = 'none';
+      showToast('✅ NEURON установлен на главный экран!', 3000);
+    });
+  } else {
+    showToast('Не поддерживается на этом устройстве', 3000);
+  }
+}
+
+window.addToHomeScreen = addToHomeScreen;
+window.checkHomeScreenStatus = checkHomeScreenStatus;
+
   setTimeout(() => {
   startApp(1);
   if (duelIdFromUrl) {
