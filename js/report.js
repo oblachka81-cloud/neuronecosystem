@@ -111,9 +111,9 @@ async function openWeeklyReport() {
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
   
   modal.innerHTML = `
-    <div style="background:rgba(10,15,30,0.98);border:1.5px solid rgba(220,220,225,0.5);border-radius:20px;padding:24px 20px;max-width:400px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 0 30px rgba(220,220,225,0.1);">
+    <div style="background:rgba(10,15,30,0.85);border:1.5px solid rgba(220,220,225,0.5);border-radius:20px;padding:24px 20px;max-width:400px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 0 30px rgba(220,220,225,0.1);backdrop-filter:blur(8px);">
       <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:1.2rem;font-weight:800;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 50%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;text-transform:uppercase;">📊 ${t.title}</div>
+        <div style="font-size:1.2rem;font-weight:800;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 50%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;text-transform:uppercase;"> ${t.title}</div>
       </div>
       <div id="weeklyReportContent" style="font-size:0.85rem;color:#c8d0e0;">
         <div style="text-align:center;padding:20px;color:#00ccff;">${t.loading}</div>
