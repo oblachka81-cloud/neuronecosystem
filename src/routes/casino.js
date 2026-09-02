@@ -105,6 +105,15 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
 
     const buf = crypto.randomBytes(4);
     const roll = buf.readUInt32BE(0) / 0x100000000;
+
+    // символ, которого нет в exclude
+    const pickOther = (exclude) => {
+      let idx;
+      do { idx = Math.floor(Math.random() * symbols.length); } while (exclude.has(idx));
+      exclude.add(idx);
+      return symbols[idx];
+    };
+
     let reels = [];
 
     if (roll < 0.001) {
@@ -113,37 +122,28 @@ router.post('/api/casino/slot', requireInitDataStrict, casinoRateLimit, async (r
       reels = [cogniq, cogniq, cogniq, cogniq, cogniq];
     } else if (roll < 0.005) {
       // 0.4% — 5 одинаковых (кроме cogniq)
-      const sym = symbols[buf[0] % (symbols.length - 1)];
+      const sym = symbols[Math.floor(Math.random() * (symbols.length - 1))];
       reels = [sym, sym, sym, sym, sym];
     } else if (roll < 0.025) {
       // 2% — 4 одинаковых
-      const sym = symbols[buf[0] % symbols.length];
-      const otherIndex = (buf[1] % (symbols.length - 1));
-      const other = symbols[otherIndex === symbols.indexOf(sym) ? (otherIndex + 1) % symbols.length : otherIndex];
-      reels = [sym, sym, sym, sym, other];
+      const sym = symbols[Math.floor(Math.random() * symbols.length)];
+      const ex = new Set([symbols.indexOf(sym)]);
+      reels = [sym, sym, sym, sym, pickOther(ex)];
     } else if (roll < 0.125) {
       // 10% — 3 одинаковых
-      const sym = symbols[buf[0] % symbols.length];
-      reels = [sym, sym, sym,
-        symbols[(buf[1] % (symbols.length - 1) + 1) % symbols.length],
-        symbols[(buf[2] % (symbols.length - 2) + 2) % symbols.length]
-      ];
+      const sym = symbols[Math.floor(Math.random() * symbols.length)];
+      const ex = new Set([symbols.indexOf(sym)]);
+      reels = [sym, sym, sym, pickOther(ex), pickOther(ex)];
     } else if (roll < 0.275) {
       // 15% — 2 одинаковых
-      const sym = symbols[buf[0] % symbols.length];
-      reels = [sym, sym,
-        symbols[(buf[1] % (symbols.length - 1) + 1) % symbols.length],
-        symbols[(buf[2] % (symbols.length - 2) + 2) % symbols.length],
-        symbols[(buf[3] % (symbols.length - 3) + 3) % symbols.length]
-      ];
+      const sym = symbols[Math.floor(Math.random() * symbols.length)];
+      const ex = new Set([symbols.indexOf(sym)]);
+      reels = [sym, sym, pickOther(ex), pickOther(ex), pickOther(ex)];
     } else {
-      // 67.5% — проигрыш (все разные)
+      // 72.5% — проигрыш (все разные)
       const used = new Set();
       for (let i = 0; i < 5; i++) {
-        let idx;
-        do { idx = Math.floor(Math.random() * symbols.length); } while (used.has(idx));
-        used.add(idx);
-        reels.push(symbols[idx]);
+        reels.push(pickOther(used));
       }
     }
 
