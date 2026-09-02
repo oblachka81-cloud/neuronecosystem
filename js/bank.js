@@ -383,7 +383,7 @@ function loadBankPanel() {
   document.getElementById('bankExchangeAmount').addEventListener('input', function() {
     const amt = parseFloat(this.value) || 0;
     const el = document.getElementById('bankExchangeCalc');
-    if(el) el.textContent = amt > 0 ? bt.exCalc(Math.floor(amt * bankExchangeRate)) : bt.exCalcEmpty;
+    if(el) el.textContent = amt > 0 ? bt.exCalc(Math.floor(amt * bankExchangeRate), Math.floor(amt)) : bt.exCalcEmpty;
   });
   document.getElementById('bankExchangeBuyBtn').addEventListener('click', bankExchangeBuy);
   
