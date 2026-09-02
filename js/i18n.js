@@ -685,3 +685,35 @@ function closeLangModal(e) {
   if (!e || e.target === document.getElementById('langOverlay'))
     document.getElementById('langOverlay').classList.remove('open');
 }
+
+// ==================== ФИКС ХЕДЕРА ПРИ СТАРТЕ ====================
+function updateHeaderLang() {
+  const L = currentLang || 'en';
+  const tabs = {
+    tabGameImg: 'main/tab_game_' + L + '.webp',
+    tabLeaderImg: 'main/tab_leaderboard_' + L + '.webp',
+    tabWalletImg: 'main/tab_wallet_' + L + '.webp',
+    tabBankImg: 'main/tab_bank_' + L + '.webp',
+    tabProfileImg: 'main/tab_profile_' + L + '.webp',
+    tabShopImg: 'main/tab_shop_' + L + '.webp',
+    tabCasinoImg: 'main/tab_impulse_' + L + '.webp',
+    tabExchangeImg: 'main/tab_exchange_' + L + '.webp',
+    langBtnImg: 'main/btn_lang_' + L + '.webp',
+    supportBtnImg: 'main/support_btn_' + L + '.webp',
+  };
+  for (const id in tabs) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.onerror = () => { el.onerror = null; el.src = tabs[id].replace('_' + L + '.webp', '_ru.webp'); };
+      el.src = tabs[id];
+    }
+  }
+}
+window.updateHeaderLang = updateHeaderLang;
+
+// Применяем язык хедера сразу при загрузке
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateHeaderLang);
+} else {
+  updateHeaderLang();
+}
