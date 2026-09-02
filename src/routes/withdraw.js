@@ -7,7 +7,19 @@ const { MIN_WITHDRAW } = require('../config');
 const { sendCogniqJetton } = require('../services/ton');
 
 function isValidTonAddress(address) {
-  return /^[EUk][Qq0-9A-Za-z_-]{47}$/.test(address);
+  if (!address || typeof address !== 'string') return false;
+  const clean = address.trim();
+  
+  // Friendly format: EQ/UQ + 46 символов = 48 total
+  if (/^[EUk][Qq0-9A-Za-z_-]{47}$/.test(clean)) return true;
+  
+  // Raw format: 0:hex (64 hex chars after colon)
+  if (/^[0-9a-fA-F]:[0-9a-fA-F]{64}$/.test(clean)) return true;
+  
+  // Raw format без workchain: 64 hex chars
+  if (/^[0-9a-fA-F]{64}$/.test(clean)) return true;
+  
+  return false;
 }
 
 async function checkAml(wallet) {
