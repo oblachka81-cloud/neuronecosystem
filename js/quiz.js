@@ -74,6 +74,7 @@ const superGameCard=`
   let startBtnDisabled = (!currentState.superGamePending && freeGamesLeft <= 0) ? 'disabled' : '';
   const duelsBtnHtml = webpBtn('duelsBtn', 'main/btn_duel.webp', window.DUEL_LANG?.[currentLang]?.title || 'Duels');
   const chessBtnHtml = webpBtn('chessBtn', 'main/btn_chess.webp', window.CHESS_LANG?.[currentLang]?.title || 'Chess');
+  const installBtnHtml = webpBtn('installAppBtn', 'main/btn_install.webp', t.installApp || 'INSTALL NEURON', 'onclick="addToHomeScreen()" style="display:none;"');
   const startBtnHtml = webpBtn('startNewBtn', 'main/btn_frame_start.webp', startBtnText, startBtnDisabled, startBtnDisabled ? 'opacity:0.5;pointer-events:none;' : '');
 
   const replayBtnHtml = currentState.lastGameWasSuper && !currentState.superGameReplayUsed
@@ -90,7 +91,7 @@ root.innerHTML = `
       ${startBtnHtml}
       ${duelsBtnHtml}
       ${chessBtnHtml}
-      ${webpBtn('installAppBtn', '/main/btn_install.webp', t.installApp || 'INSTALL NEURON', 'onclick="addToHomeScreen()" style="display:none;"')}
+      ${installBtnHtml}
       ${replayBtnHtml}
       <div id="dailyQuestionCard" style="display:none; background: linear-gradient(135deg, rgba(0,200,255,0.1), rgba(122,46,255,0.1)); border: 1px solid rgba(0,255,255,0.3); border-radius: 24px; padding: 20px; margin-bottom: 16px; text-align: left;">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
