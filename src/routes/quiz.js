@@ -441,6 +441,7 @@ if (isFinished) {
       message,
       total: QUESTIONS_PER_GAME,
       superGamePending,
+      grantedSuperGames: user.granted_super_games || 0,
       superGamesTotal,
       withdrawTickets,
       wasSuper: currentIsSuper,
