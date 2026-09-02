@@ -152,7 +152,7 @@ app.get('/fiat.html', (req, res) => {
 
 app.get('/api/exchange/rate', requireInitData, authRateLimit, async (req, res) => {
   const wallet = process.env.TON_OPERATION_WALLET;
-  res.json({ rate: 200, address: wallet || 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv', min_usdt: 1, max_usdt: 100 });
+  res.json({ rate: 2000, address: wallet || 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv', min_usdt: 1, max_usdt: 100 });
 });
 
 app.get('/api/transactions', requireInitData, publicRateLimit, async (req, res) => {
