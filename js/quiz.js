@@ -460,7 +460,8 @@ function loadFirstQuestion() {
       currentState.freeGamesLeft = data.freeGamesLeft || 10;
       currentState.currentIsSuper = data.currentIsSuper || false;
       if (!currentState.superGamePending) currentState.lastGameWasSuper = false;
-      currentState.superGamePending = false;
+      currentState.superGamePending = data.superGamePending || false;
+      currentState.grantedSuperGames = data.grantedSuperGames || 0;
       updateScoresUI(currentState.totalScore); updateGamesLeftUI(currentState.freeGamesLeft);
       renderQuestion(currentState.currentQuestion, data.index, data.total, currentState.gameScore);
     }
