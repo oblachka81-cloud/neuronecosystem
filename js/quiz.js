@@ -406,6 +406,7 @@ function sendAnswer(selectedIndex) {
     if (data.totalScore !== undefined) { currentState.totalScore = data.totalScore; updateScoresUI(data.totalScore); }
     if (data.score !== undefined) { currentState.gameScore = data.score; if (!data.finished) gamesLeftSpan.innerText = currentState.currentIsSuper ? `🔥 ${data.score}` : t.scoreBadge(data.score); }
     if (data.superGamePending !== undefined) currentState.superGamePending = data.superGamePending;
+    if (data.grantedSuperGames !== undefined) currentState.grantedSuperGames = data.grantedSuperGames;
     if (data.superGamesTotal !== undefined) currentState.superGamesTotal = data.superGamesTotal;
     if (data.withdrawTickets !== undefined) currentState.withdrawTickets = data.withdrawTickets;
     if (data.finished) {
