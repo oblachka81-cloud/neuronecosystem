@@ -99,6 +99,7 @@ router.get('/api/user', requireInitData, publicRateLimit, async (req, res) => {
       balance: user.balance,
       freeGamesLeft,
       superGamePending: user.super_game_pending || false,
+      grantedSuperGames: user.granted_super_games || 0,
       superGamesTotal: user.super_games_total || 0,
       canWithdraw,
       gamesPlayed: user.games_played_total || 0,
