@@ -603,7 +603,7 @@ router.get('/api/admin/transfers/list', requireAdmin, async (req, res) => {
 // ==================== BURN ====================
 router.get('/api/admin/burn/stats', requireAdmin, async (req, res) => {
   try {
-    const { rows: poolRows } = await pool.query('SELECT COALESCE(SUM(amount), 0) AS total FROM burn_pool');
+    const { rows: poolRows } = await pool.query(`SELECT COALESCE(SUM(CASE WHEN source LIKE 'impulse_%' THEN amount / 5.0 ELSE amount END), 0) AS total FROM burn_pool`);
     const { rows: histRows } = await pool.query('SELECT COALESCE(SUM(amount), 0) AS total_burned, MAX(burned_at) AS last_burned_at FROM burn_history');
     const { rows: sources } = await pool.query('SELECT source, COUNT(*) AS count, SUM(amount) AS total FROM burn_pool GROUP BY source ORDER BY total DESC');
     const { rows: history } = await pool.query('SELECT id, amount, tx_hash, burned_at FROM burn_history ORDER BY burned_at DESC LIMIT 20');
