@@ -51,15 +51,17 @@ function loadBankPanel() {
     </div>
     
     <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(168,85,247,0.25);padding:20px;">
-      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">${bt.exchangeTitle}</div>
-      <div style="display:flex;gap:10px;margin-bottom:12px;align-items:stretch;">
-        <input type="number" id="bankExchangeAmount" placeholder="Сумма USDT" min="1" max="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;">
+      <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">${bt.exchangeTitle}</div>
+      <div style="text-align:center;margin-bottom:6px;">
+        <span id="bankExchangeRate" style="font-size:1.15rem;font-weight:900;background:linear-gradient(90deg,#00ffff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${bt.exRate}</span>
+      </div>
+      <div style="text-align:center;font-size:0.75rem;color:#ffcc44;margin-bottom:12px;">${bt.exGift}</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;align-items:stretch;">
+        <input type="number" id="bankExchangeAmount" placeholder="${bt.exPlaceholder}" min="1" max="100" style="flex:1;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.25);border-radius:13px;color:#e0e0f0;font-size:0.95rem;outline:none;">
         <button id="bankExchangeBuyBtn" style="background:none;border:none;padding:0;cursor:pointer;flex-shrink:0;"><img src="/bank/bank_buy_btn_${currentLang}.webp" style="height:44px;width:auto;display:block;"></button>
       </div>
-      <div style="text-align:center;font-size:0.85rem;color:#5566aa;">
-        <span id="bankExchangeRate">1 USDT = 200 COGNIQ</span> &nbsp;·&nbsp;
-        <span id="bankExchangeCalc" style="color:#00ffaa;">${bt.exCalcEmpty}</span>
-      </div>
+      <div style="text-align:center;font-size:0.8rem;color:#00ffaa;margin-bottom:8px;" id="bankExchangeCalc">${bt.exCalcEmpty}</div>
+      <div style="text-align:center;font-size:0.68rem;color:#5577aa;">${bt.exPool}</div>
     </div>
     
     <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(168,85,247,0.25);padding:20px;">
