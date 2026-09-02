@@ -5,6 +5,7 @@ const REPORT_LANG = {
     title: 'НЕДЕЛЬНЫЙ ОТЧЁТ',
     activity: 'АКТИВНОСТЬ',
     quiz: 'Викторин',
+    quizEarned: 'COGNIQ с викторин',
     duels: 'Дуэлей',
     duelsWon: 'побед',
     chess: 'Шахмат',
@@ -12,22 +13,39 @@ const REPORT_LANG = {
     cogniq: 'COGNIQ',
     earned: 'Заработано',
     spent: 'Потрачено',
+    net: 'Чистый профит',
+    converted: 'В IMPULSE',
+    staked: 'В банк',
+    transferredOut: 'Отправлено',
+    transferredIn: 'Получено',
     burned: 'Сожжено',
     impulse: 'IMPULSE',
     bets: 'Ставок',
+    betSum: 'Поставлено',
     won: 'Выиграно',
     lost: 'Проиграно',
-    achievements: 'Достижения',
+    bestWin: 'Лучший занос',
+    bank: 'БАНК',
+    bankBuys: 'Покупок',
+    achievements: 'ДОСТИЖЕНИЯ',
     newAchievements: 'Новых',
-    rank: 'Ранг',
+    streak: 'Стрик',
+    days: 'дн.',
+    tickets: 'Тикетов на вывод',
+    rank: 'РАНГ',
+    balance: 'Баланс',
+    delta: 'vs прошлая неделя',
+    newWeek: 'Первая неделя!',
     close: 'Закрыть',
     loading: 'Загрузка отчёта...',
-    error: 'Ошибка загрузки'
+    error: 'Ошибка загрузки',
+    noData: 'Пока пусто. Играй!',
   },
   en: {
     title: 'WEEKLY REPORT',
     activity: 'ACTIVITY',
     quiz: 'Quizzes',
+    quizEarned: 'COGNIQ from quizzes',
     duels: 'Duels',
     duelsWon: 'won',
     chess: 'Chess',
@@ -35,22 +53,39 @@ const REPORT_LANG = {
     cogniq: 'COGNIQ',
     earned: 'Earned',
     spent: 'Spent',
+    net: 'Net profit',
+    converted: 'To IMPULSE',
+    staked: 'Staked',
+    transferredOut: 'Sent',
+    transferredIn: 'Received',
     burned: 'Burned',
     impulse: 'IMPULSE',
     bets: 'Bets',
+    betSum: 'Wagered',
     won: 'Won',
     lost: 'Lost',
-    achievements: 'Achievements',
+    bestWin: 'Best win',
+    bank: 'BANK',
+    bankBuys: 'Buys',
+    achievements: 'ACHIEVEMENTS',
     newAchievements: 'New',
-    rank: 'Rank',
+    streak: 'Streak',
+    days: 'days',
+    tickets: 'Withdraw tickets',
+    rank: 'RANK',
+    balance: 'Balance',
+    delta: 'vs last week',
+    newWeek: 'First week!',
     close: 'Close',
     loading: 'Loading report...',
-    error: 'Load error'
+    error: 'Load error',
+    noData: 'Empty yet. Play!',
   },
   fr: {
     title: 'RAPPORT HEBDOMADAIRE',
     activity: 'ACTIVITÉ',
     quiz: 'Quiz',
+    quizEarned: 'COGNIQ des quiz',
     duels: 'Duels',
     duelsWon: 'gagnés',
     chess: 'Échecs',
@@ -58,22 +93,39 @@ const REPORT_LANG = {
     cogniq: 'COGNIQ',
     earned: 'Gagné',
     spent: 'Dépensé',
+    net: 'Bénéfice net',
+    converted: 'En IMPULSE',
+    staked: 'Placé',
+    transferredOut: 'Envoyé',
+    transferredIn: 'Reçu',
     burned: 'Brûlé',
     impulse: 'IMPULSE',
     bets: 'Mises',
+    betSum: 'Misé',
     won: 'Gagné',
     lost: 'Perdu',
-    achievements: 'Succès',
+    bestWin: 'Meilleur gain',
+    bank: 'BANQUE',
+    bankBuys: 'Achats',
+    achievements: 'SUCCÈS',
     newAchievements: 'Nouveaux',
-    rank: 'Rang',
+    streak: 'Série',
+    days: 'j.',
+    tickets: 'Tickets de retrait',
+    rank: 'RANG',
+    balance: 'Solde',
+    delta: 'vs sem. dernière',
+    newWeek: 'Première semaine !',
     close: 'Fermer',
     loading: 'Chargement...',
-    error: 'Erreur'
+    error: 'Erreur',
+    noData: 'Vide encore. Joue !',
   },
   es: {
     title: 'INFORME SEMANAL',
     activity: 'ACTIVIDAD',
     quiz: 'Quizzes',
+    quizEarned: 'COGNIQ de quizzes',
     duels: 'Duelos',
     duelsWon: 'ganados',
     chess: 'Ajedrez',
@@ -81,17 +133,33 @@ const REPORT_LANG = {
     cogniq: 'COGNIQ',
     earned: 'Ganado',
     spent: 'Gastado',
+    net: 'Beneficio neto',
+    converted: 'A IMPULSE',
+    staked: 'Depositado',
+    transferredOut: 'Enviado',
+    transferredIn: 'Recibido',
     burned: 'Quemado',
     impulse: 'IMPULSE',
     bets: 'Apuestas',
+    betSum: 'Apostado',
     won: 'Ganado',
     lost: 'Perdido',
-    achievements: 'Logros',
+    bestWin: 'Mejor ganancia',
+    bank: 'BANCO',
+    bankBuys: 'Compras',
+    achievements: 'LOGROS',
     newAchievements: 'Nuevos',
-    rank: 'Rango',
+    streak: 'Racha',
+    days: 'días',
+    tickets: 'Tickets de retiro',
+    rank: 'RANGO',
+    balance: 'Saldo',
+    delta: 'vs sem. pasada',
+    newWeek: '¡Primera semana!',
     close: 'Cerrar',
     loading: 'Cargando...',
-    error: 'Error'
+    error: 'Error',
+    noData: 'Vacío aún. ¡Juega!',
   }
 };
 
@@ -99,85 +167,146 @@ function reportT() {
   return REPORT_LANG[currentLang] || REPORT_LANG.en;
 }
 
+const row = (label, value, color = '#fff') =>
+  `<div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="color:#a0aac0;">${label}</span><span style="color:${color};font-weight:700;">${value}</span></div>`;
+
+const section = (emoji, title, color, html) =>
+  `<div style="margin-bottom:18px;">
+     <div style="font-size:0.7rem;font-weight:800;color:${color};letter-spacing:1.2px;text-transform:uppercase;margin-bottom:9px;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:6px;">${emoji} ${title}</div>
+     ${html}
+   </div>`;
+
 async function openWeeklyReport() {
   const t = reportT();
-  
-  // Создаём модалку
+
   const existing = document.getElementById('weeklyReportModal');
   if (existing) existing.remove();
-  
+
   const modal = document.createElement('div');
   modal.id = 'weeklyReportModal';
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
-  
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
+
   modal.innerHTML = `
-    <div style="background:rgba(10,15,30,0.85);border:1.5px solid rgba(220,220,225,0.5);border-radius:20px;padding:24px 20px;max-width:400px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 0 30px rgba(220,220,225,0.1);backdrop-filter:blur(8px);">
-      <div style="text-align:center;margin-bottom:20px;">
-        <div style="font-size:1.2rem;font-weight:800;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 50%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;text-transform:uppercase;"> ${t.title}</div>
+    <div style="background:rgba(10,15,30,0.95);border:1.5px solid rgba(220,220,225,0.35);border-radius:20px;padding:22px 20px;max-width:420px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 0 40px rgba(0,0,0,0.6);backdrop-filter:blur(12px);">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:1.15rem;font-weight:900;background:linear-gradient(90deg,#ffcc44 0%,#fff3c4 50%,#ffcc44 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1.5px;text-transform:uppercase;">${t.title}</div>
       </div>
-      <div id="weeklyReportContent" style="font-size:0.85rem;color:#c8d0e0;">
+      <div id="weeklyReportContent" style="font-size:0.83rem;color:#c8d0e0;">
         <div style="text-align:center;padding:20px;color:#00ccff;">${t.loading}</div>
       </div>
-      <button onclick="document.getElementById('weeklyReportModal').remove()" style="width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:40px;font-size:0.85rem;font-weight:600;color:#8899aa;cursor:pointer;margin-top:16px;">
+      <button onclick="document.getElementById('weeklyReportModal').remove()" style="width:100%;padding:12px;margin-top:14px;background:linear-gradient(90deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.12);border-radius:40px;font-size:0.85rem;font-weight:700;color:#a0aac0;cursor:pointer;">
         ${t.close}
       </button>
     </div>
   `;
-  
+
   document.body.appendChild(modal);
-  
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) modal.remove();
-  });
-  
-  // Загружаем данные
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+
   try {
     const res = await authFetch(`${BASE_URL}/api/weekly-report?lang=${currentLang}`);
     const data = await res.json();
-    
+
     if (!data.success) {
       document.getElementById('weeklyReportContent').innerHTML = `<div style="text-align:center;color:#ff6464;">${t.error}</div>`;
       return;
     }
-    
-    document.getElementById('weeklyReportContent').innerHTML = `
-      <div style="margin-bottom:16px;">
-        <div style="font-size:0.7rem;font-weight:700;color:#00ccff;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">🎮 ${t.activity}</div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${t.quiz}</span><span style="color:#fff;font-weight:700;">${data.quiz.games}</span></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${t.duels}</span><span style="color:#fff;font-weight:700;">${data.duels.total} <span style="color:#00ffaa;">(${data.duels.won} ${t.duelsWon})</span></span></div>
-        <div style="display:flex;justify-content:space-between;"><span>${t.chess}</span><span style="color:#fff;font-weight:700;">${data.chess.total} <span style="color:#00ffaa;">(${data.chess.won} ${t.chessWon})</span></span></div>
-      </div>
-      
-      <div style="margin-bottom:16px;">
-        <div style="font-size:0.7rem;font-weight:700;color:#ffcc44;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">💰 ${t.cogniq}</div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${t.earned}</span><span style="color:#00ffaa;font-weight:700;">+${data.cogniq.earned.toLocaleString()}</span></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${t.spent}</span><span style="color:#ff6464;font-weight:700;">-${data.cogniq.spent.toLocaleString()}</span></div>
-        <div style="display:flex;justify-content:space-between;"><span>${t.burned}</span><span style="color:#ff8800;font-weight:700;">🔥 ${data.cogniq.burned.toLocaleString()}</span></div>
-      </div>
-      
-      <div style="margin-bottom:16px;">
-        <div style="font-size:0.7rem;font-weight:700;color:#a855f7;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">🎰 ${t.impulse}</div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${t.bets}</span><span style="color:#fff;font-weight:700;">${data.impulse.bets}</span></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>${t.won}</span><span style="color:#00ffaa;font-weight:700;">+${data.impulse.won.toLocaleString()}</span></div>
-        <div style="display:flex;justify-content:space-between;"><span>${t.lost}</span><span style="color:#ff6464;font-weight:700;">-${data.impulse.lost.toLocaleString()}</span></div>
-      </div>
-      
-      <div style="margin-bottom:16px;">
-        <div style="font-size:0.7rem;font-weight:700;color:#00ffaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">🏅 ${t.achievements}</div>
-        <div style="display:flex;justify-content:space-between;"><span>${t.newAchievements}</span><span style="color:#fff;font-weight:700;">${data.achievements.new}</span></div>
-      </div>
-      
-      <div>
-        <div style="font-size:0.7rem;font-weight:700;color:#ffcc44;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">⚡ ${t.rank}</div>
-        <div style="text-align:center;font-size:1.1rem;font-weight:800;color:#ffcc44;">${data.rank.emoji} ${data.rank.title}</div>
+
+    const fmt = n => (n ?? 0).toLocaleString();
+    const netColor = data.cogniq.net > 0 ? '#00ffaa' : data.cogniq.net < 0 ? '#ff6464' : '#a0aac0';
+    const netSign = data.cogniq.net > 0 ? '+' : '';
+    const impNet = data.impulse.net;
+    const impNetColor = impNet > 0 ? '#00ffaa' : impNet < 0 ? '#ff6464' : '#a0aac0';
+    const impNetSign = impNet > 0 ? '+' : '';
+
+    // Дельта активности
+    const prevGames = data.delta?.gamesPrev ?? 0;
+    const curGames = (data.activity?.quiz ?? 0) + (data.activity?.duels?.total ?? 0) + (data.activity?.chess?.total ?? 0);
+    let deltaHtml;
+    if (prevGames === 0 && curGames === 0) {
+      deltaHtml = `<span style="color:#a0aac0;font-style:italic;font-weight:500;">${t.noData}</span>`;
+    } else if (prevGames === 0) {
+      deltaHtml = `<span style="color:#ffcc44;font-weight:700;">🆕 ${t.newWeek}</span>`;
+    } else {
+      const pct = Math.round(((curGames - prevGames) / prevGames) * 100);
+      const dColor = pct > 0 ? '#00ffaa' : pct < 0 ? '#ff6464' : '#a0aac0';
+      const dSign = pct > 0 ? '+' : '';
+      deltaHtml = `<span style="color:${dColor};font-weight:700;">${dSign}${pct}% ${t.delta}</span>`;
+    }
+
+    // АКТИВНОСТЬ
+    const actHtml = `
+      ${row(t.quiz, `${fmt(data.activity.quiz)} <span style="color:#00ffaa;font-size:0.75rem;">(+${fmt(data.activity.quizEarned)} C)</span>`)}
+      ${row(t.duels, `${fmt(data.activity.duels.total)} <span style="color:#00ffaa;font-size:0.75rem;">(${fmt(data.activity.duels.won)} ${t.duelsWon})</span>`)}
+      ${row(t.chess, `${fmt(data.activity.chess.total)} <span style="color:#00ffaa;font-size:0.75rem;">(${fmt(data.activity.chess.won)} ${t.chessWon})</span>`)}
+      ${row(t.streak, `${fmt(data.streak)} ${t.days}`)}
+      <div style="text-align:center;margin-top:8px;font-size:0.72rem;">${deltaHtml}</div>
+    `;
+
+    // COGNIQ
+    const cogniqHtml = `
+      ${row(t.earned, `+${fmt(data.cogniq.earned)}`, '#00ffaa')}
+      ${row(t.spent, `-${fmt(data.cogniq.spent)}`, '#ff6464')}
+      <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0;"></div>
+      ${row(t.net, `${netSign}${fmt(data.cogniq.net)}`, netColor)}
+      <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0;"></div>
+      ${row(t.converted, fmt(data.cogniq.converted), '#a855f7')}
+      ${row(t.staked, fmt(data.cogniq.staked), '#ffcc44')}
+      ${row(t.transferredOut, fmt(data.cogniq.transferredOut), '#a0aac0')}
+      ${row(t.transferredIn, fmt(data.cogniq.transferredIn), '#a0aac0')}
+      ${data.cogniq.burned > 0 ? row(t.burned, `🔥 ${fmt(data.cogniq.burned)}`, '#ff8800') : ''}
+    `;
+
+    // БАНК
+    let bankHtml = '';
+    if (data.cogniq.bankBuys > 0) {
+      bankHtml = section('🏦', t.bank, '#00ccff', `
+        ${row(t.bankBuys, fmt(data.cogniq.bankBuys))}
+        ${row('USDT', `$${fmt(data.cogniq.bankUsdt)}`, '#00ffaa')}
+        ${row('COGNIQ', fmt(data.cogniq.bankCogniq), '#00ffff')}
+      `);
+    }
+
+    // IMPULSE
+    const impHtml = `
+      ${row(t.bets, fmt(data.impulse.bets))}
+      ${row(t.betSum, fmt(data.impulse.betSum))}
+      ${row(t.won, `+${fmt(data.impulse.won)}`, '#00ffaa')}
+      ${row(t.lost, `-${fmt(data.impulse.lost)}`, '#ff6464')}
+      <div style="height:1px;background:rgba(255,255,255,0.08);margin:8px 0;"></div>
+      ${row(t.net, `${impNetSign}${fmt(impNet)}`, impNetColor)}
+      ${data.impulse.bestWin > 0 ? `<div style="margin-top:10px;padding:10px 12px;border:1px solid rgba(255,136,0,0.4);border-radius:10px;background:linear-gradient(135deg,rgba(255,136,0,0.1),rgba(255,80,0,0.05));text-align:center;"><div style="font-size:0.65rem;color:#ff8800;text-transform:uppercase;letter-spacing:1px;font-weight:700;">🔥 ${t.bestWin}</div><div style="font-size:1.1rem;font-weight:900;color:#ffcc44;margin-top:4px;">+${fmt(data.impulse.bestWin)} IMPULSE</div></div>` : ''}
+    `;
+
+    // ДОСТИЖЕНИЯ + ТИКЕТЫ
+    const achHtml = `
+      ${row(t.newAchievements, fmt(data.achievements.new), '#ffcc44')}
+      ${row(t.tickets, fmt(data.withdrawTickets), '#00ffff')}
+    `;
+
+    // РАНГ
+    const rankHtml = `
+      <div style="text-align:center;padding:10px 0;">
+        <div style="font-size:1.5rem;margin-bottom:4px;">${data.rank.emoji}</div>
+        <div style="font-size:1rem;font-weight:800;color:#ffcc44;">${data.rank.title}</div>
+        <div style="font-size:0.75rem;color:#8899bb;margin-top:4px;">${t.balance}: <span style="color:#fff;font-weight:700;">${fmt(data.rank.balance)}</span></div>
       </div>
     `;
-    
+
+    document.getElementById('weeklyReportContent').innerHTML = `
+      ${section('🎮', t.activity, '#00ccff', actHtml)}
+      ${section('💰', t.cogniq, '#ffcc44', cogniqHtml)}
+      ${bankHtml}
+      ${section('🎰', t.impulse, '#a855f7', impHtml)}
+      ${section('🏅', t.achievements, '#00ffaa', achHtml)}
+      ${section('⚡', t.rank, '#ffcc44', rankHtml)}
+    `;
+
   } catch (e) {
+    console.error('weekly-report error:', e);
     document.getElementById('weeklyReportContent').innerHTML = `<div style="text-align:center;color:#ff6464;">${t.error}</div>`;
   }
 }
 
-// Глобальные функции
 window.openWeeklyReport = openWeeklyReport;
 window.REPORT_LANG = REPORT_LANG;
