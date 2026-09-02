@@ -605,7 +605,7 @@ router.get('/api/admin/burn/stats', requireAdmin, async (req, res) => {
   try {
     const { rows: poolRows } = await pool.query(`SELECT COALESCE(SUM(CASE WHEN source LIKE 'impulse_%' THEN amount / 5.0 ELSE amount END), 0) AS total FROM burn_pool`);
     const { rows: histRows } = await pool.query('SELECT COALESCE(SUM(amount), 0) AS total_burned, MAX(burned_at) AS last_burned_at FROM burn_history');
-    const { rows: sources } = await pool.query('SELECT source, COUNT(*) AS count, SUM(amount) AS total FROM burn_pool GROUP BY source ORDER BY total DESC');
+    const { rows: sources } = await pool.query(`SELECT source, COUNT(*) AS count, SUM(CASE WHEN source LIKE 'impulse_%' THEN amount / 5.0 ELSE amount END) AS total FROM burn_pool GROUP BY source ORDER BY total DESC`);
     const { rows: history } = await pool.query('SELECT id, amount, tx_hash, burned_at FROM burn_history ORDER BY burned_at DESC LIMIT 20');
     res.json({ total: parseInt(poolRows[0].total), totalBurned: parseInt(histRows[0].total_burned), lastBurnedAt: histRows[0].last_burned_at, sources, history });
   } catch(e) { console.error('[BURN] stats error:', e); res.status(500).json({ error: 'Server error' }); }
