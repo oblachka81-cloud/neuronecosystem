@@ -82,6 +82,82 @@ router.post('/api/create-stars-invoice', requireInitData, publicRateLimit, async
   }
 });
 
+router.post('/api/activate-gift-super', requireInitData, publicRateLimit, async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    const userId = req.tgUser.id;
+
+    const userRes = await client.query(
+      `SELECT telegram_id, super_game_pending, COALESCE(granted_super_games, 0) AS granted_super_games
+       FROM users
+       WHERE telegram_id = $1
+       FOR UPDATE`,
+      [userId]
+    );
+
+    const user = userRes.rows[0];
+
+    if (!user) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ ok: false, error: 'User not found' });
+    }
+
+    if (user.super_game_pending) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({
+        ok: false,
+        error: 'Super game already active',
+        superGamePending: true,
+        grantedSuperGames: user.granted_super_games || 0
+      });
+    }
+
+    if ((user.granted_super_games || 0) <= 0) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({
+        ok: false,
+        error: 'No gifted super games',
+        grantedSuperGames: 0
+      });
+    }
+
+    const upd = await client.query(
+      `UPDATE users
+       SET granted_super_games = COALESCE(granted_super_games, 0) - 1,
+           super_game_pending = true,
+           super_replay_used = false
+       WHERE telegram_id = $1
+         AND COALESCE(granted_super_games, 0) > 0
+         AND super_game_pending = false
+       RETURNING granted_super_games`,
+      [userId]
+    );
+
+    if (!upd.rows.length) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ ok: false, error: 'Activation failed' });
+    }
+
+    await client.query('COMMIT');
+
+    return res.json({
+      ok: true,
+      superGamePending: true,
+      grantedSuperGames: upd.rows[0].granted_super_games || 0
+    });
+
+  } catch (e) {
+    await client.query('ROLLBACK');
+    console.error('/api/activate-gift-super error:', e);
+    return res.status(500).json({ ok: false, error: 'Server error' });
+  } finally {
+    client.release();
+  }
+});
+
 router.post('/api/create-stars-invoice-pack', requireInitData, publicRateLimit, async (req, res) => {
   try {
     const userId = req.tgUser.id;
