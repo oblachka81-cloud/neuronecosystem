@@ -26,6 +26,17 @@ for (const [symbol, address] of Object.entries(exchange.TOKEN_MAP || {})) {
     };
   } catch (e) { /* пропускаем битый адрес */ }
 }
+// ===== COGNIQ он-чейн (выведенные жетоны в кошельке) =====
+try {
+  const COGNIQ_MASTER = 'EQDOjRZ5rbSnBBvhsv4g0JNN67p89617_2pNc_AO1dTEkaNg';
+  const cogniqRaw = Address.parse(COGNIQ_MASTER).toRawString().toLowerCase();
+  JETTON_MAP[cogniqRaw] = {
+    symbol: 'COGNIQ (wallet)',
+    decimals: 9,
+    name: 'COGNIQ (wallet)',
+    icon: '🧠'
+  };
+} catch (e) {}
 
 const TON_RAW = Address.parse('EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c').toRawString().toLowerCase();
 
