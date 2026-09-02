@@ -91,6 +91,7 @@ app.use(portfolioRoutes);
 app.use(require('./src/routes/duels'));
 app.use(require('./src/routes/chess'));
 app.use(require('./src/routes/aml'));
+app.use(require('./src/routes/report'));
 
 if (!BESTCHANGE_API_KEY) {
   console.warn('⚠️ BESTCHANGE_API_KEY не задан в .env — BestChange API работать не будет');
