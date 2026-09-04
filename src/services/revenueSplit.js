@@ -27,7 +27,7 @@ async function splitSuperGameRevenue(bot) {
 
     console.log(`[SPLIT] найдено ${cnt} платежей (супер-игры + банк), всего ${(total/1e6).toFixed(2)} USDT, шлём ${(liqAmount/1e6).toFixed(2)} в ликвидность`);
 
-    const tx1 = await sendJetton(USDT_MASTER, liqWallet, liqAmountBig, key);
+    const tx1 = await sendJetton(USDT_MASTER, liqWallet, liqAmount, key);
 
     await pool.query(`UPDATE processed_ton_payments SET split_done = true
                       WHERE item IN ('super_game', 'bank_exchange') AND NOT split_done`);
