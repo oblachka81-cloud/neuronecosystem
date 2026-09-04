@@ -6,6 +6,7 @@ function initTonConnect() {
   try {
     if (typeof TON_CONNECT_UI === 'undefined') return;
     tonConnectUI = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: window.location.origin + '/tonconnect-manifest.json' });
+    window.tonConnectUI = tonConnectUI;  // ← ДОБАВИТЬ ЭТУ СТРОКУ
     tonConnectUI.onStatusChange(wallet => {
       if (currentTab === 'wallet') showWalletPanel();
       else if (document.querySelector('.welcome-card')) showWelcome(currentState.totalScore, currentState.gamesPlayed || 0);
