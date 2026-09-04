@@ -157,22 +157,47 @@ function parseTgUser() {
   return null;
 }
 
-function startApp(attempt) {
-  attempt = attempt || 1;
+function startApp(attempt = 1) {
   const tgUser = parseTgUser();
+  
   if (tgUser?.id) {
     userId = String(tgUser.id);
     userName = tgUser.first_name || tgUser.username || localStorage.getItem('neuron_uname') || 'Player';
     localStorage.setItem('neuron_uid', userId);
     localStorage.setItem('neuron_uname', userName);
+    loadWelcome();
+    return;
   }
-  if (!userId) {
-    if (attempt < 8) { setTimeout(() => startApp(attempt + 1), 300); return; }
-    userId = localStorage.getItem('neuron_uid') || ('dev_' + Math.random().toString(36).slice(2, 11));
-    userName = localStorage.getItem('neuron_uname') || 'Player';
-    localStorage.setItem('neuron_uid', userId);
-    localStorage.setItem('neuron_uname', userName);
+  
+  // Ждём initData (до 13 попыток по 300мс = 3.9 сек)
+  if (attempt < 13) {
+    setTimeout(() => startApp(attempt + 1), 300);
+    return;
   }
+  
+  // Проверяем: мы внутри Telegram?
+  const isInsideTelegram = !!(window.Telegram?.WebApp?.initData || window.Telegram?.WebApp?.initDataUnsafe?.user);
+  
+  if (isInsideTelegram) {
+    // НЕ создаём dev_ ID — показываем ошибку
+    console.warn('[NEURON] initData не получен на iOS');
+    if (window._hideSplash) window._hideSplash();
+    root.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="font-size:3rem;margin-bottom:16px;">⚠️</div>
+        <div style="font-size:1.1rem;font-weight:700;color:#ffcc44;margin-bottom:12px;">Авторизация не удалась</div>
+        <div style="font-size:0.9rem;color:#8899bb;margin-bottom:24px;">Закрой и открой приложение заново</div>
+        <button onclick="location.reload()" style="background:linear-gradient(90deg,#00aa88,#00ddaa);border:none;border-radius:40px;padding:12px 32px;font-size:0.9rem;font-weight:700;color:white;cursor:pointer;">🔄 Обновить</button>
+      </div>
+    `;
+    return;
+  }
+  
+  // Только для разработки (открыто не через Telegram)
+  userId = localStorage.getItem('neuron_uid') || ('dev_' + Math.random().toString(36).slice(2, 11));
+  userName = localStorage.getItem('neuron_uname') || 'Player';
+  localStorage.setItem('neuron_uid', userId);
+  localStorage.setItem('neuron_uname', userName);
   loadWelcome();
 }
 
