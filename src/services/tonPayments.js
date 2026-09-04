@@ -228,6 +228,7 @@ async function checkTonUsdtPayments(bot) {
           
           console.log(`[TON] Exchange: ${amountUSDT} USDT → ${amountCogniq} COGNIQ + ${grantedGames} super games for user ${userId}`);
         }
+      }
 
       if (transfers.length < limit) break;
       offset += limit;
@@ -236,6 +237,5 @@ async function checkTonUsdtPayments(bot) {
     console.error('[TON] checkTonUsdtPayments error:', e.message);
   }
 }
-
 
 module.exports = { checkTonUsdtPayments };
