@@ -153,79 +153,80 @@ async function checkTonUsdtPayments(bot) {
           try { await withRetry(() => bot.telegram.sendMessage(userId, '💎 PREMIUM подписка активирована на 30 дней! Открой приложение.')); } catch (e) {}
           console.log(`[TON] Premium sub activated for user ${userId}, tx: ${txHash}`);
         }
-        else if(comment.startsWith('exchange_')){
-constrawId=comment.replace('exchange_','');
-if(!/^d+$/.test(rawId))continue;
-constuserId=parseInt(rawId,10);
-if(!userId||userId<=0)continue;
-constamountUSDT=amount/1000000;
-constrate=2000;
-constamountCogniq=Math.floor(amountUSDT*rate);
-constgrantedGames=Math.floor(amountUSDT);
-letclient;
-try{
-client=awaitpool.connect();
-awaitclient.query('BEGIN');
-constexists=awaitclient.query(
-'SELECT 1 FROM processed_ton_payments WHERE tx_hash = $1',
-[txHash]
-);
-if(exists.rows.length>0){
-awaitclient.query('ROLLBACK');
-client.release();
-client=null;
-continue;
-}
-awaitclient.query(
-'INSERT INTO processed_ton_payments (tx_hash, user_id, amount, processed_at, item) VALUES ($1, $2, $3, NOW(), $4)',
-[txHash,userId,amount,'bank_exchange']
-);
-awaitclient.query(
-'UPDATE users SET balance = balance + $1, balance_purchased = COALESCE(balance_purchased, 0) + $1, granted_super_games = granted_super_games + $2 WHERE telegram_id = $3',
-[amountCogniq,grantedGames,userId]
-);
-awaitclient.query(
-'INSERT INTO exchange_orders (telegram_id, tx_hash, amount_usdt, amount_cogniq, rate, status) VALUES ($1, $2, $3, $4, $5, $6)',
-[userId,txHash,amountUSDT,amountCogniq,rate,'completed']
-);
-awaitclient.query('COMMIT');
-client.release();
-client=null;
-awaitlogTx(userId,'usdt_exchange',amountCogniq,'in',{usdt: amountUSDT});
-}catch(e){
-if(client){
-try{awaitclient.query('ROLLBACK');}catch(_){}
-client.release();
-client=null;
-}
-console.error('[TON] exchange tx error:',e.message);
-continue;
-}
-try{
-constuserLang=awaitpool.query(
-'SELECT language_code FROM users WHERE telegram_id = $1',
-[userId]
-);
-constlang=userLang.rows[0]?.language_code||'ru';
-try{
-constimg=awaitgenerateExchangeCard({ amountCogniq, amountUSDT, lang });
-awaitwithRetry(()=>bot.telegram.sendPhoto(userId,{source: img}));
-}catch(e){
-awaitwithRetry(()=>
-bot.telegram.sendMessage(userId,`💱 Обмен: +${amountCogniq} COGNIQ за ${amountUSDT} USDT!`)
-);
-}
-}catch(e){}
-console.log(`[TON] Exchange: ${amountUSDT} USDT → ${amountCogniq} COGNIQ + ${grantedGames} super games for user ${userId}`);
-}
-      }
-
-      if (transfers.length < limit) break;
-      offset += limit;
-    }
-  } catch (e) {
-    console.error('[TON] checkTonUsdtPayments error:', e.message);
-  }
-}
+        else if (comment.startsWith('exchange_')) {
+          const rawId = comment.replace('exchange_', '');
+          if (!/^\d+$/.test(rawId)) continue;
+          const userId = parseInt(rawId, 10);
+          if (!userId || userId <= 0) continue;
+          
+          const amountUSDT = amount / 1000000;
+          const rate = 2000;
+          const amountCogniq = Math.floor(amountUSDT * rate);
+          const grantedGames = Math.floor(amountUSDT);
+          
+          let client;
+          try {
+            client = await pool.connect();
+            await client.query('BEGIN');
+            
+            const exists = await client.query(
+              'SELECT 1 FROM processed_ton_payments WHERE tx_hash = $1',
+              [txHash]
+            );
+            if (exists.rows.length > 0) {
+              await client.query('ROLLBACK');
+              client.release();
+              client = null;
+              continue;
+            }
+            
+            await client.query(
+              'INSERT INTO processed_ton_payments (tx_hash, user_id, amount, processed_at, item) VALUES ($1, $2, $3, NOW(), $4)',
+              [txHash, userId, amount, 'bank_exchange']
+            );
+            
+            await client.query(
+              'UPDATE users SET balance = balance + $1, balance_purchased = COALESCE(balance_purchased, 0) + $1, granted_super_games = granted_super_games + $2 WHERE telegram_id = $3',
+              [amountCogniq, grantedGames, userId]
+            );
+            
+            await client.query(
+              'INSERT INTO exchange_orders (telegram_id, tx_hash, amount_usdt, amount_cogniq, rate, status) VALUES ($1, $2, $3, $4, $5, $6)',
+              [userId, txHash, amountUSDT, amountCogniq, rate, 'completed']
+            );
+            
+            await client.query('COMMIT');
+            client.release();
+            client = null;
+            
+            await logTx(userId, 'usdt_exchange', amountCogniq, 'in', { usdt: amountUSDT });
+          } catch (e) {
+            if (client) {
+              try { await client.query('ROLLBACK'); } catch (_) {}
+              client.release();
+              client = null;
+            }
+            console.error('[TON] exchange tx error:', e.message);
+            continue;
+          }
+          
+          try {
+            const userLang = await pool.query(
+              'SELECT language_code FROM users WHERE telegram_id = $1',
+              [userId]
+            );
+            const lang = userLang.rows[0]?.language_code || 'ru';
+            try {
+              const img = await generateExchangeCard({ amountCogniq, amountUSDT, lang });
+              await withRetry(() => bot.telegram.sendPhoto(userId, { source: img }));
+            } catch (e) {
+              await withRetry(() =>
+                bot.telegram.sendMessage(userId, `💱 Обмен: +${amountCogniq} COGNIQ за ${amountUSDT} USDT!`)
+              );
+            }
+          } catch (e) {}
+          
+          console.log(`[TON] Exchange: ${amountUSDT} USDT → ${amountCogniq} COGNIQ + ${grantedGames} super games for user ${userId}`);
+        }
 
 module.exports = { checkTonUsdtPayments };
