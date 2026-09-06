@@ -670,7 +670,7 @@ function renderLeaderboard(data) {
             ${photoUrl ? `
             <div class="lb-avatar">
               <img src="${photoUrl}">
-              <img src="leaderboard/${i === 0 ? 'shop_neon_gold_frame.webp' : 'avatar_frame_' + ['silver','bronze','emerald','emerald'][i-1] + '.webp'}">
+              <img src="${ringImg}">
             </div>
             ` : ''}
             <span class="lb-name" style="color:${subColor};">${subBadge} ${displayName}${isMe ? ` <span style="color:#00ffff;font-size:0.72rem;">${t.you}</span>` : ''}</span>
