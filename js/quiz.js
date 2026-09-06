@@ -665,7 +665,8 @@ function renderLeaderboard(data) {
         ? LUXURY_GOLD
          : `color:${p.subscriptionType === 'vip' ? '#ffcc44' : '#cceeff'};`;
         const rankRing = `leaderboard/${i===0 ? 'shop_neon_gold_frame.webp' : 'avatar_frame_'+['silver','bronze','emerald','emerald'][i-1]+'.webp'}`;
-        const ringImg = FRAME_IMG[p.avatarFrame] || rankRing;
+        const effectiveFrame = p.avatarFrame || (p.subscriptionType === 'premium' ? 'frame_premium' : p.subscriptionType === 'vip' ? 'frame_vip' : null);
+        const ringImg = FRAME_IMG[effectiveFrame] || rankRing;
         
         return `
         <div class="lb-row-wrap">
