@@ -68,9 +68,13 @@ router.get('/api/question', requireInitData, publicRateLimit, async (req, res) =
     }
 
     if (currentIndex >= QUESTIONS_PER_GAME) {
-      const updatedUser = await pool.query('SELECT games_today, extra_games FROM users WHERE telegram_id = $1', [userId]);
+      const updatedUser = await pool.query('SELECT games_today, extra_games, subscription_type FROM users WHERE telegram_id = $1', [userId]);
       const actualGamesToday = updatedUser.rows[0]?.games_today || 0;
-      const actualFreeGamesLeft = Math.max(0, MAX_FREE_GAMES_PER_DAY - actualGamesToday) + (updatedUser.rows[0]?.extra_games || 0);
+      const actualFreeGamesLeft = calcGamesLeft({
+      games_today: actualGamesToday,
+      extra_games: updatedUser.rows[0]?.extra_games || 0,
+      subscription_type: updatedUser.rows[0]?.subscription_type || null
+    });
 
       return res.json({
         total: QUESTIONS_PER_GAME,
