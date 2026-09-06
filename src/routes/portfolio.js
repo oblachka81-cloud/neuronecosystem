@@ -48,6 +48,27 @@ const T = {
   es: { title: 'VALOR TOTAL', assets: 'ACTIVOS', back: '← Volver', empty: 'Tu portafolio está vacío', emptyDesc: '¡Empieza a jugar o tradear!', playBtn: 'Jugar', exchangeBtn: 'Exchange', units: 'uds.', loading: 'Cargando...', error: 'Error', listingTitle: 'Listado COGNIQ', listingDesc: 'COGNIQ se listará en DEX (Q1-Q2 2027) y CEX (Q3-Q4 2027).', yourBalance: 'Balance', dexListing: 'DEX', cexListing: 'CEX' }
 };
 
+// ===== ЦЕНА COGNIQ ИЗ ПУЛА STON.FI =====
+async function getCogniqPrice() {
+  try {
+    const COGNIQ = 'EQDOjRZ5rbSnBBvhsv4g0JNN67p89617_2pNc_AO1dTEkaNg';
+    const USDT   = 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs';
+    const res = await fetch(`https://api.ston.fi/v1/pools/by_market/${COGNIQ}/${USDT}`);
+    if (!res.ok) return 0;
+    const data = await res.json();
+    const pool = data?.pool_list?.[0];
+    if (!pool) return 0;
+    const isCogniqToken0 = (pool.token0_address || '').toLowerCase() === COGNIQ.toLowerCase();
+    const reserveCogniq = BigInt(isCogniqToken0 ? pool.reserve0 : pool.reserve1);
+    const reserveUsdt   = BigInt(isCogniqToken0 ? pool.reserve1 : pool.reserve0);
+    if (reserveCogniq === 0n) return 0;
+    return (Number(reserveUsdt) / Number(reserveCogniq)) * 1000;
+  } catch (e) {
+    console.error('[PORTFOLIO] COGNIQ price error:', e.message);
+    return 0;
+  }
+}
+
 // ===== ЦЕНЫ СО STON.FI =====
 async function getPricesFromStonFi() {
   const prices = {};
@@ -81,12 +102,22 @@ router.get('/api/wallet/portfolio', requireInitData, async (req, res) => {
     if (!userRes.rows.length) return res.status(404).json({ error: 'User not found' });
     const cogniqBalance = parseFloat(userRes.rows[0].balance || 0);
 
-    const prices = await getPricesFromStonFi();
+    const [prices, cogniqPrice] = await Promise.all([
+      getPricesFromStonFi(),
+      getCogniqPrice()
+    ]);
+
+    try {
+      const cogniqRaw = Address.parse('EQDOjRZ5rbSnBBvhsv4g0JNN67p89617_2pNc_AO1dTEkaNg').toRawString().toLowerCase();
+      if (cogniqPrice > 0) prices[cogniqRaw] = cogniqPrice;
+    } catch (e) {}
+
     const assets = [];
     let totalUsd = 0;
 
-    // COGNIQ из БД (цена 0 до листинга)
-    assets.push({ symbol: 'COGNIQ', name: 'Cogniq', amount: cogniqBalance, price: 0, value: 0, icon: '🧠' });
+    const cogniqValue = cogniqBalance * cogniqPrice;
+    totalUsd += cogniqValue;
+    assets.push({ symbol: 'COGNIQ', name: 'Cogniq', amount: cogniqBalance, price: cogniqPrice, value: cogniqValue, icon: '🧠' });
 
     if (walletAddress) {
       try {
