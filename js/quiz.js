@@ -677,7 +677,7 @@ function renderLeaderboard(data) {
               <img src="${ringImg}">
             </div>
             ` : ''}
-            <span class="lb-name" style="color:${subColor};">${subBadge} ${displayName}${isMe ? ` <span style="color:#00ffff;font-size:0.72rem;">${t.you}</span>` : ''}</span>
+            <span class="lb-name" style="${nameStyle}">${subBadge}${displayName}${isMe ? ` <span style="color:#00ffff;font-size:0.72rem;">${t.you}</span>` : ''}</span>
             <span class="lb-score" style="color:#00ffaa;">${score}</span>
           </div>
         </div>`;
