@@ -622,7 +622,7 @@ function loadLeaderboard() {
 function renderLeaderboard(data) {
   const me = data.me, myRank = data.myRank || '—', top5 = (data.top10 || []).slice(0, 5);
   const myPhotoUrl = me?.id ? `${BASE_URL}/api/tg-photo/${me.id}` : '';
-  
+  const myFrame = me?.avatarFrame || (me?.subscriptionType === 'premium' ? 'frame_premium' : me?.subscriptionType === 'vip' ? 'frame_vip' : null);
   const myCardHtml = me ? `
     <div class="my-card-wrap">
       <img src="leaderboard/my_card_frame.webp" style="opacity:0.65;">
