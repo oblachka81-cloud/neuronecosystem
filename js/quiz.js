@@ -600,6 +600,15 @@ async function submitDailyAnswer() {
 }
 
 // ==================== ЛИДЕРБОРД ====================
+
+const FRAME_IMG = {
+  frame_neon_basic: 'shop/shop_neon_basic_frame.webp',
+  frame_neon_pulse: 'shop/shop_neon_pulse_frame.webp',
+  frame_neon_gold: 'shop/shop_neon_gold_frame.webp',
+  frame_vip: 'shop/shop_vip_frame_avatar.webp',
+  frame_premium: 'shop/shop_premium_frame_avatar.webp'
+};
+
 function loadLeaderboard() {
   root.innerHTML = `<div class="loader">${t.loadingLb}</div>`;
   authFetch(`${BASE_URL}/api/leaderboard?user_id=${userId}`)
@@ -651,6 +660,8 @@ function renderLeaderboard(data) {
         const score = p.totalScore.toLocaleString();
         const subBadge = p.subscriptionType === 'premium' ? '💎' : p.subscriptionType === 'vip' ? '👑' : '';
         const subColor = p.subscriptionType === 'premium' ? '#aa66ff' : p.subscriptionType === 'vip' ? '#ffcc44' : '#cceeff';
+        const rankRing = `leaderboard/${i===0 ? 'shop_neon_gold_frame.webp' : 'avatar_frame_'+['silver','bronze','emerald','emerald'][i-1]+'.webp'}`;
+        const ringImg = FRAME_IMG[p.avatarFrame] || rankRing;
         
         return `
         <div class="lb-row-wrap">
