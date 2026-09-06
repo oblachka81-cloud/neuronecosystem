@@ -627,7 +627,7 @@ function renderLeaderboard(data) {
     <div class="my-card-wrap">
       <img src="leaderboard/my_card_frame.webp" style="opacity:0.65;">
       <div class="my-card-inner">
-        <div class="my-card-name">${me.subscriptionType === 'premium' ? '💎 ' : me.subscriptionType === 'vip' ? '👑 ' : ''}${escapeHtml(me.name)}</div>
+        <div class="my-card-name" style="${me.subscriptionType === 'premium' ? LUXURY_GOLD : ''}">${me.subscriptionType === 'premium' ? '💎 ' : me.subscriptionType === 'vip' ? '👑 ' : ''}${escapeHtml(me.name)}</div>
         <div class="my-card-row">
           <div class="my-card-avatar-wrap">
             ${myPhotoUrl ? `
