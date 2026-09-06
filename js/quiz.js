@@ -632,7 +632,7 @@ function renderLeaderboard(data) {
             ${myPhotoUrl ? `
             <div class="my-card-avatar">
               <img src="${myPhotoUrl}">
-              <img src="leaderboard/avatar_ring_wood.webp">
+              <img src="${FRAME_IMG[me.avatarFrame] || 'leaderboard/avatar_ring_wood.webp'}">
             </div>
             ` : ''}
           </div>
