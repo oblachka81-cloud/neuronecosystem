@@ -608,6 +608,7 @@ const FRAME_IMG = {
   frame_vip: 'shop/shop_vip_frame_avatar.webp',
   frame_premium: 'shop/shop_premium_frame_avatar.webp'
 };
+const LUXURY_GOLD = 'background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:900;';
 
 function loadLeaderboard() {
   root.innerHTML = `<div class="loader">${t.loadingLb}</div>`;
@@ -658,8 +659,11 @@ function renderLeaderboard(data) {
         const photoUrl = p.photo_url ? `${BASE_URL}${p.photo_url}` : '';
         const displayName = escapeHtml(p.name);
         const score = p.totalScore.toLocaleString();
-        const subBadge = p.subscriptionType === 'premium' ? '💎' : p.subscriptionType === 'vip' ? '👑' : '';
-        const subColor = p.subscriptionType === 'premium' ? '#aa66ff' : p.subscriptionType === 'vip' ? '#ffcc44' : '#cceeff';
+        const subBadge = p.subscriptionType === 'premium' ? '💎 ' : p.subscriptionType === 'vip' ? '👑 ' : '';
+        const isGoldName = i === 0 || p.subscriptionType === 'premium';
+        const nameStyle = isGoldName
+        ? LUXURY_GOLD
+         : `color:${p.subscriptionType === 'vip' ? '#ffcc44' : '#cceeff'};`;
         const rankRing = `leaderboard/${i===0 ? 'shop_neon_gold_frame.webp' : 'avatar_frame_'+['silver','bronze','emerald','emerald'][i-1]+'.webp'}`;
         const ringImg = FRAME_IMG[p.avatarFrame] || rankRing;
         
