@@ -520,7 +520,7 @@ function exchangeRenderPairGrid(id, pairsList) {
          <div style="font-size:0.8rem;font-weight:800;margin-bottom:2px;background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${p.name}</div>`
       : `<div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:2px;">${p.name}</div>`;
     const priceHtml = isCogniq
-      ? `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.78rem;font-weight:700;color:#00ffaa;">${rate ? fmtRate(rate) : '—'}</div>`
+      ? `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.78rem;font-weight:700;color:#00ffaa;">${rate ? fmtRate(rate) : '—'} ${pct}</div>`
       : `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'} ${pct}</div>`;
     return `<div class="pair-card" onclick="exchangeSelectPair('${p.from}','${p.to}')" style="position:relative;background:none;border:none;padding:0;">
       <img src="/public/images/cogniq/exchange_pair_card.webp" style="width:100%;display:block;">
