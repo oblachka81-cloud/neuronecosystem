@@ -197,7 +197,6 @@ router.get('/api/exchange/rates', async (req, res) => {
           if (price > 0) {
             rates[`${ticker}/USDT`] = price;
             rates[`USDT/${ticker}`] = 1 / price;
-            console.log(`xStocks ${ticker} OK (STON.fi): ${price}`);
           } else {
             console.error(`xStocks ${ticker}: цена 0`);
           }
