@@ -159,7 +159,7 @@ function parseTgUser() {
 
 function setupBackgroundRefresh() {
   if (window.Telegram?.WebApp?.onEvent) {
-    window.Telegram.WebApp.onEvent('active', () => {
+    window.Telegram.WebApp.onEvent('activated', () => {
       console.log('[NEURON] app activated from background');
       if (currentTab === 'game') loadWelcome();
     });
