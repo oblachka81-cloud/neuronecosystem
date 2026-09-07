@@ -157,6 +157,15 @@ function parseTgUser() {
   return null;
 }
 
+function setupBackgroundRefresh() {
+  if (window.Telegram?.WebApp?.onEvent) {
+    window.Telegram.WebApp.onEvent('active', () => {
+      console.log('[NEURON] app activated from background');
+      if (currentTab === 'game') loadWelcome();
+    });
+  }
+}
+
 function startApp(attempt = 1) {
   const tgUser = parseTgUser();
   
@@ -165,15 +174,7 @@ function startApp(attempt = 1) {
     userName = tgUser.first_name || tgUser.username || localStorage.getItem('neuron_uname') || 'Player';
     localStorage.setItem('neuron_uid', userId);
     localStorage.setItem('neuron_uname', userName);
-    
-    // Автообновление при разворачивании из фона
-    if (window.Telegram?.WebApp?.onEvent) {
-      window.Telegram.WebApp.onEvent('active', () => {
-        console.log('[NEURON] app activated from background');
-        if (currentTab === 'game') loadWelcome();
-      });
-    }
-    
+    setupBackgroundRefresh();
     loadWelcome();
     return;
   }
@@ -208,14 +209,7 @@ function startApp(attempt = 1) {
   localStorage.setItem('neuron_uid', userId);
   localStorage.setItem('neuron_uname', userName);
   
-  // Автообновление при разворачивании из фона
-  if (window.Telegram?.WebApp?.onEvent) {
-    window.Telegram.WebApp.onEvent('active', () => {
-      console.log('[NEURON] app activated from background');
-      if (currentTab === 'game') loadWelcome();
-    });
-  }
-  
+  setupBackgroundRefresh();
   loadWelcome();
 }
 
