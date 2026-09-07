@@ -536,6 +536,7 @@ function exchangeRenderPairGrid(id, pairsList) {
 // ==================== NEURON LIVE ЛЕНТА ====================
 let tapeCategory = 'crypto';
 const TAPE_ICONS = { 
+  COGNIQ: '🧠',
   TON: '💎', 
   BTC: '₿', 
   XAUt0: '🥇', 
