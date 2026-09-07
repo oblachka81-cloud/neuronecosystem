@@ -490,10 +490,17 @@ function exchangeRenderPairs() {
 
 function exchangeRenderPairGrid(id, pairsList) {
   const grid = document.getElementById(id);
+  if (!document.getElementById('liveDotStyle')) {
+    const st = document.createElement('style');
+    st.id = 'liveDotStyle';
+    st.textContent = '@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 8px #00ffaa;}50%{opacity:0.3;box-shadow:0 0 2px #00ffaa;}}';
+    document.head.appendChild(st);
+  }
   grid.innerHTML = pairsList.map(p => {
     const rate = exchangeRates[`${p.from}/${p.to}`];
     const asset = p.from !== 'USDT' ? p.from : p.to;
     const mkt = marketTickers[asset];
+    const isCogniq = (p.from === 'COGNIQ' || p.to === 'COGNIQ');
     let pct = '', spark = '';
     if (mkt && isFinite(mkt.change24h)) {
       const pc = mkt.change24h * 100;
@@ -501,11 +508,21 @@ function exchangeRenderPairGrid(id, pairsList) {
       pct = `<span style="font-size:0.68rem;font-weight:700;color:${up ? '#00ffaa' : '#ff5566'};">${up ? '▲' : '▼'}${Math.abs(pc).toFixed(1)}%</span>`;
       spark = sparkSvg(mkt.spark, up);
     }
+    const nameHtml = isCogniq
+      ? `<div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:2px;">
+           <span style="width:7px;height:7px;border-radius:50%;background:#00ffaa;animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></span>
+           <span style="font-size:0.8rem;font-weight:800;background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${p.name}</span>
+           <span style="font-size:0.5rem;font-weight:800;letter-spacing:0.5px;color:#0a0a14;background:linear-gradient(90deg,#ffcc44,#fff3c4);padding:2px 6px;border-radius:6px;flex-shrink:0;">NEURON NATIVE</span>
+         </div>`
+      : `<div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:2px;">${p.name}</div>`;
+    const priceHtml = isCogniq
+      ? `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.78rem;font-weight:700;color:#00ffaa;">${rate ? fmtRate(rate) : '—'}</div>`
+      : `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'} ${pct}</div>`;
     return `<div class="pair-card" onclick="exchangeSelectPair('${p.from}','${p.to}')" style="position:relative;background:none;border:none;padding:0;">
       <img src="/public/images/cogniq/exchange_pair_card.webp" style="width:100%;display:block;">
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 36px 0 12px;">
-        <div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:2px;">${p.name}</div>
-        <div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'} ${pct}</div>
+        ${nameHtml}
+        ${priceHtml}
         ${spark}
       </div>
     </div>`;
