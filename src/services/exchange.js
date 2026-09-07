@@ -23,7 +23,8 @@ const TOKEN_MAP = {
   'CATI':  'EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7',
   'BLUM':  'EQCAj5oiRRrXokYsg_B-e0KG9xMwh5upr5I8HQzErm0_BLUM',
   'REDO':  'EQBZ_cafPyDr5KUTs0aNxh0ZTDhkpEZONmLJA2SNGlLm4Cko',
-  'STORM': 'EQBsosmcZrD6FHijA7qWGLw5wo_aH8UN435hi935jJ_STORM'
+  'STORM': 'EQBsosmcZrD6FHijA7qWGLw5wo_aH8UN435hi935jJ_STORM',
+  'COGNIQ': 'EQDOjRZ5rbSnBBvhsv4g0JNN67p89617_2pNc_AO1dTEkaNg'
 };
 
 const DECIMALS = {
@@ -39,7 +40,8 @@ const DECIMALS = {
   'CATI':  9,
   'BLUM':  9,
   'REDO': 9,
-  'STORM': 9
+  'STORM': 9,
+  'COGNIQ': 9
 };
 
 const OPERATIONAL_WALLET = 'UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv';
