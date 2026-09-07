@@ -10,6 +10,12 @@ const { mnemonicToPrivateKey } = require('@ton/crypto');
 const { beginCell } = require('@ton/core');
 const { generateStreakWarningCard, generateStreakMilestoneCard, generateQuestionOfDayCard, generateWelcomeCard, generateWeeklyTopCard, generateReferralReferrerCard, generateReferralNewUserCard, generateWeeklyHeroesCard, generateStreakBattleCard, generateFactOfDayCard, generateRankRatingCard, generateAchievementCard, generatePurchaseCard, generateExchangeCard, generateTransferReceivedCard, postBurnCard, postBetaCard, generateDuelInviteCard } = require('./channel.js');
 
+// ===== ЗАЩИТА ОТ ПАДЕНИЯ ИЗ-ЗА WS-ГЛЮКОВ STON.FI =====
+process.on('uncaughtException', (err) => {
+  const isWsGlitch = /Unexpected server response|WebSocket|ECONNRESET|ETIMEDOUT/i.test(err.message || '');
+  console.error('[PROCESS] uncaughtException:', err.message, isWsGlitch ? '→ WS-глюк, игнорируем' : '→ КРИТИЧНО, рестарт');
+  if (!isWsGlitch) process.exit(1); // реальная ошибка — пусть Bothost перезапустит чисто
+});
 // ==================== CONFIG + DB ====================
 const config = require('./src/config');
 const pool = require('./src/db/pool');
