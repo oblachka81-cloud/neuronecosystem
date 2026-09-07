@@ -16,6 +16,13 @@ process.on('uncaughtException', (err) => {
   console.error('[PROCESS] uncaughtException:', err.message, isWsGlitch ? '→ WS-глюк, игнорируем' : '→ КРИТИЧНО, рестарт');
   if (!isWsGlitch) process.exit(1); // реальная ошибка — пусть Bothost перезапустит чисто
 });
+
+process.on('unhandledRejection', (reason) => {
+  const msg = (reason && (reason.message || reason.toString())) || String(reason);
+  const isWsGlitch = /Unexpected server response|WebSocket|ECONNRESET|ETIMEDOUT|No quote/i.test(msg);
+  console.error('[PROCESS] unhandledRejection:', msg, isWsGlitch ? '→ WS-глюк, игнорируем' : '→ КРИТИЧНО, рестарт');
+  if (!isWsGlitch) process.exit(1);
+});
 // ==================== CONFIG + DB ====================
 const config = require('./src/config');
 const pool = require('./src/db/pool');
