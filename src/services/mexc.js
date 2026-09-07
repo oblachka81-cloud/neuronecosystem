@@ -216,7 +216,7 @@ async function getSparks(symbols, interval = '60m', limit = 24) {
     }
     
     if (!pair) {
-      console.log(`[SPARKS] ${s}: no pair found`);
+      console.warn(`[SPARKS] ${s}: no pair found`);
       return;
     }
     
@@ -239,13 +239,11 @@ async function getSparks(symbols, interval = '60m', limit = 24) {
         }
       }
       
-      if (candles.length) {
-        console.log(`[SPARKS] ${s} (${pair} @ ${exchange}): ${candles.length} candles`);
-      } else {
-        console.log(`[SPARKS] ${s} (${pair} @ ${exchange}): empty response`);
+      if (!candles.length) {
+        console.warn(`[SPARKS] ${s} (${pair} @ ${exchange}): empty response`);
       }
     } catch (e) {
-      console.log(`[SPARKS] ${s} (${pair} @ ${exchange}) error:`, e.message);
+      console.error(`[SPARKS] ${s} (${pair} @ ${exchange}) error:`, e.message);
     }
   }));
   
