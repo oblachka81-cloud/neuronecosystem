@@ -203,6 +203,7 @@ const EXCHANGE_LANG = {
     toastEnterAmount: 'Введите сумму',
     fiatBtn: '💳 Купить / Продать crypto',
     tapeNote: 'NEURON Blockchain Systems — глобальный мониторинг биржевых курсов CEX 24/7. Ваш своп на платформе NEURON исполняется по лучшему ончейн-курсу DEX: мгновенно, без посредников. Дополнительная информация — в разделе «Информация».',
+    dyorNote: 'Данные предоставлены',
   },
   en: {
     walletLabel: 'Connected Wallet',
@@ -223,6 +224,7 @@ const EXCHANGE_LANG = {
     toastEnterAmount: 'Enter amount',
     fiatBtn: '💳 Buy / Sell crypto',
     tapeNote: 'NEURON Blockchain Systems — global monitoring of CEX exchange rates 24/7. Your swap on the NEURON platform is executed at the best on-chain DEX rate: instantly, with no intermediaries. Additional information is available in the "Information" section.',
+    dyorNote: 'Data provided by',
   },
   fr: {
     walletLabel: 'Portefeuille connecté',
@@ -243,6 +245,7 @@ const EXCHANGE_LANG = {
     toastEnterAmount: 'Entrez le montant',
     fiatBtn: '💳 Acheter / Vendre crypto',
     tapeNote: 'NEURON Blockchain Systems — surveillance mondiale des cours CEX 24h/24, 7j/7. Votre swap sur la plateforme NEURON est exécuté au meilleur cours on-chain DEX : instantanément, sans intermédiaire. Informations complémentaires dans la section « Information ».',
+    dyorNote: 'Données fournies par',
   },
   es: {
     walletLabel: 'Cartera conectada',
@@ -263,6 +266,7 @@ const EXCHANGE_LANG = {
     toastEnterAmount: 'Ingresa el monto',
     fiatBtn: '💳 Comprar / Vender crypto',
     tapeNote: 'NEURON Blockchain Systems — monitoreo global de tasas CEX 24/7. Tu swap en la plataforma NEURON se ejecuta al mejor tipo on-chain DEX: al instante y sin intermediarios. Información adicional en la sección "Información".',
+    dyorNote: 'Datos proporcionados por',
   }
 };
 
@@ -963,6 +967,8 @@ function loadExchangePanel() {
         <div id="historyList"><div class="loader">${ex.noHistory}</div></div>
       </div>
     </div>
+
+    <p style="text-align:center;margin:18px 0 0 0;font-size:0.62rem;color:#5577aa;">${ex.dyorNote} <a href="https://dyor.io/tonapi" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:#7799bb;text-decoration:none;font-weight:600;">DYOR.io <img src="https://dyor.io/img/logos/dyorLogo.svg" alt="DYOR.io logo" width="14" height="14"></a></p>
 
     <div id="listingModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'">
       <div style="background:rgba(10,18,38,0.98);border:1px solid rgba(255,200,50,0.3);border-radius:20px;padding:24px 20px;max-width:400px;width:90%;text-align:center;">
