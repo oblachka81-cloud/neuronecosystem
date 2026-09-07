@@ -863,8 +863,8 @@ function loadExchangePanel() {
           <div style="display:flex;gap:6px;">
             <input type="number" id="toAmount" placeholder="0.00" readonly style="flex:1;min-width:0;padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,68,0.25);border-radius:12px;color:#fff;font-size:0.95rem;outline:none;">
             <select id="toCurrency" onchange="exchangeCalcSwap()" style="padding:10px 8px;max-width:112px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,204,68,0.25);border-radius:12px;color:#ffcc44;font-size:0.82rem;font-weight:700;outline:none;">
-              <option value="COGNIQ">COGNIQ</option>
               <option value="USDT">USDT</option>
+              <option value="COGNIQ">COGNIQ</option>
               <option value="TON">TON</option>
               <option value="BTC">BTC</option>
               <option value="XAUt0">XAUt0 (Gold)</option>
