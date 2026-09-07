@@ -25,7 +25,7 @@ async function getCogniqMarket() {
   try {
     const [poolRes, ohlcvRes] = await Promise.allSettled([
       fetchJson(`${GT_BASE}/networks/ton/pools/${POOL_ADDRESS}`),
-      fetchJson(`${GT_BASE}/networks/ton/pools/${POOL_ADDRESS}/ohlcv?timeframe=hour&aggregate=1&limit=24&currency=usd`)
+      fetchJson(`${GT_BASE}/networks/ton/pools/${POOL_ADDRESS}/ohlcv/hour?aggregate=1&limit=24&currency=usd`)
     ]);
 
     const pool = poolRes.status === 'fulfilled' ? poolRes.value?.data?.attributes : null;
