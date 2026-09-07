@@ -105,6 +105,7 @@ router.get('/api/exchange/rates', async (req, res) => {
           else if (addr === TOKEN_MAP.BLUM.toLowerCase()) priceBySymbol.BLUM = price;
           else if (addr === TOKEN_MAP.REDO.toLowerCase()) priceBySymbol.REDO = price;
           else if (addr === TOKEN_MAP.STORM.toLowerCase()) priceBySymbol.STORM = price;
+          else if (addr === TOKEN_MAP.COGNIQ.toLowerCase()) priceBySymbol.COGNIQ = price;
         }
       }
     } catch (e) { console.error('STON.fi list error:', e.message); }
