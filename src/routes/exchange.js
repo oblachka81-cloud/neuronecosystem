@@ -9,6 +9,7 @@ const { logTx } = require('../services/burn');
 const { BESTCHANGE_API_KEY, BESTCHANGE_PARTNER_ID } = require('../config');
 const { getTickers, getKlines, getSparks, CATEGORIES } = require('../services/mexc');
 const { getWorld } = require('../services/world');
+const { getCogniqMarket } = require('../services/gecko');
 // ==================== BESTCHANGE ====================
 router.get('/api/bestchange/currencies/:lang', publicRateLimit, async (req, res) => {
   if (!BESTCHANGE_API_KEY) return res.status(503).json({ success: false, error: 'API key not configured' });
@@ -375,6 +376,10 @@ router.get('/api/market/tickers', publicRateLimit, async (req, res) => {
   let tickers = {};
   try {
     tickers = await getTickers(CATEGORIES[category]);
+    if (category === 'crypto') {
+      const cg = await getCogniqMarket();
+      if (cg && cg.price > 0) tickers.COGNIQ = cg;
+    }
     if (!Object.keys(tickers).length) throw new Error('CEX empty');
     try {
       const sparks = await getSparks(CATEGORIES[category]);
