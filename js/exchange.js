@@ -1,9 +1,9 @@
 // ==================== БИРЖА ====================
 const LISTING_TEXTS = {
-  ru: 'Листинг COGNIQ запланирован на I-II квартал 2027 года. Точная дата будет объявлена дополнительно. Следите за новостями в нашем Telegram-канале.',
-  en: 'COGNIQ listing is scheduled for Q1-Q2 2027. Exact date to be announced. Follow our Telegram channel for updates.',
-  fr: 'Le listing COGNIQ est prévu pour Q1-Q2 2027. La date exacte sera annoncée. Suivez notre canal Telegram.',
-  es: 'El listing de COGNIQ está previsto para Q1-Q2 2027. La fecha exacta será anunciada. Sigue nuestro canal de Telegram.'
+  ru: 'Листинг COGNIQ на CEX запланирован на II-III квартал 2027 года. Точная дата будет объявлена дополнительно. Следите за новостями в нашем Telegram-канале.',
+  en: 'COGNIQ listing on CEX is scheduled for Q2-Q3 2027. Exact date to be announced. Follow our Telegram channel for updates.',
+  fr: 'Le listing COGNIQ sur CEX est prévu pour Q2-Q3 2027. La date exacte sera annoncée. Suivez notre canal Telegram.',
+  es: 'El listing de COGNIQ en CEX está previsto para Q2-Q3 2027. La fecha exacta será anunciada. Sigue nuestro canal de Telegram.'
 };
 
 const EXCHANGE_INFO_TEXTS = {
