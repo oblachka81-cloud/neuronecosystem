@@ -110,6 +110,25 @@ router.get('/api/exchange/rates', async (req, res) => {
       }
     } catch (e) { console.error('STON.fi list error:', e.message); }
 
+    // COGNIQ: цена из резервов пула (asset list не отдаёт no_liquidity)
+    if (!priceBySymbol.COGNIQ) {
+      try {
+        const COGNIQ_MASTER = 'EQDOjRZ5rbSnBBvhsv4g0JNN67p89617_2pNc_AO1dTEkaNg';
+        const USDT_MASTER = 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs';
+        const pr = await fetchT(`https://api.ston.fi/v1/pools/by_market/${COGNIQ_MASTER}/${USDT_MASTER}`, 8000);
+        if (pr.ok) {
+          const pd = await pr.json();
+          const pool = pd?.pool_list?.[0];
+          if (pool) {
+            const isCog0 = (pool.token0_address || '').toLowerCase() === COGNIQ_MASTER.toLowerCase();
+            const rCog = BigInt(isCog0 ? pool.reserve0 : pool.reserve1);
+            const rUsdt = BigInt(isCog0 ? pool.reserve1 : pool.reserve0);
+            if (rCog > 0n) priceBySymbol.COGNIQ = (Number(rUsdt) / Number(rCog)) * 1000;
+          }
+        }
+      } catch (e) { console.error('COGNIQ pool price error:', e.message); }
+    }
+
     const [btcRes, xautRes] = await Promise.allSettled([
       fetchT(`https://api.ston.fi/v1/assets/${TOKEN_MAP.BTC}`),
       fetchT(`https://api.ston.fi/v1/assets/${TOKEN_MAP.XAUt0}`)
