@@ -165,6 +165,15 @@ function startApp(attempt = 1) {
     userName = tgUser.first_name || tgUser.username || localStorage.getItem('neuron_uname') || 'Player';
     localStorage.setItem('neuron_uid', userId);
     localStorage.setItem('neuron_uname', userName);
+    
+    // Автообновление при разворачивании из фона
+    if (window.Telegram?.WebApp?.onEvent) {
+      window.Telegram.WebApp.onEvent('active', () => {
+        console.log('[NEURON] app activated from background');
+        if (currentTab === 'game') loadWelcome();
+      });
+    }
+    
     loadWelcome();
     return;
   }
@@ -198,6 +207,15 @@ function startApp(attempt = 1) {
   userName = localStorage.getItem('neuron_uname') || 'Player';
   localStorage.setItem('neuron_uid', userId);
   localStorage.setItem('neuron_uname', userName);
+  
+  // Автообновление при разворачивании из фона
+  if (window.Telegram?.WebApp?.onEvent) {
+    window.Telegram.WebApp.onEvent('active', () => {
+      console.log('[NEURON] app activated from background');
+      if (currentTab === 'game') loadWelcome();
+    });
+  }
+  
   loadWelcome();
 }
 
