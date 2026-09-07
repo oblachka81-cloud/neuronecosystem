@@ -968,7 +968,6 @@ function loadExchangePanel() {
       </div>
     </div>
 
-    <p style="text-align:center;margin:18px 0 0 0;font-size:0.62rem;color:#5577aa;">${ex.dyorNote} <a href="https://dyor.io/tonapi" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:#7799bb;text-decoration:none;font-weight:600;">DYOR.io <img src="https://dyor.io/img/logos/dyorLogo.svg" alt="DYOR.io logo" width="14" height="14"></a></p>
 
     <div id="listingModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(6px);" onclick="if(event.target===this)this.style.display='none'">
       <div style="background:rgba(10,18,38,0.98);border:1px solid rgba(255,200,50,0.3);border-radius:20px;padding:24px 20px;max-width:400px;width:90%;text-align:center;">
