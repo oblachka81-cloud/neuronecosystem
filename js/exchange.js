@@ -509,9 +509,9 @@ function exchangeRenderPairGrid(id, pairsList) {
       spark = sparkSvg(mkt.spark, up);
     }
     const nameHtml = isCogniq
-      ? `<div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:1px;">
+      ? `<div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:0;">
            <span style="width:6px;height:6px;border-radius:50%;background:#00ffaa;animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></span>
-           <span style="font-size:0.5rem;font-weight:800;letter-spacing:0.5px;color:#0a0a14;background:linear-gradient(90deg,#ffcc44,#fff3c4);padding:2px 6px;border-radius:6px;">NEURON NATIVE</span>
+           <span style="font-size:0.5rem;font-weight:800;letter-spacing:0.5px;color:#0a0a14;background:linear-gradient(90deg,#ffcc44,#fff3c4);padding:1px 6px;border-radius:6px;">NEURON NATIVE</span>
          </div>
          <div style="font-size:0.8rem;font-weight:800;margin-bottom:1px;background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${p.name}</div>`
       : `<div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:2px;">${p.name}</div>`;
