@@ -524,7 +524,7 @@ function exchangeRenderPairGrid(id, pairsList) {
       : `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'} ${pct}</div>`;
     return `<div class="pair-card" onclick="exchangeSelectPair('${p.from}','${p.to}')" style="position:relative;background:none;border:none;padding:0;">
       <img src="/public/images/cogniq/exchange_pair_card.webp" style="width:100%;display:block;">
-      <div style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 36px 0 12px;">
+      <div class="pc-content" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 36px 0 12px;">
         ${nameHtml}
         ${priceHtml}
         ${spark}
