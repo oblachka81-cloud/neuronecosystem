@@ -133,7 +133,7 @@ function shuffleArray(arr) {
 app.get('/tonconnect-manifest.json', (req, res) => {
   res.json({
     url: WEBAPP_URL,
-    name: 'NEURON Game',
+    name: 'NEURON Ecosystem',
     iconUrl: `${WEBAPP_URL}/icon.png`,
   });
 });
