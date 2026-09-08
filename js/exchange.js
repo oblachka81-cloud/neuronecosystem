@@ -500,6 +500,13 @@ function exchangeRenderPairGrid(id, pairsList) {
     st.textContent = '@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 8px #00ffaa;}50%{opacity:0.3;box-shadow:0 0 2px #00ffaa;}}';
     document.head.appendChild(st);
   }
+
+  if (!document.getElementById('pairCardNarrowStyle')) {
+    const stn = document.createElement('style');
+    stn.id = 'pairCardNarrowStyle';
+    stn.textContent = '@media(max-width:520px){.pc-content{padding:0 30px 0 6px !important;}.pc-badge{font-size:0.42rem !important;letter-spacing:0.3px !important;padding:1px 4px !important;}.pc-spark svg{width:100% !important;height:14px !important;}}';
+    document.head.appendChild(stn);
+  }
   grid.innerHTML = pairsList.map(p => {
     const rate = exchangeRates[`${p.from}/${p.to}`];
     const asset = p.from !== 'USDT' ? p.from : p.to;
