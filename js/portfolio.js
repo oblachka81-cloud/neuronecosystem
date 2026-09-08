@@ -98,40 +98,35 @@ const sortedAssets = [...data.assets].sort((a, b) => {
     </button>
   </div>`;
 
-    // Карточка листинга COGNIQ
+    // Плашки COGNIQ под общей оценкой (текст листинга убран — он в вайтпейпере и на бирже)
     const listingCardHtml = `
-  <div style="margin-bottom:18px;border:2px solid #e9eef7;border-radius:16px;box-shadow:0 0 16px rgba(0,204,255,0.15);padding:20px;">
-    <div style="font-size:0.72rem;font-weight:700;background:linear-gradient(90deg,#00ccff,#7a2eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;text-align:center;">${t.listingTitle}</div>
-    <div style="font-size:0.85rem;background:linear-gradient(90deg,#c8d0e0 0%,#ffffff 50%,#c8d0e0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;line-height:1.5;text-align:center;">${listingDescCexOnly}</div>
-    
-    <div style="display:flex;gap:10px;">
+  <div class="listing-plaques" style="display:flex;gap:10px;margin-bottom:18px;">
       <div onclick="switchTab('exchange');setTimeout(function(){try{exchangeSelectPair('COGNIQ','USDT')}catch(e){}},300)" style="flex:1;position:relative;height:80px;padding:0;background:none;border:none;border-radius:12px;overflow:hidden;cursor:pointer;">
         <img src="/main/btn_portfolio_plaque.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
-          <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:4px;">
+          <div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:3px;flex-wrap:nowrap;">
             <span style="width:6px;height:6px;border-radius:50%;background:#00ffaa;animation:portfolioLivePulse 1.6s ease-in-out infinite;flex-shrink:0;"></span>
-            <span style="font-size:0.72rem;font-weight:800;background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">COGNIQ DEX</span>
+            <span style="font-size:0.66rem;font-weight:800;white-space:nowrap;flex-shrink:0;background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">COGNIQ DEX</span>
           </div>
-          <div style="font-size:0.78rem;font-weight:800;color:#00ffaa;">${cogniqPriceText}</div>
+          <div style="font-size:0.7rem;font-weight:800;color:#00ffaa;white-space:nowrap;">${cogniqPriceText}</div>
         </div>
       </div>
 
       <div style="flex:1;position:relative;height:80px;padding:0;background:none;border:none;border-radius:12px;overflow:hidden;">
         <img src="/main/btn_portfolio_plaque.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
-          <div style="font-size:0.65rem;color:#8899aa;margin-bottom:4px;letter-spacing:1px;">Q2-Q3 2027</div>
-          <div style="font-size:0.8rem;font-weight:700;background:linear-gradient(90deg,#ffcc44 0%,#ffdd88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${t.cexListing}</div>
+          <div style="font-size:0.58rem;color:#8899aa;margin-bottom:3px;letter-spacing:0.5px;white-space:nowrap;">Q2-Q3 2027</div>
+          <div style="font-size:0.7rem;font-weight:700;white-space:nowrap;background:linear-gradient(90deg,#ffcc44 0%,#ffdd88 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${t.cexListing}</div>
         </div>
       </div>
 
       <div style="flex:1;position:relative;height:80px;padding:0;background:none;border:none;border-radius:12px;overflow:hidden;">
         <img src="/main/btn_portfolio_plaque.webp" style="width:100%;height:100%;object-fit:fill;display:block;">
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;">
-          <div style="font-size:0.65rem;color:#8899aa;margin-bottom:4px;letter-spacing:1px;">${t.yourBalance}</div>
-          <div style="font-size:0.8rem;font-weight:700;background:linear-gradient(90deg,#00ccff 0%,#66ddff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${cogniqBalance.toLocaleString()}</div>
+          <div style="font-size:0.58rem;color:#8899aa;margin-bottom:3px;letter-spacing:0.5px;white-space:nowrap;">${t.yourBalance}</div>
+          <div style="font-size:0.72rem;font-weight:700;white-space:nowrap;background:linear-gradient(90deg,#00ccff 0%,#66ddff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${cogniqBalance.toLocaleString()}</div>
         </div>
       </div>
-    </div>
   </div>`;
 
     root.innerHTML = `
