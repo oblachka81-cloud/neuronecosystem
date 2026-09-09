@@ -397,6 +397,7 @@ router.post('/api/transfer', requireInitDataStrict, publicRateLimit, async (req,
     );
     const toUserLang = toUser.rows[0]?.language_code || 'ru';
     await client.query('COMMIT');
+    await addToBurnPool('transfer', commission, fromId);
     const senderRow = await pool.query('SELECT nickname, first_name FROM users WHERE telegram_id = $1', [fromId]);
     const senderName = senderRow.rows[0]?.nickname || senderRow.rows[0]?.first_name || 'Игрок';
     await logTx(fromId, 'transfer_sent', amount, 'out', { to: toUser.rows[0]?.nickname || toUser.rows[0]?.first_name || 'Игрок' });
