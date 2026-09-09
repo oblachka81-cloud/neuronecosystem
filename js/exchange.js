@@ -504,9 +504,10 @@ function exchangeRenderPairGrid(id, pairsList) {
   if (!document.getElementById('pairCardNarrowStyle')) {
     const stn = document.createElement('style');
     stn.id = 'pairCardNarrowStyle';
-    stn.textContent = '@media(max-width:520px){.pc-content{padding:0 30px 0 6px !important;}.pc-badge{font-size:0.42rem !important;letter-spacing:0.3px !important;padding:1px 4px !important;}.pc-spark svg{width:100% !important;height:14px !important;}}';
+    stn.textContent = '@media(max-width:520px){.pc-content:not(.pc-native){padding:0 30px 0 6px !important;}.pc-native{padding:0 10px !important;}.pc-badge{font-size:0.42rem !important;letter-spacing:0.3px !important;padding:1px 4px !important;}.pc-spark svg{width:100% !important;height:14px !important;}}';
     document.head.appendChild(stn);
   }
+
   grid.innerHTML = pairsList.map(p => {
     const rate = exchangeRates[`${p.from}/${p.to}`];
     const asset = p.from !== 'USDT' ? p.from : p.to;
@@ -520,18 +521,18 @@ function exchangeRenderPairGrid(id, pairsList) {
       spark = sparkSvg(mkt.spark, up);
     }
     const nameHtml = isCogniq
-      ? `<div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:2px;">
+      ? `<div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:6px;">
            <span style="width:6px;height:6px;border-radius:50%;background:#00ffaa;animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></span>
            <span class="pc-badge" style="font-size:0.5rem;font-weight:800;letter-spacing:0.5px;color:#0a0a14;background:linear-gradient(90deg,#ffcc44,#fff3c4);padding:1px 6px;border-radius:6px;">NEURON NATIVE</span>
          </div>
-         <div style="font-size:0.8rem;font-weight:800;margin-bottom:2px;background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${p.name}</div>`
+         <div style="font-size:0.8rem;font-weight:800;margin-bottom:4px;background:linear-gradient(90deg,#bf953f,#fcf6ba,#b38728,#fbf5b7,#aa771c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${p.name}</div>`
       : `<div style="font-size:0.8rem;font-weight:600;color:#ffcc44;margin-bottom:2px;">${p.name}</div>`;
     const priceHtml = isCogniq
-      ? `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.78rem;font-weight:700;color:#00ffaa;">${rate ? fmtRate(rate) : '—'} ${pct}</div>`
+      ? `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.78rem;font-weight:700;color:#00ffaa;margin-bottom:6px;">${rate ? fmtRate(rate) : '—'} ${pct}</div>`
       : `<div style="display:flex;align-items:baseline;gap:6px;justify-content:center;font-size:0.75rem;color:#ffcc44;">${rate ? fmtRate(rate) : '—'} ${pct}</div>`;
     return `<div class="pair-card" onclick="exchangeSelectPair('${p.from}','${p.to}')" style="position:relative;background:none;border:none;padding:0;">
       <img src="${isCogniq ? '/public/images/cogniq/exchange_pair_card_cogniq.webp' : '/public/images/cogniq/exchange_pair_card.webp'}" style="width:100%;display:block;">
-      <div class="pc-content" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;padding:0 36px 0 12px;">
+      <div class="pc-content${isCogniq ? ' pc-native' : ''}" style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:${isCogniq ? '0 14px' : '0 36px 0 12px'};">
         ${nameHtml}
         ${priceHtml}
         <div class="pc-spark" style="width:100%;display:flex;justify-content:center;overflow:hidden;">${spark}</div>
