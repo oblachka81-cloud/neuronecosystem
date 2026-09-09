@@ -386,7 +386,7 @@ router.post('/api/transfer', requireInitDataStrict, publicRateLimit, async (req,
       await client.query('ROLLBACK');
       return res.status(403).json({ error: 'Недостаточно COGNIQ' });
     }
-    const commission = Math.max(1, Math.floor(amount * 0.01));
+    const commission = Math.max(1, Math.floor(amount * 0.001));
     const amountToReceive = amount - commission;
     await client.query('UPDATE users SET balance = balance - $1 WHERE telegram_id = $2', [amount, fromId]);
     await client.query('UPDATE users SET balance = balance + $1 WHERE telegram_id = $2', [amountToReceive, toId]);
