@@ -389,7 +389,7 @@ function loadBankPanel() {
   
   document.getElementById('bankTransferAmount').addEventListener('input', function() {
     const amt = parseInt(this.value) || 0;
-    const commission = Math.max(1, Math.floor(amt * 0.01));
+    const commission = Math.max(1, Math.floor(amt * 0.001));
     const receives = amt > 0 ? amt - commission : 0;
     const el = document.getElementById('bankTransferCalc');
     if(el) el.textContent = amt > 0 ? bt.transferCalcDynamic(commission, receives) : bt.transferCalc;
