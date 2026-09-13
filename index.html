@@ -181,6 +181,7 @@ window.addEventListener('error', function(e){
     splash.classList.add('canvas-mode');
     startTime = performance.now();
     draw();
+    setTimeout(hideSplash, 1500);
   }
   
   function hideSplash(){
