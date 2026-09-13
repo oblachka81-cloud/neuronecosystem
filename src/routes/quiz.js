@@ -273,6 +273,13 @@ router.post('/api/answer', requireInitDataStrict, authRateLimit, async (req, res
       await logTx(userId, 'quiz_win', newGameScore, 'in');
       if (!currentIsSuper) {
         newGamesToday = newGamesToday + 1;
+        // Списание купленных игр: если сыграл больше дневного лимита → минус 1 из купленных
+        const _base = MAX_FREE_GAMES_PER_DAY;
+        const _subActive = user.subscription_type && user.subscription_expires_at && new Date(user.subscription_expires_at) > new Date();
+        const _freeLimit = _base + (_subActive ? 10 : 0);
+        if (newGamesToday > _freeLimit && (user.extra_games || 0) > 0) {
+          await client.query('UPDATE users SET extra_games = extra_games - 1 WHERE telegram_id = $1', [userId]);
+        }
       } else {
         superGamesTotal = superGamesTotal + 1;
         superGamePending = false;
