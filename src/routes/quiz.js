@@ -179,6 +179,13 @@ router.post('/api/answer', requireInitDataStrict, authRateLimit, async (req, res
 
       if (!currentIsSuper && gameStarted) {
         gamesToday += 1;
+        // Списание купленных игр при reset
+        const _base = MAX_FREE_GAMES_PER_DAY;
+        const _subActive = user.subscription_type && user.subscription_expires_at && new Date(user.subscription_expires_at) > new Date();
+        const _freeLimit = _base + (_subActive ? 10 : 0);
+        if (gamesToday > _freeLimit && (user.extra_games || 0) > 0) {
+          await client.query('UPDATE users SET extra_games = extra_games - 1 WHERE telegram_id = $1', [userId]);
+        }
       }
 
       const freeGamesLeft = calcGamesLeft({ ...user, games_today: gamesToday });
