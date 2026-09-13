@@ -14,7 +14,9 @@ function normalizeDateStr(val) {
 
 function calcGamesLeft(user) {
   const base = MAX_FREE_GAMES_PER_DAY;
-  const bonus = user.subscription_type === 'premium' ? 10 : user.subscription_type === 'vip' ? 10 : 0;
+  const subActive = user.subscription_type && user.subscription_expires_at &&
+  new Date(user.subscription_expires_at) > new Date();
+  const bonus = subActive ? 10 : 0;
   const extra = user.extra_games || 0;
   const played = user.games_today || 0;
   return Math.max(0, base + bonus + extra - played);
