@@ -46,7 +46,7 @@
 <body>
   <script>
 window.addEventListener('error', function(e){
-  alert('⚠️ ' + e.message + ' | файл: ' + (e.filename||'').split('/').pop() + ' строка ' + e.lineno);
+  console.error('[NEURON ERROR]', e.message, e.filename, e.lineno);
 });
 </script>
 <div id="particles"></div>
@@ -387,8 +387,8 @@ window.addEventListener('error', function(e){
   let userId, userName;
   let tonPaymentContext = 'super_game';
 
-  initTonConnect();
-  window.addEventListener('load', () => { initTonConnect(); });
+  //initTonConnect();
+  //window.addEventListener('load', () => { initTonConnect(); });
 
   window.addEventListener('message', async (event) => {
     if (event.data === 'switchTab:game') {
