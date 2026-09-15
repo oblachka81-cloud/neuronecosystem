@@ -209,7 +209,7 @@ if (payload && payload.startsWith('chess_')) {
         await pool.query('UPDATE users SET balance = balance + 1000 WHERE telegram_id = $1', [tgId]);
         
         try {
-          await postBetaCard(ctx.telegram, tgId, lang);
+          await postBetaCard(ctx, tgId, lang);
         } catch(e) {
           console.error('[BETA] card error:', e.message);
         }
