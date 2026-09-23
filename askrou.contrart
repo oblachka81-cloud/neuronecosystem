@@ -1,0 +1,496 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// NEURON Vesting — LockupFactory v3.0.0 (Escrow)
+// Single-contract escrow. No child locks. Pull-model.
+// ═══════════════════════════════════════════════════════════════════════════
+
+import "@stdlib/deploy";
+import "./messages";
+
+// ─── Messages ──────────────────────────────────────────────────────────────
+
+message(0x10) Claim {
+    query_id: Int as uint64;
+    lock_id: Int as uint64;
+    destination_jetton_wallet: Address;
+}
+
+message(0x20) WithdrawFees {
+    query_id: Int as uint64;
+    jetton_master: Address;
+    destination_wallet: Address;
+    amount: Int as coins;
+}
+
+message(0x21) SetJettonWallet {
+    query_id: Int as uint64;
+    jetton_master: Address;
+    jetton_wallet: Address;
+}
+
+message(0x22) WithdrawTonFees {
+    query_id: Int as uint64;
+    amount: Int as coins;
+    destination: Address;
+}
+
+message(0x23) RescueTon {
+    query_id: Int as uint64;
+    amount: Int as coins;
+    destination: Address;
+}
+
+message(0x24) RescueJetton {
+    query_id: Int as uint64;
+    jetton_master: Address;
+    amount: Int as coins;
+    destination: Address;
+}
+
+message(0x25) SetFeeBps {
+    query_id: Int as uint64;
+    fee_bps: Int as uint16;
+}
+
+message(0x26) SetFeeTon {
+    query_id: Int as uint64;
+    fee_ton: Int as coins;
+}
+
+// ─── Events ────────────────────────────────────────────────────────────────
+
+message(0x100) LockCreated {
+    lock_id: Int as uint64;
+    creator: Address;
+    beneficiary: Address;
+    jetton: Address;
+    amount: Int as coins;
+    unlock_at: Int as uint64;
+}
+
+message(0x101) Claimed {
+    lock_id: Int as uint64;
+    amount: Int as coins;
+    beneficiary: Address;
+    query_id: Int as uint64;
+}
+
+message(0x102) ClaimBounced {
+    lock_id: Int as uint64;
+    amount: Int as coins;
+}
+
+message(0x106) TonFeeCollected {
+    lock_id: Int as uint64;
+    amount: Int as coins;
+}
+
+message(0x107) FeesWithdrawn {
+    query_id: Int as uint64;
+    jetton_master: Address;
+    amount: Int as coins;
+    destination: Address;
+}
+
+message(0x108) OverpayRefunded {
+    creator: Address;
+    amount: Int as coins;
+}
+
+message(0x109) JettonWalletSet {
+    jetton_master: Address;
+    jetton_wallet: Address;
+}
+
+message(0x111) LockCreationFailed {
+    lock_id: Int as uint64;
+    creator: Address;
+    beneficiary: Address;
+    jetton: Address;
+    amount: Int as coins;
+}
+
+message(0x113) FeeBpsChanged {
+    old_fee_bps: Int as uint16;
+    new_fee_bps: Int as uint16;
+}
+
+message(0x114) FeeTonChanged {
+    old_fee_ton: Int as coins;
+    new_fee_ton: Int as coins;
+}
+
+// ─── Constants ─────────────────────────────────────────────────────────────
+
+const GAS_BUFFER_TON: Int = ton("0.15");
+const CLAIM_GAS: Int = ton("0.15");
+const TRANSFER_GAS: Int = ton("0.15");
+const RESCUE_GAS: Int = ton("0.15");
+const MAX_LOCK_DURATION: Int = 315360000;   // 10 years
+const CREATE_LOCK_OP: Int = 0x1;
+const MAX_FEE_BPS: Int = 1000;               // 10%
+
+// ─── Data ──────────────────────────────────────────────────────────────────
+
+struct LockData {
+    creator: Address;
+    beneficiary: Address;
+    jetton_master: Address;
+    amount: Int as coins;
+    unlock_at: Int as uint64;
+    claimed: Bool;
+}
+
+// ─── Contract ──────────────────────────────────────────────────────────────
+
+contract LockupFactory {
+    next_id: Int as uint64;
+    treasury: Address;
+    salt: Int as uint64;
+
+    fee_bps: Int as uint16;
+    fee_ton: Int as coins;
+
+    own_wallets: map<Address, Address>;       // master -> factory jetton wallet
+    wallet_to_master: map<Address, Address>;  // factory jetton wallet -> master
+    fees: map<Address, Int>;                  // master -> accumulated platform fee
+    ton_fees: Int as coins;
+    used_qids: map<Int, Bool>;                // Replay protection for treasury ops
+
+    locks: map<Int, LockData>;
+
+    init(treasury: Address, salt: Int, fee_bps: Int, fee_ton: Int) {
+        self.next_id = 1;
+        self.treasury = treasury;
+        self.salt = salt;
+        self.fee_bps = fee_bps;
+        self.fee_ton = fee_ton;
+        self.ton_fees = 0;
+    }
+
+    // ── Treasury: whitelist ────────────────────────────────────────────
+
+    receive(msg: SetJettonWallet) {
+        require(sender() == self.treasury, "not treasury");
+        require(msg.query_id > 0, "query_id must be > 0");
+
+        let cur: Address? = self.own_wallets.get(msg.jetton_master);
+        require(cur == null || cur!! == msg.jetton_wallet, "already set");
+
+        self.own_wallets.set(msg.jetton_master, msg.jetton_wallet);
+        self.wallet_to_master.set(msg.jetton_wallet, msg.jetton_master);
+
+        emit(JettonWalletSet{
+            jetton_master: msg.jetton_master,
+            jetton_wallet: msg.jetton_wallet
+        }.toCell());
+    }
+
+    // ── Treasury: fees ─────────────────────────────────────────────────
+
+    receive(msg: SetFeeBps) {
+        require(sender() == self.treasury, "not treasury");
+        require(msg.query_id > 0, "query_id must be > 0");
+        require(msg.fee_bps <= MAX_FEE_BPS, "max 10%");
+        let old: Int = self.fee_bps;
+        self.fee_bps = msg.fee_bps;
+        emit(FeeBpsChanged{ old_fee_bps: old, new_fee_bps: msg.fee_bps }.toCell());
+    }
+
+    receive(msg: SetFeeTon) {
+        require(sender() == self.treasury, "not treasury");
+        require(msg.query_id > 0, "query_id must be > 0");
+        require(msg.fee_ton >= 0, "negative fee");
+        let old: Int = self.fee_ton;
+        self.fee_ton = msg.fee_ton;
+        emit(FeeTonChanged{ old_fee_ton: old, new_fee_ton: msg.fee_ton }.toCell());
+    }
+
+    // ── Create lock ────────────────────────────────────────────────────
+
+    receive(msg: JettonNotification) {
+        let jm: Address? = self.wallet_to_master.get(sender());
+        require(jm != null, "unknown jetton wallet");
+        let jetton_master: Address = jm!!;
+
+        require(self.own_wallets.get(jetton_master) != null, "jetton not whitelisted");
+        require(context().value >= self.fee_ton + GAS_BUFFER_TON, "attach fee + buffer");
+
+        // Either unwrap (Tact does NOT strip it for Slice as remaining)
+        let sc: Slice = msg.forward_payload;
+        if (sc.bits() > 0 && sc.loadBit()) {
+            sc = sc.loadRef().beginParse();
+        }
+
+        // Guard: bad or short payload -> full jetton refund, no state change
+        if (sc.bits() < 694 || sc.preloadUint(32) != CREATE_LOCK_OP) {
+            // sender() is the jetton wallet. We tell IT to send jettons back to msg.sender (user EOA).
+            send(SendParameters{
+                to: sender(),
+                value: TRANSFER_GAS,
+                mode: SendPayGasSeparately,
+                body: JettonTransfer{
+                    query_id: 0,
+                    amount: msg.amount,
+                    destination: msg.sender,
+                    response_destination: myAddress(),
+                    custom_payload: null,
+                    forward_ton_amount: 0,
+                    forward_payload: emptySlice()
+                }.toCell()
+            });
+            let back: Int = context().value - TRANSFER_GAS;
+            if (back > 0) {
+                send(SendParameters{
+                    to: msg.sender,
+                    value: back,
+                    mode: SendPayGasSeparately,
+                    body: emptyCell()
+                });
+            }
+            emit(LockCreationFailed{
+                lock_id: 0,
+                creator: msg.sender,
+                beneficiary: msg.sender,
+                jetton: jetton_master,
+                amount: msg.amount
+            }.toCell());
+            return;
+        }
+
+        sc.loadUint(32);                          // op
+        let qid: Int = sc.loadUint(64);           // client-side query id
+        let jm_in_payload: Address = sc.loadAddress();
+        let ben: Address = sc.loadAddress();
+        let unlock_at: Int = sc.loadUint(64);
+
+        require(jm_in_payload == jetton_master, "jm mismatch");
+        require(unlock_at > now(), "past date");
+        require(unlock_at <= now() + MAX_LOCK_DURATION, "unlock too far");
+        require(qid > 0, "query_id must be > 0");
+
+        let fee: Int = (msg.amount * self.fee_bps) / 10000;
+        let lock_amount: Int = msg.amount - fee;
+        require(lock_amount > 0, "too small");
+
+        let creator: Address = msg.sender;
+        require(creator != myAddress(), "creator cannot be factory");
+
+        // TON fee accounting
+        let overpay: Int = context().value - self.fee_ton - GAS_BUFFER_TON;
+        self.ton_fees = self.ton_fees + self.fee_ton;
+
+        if (overpay > 0) {
+            send(SendParameters{
+                to: creator,
+                value: overpay,
+                mode: SendPayGasSeparately,
+                body: emptyCell()
+            });
+            emit(OverpayRefunded{ creator: creator, amount: overpay }.toCell());
+        }
+
+        // Jetton fee accounting
+        let curFeeOpt: Int? = self.fees.get(jetton_master);
+        let curFee: Int = curFeeOpt != null ? curFeeOpt!! : 0;
+        self.fees.set(jetton_master, curFee + fee);
+
+        let id: Int = self.next_id;
+        self.next_id = id + 1;
+
+        self.locks.set(id, LockData{
+            creator: creator,
+            beneficiary: ben,
+            jetton_master: jetton_master,
+            amount: lock_amount,
+            unlock_at: unlock_at,
+            claimed: false
+        });
+
+        emit(LockCreated{
+            lock_id: id,
+            creator: creator,
+            beneficiary: ben,
+            jetton: jetton_master,
+            amount: lock_amount,
+            unlock_at: unlock_at
+        }.toCell());
+
+        emit(TonFeeCollected{ lock_id: id, amount: self.fee_ton }.toCell());
+    }
+
+    // ── Claim (pull-model) ─────────────────────────────────────────────
+
+    receive(msg: Claim) {
+        let lockOpt: LockData? = self.locks.get(msg.lock_id);
+        require(lockOpt != null, "lock not found");
+        let l: LockData = lockOpt!!;
+
+        require(sender() == l.beneficiary, "not beneficiary");
+        require(now() >= l.unlock_at, "still locked");
+        require(!l.claimed, "already claimed");
+
+        // Optimistic lock — bounce rolls it back
+        l.claimed = true;
+        self.locks.set(msg.lock_id, l);
+
+        let jw: Address = self.own_wallets.get(l.jetton_master)!!;
+
+        send(SendParameters{
+            to: jw,
+            value: CLAIM_GAS,
+            mode: SendPayGasSeparately,
+            body: JettonTransfer{
+                query_id: msg.lock_id,             // used for bounce matching
+                amount: l.amount,
+                destination: msg.destination_jetton_wallet,
+                response_destination: myAddress(),
+                custom_payload: null,
+                forward_ton_amount: 0,
+                forward_payload: emptySlice()
+            }.toCell()
+        });
+
+        emit(Claimed{
+            lock_id: msg.lock_id,
+            amount: l.amount,
+            beneficiary: l.beneficiary,
+            query_id: msg.query_id
+        }.toCell());
+    }
+
+    // ── Bounce: roll back optimistic claim on failed transfer ──────────
+
+    bounced(msg: bounced<JettonTransfer>) {
+        let lock_id: Int = msg.query_id;
+        let lockOpt: LockData? = self.locks.get(lock_id);
+        if (lockOpt != null) {
+            let l: LockData = lockOpt!!;
+            if (l.claimed && msg.amount == l.amount) {
+                l.claimed = false;
+                self.locks.set(lock_id, l);
+                emit(ClaimBounced{ lock_id: lock_id, amount: l.amount }.toCell());
+            }
+        }
+    }
+
+    // ── Treasury: withdraw jetton fees ─────────────────────────────────
+
+    receive(msg: WithdrawFees) {
+        require(sender() == self.treasury, "not treasury");
+        require(msg.query_id > 0, "query_id must be > 0");
+        require(msg.amount > 0, "zero amount");
+        require(self.used_qids.get(msg.query_id) == null, "query_id reused"); // FIX
+
+        let curOpt: Int? = self.fees.get(msg.jetton_master);
+        let cur: Int = curOpt != null ? curOpt!! : 0;
+        require(cur >= msg.amount, "not enough fees");
+
+        self.used_qids.set(msg.query_id, true); // FIX
+        self.fees.set(msg.jetton_master, cur - msg.amount);
+
+        let jw: Address = self.own_wallets.get(msg.jetton_master)!!;
+        send(SendParameters{
+            to: jw,
+            value: TRANSFER_GAS,
+            mode: SendPayGasSeparately,
+            body: JettonTransfer{
+                query_id: msg.query_id,
+                amount: msg.amount,
+                destination: msg.destination_wallet,
+                response_destination: myAddress(),
+                custom_payload: null,
+                forward_ton_amount: 0,
+                forward_payload: emptySlice()
+            }.toCell()
+        });
+
+        emit(FeesWithdrawn{
+            query_id: msg.query_id,
+            jetton_master: msg.jetton_master,
+            amount: msg.amount,
+            destination: msg.destination_wallet
+        }.toCell());
+    }
+
+    // ── Treasury: TON fees & rescue ────────────────────────────────────
+
+    receive(msg: WithdrawTonFees) {
+        require(sender() == self.treasury, "not treasury");
+        require(msg.query_id > 0, "query_id must be > 0");
+        require(msg.amount > 0, "zero amount");
+        require(self.ton_fees >= msg.amount, "not enough ton fees");
+        require(self.used_qids.get(msg.query_id) == null, "query_id reused"); // FIX
+
+        self.used_qids.set(msg.query_id, true); // FIX
+        self.ton_fees = self.ton_fees - msg.amount;
+
+        send(SendParameters{
+            to: msg.destination,
+            value: msg.amount,
+            mode: SendPayGasSeparately,
+            body: emptyCell()
+        });
+    }
+
+    receive(msg: RescueTon) {
+        require(sender() == self.treasury, "not treasury");
+        require(msg.query_id > 0, "query_id must be > 0");
+        require(msg.amount > 0, "zero amount");
+        require(myBalance() >= msg.amount + ton("0.05"), "not enough ton");
+        require(self.used_qids.get(msg.query_id) == null, "query_id reused"); // FIX
+
+        self.used_qids.set(msg.query_id, true); // FIX
+
+        send(SendParameters{
+            to: msg.destination,
+            value: msg.amount,
+            mode: SendPayGasSeparately,
+            body: emptyCell()
+        });
+    }
+
+    receive(msg: RescueJetton) {
+        require(sender() == self.treasury, "not treasury");
+        require(msg.query_id > 0, "query_id must be > 0");
+        require(msg.amount > 0, "zero amount");
+        require(self.used_qids.get(msg.query_id) == null, "query_id reused"); // FIX
+
+        let jw: Address? = self.own_wallets.get(msg.jetton_master);
+        require(jw != null, "not whitelisted");
+
+        self.used_qids.set(msg.query_id, true); // FIX
+
+        send(SendParameters{
+            to: jw!!,
+            value: RESCUE_GAS,
+            mode: SendPayGasSeparately,
+            body: JettonTransfer{
+                query_id: msg.query_id,
+                amount: msg.amount,
+                destination: msg.destination,
+                response_destination: myAddress(),
+                custom_payload: null,
+                forward_ton_amount: 0,
+                forward_payload: emptySlice()
+            }.toCell()
+        });
+    }
+
+    receive() { }
+
+    // ── Getters ────────────────────────────────────────────────────────
+
+    get fun nextLockId(): Int { return self.next_id; }
+    get fun treasuryAddress(): Address { return self.treasury; }
+    get fun saltGet(): Int { return self.salt; }
+    get fun feeBps(): Int { return self.fee_bps; }
+    get fun feeTon(): Int { return self.fee_ton; }
+    get fun tonFees(): Int { return self.ton_fees; }
+
+    get fun feeOf(jetton: Address): Int {
+        let opt: Int? = self.fees.get(jetton);
+        return opt != null ? opt!! : 0;
+    }
+    get fun isWalletSet(jetton: Address): Bool { return self.own_wallets.get(jetton) != null; }
+    get fun getLock(id: Int): LockData? { return self.locks.get(id); }
+}
