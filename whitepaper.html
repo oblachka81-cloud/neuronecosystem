@@ -322,19 +322,166 @@ span[data-en],span[data-fr],span[data-es]{display:none;}
 </section>
 
 <section>
-<h2 data-ru>9. On-chain прозрачность</h2><h2 data-en>9. On-chain Transparency</h2><h2 data-fr>9. Transparence On-chain</h2><h2 data-es>9. Transparencia On-chain</h2>
+<h2 data-ru>9. On-chain прозрачность</h2>
+<h2 data-en>9. On-chain Transparency</h2>
+<h2 data-fr>9. Transparence On-chain</h2>
+<h2 data-es>9. Transparencia On-chain</h2>
+
+<p data-ru>Каждый адрес, каждый лок, каждая транзакция — публичны и проверяемы в блокчейне TON. Никаких закрытых резервов, никаких «бумажных» обещаний: только <strong style="color:var(--gold);">on-chain proof</strong>.</p>
+<p data-en>Every address, every lock, every transaction — public and verifiable on the TON blockchain. No closed reserves, no paper promises: only <strong style="color:var(--gold);">on-chain proof</strong>.</p>
+<p data-fr>Chaque adresse, chaque verrou, chaque transaction — publique et vérifiable sur la blockchain TON. Pas de réserves fermées, pas de promesses sur papier : uniquement des <strong style="color:var(--gold);">preuves on-chain</strong>.</p>
+<p data-es>Cada dirección, cada bloqueo, cada transacción — pública y verificable en la blockchain TON. Sin reservas cerradas, sin promesas en papel: solo <strong style="color:var(--gold);">pruebas on-chain</strong>.</p>
+
 <div class="address-block"><div class="addr-label" data-ru>Контракт токена COGNIQ</div><div class="addr-label" data-en>COGNIQ Token Contract</div><div class="addr-label" data-fr>Contrat du token COGNIQ</div><div class="addr-label" data-es>Contrato del token COGNIQ</div><div class="addr-copy-row"><code>EQDOjRZ5rbSnBBvhsv4g0JNN67p89617_2pNc_AO1dTEkaNg</code></div></div>
+
 <div class="address-block"><div class="addr-label" data-ru>Операционный кошелёк</div><div class="addr-label" data-en>Operational Wallet</div><div class="addr-label" data-fr>Portefeuille opérationnel</div><div class="addr-label" data-es>Cartera operativa</div><div class="addr-copy-row"><code>UQBniD_M-MTeVqUbWshZrXdQcz0m8lPstG3mQg1AL5KKCGSv</code></div></div>
+
 <div class="address-block"><div class="addr-label" data-ru>Замороженный резерв (vesting 2 года)</div><div class="addr-label" data-en>Frozen Reserve (2yr vesting)</div><div class="addr-label" data-fr>Réserve gelée (vesting 2 ans)</div><div class="addr-label" data-es>Reserva congelada (vesting 2 años)</div><div class="addr-copy-row"><code>UQC4kZ7R86_E37FwN8-46OK1EDccQptSqgOhosOhM4SS-MGP</code></div></div>
-  <div class="address-block">
+
+<div class="address-block">
   <div class="addr-label" data-ru>💧 Кошелёк ликвидности</div>
   <div class="addr-label" data-en>💧 Liquidity Wallet</div>
   <div class="addr-label" data-fr>💧 Portefeuille liquidité</div>
   <div class="addr-label" data-es>💧 Cartera liquidez</div>
   <div class="addr-copy-row"><code>UQCFoYmCO2-FRsJRjUthSMi7myZsqNUk1YjhUeFi8Mg2wy_U</code></div>
 </div>
-<div class="highlight cyan" style="margin-top:16px;"><p data-ru>🔐 <strong>Безопасность API:</strong> все ключи только на сервере. Запросы к toncenter проксируются через backend.</p><p data-en>🔐 <strong>API Security:</strong> all keys are server-side only. Requests to toncenter are proxied through the backend.</p><p data-fr>🔐 <strong>Sécurité API :</strong> toutes les clés sont uniquement côté serveur. Les requêtes vers toncenter sont proxyfiées via le backend.</p><p data-es>🔐 <strong>Seguridad API:</strong> todas las claves están solo en el servidor. Las solicitudes a toncenter se proxy a través del backend.</p></div>
-  <div class="highlight green" style="margin-top:16px;"><p data-ru>🛡️ <strong>AML Security:</strong> встроенная проверка TON-адресов на связи с высокорисковыми источниками. Официальные метки от TON Foundation через TonAPI. Расширенная проверка — через партнёрский сервис AML Security Finance.</p><p data-en>🛡️ <strong>AML Security:</strong> built-in TON address check for high-risk source connections. Official TON Foundation tags via TonAPI. Extended check via partner AML Security Finance.</p><p data-fr>🛡️ <strong>AML Security :</strong> vérification intégrée des adresses TON pour des connexions à des sources à haut risque. Tags officiels de la TON Foundation via TonAPI. Vérification avancée via le partenaire AML Security Finance.</p><p data-es>🛡️ <strong>AML Security:</strong> verificación integrada de direcciones TON para conexiones con fuentes de alto riesgo. Etiquetas oficiales de TON Foundation a través de TonAPI. Verificación avanzada a través del socio AML Security Finance.</p></div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TEAM VESTING — 500M COGNIQ, on-chain locked -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<div class="highlight fire" style="margin-top:28px;">
+  <p data-ru>🔐 <strong>Команда залочила свои 500 000 000 COGNIQ (10% supply)</strong> через публичный смарт-контракт <strong style="color:var(--gold);">NEURON Vesting</strong>. Схема: <strong>12 месяцев cliff</strong> + <strong>5 равных траншей по 100M COGNIQ</strong> с шагом 3 месяца. Ни один токен команды не может быть разблокирован до 1 октября 2027.</p>
+  <p data-en>🔐 <strong>The team locked its 500,000,000 COGNIQ (10% supply)</strong> via the public smart contract <strong style="color:var(--gold);">NEURON Vesting</strong>. Schedule: <strong>12-month cliff</strong> + <strong>5 equal tranches of 100M COGNIQ</strong> every 3 months. No team tokens can be unlocked before October 1, 2027.</p>
+  <p data-fr>🔐 <strong>L'équipe a verrouillé ses 500 000 000 COGNIQ (10% du supply)</strong> via le smart contract public <strong style="color:var(--gold);">NEURON Vesting</strong>. Calendrier : <strong>cliff de 12 mois</strong> + <strong>5 tranches égales de 100M COGNIQ</strong> tous les 3 mois. Aucun token de l'équipe ne peut être débloqué avant le 1er octobre 2027.</p>
+  <p data-es>🔐 <strong>El equipo bloqueó sus 500 000 000 COGNIQ (10% del supply)</strong> mediante el contrato inteligente público <strong style="color:var(--gold);">NEURON Vesting</strong>. Calendario: <strong>cliff de 12 meses</strong> + <strong>5 tramos iguales de 100M COGNIQ</strong> cada 3 meses. Ningún token del equipo puede desbloquearse antes del 1 de octubre de 2027.</p>
+</div>
+
+<div class="token-chart" style="margin-top:16px;">
+  <div class="token-slice c4"><div class="pct">500M</div><div class="label" data-ru>Всего залочено<br>COGNIQ</div><div class="label" data-en>Total locked<br>COGNIQ</div><div class="label" data-fr>Total verrouillé<br>COGNIQ</div><div class="label" data-es>Total bloqueado<br>COGNIQ</div></div>
+  <div class="token-slice c3"><div class="pct">0</div><div class="label" data-ru>Комиссия<br>в jetton</div><div class="label" data-en>Fee<br>in jetton</div><div class="label" data-fr>Frais<br>en jetton</div><div class="label" data-es>Comisión<br>en jetton</div></div>
+  <div class="token-slice c1"><div class="pct">0</div><div class="label" data-ru>Комиссия<br>в TON</div><div class="label" data-en>Fee<br>in TON</div><div class="label" data-fr>Frais<br>en TON</div><div class="label" data-es>Comisión<br>en TON</div></div>
+  <div class="token-slice c2"><div class="pct">100%</div><div class="label" data-ru>On-chain<br>verified</div><div class="label" data-en>On-chain<br>verified</div><div class="label" data-fr>Vérifié<br>on-chain</div><div class="label" data-es>Verificado<br>on-chain</div></div>
+</div>
+
+<div class="address-block" style="margin-top:16px;">
+  <div class="addr-label" data-ru>📋 Параметры вестинга команды</div>
+  <div class="addr-label" data-en>📋 Team vesting parameters</div>
+  <div class="addr-label" data-fr>📋 Paramètres du vesting équipe</div>
+  <div class="addr-label" data-es>📋 Parámetros del vesting del equipo</div>
+  <div class="addr-copy-row">
+    <b data-ru>Сумма:</b><b data-en>Amount:</b><b data-fr>Montant :</b><b data-es>Monto:</b> 500 000 000 COGNIQ<br>
+    <b data-ru>Схема:</b><b data-en>Schedule:</b><b data-fr>Calendrier :</b><b data-es>Calendario:</b> 12m cliff + 5 × 100M / 3m<br>
+    <b data-ru>Beneficiary:</b><b data-en>Beneficiary:</b><b data-fr>Bénéficiaire :</b><b data-es>Beneficiario:</b> <code>UQAG-6hdu_fOdUE5EUMvBhxjpQrFWutGkBtS0mQfgQ6oGoZa</code><br>
+    <b data-ru>Фабрика:</b><b data-en>Factory:</b><b data-fr>Usine :</b><b data-es>Fábrica:</b> <code>EQD_dSnLqcBiQyT2LRyNPIUpqAY9Qr9VoMgUCKtHN5xpSCTN</code>
+  </div>
+</div>
+
+<div class="address-block">
+  <div class="addr-label" data-ru>🟡 Транш 1/5 — 100M COGNIQ — Разблокировка 2027-10-01 (UTC)</div>
+  <div class="addr-label" data-en>🟡 Tranche 1/5 — 100M COGNIQ — Unlock 2027-10-01 (UTC)</div>
+  <div class="addr-label" data-fr>🟡 Tranche 1/5 — 100M COGNIQ — Déblocage 2027-10-01 (UTC)</div>
+  <div class="addr-label" data-es>🟡 Tramo 1/5 — 100M COGNIQ — Desbloqueo 2027-10-01 (UTC)</div>
+  <div class="addr-copy-row">
+    <b>LockupWallet:</b> <code>EQAYLHKt_XPsXV6dYc55i3E5uSz7U-twpkDJbhFiYUV4X3Nr</code><br>
+    <b>TX:</b> <a href="https://tonviewer.com/transaction/dad982630afa9eb4d4e787ddd1ea00dd4e99f313fc9111da71551514a224320f" target="_blank" rel="noopener">Tonviewer ↗</a>
+  </div>
+</div>
+
+<div class="address-block">
+  <div class="addr-label" data-ru>🟡 Транш 2/5 — 100M COGNIQ — Разблокировка 2028-01-01 (UTC)</div>
+  <div class="addr-label" data-en>🟡 Tranche 2/5 — 100M COGNIQ — Unlock 2028-01-01 (UTC)</div>
+  <div class="addr-label" data-fr>🟡 Tranche 2/5 — 100M COGNIQ — Déblocage 2028-01-01 (UTC)</div>
+  <div class="addr-label" data-es>🟡 Tramo 2/5 — 100M COGNIQ — Desbloqueo 2028-01-01 (UTC)</div>
+  <div class="addr-copy-row">
+    <b>LockupWallet:</b> <code>EQB0qmIN438QTAIfaUXrXTPbvIGdM2H8Va2Qt1D_nlESEu59</code><br>
+    <b>TX:</b> <a href="https://tonviewer.com/transaction/5b96a70d2764d6aef55abebc3c956673fdfc456192b9b46fc70c7eba1739f791" target="_blank" rel="noopener">Tonviewer ↗</a>
+  </div>
+</div>
+
+<div class="address-block">
+  <div class="addr-label" data-ru>🟡 Транш 3/5 — 100M COGNIQ — Разблокировка 2028-04-01 (UTC)</div>
+  <div class="addr-label" data-en>🟡 Tranche 3/5 — 100M COGNIQ — Unlock 2028-04-01 (UTC)</div>
+  <div class="addr-label" data-fr>🟡 Tranche 3/5 — 100M COGNIQ — Déblocage 2028-04-01 (UTC)</div>
+  <div class="addr-label" data-es>🟡 Tramo 3/5 — 100M COGNIQ — Desbloqueo 2028-04-01 (UTC)</div>
+  <div class="addr-copy-row">
+    <b>LockupWallet:</b> <code>EQBNTbN2YuvJfmio4ut-Nb795QX-p_zreq0zt-RueNQ1LPe0</code><br>
+    <b>TX:</b> <a href="https://tonviewer.com/transaction/492198ce0bb31355106297587175a16b1db974ca409480817739f6c2fee4b40f" target="_blank" rel="noopener">Tonviewer ↗</a>
+  </div>
+</div>
+
+<div class="address-block">
+  <div class="addr-label" data-ru>🟡 Транш 4/5 — 100M COGNIQ — Разблокировка 2028-07-01 (UTC)</div>
+  <div class="addr-label" data-en>🟡 Tranche 4/5 — 100M COGNIQ — Unlock 2028-07-01 (UTC)</div>
+  <div class="addr-label" data-fr>🟡 Tranche 4/5 — 100M COGNIQ — Déblocage 2028-07-01 (UTC)</div>
+  <div class="addr-label" data-es>🟡 Tramo 4/5 — 100M COGNIQ — Desbloqueo 2028-07-01 (UTC)</div>
+  <div class="addr-copy-row">
+    <b>LockupWallet:</b> <code>EQDHBH9ZYXGMGAnDf1typPqx8V9gSsqt2Q3ZnZDnmcMlr-iN</code><br>
+    <b>TX:</b> <a href="https://tonviewer.com/transaction/816d9b752947eafc863a8e2f094d48eee4f3a00feeca550431c1b4be6dc6891c" target="_blank" rel="noopener">Tonviewer ↗</a>
+  </div>
+</div>
+
+<div class="address-block">
+  <div class="addr-label" data-ru>🟡 Транш 5/5 — 100M COGNIQ — Разблокировка 2028-10-01 (UTC)</div>
+  <div class="addr-label" data-en>🟡 Tranche 5/5 — 100M COGNIQ — Unlock 2028-10-01 (UTC)</div>
+  <div class="addr-label" data-fr>🟡 Tranche 5/5 — 100M COGNIQ — Déblocage 2028-10-01 (UTC)</div>
+  <div class="addr-label" data-es>🟡 Tramo 5/5 — 100M COGNIQ — Desbloqueo 2028-10-01 (UTC)</div>
+  <div class="addr-copy-row">
+    <b>LockupWallet:</b> <code>EQDKK59jBUk_SclAIS16V7vtiuJmnoPhYlpQCnZk81atRNDv</code><br>
+    <b>TX:</b> <a href="https://tonviewer.com/transaction/58a727568496606e01b2d2516134e2fede3698e803f5dab75129519e8eb59737" target="_blank" rel="noopener">Tonviewer ↗</a>
+  </div>
+</div>
+
+<div class="highlight green" style="margin-top:16px;">
+  <p data-ru>✅ <strong>Независимая проверка.</strong> Открой любую ссылку Tonviewer выше → увидишь вызов фабрики <code>EQD_dSnL…</code> с opcode <code>0x31</code> (CreateLock) и деплой нового LockupWallet. Никаких закрытых ключей, никаких admin-функций — всё доказуемо в блокчейне.</p>
+  <p data-en>✅ <strong>Independent verification.</strong> Open any Tonviewer link above → see the factory call <code>EQD_dSnL…</code> with opcode <code>0x31</code> (CreateLock) and the new LockupWallet deployment. No closed keys, no admin functions — everything is provable on-chain.</p>
+  <p data-fr>✅ <strong>Vérification indépendante.</strong> Ouvrez n'importe quel lien Tonviewer ci-dessus → vous verrez l'appel d'usine <code>EQD_dSnL…</code> avec l'opcode <code>0x31</code> (CreateLock) et le déploiement du nouveau LockupWallet. Aucune clé fermée, aucune fonction admin — tout est prouvable on-chain.</p>
+  <p data-es>✅ <strong>Verificación independiente.</strong> Abre cualquier enlace de Tonviewer arriba → verás la llamada a la fábrica <code>EQD_dSnL…</code> con opcode <code>0x31</code> (CreateLock) y el despliegue del nuevo LockupWallet. Sin claves cerradas, sin funciones admin — todo es comprobable on-chain.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PROMO: NEURON VESTING as a service for other TON projects -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<div class="highlight gold" style="margin-top:28px;">
+  <p data-ru>💡 <strong>NEURON Vesting — открытая инфраструктура для TON.</strong> Мы залочили токены команды через собственный вестинг-модуль и теперь открываем его для <strong>любого проекта в сети TON</strong>. Любой TEP-74 jetton можно залочить с публичным on-chain proof: cliff, линейный вестинг, произвольные транши. Без кастоди, без доверия к третьим лицам — только смарт-контракт.</p>
+  <p data-en>💡 <strong>NEURON Vesting — open infrastructure for TON.</strong> We locked our team tokens via our own vesting module and now open it to <strong>any project on TON</strong>. Any TEP-74 jetton can be locked with public on-chain proof: cliff, linear vesting, arbitrary tranches. No custody, no third-party trust — just the smart contract.</p>
+  <p data-fr>💡 <strong>NEURON Vesting — infrastructure ouverte pour TON.</strong> Nous avons verrouillé nos tokens d'équipe via notre propre module de vesting et l'ouvrons maintenant à <strong>tout projet sur TON</strong>. N'importe quel jetton TEP-74 peut être verrouillé avec une preuve on-chain publique : cliff, vesting linéaire, tranches arbitraires. Sans garde, sans confiance tierce — uniquement le smart contract.</p>
+  <p data-es>💡 <strong>NEURON Vesting — infraestructura abierta para TON.</strong> Bloqueamos los tokens de nuestro equipo mediante nuestro propio módulo de vesting y ahora lo abrimos a <strong>cualquier proyecto en TON</strong>. Cualquier jetton TEP-74 puede bloquearse con prueba on-chain pública: cliff, vesting lineal, tramos arbitrarios. Sin custodia, sin confianza en terceros — solo el contrato inteligente.</p>
+</div>
+
+<div class="highlight cyan">
+  <p data-ru>🚀 <strong>Попробовать NEURON Vesting:</strong><br>
+  🌐 WebApp: <a href="https://oblachka81-cloud.github.io/neuron-vesting/" target="_blank" rel="noopener">oblachka81-cloud.github.io/neuron-vesting</a><br>
+  🤖 Telegram bot: <a href="https://t.me/NeuronVestingBot/vesting" target="_blank" rel="noopener">@NeuronVestingBot</a><br>
+  💻 Open-source: <a href="https://github.com/oblachka81-cloud/neuron-vesting" target="_blank" rel="noopener">github.com/oblachka81-cloud/neuron-vesting</a></p>
+  <p data-en>🚀 <strong>Try NEURON Vesting:</strong><br>
+  🌐 WebApp: <a href="https://oblachka81-cloud.github.io/neuron-vesting/" target="_blank" rel="noopener">oblachka81-cloud.github.io/neuron-vesting</a><br>
+  🤖 Telegram bot: <a href="https://t.me/NeuronVestingBot/vesting" target="_blank" rel="noopener">@NeuronVestingBot</a><br>
+  💻 Open-source: <a href="https://github.com/oblachka81-cloud/neuron-vesting" target="_blank" rel="noopener">github.com/oblachka81-cloud/neuron-vesting</a></p>
+  <p data-fr>🚀 <strong>Essayez NEURON Vesting :</strong><br>
+  🌐 WebApp : <a href="https://oblachka81-cloud.github.io/neuron-vesting/" target="_blank" rel="noopener">oblachka81-cloud.github.io/neuron-vesting</a><br>
+  🤖 Bot Telegram : <a href="https://t.me/NeuronVestingBot/vesting" target="_blank" rel="noopener">@NeuronVestingBot</a><br>
+  💻 Open-source : <a href="https://github.com/oblachka81-cloud/neuron-vesting" target="_blank" rel="noopener">github.com/oblachka81-cloud/neuron-vesting</a></p>
+  <p data-es>🚀 <strong>Prueba NEURON Vesting:</strong><br>
+  🌐 WebApp: <a href="https://oblachka81-cloud.github.io/neuron-vesting/" target="_blank" rel="noopener">oblachka81-cloud.github.io/neuron-vesting</a><br>
+  🤖 Bot de Telegram: <a href="https://t.me/NeuronVestingBot/vesting" target="_blank" rel="noopener">@NeuronVestingBot</a><br>
+  💻 Open-source: <a href="https://github.com/oblachka81-cloud/neuron-vesting" target="_blank" rel="noopener">github.com/oblachka81-cloud/neuron-vesting</a></p>
+</div>
+
+<div class="highlight" style="margin-top:16px;">
+  <p data-ru>🔐 <strong>Безопасность API:</strong> все ключи только на сервере. Запросы к toncenter проксируются через backend.</p>
+  <p data-en>🔐 <strong>API Security:</strong> all keys are server-side only. Requests to toncenter are proxied through the backend.</p>
+  <p data-fr>🔐 <strong>Sécurité API :</strong> toutes les clés sont uniquement côté serveur. Les requêtes vers toncenter sont proxyfiées via le backend.</p>
+  <p data-es>🔐 <strong>Seguridad API:</strong> todas las claves están solo en el servidor. Las solicitudes a toncenter se proxy a través del backend.</p>
+</div>
+
+<div class="highlight green" style="margin-top:16px;">
+  <p data-ru>🛡️ <strong>AML Security:</strong> встроенная проверка TON-адресов на связи с высокорисковыми источниками. Официальные метки от TON Foundation через TonAPI. Расширенная проверка — через партнёрский сервис AML Security Finance.</p>
+  <p data-en>🛡️ <strong>AML Security:</strong> built-in TON address check for high-risk source connections. Official TON Foundation tags via TonAPI. Extended check via partner AML Security Finance.</p>
+  <p data-fr>🛡️ <strong>AML Security :</strong> vérification intégrée des adresses TON pour des connexions à des sources à haut risque. Tags officiels de la TON Foundation via TonAPI. Vérification avancée via le partenaire AML Security Finance.</p>
+  <p data-es>🛡️ <strong>AML Security:</strong> verificación integrada de direcciones TON para conexiones con fuentes de alto riesgo. Etiquetas oficiales de TON Foundation a través de TonAPI. Verificación avanzada a través del socio AML Security Finance.</p>
+</div>
 </section>
 
 <section>
