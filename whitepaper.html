@@ -108,6 +108,21 @@ span[data-en],span[data-fr],span[data-es]{display:none;}
 .partner-logo:hover{transform:translateY(-4px);background:rgba(200,200,200,0.2);box-shadow:0 8px 24px rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);}
 .partner-logo img{width:100%;height:100%;object-fit:cover;filter:brightness(0.95);transition:filter 0.3s;}
 .partner-logo:hover img{filter:brightness(1.15);}
+
+/* Clickable LockupWallet addresses in section 9 */
+.address-block a code {
+  color: var(--gold);
+  text-decoration: underline;
+  text-decoration-color: rgba(232,217,160,0.5);
+  cursor: pointer;
+  transition: all 0.2s;
+  word-break: break-all;
+}
+.address-block a:hover code {
+  color: #ffe9a8;
+  text-decoration-color: var(--gold);
+  background: rgba(255,204,68,0.08);
+}
 </style>
 </head>
 <body>
