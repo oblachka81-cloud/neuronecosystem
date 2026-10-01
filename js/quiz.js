@@ -110,7 +110,7 @@ root.innerHTML = `
       ${webpBtn('','/main/btn_frame_channel.webp',`📢 ${t.channelBonusBtn}`,`onclick="window.open('https://t.me/neuron_game_club','_blank')"`)}
       ${webpBtn('channelBonusBtn', '/main/btn_frame_channel.webp', t.channelClaimBtn || '🎁 Забрать бонус')}
     `}
-      ${webpBtn('vestingBtn', '/main/bin_frame_vesting.webp', 'Vesting')}
+      ${webpBtn('vestingBtn', '/main/btn_frame_vesting.webp', 'Vesting')}
       ${webpBtn('whitepaperBtn', '/main/btn_frame_whitepaper.webp', 'Whitepaper')}
     </div>`;
 
