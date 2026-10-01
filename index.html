@@ -62,7 +62,7 @@ window.addEventListener('error', function(e){
 </div>
 <script>
 (function(){
-  if (document.referrer && (document.referrer.includes('/exchange') || document.referrer.includes('/casino') || document.referrer.includes('/bank') || document.referrer.includes('/support'))) {
+  if (document.referrer && (document.referrer.includes('/exchange') || document.referrer.includes('/casino') || document.referrer.includes('/bank') || document.referrer.includes('/support') || document.referrer.includes('/neuron-vesting'))) {
   document.body.style.visibility = 'visible';
   document.getElementById('quasarSplash').classList.add('qs-hidden');
   return;
