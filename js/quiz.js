@@ -120,6 +120,13 @@ root.innerHTML = `
     else window.open('/whitepaper.html', '_blank');
   });
 
+  const vestingBtn = document.getElementById('vestingBtn');
+if (vestingBtn) vestingBtn.addEventListener('click', () => {
+  const vestingUrl = 'https://oblachka81-cloud.github.io/neuron-vesting/';
+  if (window.Telegram?.WebApp?.openLink) window.Telegram.WebApp.openLink(vestingUrl);
+  else window.open(vestingUrl, '_blank');
+});
+
 
   const miniRefBtn = document.getElementById('miniRefBtn');
   if (miniRefBtn) miniRefBtn.addEventListener('click', () => {
