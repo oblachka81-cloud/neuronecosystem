@@ -122,9 +122,15 @@ root.innerHTML = `
 
   const vestingBtn = document.getElementById('vestingBtn');
 if (vestingBtn) vestingBtn.addEventListener('click', () => {
-  const vestingUrl = 'https://oblachka81-cloud.github.io/neuron-vesting/';
-  if (window.Telegram?.WebApp?.openLink) window.Telegram.WebApp.openLink(vestingUrl);
-  else window.open(vestingUrl, '_blank');
+  const vestingUrl = 'https://t.me/NeuronVestingBot?startapp=vesting';
+  const tg = window.Telegram?.WebApp;
+  if (tg?.openTelegramLink) {
+    tg.openTelegramLink(vestingUrl);
+  } else if (tg?.openLink) {
+    tg.openLink(vestingUrl);
+  } else {
+    window.open(vestingUrl, '_blank');
+  }
 });
 
 
