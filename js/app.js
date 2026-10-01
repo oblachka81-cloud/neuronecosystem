@@ -325,7 +325,8 @@ function preloadTabImages() {
     'main/btn_lang_en.webp',
     'main/btn_lang_es.webp',
     'main/btn_lang_fr.webp',
-    'main/btn_lang_ru.webp'
+    'main/btn_lang_ru.webp',
+    'main/bin_frame_vesting.webp'
   ];
   imgs.forEach(src => { const i = new Image(); i.src = src; });
 }
